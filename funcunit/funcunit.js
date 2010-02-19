@@ -2,9 +2,9 @@
 
 if(steal.browser.rhino){
 	
-	steal('jquery').plugins('steal/test/qunit').then('drivers/json','drivers/base','drivers/selenium')
+	steal('jquery').plugins('funcunit/qunit').then('drivers/json','drivers/base','drivers/selenium')
 }else{
-	steal('jquery').plugins('steal/test/qunit','steal/test/synthetic').then('drivers/json','drivers/base','drivers/standard')
+	steal('jquery').plugins('funcunit/qunit','funcunit/synthetic').then('drivers/json','drivers/base','drivers/standard')
 	
 }
 
