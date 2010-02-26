@@ -3,10 +3,10 @@
 
 
 //load global selenium settings
-load('steal/settings/selenium.js')
+load('funcunit/settings/selenium.js')
 
 // load qfunctional
 load('steal/rhino/loader.js');
 rhinoLoader(function(){
-    steal.plugins('steal/test/funcunit/test/funcunit');
+    steal.plugins('funcunit/funcunit/test/funcunit');
 }, true);
