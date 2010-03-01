@@ -4,8 +4,8 @@ module("funcunit test")
 
 /**
 test("Back to back opens", function(){
-      S.open("file:///c:/development/framework/funcunit/funcunit/myotherapp.html", null, 10000);
-      S.open("file:///c:/development/framework/funcunit/funcunit/myapp.html", null, 10000);
+      S.open("file:///c:/development/framework/funcunit/functional/myotherapp.html", null, 10000);
+      S.open("file:///c:/development/framework/funcunit/functional/myapp.html", null, 10000);
 
     S("#changelink").click().text(function(t){
         equals(t, "Changed","href javascript run")

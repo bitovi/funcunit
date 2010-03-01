@@ -1,6 +1,6 @@
 SeleniumDefaults = {
     serverHost: "localhost",
     serverPort: 4444,
-    browserURL: "file:///C:/development/framework/funcunit/funcunit/test.html"
+    browserURL: "file:///C:/development/framework/funcunit/functional/test.html"
 }
-SeleniumBrowsers = ["*firefox"]
+SeleniumBrowsers = ["*iexplore"]
