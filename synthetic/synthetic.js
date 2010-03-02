@@ -1,4 +1,8 @@
-(function(){
+
+steal.then(function(){
+	
+	if (!navigator.userAgent.match(/Rhino/)) {
+	(function(){
 	//check if browser supports change delegation
 	var Synthetic = function(type, options, scope){
 		this.type = type;
@@ -262,11 +266,19 @@
 			support.linkHrefJS = true;
 		}
 		var div = document.createElement("div"), checkbox, submit, form, input, submitted = false;
-		div.innerHTML = "<form id='outer'><input name='checkbox' type='checkbox'/><input name='radio' type='radio' /><input type='submit' name='submitter'/><input type='input' name='inputter'/><input name='one'><input name='two'/><a href='javascript:__synthTest()' id='synlink'></a></form>";
-	    document.documentElement.appendChild(div);
+		div.innerHTML = "<form id='outer'>"+
+			"<input name='checkbox' type='checkbox'/>"+
+			"<input name='radio' type='radio' />"+
+			"<input type='submit' name='submitter'/>"+
+			"<input type='input' name='inputter'/>"+
+			"<input name='one'>"+
+			"<input name='two'/>"+
+			"<a href='javascript:__synthTest()' id='synlink'></a>"+
+			"</form>";
+		document.documentElement.appendChild(div);
 		form = div.firstChild
-		checkbox = form.checkbox;
-		submit = form.submitter
+		checkbox = form.childNodes[0];
+		submit = form.childNodes[2];
 		
 		
 		checkbox.checked = false;
@@ -274,39 +286,46 @@
 			support.clickChanges = true;
 		}
 		//document.body.appendChild(div);
-		createEvent("click",{},checkbox)
+		createEvent("click", {}, checkbox)
 		support.clickChecks = checkbox.checked;
 		checkbox.checked = false;
 		
 		
-		createEvent("change",{},checkbox);
+		createEvent("change", {}, checkbox);
 		
 		support.changeChecks = checkbox.checked;
 		
 		form.onsubmit = function(ev){
-			if(ev.preventDefault) ev.preventDefault();
+			if (ev.preventDefault) 
+				ev.preventDefault();
 			submitted = true;
 			return false;
 		}
-		createEvent("click",{},submit)
-		if(submitted) support.clickSubmits = true;
+		createEvent("click", {}, submit)
+		if (submitted) 
+			support.clickSubmits = true;
 		submitted = false;
-		createEvent("keypress",{character: "\n"},form.inputter);
-		if(submitted) support.keypressSubmits = true;
+		createEvent("keypress", {
+			character: "\n"
+		}, form.childNodes[3]);
+		if (submitted) 
+			support.keypressSubmits = true;
 		
-		form.radio.onchange = function(){
+		form.childNodes[1].onchange = function(){
 			support.radioClickChanges = true;
 		}
-		createEvent("click",{},form.radio)
+		createEvent("click", {}, form.childNodes[1])
 		
-		form.one.onchange = function(){
+		form.childNodes[1].onchange = function(){
 			support.focusChanges = true;
 		}
-		form.one.focus();
-		createEvent("keypress",{character: "a"},form.one);
-		form.two.focus();
+		form.childNodes[1].focus();
+		createEvent("keypress", {
+			character: "a"
+		}, form.childNodes[1]);
+		form.childNodes[5].focus();
 		
-		createEvent("click",{},div.getElementsByTagName('a')[0])
+		createEvent("click", {}, div.getElementsByTagName('a')[0])
 		
 		document.documentElement.removeChild(div);
 		
@@ -525,4 +544,6 @@
 		window.Synthetic = Synthetic;
 	
 }());
+}
 
+});

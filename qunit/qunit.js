@@ -1,4 +1,3 @@
-
 /*
  * QUnit - A JavaScript Unit Testing Framework
  * 
@@ -8,7 +7,7 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  */
-
+steal.plugin("jquery").then(function(){
 (function(window) {
 
 var QUnit = {
@@ -1038,3 +1037,4 @@ QUnit.jsDump = (function() {
 })();
 
 })(this);
+});

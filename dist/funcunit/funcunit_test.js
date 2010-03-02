@@ -15,7 +15,7 @@ test("Back to back opens", function(){
 
 test("Copy Test", function(){
 
-        S.open("myapp.html", null, 10000);
+        S.open("pages/myapp.html", null, 10000);
 
         
 		S("#typehere").type("javascriptmvc")
@@ -47,7 +47,7 @@ test("iframe", function(){
 
 test("Next Test", function(){
 
-        S.open("myotherapp.html", null, 10000);
+        S.open("pages/myotherapp.html", null, 10000);
 
         
 		
