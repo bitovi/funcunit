@@ -2,4 +2,4 @@ Getting started
 1. Open dist/funcunit/test.html in a browser
 2. Open a console.  CD to funcunit/dist.  Run funcunit.bat
 1. Open dist/qunit/test.html in a browser
-2. Open a console.  CD to funcunit/dist.  Run funcunit.bat
+2. Open a console.  CD to funcunit/dist.  Run qunit.bat
