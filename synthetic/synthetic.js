@@ -1,7 +1,4 @@
-
-steal.then(function(){
-	
-	if (!navigator.userAgent.match(/Rhino/)) {
+if (!navigator.userAgent.match(/Rhino/)) {
 	(function(){
 	//check if browser supports change delegation
 	var Synthetic = function(type, options, scope){
@@ -545,5 +542,3 @@ steal.then(function(){
 	
 }());
 }
-
-});

@@ -1,11 +1,7 @@
-//load("steal\test\qfunctional\test\qfunctional\run_functional.js")
-
-load('settings/selenium.js')
-
-// load qfunctional
-load('rhino/loader.js');
-rhinoLoader(function(){
-	load('jquery.js')
-	load('funcunit.js')
-	load('funcunit/test.js')
-}, true);
+load('funcunit/settings.js')
+load('rhino/env.rhino.js');
+Envjs('funcunit/test.html', 
+	{scriptTypes : {"text/javascript" : true,"text/envjs" : true}, 
+	fireLoad: true, 
+	logLevel: 2
+});

@@ -13,7 +13,6 @@
  * It is also based heavily on MochiKit's serializeJSON, which is 
  * copywrited 2005 by Bob Ippolito.
  */
-steal.plugin("jquery").then(function(){
 	(function($) {   
 	    function toIntegersAtLease(n) 
 	    // Format integers to have at least two digits.
@@ -155,4 +154,3 @@ steal.plugin("jquery").then(function(){
 	    };
 		
 	})(jQuery);
-});
