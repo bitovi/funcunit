@@ -1,5 +1,5 @@
 steal.plugin("jquery").then(function(){
-	if (navigator.userAgent.match(/Rhino/) && !window.build_in_progress) {
+	if (navigator.userAgent.match(/Rhino/) && window.SeleniumBrowsers && !window.build_in_progress) {
 		importClass(Packages.com.thoughtworks.selenium.DefaultSelenium);
 		
 		//first lets ping and make sure the server is up
