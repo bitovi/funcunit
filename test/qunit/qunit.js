@@ -1,1 +1,1 @@
-steal.plugins('funcunit/qunit').then('qunit_test')
+steal.plugins('funcunit/functional').then('test')
