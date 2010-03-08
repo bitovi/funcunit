@@ -1,6 +1,10 @@
+var path = new java.io.File(".").getCanonicalPath();
+var browserURL = "file:///"+path+"/funcunit/test/funcunit/test.html";
+
 SeleniumDefaults = {
     serverHost: "localhost",
     serverPort: 4444,
-    browserURL: "file:///C:/development/framework/funcunit/test/funcunit/separate.html"
+    browserURL: browserURL
+    //browserURL: "file:///C:/development/framework/funcunit/dist/funcunit/test.html"
 }
 SeleniumBrowsers = ["*firefox"]
