@@ -23,5 +23,5 @@ TYPE funcunit\functional\drivers\json.js >> funcunit\dist\funcunit.js
 :: rhino folder
 COPY steal\rhino\js.jar funcunit\dist\rhino\js.jar
 COPY steal\rhino\selenium-java-client-driver.jar funcunit\dist\rhino\selenium-java-client-driver.jar
-COPY steal\rhino\env.rhino.js funcunit\dist\rhino\env.rhino.js
+COPY steal\rhino\env.js funcunit\dist\rhino\env.js
 START /WAIT /B steal\js selenium\build-selenium
