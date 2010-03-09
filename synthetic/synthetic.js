@@ -439,7 +439,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				//eval js
 				var code = element.href.replace(/^\s*javascript:/,"")
                 //try{
-	            if (code != "//") {
+	            if (code != "//" || code.indexOf("void(0)") == -1) {
                     if(window.selenium){
                         eval("with(selenium.browserbot.getCurrentWindow()){"+code+"}")
                     }else{
