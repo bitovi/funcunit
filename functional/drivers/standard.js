@@ -75,6 +75,22 @@ steal.plugin("jquery").then(function() {
 			}
 			
 		}
+		var confirms = [], prompts = []
+		S.confirm = function(answer){
+			confirms.push(!!confirms)
+		}
+		S.prompt = function(answer){
+			prompts.push(answer)
+		}
+		S._opened = function(){
+			S._window.alert = function(){}
+			S._window.confirm = function(){
+				return confirms.shift();
+			}
+			S._window.prompt = function(){
+				return prompts.shift();
+			}
+		}
 		S.$ = function(selector, context, method){
 		
 			var args = makeArray(arguments);

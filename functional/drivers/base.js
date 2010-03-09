@@ -13,13 +13,16 @@ steal.plugin("jquery").then(function(){
 			S.add(function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
 				//page = window.open(url);
 				S._open(url, error);
-				S._onload(success, error);
+				S._onload(function(){
+					S._opened();
+					success()
+				}, error);
 			}, callback, "Page " + url + " not loaded in time!", timeout);
 		};
 		S.window = {
 			document: {}
 		};
-		
+		S._opened = function(){};
 		(function(){
 			var queue = [], incallback = false;
 			S.add = function(f, callback, error, timeout){
