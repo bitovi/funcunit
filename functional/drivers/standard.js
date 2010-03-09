@@ -75,7 +75,7 @@ steal.plugin("jquery").then(function() {
 			}
 			
 		}
-		var confirms = [], prompts = []
+		var confirms = [], prompts = [];
 		S.confirm = function(answer){
 			confirms.push(!!confirms)
 		}

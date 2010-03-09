@@ -58,7 +58,15 @@ steal.plugin("jquery").then(function(){
 				return arg === S.window ? "selenium.browserbot.getCurrentWindow()" : jQuery.toJSON(arg)
 				
 			}
-			
+			S.prompt = function(answer){
+				this.selenium.answerOnNextPrompt(answer);
+			}
+			S.confirm = function(answer){
+				if(answer)
+					this.selenium.chooseOkOnNextConfirmation();
+				else
+					this.selenium.chooseCancelOnNextConfirmation();
+			}
 			S.$ = function(selector, context, method){
 				var args = S.makeArray(arguments);
 				for (var a = 0; a < args.length; a++) {
