@@ -99,7 +99,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				clientX : center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
 				clientY : center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
 				ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
-				button : (type == 'contextmenu' ? 2 : 1), 
+				button : (type == 'contextmenu' ? 2 : 0), 
 				relatedTarget : document.documentElement
 			}, options);
 	}
