@@ -1,7 +1,7 @@
 module("funcunit test")
 
 test("Copy Test", function(){
-        S.open("app/myapp.html", null, 10000);
+        S.open("demo/myapp.html", null, 10000);
         
 		S("#typehere").type("javascriptmvc")
 		
