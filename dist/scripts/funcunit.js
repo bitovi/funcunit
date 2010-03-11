@@ -738,16 +738,45 @@ function () {
 
 (
 function () {
+    if (navigator.userAgent.match(/Rhino/) && !window.build_in_progress) {
+        QUnit.testStart = function (name) {
+            print("--" + name + "--");
+        };
+        QUnit.log = function (result, message) {
+            if (!message) {
+                message = "";
+            }
+            print((result ? "  PASS " : "  FAIL ") + message);
+        };
+        QUnit.testDone = function (name, failures, total) {
+            print("  done - fail " + failures + ", pass " + total + "\n");
+        };
+        QUnit.moduleStart = function (name) {
+            print("MODULE " + name + "\n");
+        };
+        QUnit.moduleDone = function (name, failures, total) {
+        };
+    }
+}
+)();
+
+(
+function () {
     S = function (s, c) {
         return new S.init(s, c);
     };
     S.open = function (url, callback, timeout) {
         S.add(function (success, error) {
             S._open(url, error);
-            S._onload(success, error);
+            S._onload(function () {
+                S._opened();
+                success();
+            }, error);
         }, callback, "Page " + url + " not loaded in time!", timeout);
     };
     S.window = {document:{}};
+    S._opened = function () {
+    };
     (function () {
         var queue = [], incallback = false;
         S.add = function (f, callback, error, timeout) {
@@ -916,24 +945,29 @@ function () {
 
 (
 function () {
-    if (navigator.userAgent.match(/Rhino/) && !window.build_in_progress) {
-        QUnit.testStart = function (name) {
-            print("--" + name + "--");
-        };
-        QUnit.log = function (result, message) {
-            print((result ? "  PASS " : "  FAIL ") + message);
-        };
-        QUnit.testDone = function (name, failures, total) {
-            print("  done - fail " + failures + ", pass " + total + "\n");
-        };
-        QUnit.moduleStart = function (name) {
-            print("MODULE " + name + "\n");
-        };
-        QUnit.moduleDone = function (name, failures, total) {
-        };
-    }
     if (navigator.userAgent.match(/Rhino/) && window.SeleniumBrowsers && !window.build_in_progress) {
         importClass(Packages.com.thoughtworks.selenium.DefaultSelenium);
+        var addr = java.net.InetAddress.getByName(SeleniumDefaults.serverHost);
+        try {
+            var s = new java.net.Socket(addr, SeleniumDefaults.serverPort);
+        }
+        catch (ex) {
+            spawn(function () {
+                if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
+                    runCommand("cmd", "/C", "start steal\\js -selenium");
+                } else {
+                    runCommand("sh", "-c", "nohup ./steal/js -selenium > selenium.log  2> selenium.err &");
+                }
+            });
+            java.lang.Thread.sleep(1000);
+            try {
+                var s = new java.net.Socket(addr, SeleniumDefaults.serverPort);
+            }
+            catch (ex) {
+                print("Selenium is not running. Please use steal/js -selenium to start it.");
+                quit();
+            }
+        }
         (function () {
             var browser = 0;
             QUnit.done = function (failures, total) {
@@ -948,6 +982,8 @@ function () {
                     S.starttime = new Date().getTime();
                     S.selenium.start();
                     QUnit.restart();
+                } else {
+                    quit();
                 }
             };
             print("\nSTARTING " + SeleniumBrowsers[0]);
@@ -965,6 +1001,16 @@ function () {
             };
             var convertToJson = function (arg) {
                 return arg === S.window ? "selenium.browserbot.getCurrentWindow()" : jQuery.toJSON(arg);
+            };
+            S.prompt = function (answer) {
+                this.selenium.answerOnNextPrompt(answer);
+            };
+            S.confirm = function (answer) {
+                if (answer) {
+                    this.selenium.chooseOkOnNextConfirmation();
+                } else {
+                    this.selenium.chooseCancelOnNextConfirmation();
+                }
             };
             S.$ = function (selector, context, method) {
                 var args = S.makeArray(arguments);
@@ -1056,6 +1102,23 @@ function () {
             } else {
                 unloadLoader();
             }
+        };
+        var confirms = [], prompts = [];
+        S.confirm = function (answer) {
+            confirms.push(!!confirms);
+        };
+        S.prompt = function (answer) {
+            prompts.push(answer);
+        };
+        S._opened = function () {
+            S._window.alert = function () {
+            };
+            S._window.confirm = function () {
+                return confirms.shift();
+            };
+            S._window.prompt = function () {
+                return prompts.shift();
+            };
         };
         S.$ = function (selector, context, method) {
             var args = makeArray(arguments);
@@ -1186,7 +1249,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				clientX : center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
 				clientY : center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
 				ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
-				button : (type == 'contextmenu' ? 2 : 1), 
+				button : (type == 'contextmenu' ? 2 : 0), 
 				relatedTarget : document.documentElement
 			}, options);
 	}
@@ -1526,7 +1589,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				//eval js
 				var code = element.href.replace(/^\s*javascript:/,"")
                 //try{
-	            if (code != "//") {
+	            if (code != "//" && code.indexOf("void(0)") == -1) {
                     if(window.selenium){
                         eval("with(selenium.browserbot.getCurrentWindow()){"+code+"}")
                     }else{
