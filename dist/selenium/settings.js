@@ -1,5 +1,5 @@
 var path = new java.io.File(".").getCanonicalPath();
-var browserURL = "file:///"+path+"/";
+var browserURL = "file:///"+path.replace("\\", "/")+"/";
 
 SeleniumDefaults = {
     serverHost: "localhost",

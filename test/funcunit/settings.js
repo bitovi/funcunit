@@ -1,6 +1,5 @@
-
 var path = new java.io.File(".").getCanonicalPath();
-var browserURL = "file:///"+path+"/funcunit/";
+var browserURL = "file:///"+path+"/<%= application_name %>/funcunit/";
 
 SeleniumDefaults = {
 	// the domain where selenium will run
