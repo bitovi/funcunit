@@ -10,9 +10,6 @@ IF NOT EXIST funcunit\dist\scripts\funcunit.js GOTO wait
 TYPE funcunit\synthetic\synthetic.js >> funcunit\dist\scripts\funcunit.js
 TYPE funcunit\functional\drivers\json.js >> funcunit\dist\scripts\funcunit.js
 
-:: demo folder
-:: COPY funcunit\test\funcunit\test.js funcunit\dist\demo\funcunit_test.js - app page link is wrong
-
 :: selenium folder
 COPY steal\rhino\js.jar funcunit\dist\selenium\js.jar
 COPY steal\rhino\selenium-java-client-driver.jar funcunit\dist\selenium\selenium-java-client-driver.jar
