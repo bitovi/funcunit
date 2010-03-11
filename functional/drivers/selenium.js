@@ -10,12 +10,13 @@ steal.plugin("jquery").then(function(){
 		catch (ex) {
 			spawn(function(){
 				if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-					//runCommand("cmd", "/C", "start steal\\js -selenium")
+					runCommand("cmd", "/C", "start steal\\js -selenium")
 				}
 				else {
-					print("herererer")
+					runCommand("sh", "-c", "nohup ./steal/js -selenium > selenium.log  2> selenium.err &")
 				}
 			})
+			java.lang.Thread.sleep(1000);
 			try {
 				var s = new java.net.Socket(addr, SeleniumDefaults.serverPort)
 			} 
