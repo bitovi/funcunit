@@ -3,7 +3,29 @@ steal.plugin("jquery").then(function(){
 		importClass(Packages.com.thoughtworks.selenium.DefaultSelenium);
 		
 		//first lets ping and make sure the server is up
-		
+		var addr = java.net.InetAddress.getByName(SeleniumDefaults.serverHost)
+		try {
+			var s = new java.net.Socket(addr, SeleniumDefaults.serverPort)
+		} 
+		catch (ex) {
+			spawn(function(){
+				if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
+					//runCommand("cmd", "/C", "start steal\\js -selenium")
+				}
+				else {
+					print("herererer")
+				}
+			})
+			try {
+				var s = new java.net.Socket(addr, SeleniumDefaults.serverPort)
+			} 
+			catch (ex) {
+				print("Selenium is not running. Please use steal/js -selenium to start it.")
+				quit();
+			}
+		}
+
+
 		(function(){
 			var browser = 0;
 			
@@ -19,6 +41,8 @@ steal.plugin("jquery").then(function(){
 					S.starttime = new Date().getTime();
 					S.selenium.start();
 					QUnit.restart();
+				} else {
+					quit();
 				}
 			}
 			
