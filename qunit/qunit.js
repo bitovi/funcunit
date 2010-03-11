@@ -1037,4 +1037,4 @@ QUnit.jsDump = (function() {
 })();
 
 })(this);
-});
+}).then("qunit_rhino");
