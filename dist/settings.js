@@ -8,3 +8,11 @@ SeleniumDefaults = {
     //browserURL: "file:///C:/development/framework/funcunit/dist/funcunit/"
 }
 SeleniumBrowsers = ["*firefox"]
+
+EmailerDefaults = {
+    host: "smtp.myserver.com",
+    port: 25,
+    from: "myemail@gmail.com",
+    to: "myemail@archer-tech.com",
+    subject: "Test Logs"
+}

@@ -10,7 +10,7 @@ steal.plugin("jquery").then(function(){
 		catch (ex) {
 			spawn(function(){
 				if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-					runCommand("cmd", "/C", "start steal\\js -selenium")
+					runCommand("cmd", "/C", 'start "selenium" java -jar steal\\rhino\\selenium-server.jar')
 				}
 				else {
 					runCommand("sh", "-c", "nohup ./steal/js -selenium > selenium.log  2> selenium.err &")
@@ -43,6 +43,12 @@ steal.plugin("jquery").then(function(){
 					S.selenium.start();
 					QUnit.restart();
 				} else {
+					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
+						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium"')
+					}
+					else {
+						runCommand("sh", "-c", "nohup ./steal/js -selenium > selenium.log  2> selenium.err &")
+					}
 					quit();
 				}
 			}

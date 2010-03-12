@@ -1,4 +1,4 @@
-load('funcunit/test/funcunit/settings.js')
+load('funcunit/test/settings.js')
 load('steal/rhino/env.js');
 
 Envjs('funcunit/funcunit_test.html', 
