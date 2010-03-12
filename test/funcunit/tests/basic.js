@@ -2,7 +2,6 @@ module("funcunit test")
 
 test("Copy Test", function(){
         S.open("funcunit.html");
-        
 		S("#typehere").type("javascriptmvc")
 		
 		S("#seewhatyoutyped").text(function(val){
@@ -12,4 +11,5 @@ test("Copy Test", function(){
 		S("#seewhatyoutyped").text(function(val){
 			equals(val, "copied javascriptmvc","copy");
 		})
+
 })
