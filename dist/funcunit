@@ -1,1 +1,9 @@
+if [ $1 = "-email" ]
+then
+	java -cp selenium/selenium-java-client-driver.jar:selenium/js.jar org.mozilla.javascript.tools.shell.Main -opt -1 -e 'load('"'"selenium/run.js"'"')' > test.log
+	java -cp selenium/selenium-java-client-driver.jar:selenium/js.jar org.mozilla.javascript.tools.shell.Main -opt -1 -e 'load('"'"selenium/email/send_email.js"'"')'
+  	exit 127
+fi
+
+
 java -cp selenium/selenium-java-client-driver.jar:selenium/js.jar org.mozilla.javascript.tools.shell.Main -opt -1 -e 'load('"'"selenium/run.js"'"')'
