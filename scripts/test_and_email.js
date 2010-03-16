@@ -8,7 +8,8 @@ if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 	runCommand("cmd", "/C", "start /b steal\\js funcunit/scripts/qunit.js >> funcunit/test.log")
 }
 else {
-	runCommand("sh", "-c", "nohup java -jar selenium/selenium/selenium-server.jar > selenium.log  2> selenium.err &")
+	runCommand("sh", "-c", "nohup ./steal/js funcunit/scripts/funcunit.js > funcunit/test.log")
+	runCommand("sh", "-c", "nohup ./steal/js funcunit/scripts/qunit.js >> funcunit/test.log")
 }
 
 var log = readFile('funcunit/test.log');

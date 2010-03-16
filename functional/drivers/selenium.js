@@ -46,9 +46,6 @@ steal.plugin("jquery").then(function(){
 					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium"')
 					}
-					else {
-						runCommand("sh", "-c", "nohup ./steal/js -selenium > selenium.log  2> selenium.err &")
-					}
 					quit();
 				}
 			}
