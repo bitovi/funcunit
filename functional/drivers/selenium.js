@@ -10,7 +10,7 @@ steal.plugin("jquery").then(function(){
 		catch (ex) {
 			spawn(function(){
 				if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-					runCommand("cmd", "/C", 'start "selenium" java -jar steal\\rhino\\selenium-server.jar')
+					runCommand("cmd", "/C", 'start "selenium" java -jar funcunit\\dist\\selenium\\selenium\\selenium-server.jar')
 				}
 				else {
 					runCommand("sh", "-c", "nohup ./steal/js -selenium > selenium.log  2> selenium.err &")
