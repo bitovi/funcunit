@@ -1,15 +1,8 @@
 module("funcunit test")
 
 test("Copy Test", function(){
-        S.open("funcunit.html");
-		S("#typehere").type("javascriptmvc")
-		
-		S("#seewhatyoutyped").text(function(val){
-			equals(val, "typed javascriptmvc","typing");
-		})
-		S("#copy").click();
-		S("#seewhatyoutyped").text(function(val){
-			equals(val, "copied javascriptmvc","copy");
-		})
-
+    S.open("funcunit.html");
+	S("h1").text(function(val){
+		equals(val, "Welcome to JavaScriptMVC 3.0!","welcome text");
+	})
 })
