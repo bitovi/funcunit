@@ -17,5 +17,9 @@ steal.plugin("jquery").then(function(){
 		//if(name)
 		//    print(name+" done\n")
 		}
+		QUnit.done = function(failures, total){
+			print("\nALL DONE - fail " + failures + ", pass " + total)
+		}
+
 	}
 })
