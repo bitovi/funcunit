@@ -27,7 +27,8 @@ copy funcunit\dist\funcunit ..\download\
 copy funcunit\dist\funcunit.bat ..\download\
 copy funcunit\dist\funcunit.html ..\download\
 copy funcunit\dist\funcunit.js ..\download\
+copy funcunit\dist\settings.js ..\download\
 copy funcunit\dist\README ..\download\
 
 :: zip that directory
-cd ..\download && zip -r funcunit-0.1.0.zip * -i demo\* -i scripts\* -i selenium\* -i funcunit -i funcunit.bat -i funcunit.html -i funcunit.js -i README
+cd ..\download && zip -r funcunit-0.1.0.zip * -i demo\* -i scripts\* -i selenium\* -i funcunit -i funcunit.bat -i funcunit.html -i funcunit.js -i README -i settings.js
