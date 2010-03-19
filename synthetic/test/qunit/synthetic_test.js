@@ -64,8 +64,9 @@ test("Click", function(){
 	};
 	__addEventListener(__g("outer"),"submit",submitf );
 	new Synthetic("click").send( __g("submit") );
+	new Synthetic("submit").send( __g("outer")  );
 	
-	equals(submit, 1, "Click on submit");
+	equals(submit, 2, "Click on submit");
 	
 	var click =0, clickf = function(ev){
 		click++;
@@ -80,7 +81,7 @@ test("Click", function(){
 	
 	new Synthetic("click").send( __g("submit") );
 	
-	equals(submit, 1, "Submit prevented");
+	equals(submit, 2, "Submit prevented");
 	equals(click, 1, "Clicked");
 	
 	__removeEventListener(__g("outer"),"submit",submitf );
@@ -240,5 +241,25 @@ test("Key Something", function(){
 	equals(__g("two").innerHTML, "JMVC is moderately impressive" , "Typing works")
 	equals(__g("three").innerHTML, "JMV is moderately impressive" , "Typing works")
 	equals(__g("four").innerHTML, "JMV is moderately impressive" , "Typing works")
+	__g("qunit-test-area").innerHTML = "";
+})
+
+test("backslash n", function(){
+	__g("qunit-test-area").innerHTML = "<form id='myform' onsubmit='return false'>"+
+			"<input id='myinput' type='text' />"+
+			"</form>"+
+			"<div id='here'></div>";
+	__addEventListener(__g("myform"),"submit",function(ev){
+		if ( ev.preventDefault ) {
+			ev.preventDefault();
+		}
+		__g("here").innerHTML = "submitted"
+	} );
+	//new Synthetic("submit").send( __g("myform")  );
+
+	new Synthetic("key","\n").send( __g("myinput") );
+	
+	
+	equals(__g("here").innerHTML, "submitted" , "\n works")
 	__g("qunit-test-area").innerHTML = "";
 })

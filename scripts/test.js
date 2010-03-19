@@ -1,7 +1,7 @@
 load('steal/rhino/env.js');
 load('funcunit/test/settings.js')
 
-if (!_args[0] || (_args[0]!="-functional" && _args[0]!="-unit" && _args[0]!="-email")) {
+if (!_args[0] || (_args[0]!="-functional" && _args[0]!="-unit" && _args[1]!="-email" && _args[1]!="-mail")) {
 	print("Usage: steal/js funcunit/scripts/test.js [option]");
 	print("");
 	print("options");
@@ -23,7 +23,7 @@ if (_args[0] == "-functional") {
 }
 
 if (_args[0] == "-unit") {
-	Envjs('funcunit/qunit.html?test=true', {
+	Envjs('funcunit/qunit.html', {
 		scriptTypes: {
 			"text/javascript": true,
 			"text/envjs": true
@@ -33,7 +33,7 @@ if (_args[0] == "-unit") {
 	});
 }
 
-if(_args[0] == "-email"){
+if(_args[1] == "-email" || _args[1] == "-mail"){
 	if (typeof javax.mail.Session.getDefaultInstance != "function") {
 		print('usage: steal\\js -mail funcunit/scripts/test.js -email')
 		quit()
