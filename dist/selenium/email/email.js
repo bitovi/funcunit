@@ -1,21 +1,38 @@
 importPackage(javax.mail);
-Emailer = {
+if(typeof steal == 'undefined') steal = {};
+steal.Emailer = {
     _msg: null,
     setup: function(options) {
-        var props = new java.util.Properties();
+        var props = new java.util.Properties(), session;
         props.put("mail.smtp.host", options.host);
         props.put("mail.smtp.port", options.port);
-        var session = javax.mail.Session.getDefaultInstance(props);
+		if (options.tls) {
+			props.put("mail.smtp.starttls.enable", "true");
+		}
+		if (options.auth) {
+			props.put("mail.smtp.auth", "true");
+			MyAuth = new JavaAdapter(javax.mail.Authenticator, {
+				getPasswordAuthentication : function(){
+					return new PasswordAuthentication(options.username, options.password);
+				}
+			});
+			session = javax.mail.Session.getDefaultInstance(props, MyAuth);
+		} else {
+        	session = javax.mail.Session.getDefaultInstance(props);
+		}
         this._msg = new javax.mail.internet.MimeMessage(session);
         var from = new javax.mail.internet.InternetAddress(options.from);
         this._msg.setFrom(from);
-        var to = javax.mail.internet.InternetAddress.parse(options.to);
-        this._msg.setRecipients(javax.mail.Message.RecipientType.TO, to);
+		for(var i=0; i<options.to.length; i++){
+        	this._msg.addRecipients(javax.mail.Message.RecipientType.TO, options.to[i]);
+		}
         this._msg.setSubject(options.subject)
     },
     send: function(text) {
         this._msg.setText(text);
+		print("Sending email.....")
         javax.mail.Transport.send(this._msg);
+		print("Email sent.")
     }
 }
 
@@ -99,24 +116,4 @@ var mail = {};
         return send.invoke(null, msg);
     }
 })();
-**/
-
-
-//var address = javax.mail.Address;
-//var addresses = java.lang.reflect.Array.newInstance(address, 1)
-//addresses[0] = to;
-/**
-importPackage(javax.mail);
-var props = new java.util.Properties();
-props.put("mail.smtp.host", "MAILHUBCANLB01.archer-tech.com");
-props.put("mail.smtp.port", 25);
-var session = javax.mail.Session.getDefaultInstance(props);
-var msg = new javax.mail.internet.MimeMessage(session);
-var from = new javax.mail.internet.InternetAddress("brian.moschel@email.com");
-msg.setFrom(from);
-var to = new javax.mail.internet.InternetAddress("brian.moschel@archer-tech.com");
-msg.setRecipients(javax.mail.Message.RecipientType.TO, to);
-msg.setSubject("Test Logs")
-msg.setText("boooo");
-javax.mail.Transport.send(msg);
 **/

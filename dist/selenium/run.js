@@ -9,7 +9,7 @@ try {
 catch (ex) {
 	spawn(function(){
 		if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-			runCommand("cmd", "/C", "start java -jar selenium\\selenium\\selenium-server.jar")
+			runCommand("cmd", "/C", 'start "selenium" java -jar selenium\\selenium\\selenium-server.jar')
 		}
 		else {
 			runCommand("sh", "-c", "nohup java -jar selenium/selenium/selenium-server.jar > selenium.log  2> selenium.err &")

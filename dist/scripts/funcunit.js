@@ -756,6 +756,9 @@ function () {
         };
         QUnit.moduleDone = function (name, failures, total) {
         };
+        QUnit.done = function (failures, total) {
+            print("\nALL DONE - fail " + failures + ", pass " + total);
+        };
     }
 }
 )();
@@ -954,7 +957,7 @@ function () {
         catch (ex) {
             spawn(function () {
                 if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-                    runCommand("cmd", "/C", "start steal\\js -selenium");
+                    runCommand("cmd", "/C", "start \"selenium\" java -jar funcunit\\dist\\selenium\\selenium\\selenium-server.jar");
                 } else {
                     runCommand("sh", "-c", "nohup ./steal/js -selenium > selenium.log  2> selenium.err &");
                 }
@@ -983,6 +986,9 @@ function () {
                     S.selenium.start();
                     QUnit.restart();
                 } else {
+                    if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
+                        runCommand("cmd", "/C", "taskkill /fi \"Windowtitle eq selenium\"");
+                    }
                     quit();
                 }
             };
@@ -1512,21 +1518,18 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			}
 			return null;
 		},
-		keypress : function(element){
+		key : function(element){
+			createEvent("keydown", this.options, element);
 			var options = keyOptions("keypress", this.options, element);
-			var res = this.create_event(element);
-			if(res && (options.charCode == 10 || options.keyCode == 10) ){
+			createEvent("keypress", options, element);
+			createEvent("keyup", this.options, element);
+			if(options.charCode == 10 || options.keyCode == 10) {
 				if(element.nodeName.toLowerCase() == "input" && !(support.keypressSubmits)){
 					var form = Synthetic.closest(element, "form");
 					if(form)
 						new Synthetic("submit").send( form  );
 				}
 			}
-		},
-		key : function(element){
-			createEvent("keydown", this.options, element);
-			createEvent("keypress", this.options, element);
-			createEvent("keyup", this.options, element);
 		},
 		/**
 		 * Mouses down, focuses, up, and clicks an element
