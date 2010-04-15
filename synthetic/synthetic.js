@@ -143,10 +143,13 @@ if (!navigator.userAgent.match(/Rhino/)) {
 	
 	// -----------------  Key Events --------------------
 	var keyOptions = function(type, options, element){
+		
 		var reverse = browser.opera || browser.msie,//if keyCode and charCode should be reversed
 			both = browser.safari || type != 'keypress', //if keyCode and charCode are in both places
-			character = "", v, 
-			defaults  = typeof options != "object" ? {character : options} : options
+			character = "", v, defaults;
+			
+		if(options.keyCode == 8 || options.charCode == 8) options = "\b";
+		defaults  = typeof options != "object" ? {character : options} : options;
 			
 		//add basics
 		defaults = extend({
@@ -225,6 +228,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			fire_event = !prevented;
 		}else{
 			fire_event = part.dispatch(event, element)
+			if(options.keyCode && options.keyCode == 8) element.value = element.value.substring(0,element.value.length-1);
 		}
 		
 		if(fire_event && type == 'keypress' && !browser.firefox && 
