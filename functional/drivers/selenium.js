@@ -16,14 +16,23 @@ steal.plugin("jquery").then(function(){
 					runCommand("sh", "-c", "nohup ./steal/js -selenium > selenium.log  2> selenium.err &")
 				}
 			})
-			java.lang.Thread.sleep(3000);
-			try {
-				var s = new java.net.Socket(addr, SeleniumDefaults.serverPort)
-			} 
-			catch (ex) {
-				print("Selenium is not running. Please use steal/js -selenium to start it.")
-				quit();
+
+			var timeouts = 0;
+			var pollSeleniumServer = function(){
+				try {
+					var s = new java.net.Socket(addr, SeleniumDefaults.serverPort)
+				} 
+				catch (ex) {
+					if (timeouts > 3) {
+						print("Selenium is not running. Please use steal/js -selenium to start it.")
+						quit();
+					} else {
+						timeouts++;
+						setTimeout( pollSeleniumServer(), 1000);
+					}
+				}					
 			}
+			setTimeout( pollSeleniumServer(), 1000);
 		}
 
 
