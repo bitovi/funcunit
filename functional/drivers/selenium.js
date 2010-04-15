@@ -16,7 +16,7 @@ steal.plugin("jquery").then(function(){
 					runCommand("sh", "-c", "nohup ./steal/js -selenium > selenium.log  2> selenium.err &")
 				}
 			})
-			java.lang.Thread.sleep(1000);
+			java.lang.Thread.sleep(3000);
 			try {
 				var s = new java.net.Socket(addr, SeleniumDefaults.serverPort)
 			} 
