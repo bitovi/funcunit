@@ -4,7 +4,8 @@ load('steal/rhino/env.js');
 	Funcunit = function(){}
 	Funcunit.runTest = function(pageLoc){
 		var path = new java.io.File(".").getCanonicalPath();
-		SeleniumDefaults.browserURL = "file:///"+path.replace("\\", "/")+"/"+pageLoc;
+		if(!SeleniumDefaults.browserURL)
+			SeleniumDefaults.browserURL = "file:///"+path.replace("\\", "/")+"/"+pageLoc;
 		Envjs(pageLoc, {
 			scriptTypes: {
 				"text/javascript": true,
