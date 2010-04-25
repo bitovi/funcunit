@@ -40,6 +40,7 @@ steal.plugin("jquery").then(function(){
 			var browser = 0;
 			
 			QUnit.done = function(failures, total){
+				S.selenium.close();
 				S.selenium.stop();
 				S.endtime = new Date().getTime();
 				var formattedtime = (S.endtime - S.starttime) / 1000;
@@ -55,7 +56,6 @@ steal.plugin("jquery").then(function(){
 					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium"')
 					}
-					if(SeleniumDefaults.quitOnDone) quit();
 				}
 			}
 			
