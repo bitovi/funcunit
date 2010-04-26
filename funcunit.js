@@ -15,12 +15,6 @@ load('steal/rhino/env.js');
 			logLevel: 2
 		});
 	}
-	Funcunit.redirectOutputTo = function(path){
-		java.lang.System.setOut(new java.io.PrintStream(
-			new java.io.BufferedOutputStream(new java.io.FileOutputStream(path))));
-		java.lang.System.setErr(new java.io.PrintStream(
-			new java.io.BufferedOutputStream(new java.io.FileOutputStream(path))));
-	}
 	Funcunit.emailFile = function(path){
 		if (typeof javax.mail.Session.getDefaultInstance != "function") {
 			print('usage: steal\\js -mail [arguments]')
