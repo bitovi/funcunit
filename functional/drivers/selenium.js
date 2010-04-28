@@ -28,11 +28,11 @@ steal.plugin("jquery").then(function(){
 						quit();
 					} else {
 						timeouts++;
-						setTimeout( pollSeleniumServer(), 1000);
+						setTimeout( pollSeleniumServer, 1000);
 					}
 				}					
 			}
-			setTimeout( pollSeleniumServer(), 1000);
+			setTimeout( pollSeleniumServer, 1000);
 		}
 
 
