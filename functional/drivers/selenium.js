@@ -80,11 +80,16 @@ steal.plugin("jquery").then(function(){
 			S.prompt = function(answer){
 				this.selenium.answerOnNextPrompt(answer);
 			}
-			S.confirm = function(answer){
-				if(answer)
-					this.selenium.chooseOkOnNextConfirmation();
-				else
-					this.selenium.chooseCancelOnNextConfirmation();
+			S.confirm = function(answer, callback){
+				var self = this;
+				S.add(function(success, error){
+					var confirm = S.selenium.getConfirmation();
+					if(answer)
+						S.selenium.chooseOkOnNextConfirmation();
+					else
+						S.selenium.chooseCancelOnNextConfirmation();
+					setTimeout(success, 13)
+				}, callback, "Could not confirm")
 			}
 			S.$ = function(selector, context, method){
 				var args = S.makeArray(arguments);
