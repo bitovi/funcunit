@@ -44,7 +44,7 @@ steal.plugin("jquery").then(function(){
 				S.selenium.stop();
 				S.endtime = new Date().getTime();
 				var formattedtime = (S.endtime - S.starttime) / 1000;
-				print("\nALL DONE " + failures + ", " + total + ' - ' + formattedtime + ' seconds')
+				print("\nALL DONE " + failures + ", " + total + (SeleniumDefaults.showTimestamps? (' - ' + formattedtime + ' seconds'): ""))
 				browser++;
 				if (browser < SeleniumBrowsers.length) {
 					print("\nSTARTING " + SeleniumBrowsers[browser])
@@ -54,7 +54,7 @@ steal.plugin("jquery").then(function(){
 					QUnit.restart();
 				} else {
 					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium"')
+						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium" > NUL')
 					}
 				}
 			}
