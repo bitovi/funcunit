@@ -7,7 +7,7 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  */
-steal.plugin("jquery").then(function(){
+steal(function(){
 (function(window) {
 
 var QUnit = {

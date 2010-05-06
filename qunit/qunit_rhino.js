@@ -1,4 +1,4 @@
-steal.plugin("jquery").then(function(){
+steal(function(){
 	if (navigator.userAgent.match(/Rhino/) && !window.build_in_progress) {
 		QUnit.testStart = function(name){
 			print("--" + name + "--")
@@ -14,8 +14,7 @@ steal.plugin("jquery").then(function(){
 			print("MODULE " + name + "\n")
 		}
 		QUnit.moduleDone = function(name, failures, total){
-		//if(name)
-		//    print(name+" done\n")
+
 		}
 		QUnit.done = function(failures, total){
 			print("\nALL DONE - fail " + failures + ", pass " + total)
