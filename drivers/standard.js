@@ -27,6 +27,7 @@ steal(function() {
 	}
 	var unloadLoader, 
 		loadSuccess, 
+		firstLoad = true,
 		currentDocument,
 		onload = function(){
 			FuncUnit._window.document.documentElement.tabIndex = 0;
@@ -50,7 +51,8 @@ steal(function() {
 			Synthetic.removeEventListener(FuncUnit._window, "load", onload);
 		}
 	unloadLoader = function(){
-		removeListeners();
+		if(!firstLoad) // dont remove the first run, fixes issue in FF 3.6
+			removeListeners();
 		
 		Synthetic.addEventListener(FuncUnit._window, "load", onload);
 		
