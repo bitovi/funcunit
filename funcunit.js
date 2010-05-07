@@ -4,8 +4,75 @@ steal('resources/jquery','resources/json').plugins('funcunit/synthetic')
 .plugins(	'funcunit/qunit')
 //Now describe FuncUnit
 .then(function(){
+		var window = (function(){return this }).call(null),
+			oldFunc = window.FuncUnit;
+		
 		/**
 		 * @constructor FuncUnit
+		 * @tag core
+		 * FuncUnit provides powerful functional testing.  It can be used with or without 
+		 * JavaScriptMVC.
+		 * <h2>FuncUnit with JavaScriptMVC</h2>
+		 * Steps:
+		 * <ol>
+		 * 	<li>Create a page that loads the funcunit plugin</li>
+		 *  <li>Steal all your scripts</li>
+		 *  <li>Configure settings to point to your jmvc root folder on your server</li>
+		 * </ol>
+		 * <b>We might want to have people point to the domain ... and to the root folder ... not sure</b>
+		 * 
+		 * <h2>Use standalone</h2>
+		 * To setup FuncUnit standalone, follow these steps:
+		 * <ol>
+		 * 	<li>Download and unzip FuncUnit into your project's directory.  You will see the following folder
+		 *      files:
+		 * @codestart text
+		 * funcunit      - linux shell
+		 * funcunit.bat  - windows shell
+		 * funcunit.html - test page
+		 * funcunit.js   - funcunit script
+		 * test.js       - test file
+		 * settings.js   - settings
+		 * resources/
+		 *   demo/       - a basic demo app
+		 *   java/
+		 *     selenium-java-client-driver.jar
+		 *     selenium-server.jar
+		 *     js.jar
+		 *     mail.jar
+		 *   env.js
+		 *   email.js
+		 *   send_email.jar
+		 *   run.js
+		 * @codeend
+		 *  </li>
+		 *  <li>test.js is already setup to test a demo app in resources.  To make sure everything is 
+		 *      running ok, simply run:
+		 *  @codestart
+		 *  funcunit
+		 *  @codeend
+		 *  Typically, you will tell the funcunit script which html file to run, but it defaults to 
+		 *  funcunit.html.  You can also open up funcunit.html in a browser and see it test the demo app.
+		 *  </li>
+		 *  <li>
+		 *    Now before you change test.js to test your application, you might have noticed that
+		 *    the funcunit command openned your browser up to the filesystem.  To change this to your server,
+		 *    open settings.js and change browser url to point to where the funcunit folder sits on your
+		 *    server.  Now run funcunit again.  It should run the demo.
+		 *  </li>
+		 * </ol>
+		 * <h3>Making other tests.</h3>
+		 * To break up tests into multiple files, just add script tags in the html file.  You can
+		 * also create more html files (for other test suites).  To run these simply do:
+		 * @codestart text
+		 * funcunit path/to/html.html
+		 * @codeend
+		 * 
+		 * 
+		 * <h2>Configuring</h2>
+		 * 
+		 * @init
+		 * selects something in the other page
 		 * @param {Object} s
 		 * @param {Object} c
 		 */
@@ -13,12 +80,17 @@ steal('resources/jquery','resources/json').plugins('funcunit/synthetic')
 			return new FuncUnit.init(s, c)
 		}
 		/**
+		 * @Static
+		 */
+		$.extend(FuncUnit,oldFunc)
+		FuncUnit.
+		/**
 		 * Opens a page
 		 * @param {Object} url
 		 * @param {Object} callback
 		 * @param {Object} timeout
 		 */
-		FuncUnit.open = function(url, callback, timeout){
+		open = function(url, callback, timeout){
 			FuncUnit.add(function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
 				//page = window.open(url);
 				FuncUnit._open(url, error);
@@ -85,7 +157,13 @@ steal('resources/jquery','resources/json').plugins('funcunit/synthetic')
 					start();
 				}
 			}
-			FuncUnit.wait = function(time, cb){
+			FuncUnit.
+			/**
+			 * waits a timeout
+			 * @param {Object} time
+			 * @param {Object} cb
+			 */
+			wait = function(time, cb){
 				time = time || 10000
 				FuncUnit.add(function(success, error){
 					setTimeout(success, time)
@@ -138,7 +216,12 @@ steal('resources/jquery','resources/json').plugins('funcunit/synthetic')
 				}
 				return narr;
 			}
-			FuncUnit.convert = function(str){
+			FuncUnit.
+			/**
+			 * Converts a string into a Native JS type.
+			 * @param {Object} str
+			 */
+			convert = function(str){
 				//if it is an object and not null, eval it
 				if (str !== null && typeof str == "object") {
 					return object;
@@ -161,8 +244,59 @@ steal('resources/jquery','resources/json').plugins('funcunit/synthetic')
 						return str;
 				}
 			}
+			/**
+			 * @prototype
+			 */
 			//list of jQuery functions we want
-			FuncUnit.funcs = ['synthetic', 'size', 'data', 'attr', 'removeAttr', 'addClass', 'hasClass', 'removeClass', 'toggleClass', 'html', 'text', 'val', 'empty', 'css', 'offset', 'offsetParent', 'position', 'scrollTop', 'scrollLeft', 'height', 'width', 'innerHeight', 'innerWidth', 'outerHeight', 'outerWidth']
+			FuncUnit.funcs = [
+			
+			'synthetic', 
+			/**
+			 * @function size
+			 * Calls back with the size
+			 */
+			'size', 
+			'data', 
+			/**
+			 * @function attr
+			 */
+			'attr', 
+			'removeAttr', 
+			'addClass', 
+			/**
+			 * @function hasClass
+			 */
+			'hasClass', 
+			'removeClass', 
+			'toggleClass', 
+			/**
+			 * @function html
+			 */
+			'html', 
+			/**
+			 * @function text
+			 */
+			'text', 
+			/**
+			 * @function val
+			 */
+			'val', 
+			/**
+			 * @function empty
+			 */
+			'empty', 
+			'css', 
+			'offset', 
+			'offsetParent', 
+			'position', 
+			'scrollTop', 
+			'scrollLeft', 
+			'height', 
+			'width', 
+			'innerHeight', 
+			'innerWidth', 
+			'outerHeight', 
+			'outerWidth']
 			FuncUnit.makeFunc = function(fname){
 				FuncUnit.init.prototype[fname] = function(){
 					//assume last arg is callback
@@ -193,6 +327,11 @@ steal('resources/jquery','resources/json').plugins('funcunit/synthetic')
 			this.context = c == null ? FuncUnit.window.document : c;
 		}
 		FuncUnit.init.prototype = {
+			/**
+			 * Waits until an element exists
+			 * @param {Object} cb
+			 * @param {Object} timeout
+			 */
 			exists: function(cb, timeout){
 				var selector = this.selector, context = this.context;
 				FuncUnit.add(function(success, error){
@@ -202,6 +341,11 @@ steal('resources/jquery','resources/json').plugins('funcunit/synthetic')
 					}, success)
 				}, cb, "Could not find " + this.selector, timeout)
 			},
+			/**
+			 * Waits until an object is missing
+			 * @param {Object} cb
+			 * @param {Object} timeout
+			 */
 			missing: function(cb, timeout){
 				var selector = this.selector, context = this.context;
 				FuncUnit.add(function(success, error){
@@ -211,6 +355,11 @@ steal('resources/jquery','resources/json').plugins('funcunit/synthetic')
 					}, success)
 				}, cb, "Could not find " + this.selector, timeout)
 			},
+			/**
+			 * Types text into the object
+			 * @param {Object} text
+			 * @param {Object} callback
+			 */
 			type: function(text, callback){
 				var selector = this.selector, context = this.context;
 				FuncUnit.add(function(success, error){
@@ -221,6 +370,11 @@ steal('resources/jquery','resources/json').plugins('funcunit/synthetic')
 					setTimeout(success, 13)
 				}, callback, "Could not type " + text + " into " + this.selector)
 			},
+			/**
+			 * Clicks an object
+			 * @param {Object} options
+			 * @param {Object} callback
+			 */
 			click: function(options, callback){
 				var selector = this.selector, context = this.context;
 				FuncUnit.add(function(success, error){
