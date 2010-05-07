@@ -61,18 +61,20 @@ steal(function() {
 	//check for window location change, documentChange, then readyState complete -> fire load if you have one
 	var poller = function(){
 		if (FuncUnit._window.document !== currentDocument) { //we have a new document
+			currentDocument = FuncUnit._window.document;
 			if (FuncUnit._window.document.readyState == "complete") {
-				if (loadSuccess) {
+				var ls = loadSuccess;
+					loadSuccess = null;
+				if (ls) {
 					FuncUnit._window.focus();
 					FuncUnit._window.document.documentElement.tabIndex = 0;
-					var ls = loadSuccess;
-					loadSuccess = null;
+					
 					ls();
 				}
-				currentDocument = FuncUnit._window.document;
+				
 			}
 		}
-		setTimeout(arguments.callee, 1000)
+		setTimeout(arguments.callee, 2000)
 	}
 	
 	FuncUnit._onload = function(success, error){
