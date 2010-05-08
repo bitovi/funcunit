@@ -1,5 +1,5 @@
 steal(function(){
-	if (navigator.userAgent.match(/Rhino/) && window.SeleniumBrowsers && !window.build_in_progress) {
+	if (navigator.userAgent.match(/Rhino/) && FuncUnit.browsers && !window.build_in_progress) {
 		FuncUnit.startSelenium();
 
 
@@ -11,11 +11,13 @@ steal(function(){
 				FuncUnit.selenium.stop();
 				FuncUnit.endtime = new Date().getTime();
 				var formattedtime = (FuncUnit.endtime - FuncUnit.starttime) / 1000;
-				print("\nALL DONE " + failures + ", " + total + (SeleniumDefaults.showTimestamps? (' - ' + formattedtime + ' seconds'): ""))
+				print("\nALL DONE " + failures + ", " + total + (FuncUnit.showTimestamps? (' - ' 
+						+ formattedtime + ' seconds'): ""))
 				browser++;
-				if (browser < SeleniumBrowsers.length) {
-					print("\nSTARTING " + SeleniumBrowsers[browser])
-					FuncUnit.selenium = new DefaultSelenium(SeleniumDefaults.serverHost, SeleniumDefaults.serverPort, SeleniumBrowsers[browser], SeleniumDefaults.browserURL);
+				if (browser < FuncUnit.browsers.length) {
+					print("\nSTARTING " + FuncUnit.browsers[browser])
+					FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
+						FuncUnit.serverPort, FuncUnit.browsers[browser], window.location);
 					FuncUnit.starttime = new Date().getTime();
 					FuncUnit.selenium.start();
 					QUnit.restart();
@@ -27,8 +29,9 @@ steal(function(){
 			}
 			
 			
-			print("\nSTARTING " + SeleniumBrowsers[0])
-			FuncUnit.selenium = new DefaultSelenium(SeleniumDefaults.serverHost, SeleniumDefaults.serverPort, SeleniumBrowsers[0], SeleniumDefaults.browserURL);
+			print("\nSTARTING " + FuncUnit.browsers[0])
+			FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
+				FuncUnit.serverPort, FuncUnit.browsers[0], window.location);
 			FuncUnit.starttime = new Date().getTime();
 			FuncUnit.selenium.start();
 			FuncUnit._open = function(url){
