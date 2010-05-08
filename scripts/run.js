@@ -6,6 +6,7 @@ if (!fileName || fileName.indexOf(".html") == -1) {
 }
 
 load('steal/rhino/env.js');
+load('funcunit/settings.js')
 
 var dirArr = fileName.split("/"),
 	dir = dirArr.slice(0, dirArr.length-1).join("/"),
@@ -20,8 +21,6 @@ try {
 }
 if(foundSettings){
 	load(settingsPath)
-} else {
-	load('settings.js')
 }
 
 var path = new java.io.File(".").getCanonicalPath();
