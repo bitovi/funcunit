@@ -1,7 +1,11 @@
 steal(function(){
 	if (navigator.userAgent.match(/Rhino/) && FuncUnit.browsers && !window.build_in_progress) {
-		FuncUnit.startSelenium();
 
+		// configuration defaults
+		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
+		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
+		
+		FuncUnit.startSelenium();
 
 		(function(){
 			var browser = 0;

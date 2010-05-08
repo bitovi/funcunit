@@ -86,9 +86,6 @@ steal.plugins('funcunit/qunit',
 		 * @Static
 		 */
 		$.extend(FuncUnit,oldFunc)
-		// configuration defaults
-		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
-		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
 		FuncUnit.
 		/**
 		 * Opens a page
