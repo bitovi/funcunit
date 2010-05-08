@@ -1,7 +1,10 @@
 //what we need from jQuery
-steal('resources/jquery','resources/json').plugins('funcunit/synthetic')
-//we need qunit
-.plugins(	'funcunit/qunit')
+steal.plugins('funcunit/qunit',
+	'funcunit/qunit/rhino',
+	'jquery',
+	'jquery/lang/json',		
+	'funcunit/synthetic'
+	)
 //Now describe FuncUnit
 .then(function(){
 		var window = (function(){return this }).call(null),
