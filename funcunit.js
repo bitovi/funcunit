@@ -492,6 +492,33 @@ FuncUnit._opened = function(){};
 			return this;
 		}
 	}
+	FuncUnit.makeWait = function(fname){
+		var caps = fname.substr(0,1).toUpperCase()+fname.substr(1);
+		FuncUnit.init.prototype["wait"+caps] = function(){
+			//assume last arg is callback
+			var args = FuncUnit.makeArray(arguments), 
+				callback,
+				tester;
+			if (typeof args[args.length - 1] == "function") {
+				tester = args.pop();
+			}
+			if (typeof args[args.length - 1] == "function") {
+				callback = tester;
+				tester = args.pop();
+			}
+			args.unshift(fname)
+			args.unshift(this.context)
+			args.unshift(this.selector)
+			
+			FuncUnit.add(function(success, error){
+				FuncUnit._repeat(function(){
+					var ret = FuncUnit.$.apply(FuncUnit.$, args);
+					return tester(ret)
+				}, success)
+			}, callback, "wait"+caps +" on " + this.selector)
+			return this;
+		}
+	}
 })();
 
 
@@ -593,6 +620,7 @@ FuncUnit.init.prototype = {
 (function(){
 	for (var i = 0; i < FuncUnit.funcs.length; i++) {
 		FuncUnit.makeFunc(FuncUnit.funcs[i])
+		FuncUnit.makeWait(FuncUnit.funcs[i])
 	}
 })();
 S = FuncUnit;

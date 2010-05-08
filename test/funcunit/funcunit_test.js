@@ -45,7 +45,14 @@ test("iframe", function(){
 		equals(text, "Goodbye World", "text of iframe")
 	})
 })
-
+test("waitHtml", function(){
+	S("#clickToChange").click().waitHtml(function(html){
+		return html == "changed"
+	}).html(function(html){
+		equals(html,"changed","wait actually waits")
+	})
+	
+})
 
 test("Next Test", function(){
 
