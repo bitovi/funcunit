@@ -5,7 +5,8 @@ if (!fileName || fileName.indexOf(".html") == -1) {
 	quit();
 }
 
-load('steal/rhino/env.js');
+//load('steal/rhino/env.js');
+load('funcunit/dist/selenium/rhino_env/env.js');
 load('funcunit/settings.js')
 
 var dirArr = fileName.split("/"),
@@ -23,9 +24,6 @@ if(foundSettings){
 	load(settingsPath)
 }
 
-var path = new java.io.File(".").getCanonicalPath();
-if(!FuncUnit.browserURL)
-	FuncUnit.browserURL = "file:///"+path.replace("\\", "/")+"/"+fileName;
 Envjs(fileName, {
 	scriptTypes: {
 		"text/javascript": true,

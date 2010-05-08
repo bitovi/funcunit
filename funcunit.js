@@ -107,6 +107,11 @@ steal.plugins('funcunit/qunit',
 			document: {}
 		};
 		FuncUnit._opened = function(){};
+		var path = new java.io.File(".").getCanonicalPath();
+		if(!FuncUnit.jmvcRoot)
+			FuncUnit.jmvcRoot = "file:///"+path.replace("\\", "/")+"/"+fileName;
+		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
+		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
 		(function(){
 			var queue = [], incallback = false;
 			FuncUnit.add = function(f, callback, error, timeout){
