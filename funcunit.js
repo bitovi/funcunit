@@ -86,6 +86,9 @@ steal.plugins('funcunit/qunit',
 		 * @Static
 		 */
 		$.extend(FuncUnit,oldFunc)
+		// configuration defaults
+		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
+		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
 		FuncUnit.
 		/**
 		 * Opens a page
@@ -107,11 +110,6 @@ steal.plugins('funcunit/qunit',
 			document: {}
 		};
 		FuncUnit._opened = function(){};
-		var path = new java.io.File(".").getCanonicalPath();
-		if(!FuncUnit.href)
-			FuncUnit.href = "file:///"+path.replace("\\", "/")+"/"+fileName;
-		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
-		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
 		(function(){
 			var queue = [], incallback = false;
 			FuncUnit.add = function(f, callback, error, timeout){
