@@ -17,7 +17,7 @@ steal(function(){
 				if (browser < FuncUnit.browsers.length) {
 					print("\nSTARTING " + FuncUnit.browsers[browser])
 					FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
-						FuncUnit.serverPort, FuncUnit.browsers[browser], FuncUnit.jmvcRoot);
+						FuncUnit.serverPort, FuncUnit.browsers[browser], FuncUnit.href);
 					FuncUnit.starttime = new Date().getTime();
 					FuncUnit.selenium.start();
 					QUnit.restart();
@@ -31,7 +31,7 @@ steal(function(){
 			
 			print("\nSTARTING " + FuncUnit.browsers[0])
 			FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
-				FuncUnit.serverPort, FuncUnit.browsers[0], FuncUnit.jmvcRoot);
+				FuncUnit.serverPort, FuncUnit.browsers[0], FuncUnit.href);
 			FuncUnit.starttime = new Date().getTime();
 			FuncUnit.selenium.start();
 			FuncUnit._open = function(url){
