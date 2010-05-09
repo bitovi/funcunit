@@ -62,3 +62,19 @@ test("Next Test", function(){
 		ok('coolness')
 	})
 })
+
+test("URL Test", function(){
+	var path;
+	
+	path = FuncUnit.getAbsolutePath("http://foo.com")
+	equals(path, "http://foo.com", "paths match");
+	
+	FuncUnit.jmvcRoot = "http://localhost/"
+	path = FuncUnit.getAbsolutePath("//myapp/mypage.html")
+	equals(path, "http://localhost/myapp/mypage.html", "paths match");
+	
+	FuncUnit.jmvcRoot = null
+	path = FuncUnit.getAbsolutePath("//myapp/mypage.html")
+	equals(path, "../myapp/mypage.html", "paths match");
+	
+})

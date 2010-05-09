@@ -226,15 +226,32 @@ S.open("//app/app.html")
  * @param {Number} timeout
  */
 open = function(path, callback, timeout){
+	var fullPath = FuncUnit.getAbsolutePath(path)
 	FuncUnit.add(function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
 		//page = window.open(path);
-		FuncUnit._open(path, error);
+		FuncUnit._open(fullPath, error);
 		FuncUnit._onload(function(){
 			FuncUnit._opened();
 			success()
 		}, error);
 	}, callback, "Page " + path + " not loaded in time!", timeout);
 };
+
+FuncUnit.getAbsolutePath = function(path){
+	var fullPath, 
+		root = FuncUnit.jmvcRoot || steal.root.path;
+	
+	if (/^\/\//.test(path)) {
+		fullPath = new steal.File(path.substr(2)).joinFrom(root);
+	}
+	else {
+		fullPath = path;
+	}
+	
+	if(/^http/.test(path))
+		fullPath = path;
+	return fullPath;
+}
 
 FuncUnit.window = {
 	document: {}
