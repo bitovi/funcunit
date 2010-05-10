@@ -5,8 +5,7 @@ if (!fileName || fileName.indexOf(".html") == -1) {
 	quit();
 }
 
-//load('steal/rhino/env.js');
-load('funcunit/dist/selenium/rhino_env/env.js');
+load('steal/rhino/env.js');
 load('funcunit/settings.js')
 
 var dirArr = fileName.split("/"),
