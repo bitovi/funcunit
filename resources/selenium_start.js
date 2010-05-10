@@ -13,7 +13,7 @@ FuncUnit.startSelenium = function(){
 				runCommand("cmd", "/C", 'start "selenium" java -jar funcunit\\java\\selenium-server.jar')
 			}
 			else {
-				runCommand("sh", "-c", "nohup ./steal/js -selenium > selenium.log  2> selenium.err &")
+				runCommand("sh", "-c", "./java -jar funcunit/java/selenium-server.jar")
 			}
 		})
 
