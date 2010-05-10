@@ -13,14 +13,15 @@ FuncUnit.startSelenium = function(){
 				runCommand("cmd", "/C", 'start "selenium" java -jar funcunit\\java\\selenium-server.jar')
 			}
 			else {
-				runCommand("sh", "-c", "./java -jar funcunit/java/selenium-server.jar")
+				runCommand("sh", "-c", "java -jar funcunit/java/selenium-server.jar > selenium.log 2> selenium.log &")
 			}
 		})
-
-		var timeouts = 0;
+		var timeouts = 0, 
+			started = false;
 		var pollSeleniumServer = function(){
 			try {
 				var s = new java.net.Socket(addr, FuncUnit.serverPort)
+				started = true;
 			} 
 			catch (ex) {
 				if (timeouts > 3) {
@@ -28,11 +29,13 @@ FuncUnit.startSelenium = function(){
 					quit();
 				} else {
 					timeouts++;
-					setTimeout( pollSeleniumServer, 1000);
 				}
 			}					
 		}
-		setTimeout( pollSeleniumServer, 1000);
+		while(!started){
+			java.lang.Thread.currentThread().sleep(1000);
+			pollSeleniumServer();
+		}
 	}
 }
 })
