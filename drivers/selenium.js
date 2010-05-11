@@ -1,5 +1,5 @@
 steal(function(){
-	if (navigator.userAgent.match(/Rhino/) && !window.build_in_progress) {
+	if (navigator.userAgent.match(/Rhino/) && FuncUnit.browsers !== undefined) {
 
 		// configuration defaults
 		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
