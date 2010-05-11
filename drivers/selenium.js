@@ -1,9 +1,19 @@
 steal(function(){
-	if (navigator.userAgent.match(/Rhino/) && FuncUnit.browsers && !window.build_in_progress) {
+	if (navigator.userAgent.match(/Rhino/) && !window.build_in_progress) {
 
 		// configuration defaults
 		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
 		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
+		if(!FuncUnit.browsers){
+			if(FuncUnit.jmvcRoot)
+				FuncUnit.browsers = ["*firefox", "*iexplore", "*safari", "*googlechrome"]
+			else {
+				FuncUnit.browsers = ["*firefox"]
+				if(java.lang.System.getProperty("os.name").indexOf("Windows") != -1){
+					FuncUnit.browsers.push("*iexplore")
+				}
+			}
+		}
 		
 		FuncUnit.startSelenium();
 
