@@ -219,22 +219,17 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			}
 		}
 		var preventDefault = event.preventDefault, prevented = false, fire_event;
-		if(browser.firefox){
-			event.preventDefault = function(){
-				preventDefault.apply(this,[]);
-				prevented = true;
-			}
-			part.dispatch(event, element)
-			fire_event = !prevented;
-		}else{
-			fire_event = part.dispatch(event, element)
-			if(options.keyCode && options.keyCode == 8) element.value = element.value.substring(0,element.value.length-1);
+		event.preventDefault = function(){
+			preventDefault.apply(this,[]);
+			prevented = true;
 		}
+		part.dispatch(event, element)
+		fire_event = !prevented;
 		
-		if(fire_event && type == 'keypress' && !browser.firefox && 
+		if(fire_event && type == 'keypress' && !support.backspaceWorks && 
 			(element.nodeName.toLowerCase() == 'input' || element.nodeName.toLowerCase() == 'textarea')) {
 				if(options.character) element.value += options.character;
-				else if(options.keyCode && options.keyCode == 8) element.value = element.value.substring(0,element.value.length-1);
+				if(options.keyCode && options.keyCode == 8) element.value = element.value.substring(0,element.value.length-1);
 		};
 		
 		return fire_event;
@@ -311,6 +306,11 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		}, form.childNodes[3]);
 		if (submitted) 
 			support.keypressSubmits = true;
+			
+		createEvent("keypress", {character: "a"}, form.childNodes[3]);
+		createEvent("keypress", {character: "\b"}, form.childNodes[3]);
+		if (form.childNodes[3].value == "") 
+			support.backspaceWorks = true;
 		
 		form.childNodes[1].onchange = function(){
 			support.radioClickChanges = true;

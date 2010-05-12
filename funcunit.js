@@ -253,6 +253,9 @@ FuncUnit.getAbsolutePath = function(path){
 	return fullPath;
 }
 
+// for feature detection
+FuncUnit.support = {};
+
 FuncUnit.window = {
 	document: {}
 };

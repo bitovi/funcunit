@@ -1,4 +1,9 @@
 steal(function() {
+	var readystate = document.readyState;
+	$(window).load(function(){
+		if(document.readyState != readystate)
+			FuncUnit.support.readystate = true;
+	})
 	//don't do any of this if in rhino (IE selenium)
 	if (navigator.userAgent.match(/Rhino/)) {
 		return;	
@@ -64,7 +69,7 @@ steal(function() {
 	var poller = function(){
 		if (FuncUnit._window.document !== currentDocument) { //we have a new document
 			currentDocument = FuncUnit._window.document;
-			if (FuncUnit._window.document.readyState == "complete") {
+			if (FuncUnit._window.document.readyState == "complete" && FuncUnit._window.location.href!="about:blank") {
 				var ls = loadSuccess;
 					loadSuccess = null;
 				if (ls) {
@@ -76,7 +81,7 @@ steal(function() {
 				
 			}
 		}
-		setTimeout(arguments.callee, 2000)
+		setTimeout(arguments.callee, 1000)
 	}
 	
 	FuncUnit._onload = function(success, error){
@@ -84,7 +89,7 @@ steal(function() {
 		if (!newPage) 
 			return;
 		newPage = false;
-		if (jQuery.browser.msie) //check for readyState
+		if (FuncUnit.support.readystate)
 		{
 			poller();
 		}

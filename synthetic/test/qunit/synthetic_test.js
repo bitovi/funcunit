@@ -143,7 +143,6 @@ test("Click link", function(){
 
 
 test("Keypress", function(){
-	return;
 	__g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'><input type='input' id='key' value=''/></div></form>";
 	var submit = 0, submitf = function(ev){
 		submit++;
@@ -152,27 +151,27 @@ test("Keypress", function(){
 		}
 		return false;
 	};
+	var keyEl = __g("key")
 	__addEventListener(__g("outer"),"submit",submitf );
 	var keypress = 0, keypressf = function(ev){
 		keypress++;
 	};
 	__addEventListener(__g("outer"),"keypress",keypressf );
-	__g("key").value = "";
+	keyEl.value = "";
 	
-	new Synthetic("keypress","a").send( __g("key") );
-	
-	equals(__g("key").value, "a", "A written");
+	new Synthetic("keypress","a").send(keyEl);
+	equals(keyEl.value, "a", "A written");
 	
 	equals(keypress, 1, "Keypress called once");
 	
-	new Synthetic("keypress","5").send( __g("key") );
-	equals(__g("key").value, "a5", "5 written");
+	new Synthetic("keypress","5").send(keyEl);
+	equals(keyEl.value, "a5", "5 written");
 	
-	new Synthetic("keypress","\b").send( __g("key") );
-	equals(__g("key").value, "a", "Backspace works");
+	new Synthetic("keypress","\b").send(keyEl);
+	equals(keyEl.value, "a", "Backspace works");
 	
 	
-	new Synthetic("keypress","\n").send( __g("key") );
+	new Synthetic("keypress","\n").send(keyEl);
 	equals(submit, 1, "submit on keypress");
 	
 	__removeEventListener(__g("outer"),"submit",submitf );
