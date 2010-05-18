@@ -255,7 +255,12 @@ FuncUnit.getAbsolutePath = function(path){
 
 // for feature detection
 FuncUnit.support = {};
-
+/**
+ * @attribute browsers
+ * Used to configure the browsers selenium uses to run FuncUnit tests.
+ * If you need to learn how to configure selenium, and we haven't filled in this page,
+ * post a note on the forum and we will fill this out right away.
+ */
 FuncUnit.window = {
 	document: {}
 };
