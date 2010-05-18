@@ -16,9 +16,10 @@ steal(function(){
 		}
 		
 		FuncUnit.startSelenium();
-
 		(function(){
 			var browser = 0;
+			//convert spaces to %20.
+			var location = /file:/.test(window.location.protocol) ? window.location.href.replace(/ /g,"%20") : window.location.href;
 			
 			QUnit.done = function(failures, total){
 				FuncUnit.selenium.close();
@@ -30,8 +31,9 @@ steal(function(){
 				browser++;
 				if (browser < FuncUnit.browsers.length) {
 					print("\nSTARTING " + FuncUnit.browsers[browser])
+					
 					FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
-						FuncUnit.serverPort, FuncUnit.browsers[browser], window.location);
+						FuncUnit.serverPort, FuncUnit.browsers[browser], location);
 					FuncUnit.starttime = new Date().getTime();
 					FuncUnit.selenium.start();
 					QUnit.restart();
@@ -45,7 +47,7 @@ steal(function(){
 			
 			print("\nSTARTING " + FuncUnit.browsers[0])
 			FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
-				FuncUnit.serverPort, FuncUnit.browsers[0], window.location);
+				FuncUnit.serverPort, FuncUnit.browsers[0], location);
 			FuncUnit.starttime = new Date().getTime();
 			FuncUnit.selenium.start();
 			FuncUnit._open = function(url){
