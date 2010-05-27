@@ -66,9 +66,10 @@ steal(function() {
 	}
 	
 	//check for window location change, documentChange, then readyState complete -> fire load if you have one
-	var poller = function(){
-		if (FuncUnit._window.document !== currentDocument) { //we have a new document
+	var newDocument = false, poller = function(){
+		if (FuncUnit._window.document !== currentDocument || newDocument) { //we have a new document
 			currentDocument = FuncUnit._window.document;
+            newDocument = true;
 			if (FuncUnit._window.document.readyState == "complete" && FuncUnit._window.location.href!="about:blank") {
 				var ls = loadSuccess;
 					loadSuccess = null;
