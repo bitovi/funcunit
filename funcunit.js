@@ -229,6 +229,7 @@ open = function(path, callback, timeout){
 	var fullPath = FuncUnit.getAbsolutePath(path)
 	FuncUnit.add(function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
 		//page = window.open(path);
+		steal.dev.log("Opening "+path)
 		FuncUnit._open(fullPath, error);
 		FuncUnit._onload(function(){
 			FuncUnit._opened();
@@ -266,10 +267,10 @@ FuncUnit.window = {
 };
 FuncUnit._opened = function(){};
 (function(){
-	var queue = [], incallback = false;
+	var queue = [], incallback_queue = [], incallback = false;
 	FuncUnit.add = function(f, callback, error, timeout){
 		if (incallback) {
-			queue.unshift({
+			incallback_queue.push({
 				method: f,
 				callback: callback,
 				error: error,
@@ -285,17 +286,19 @@ FuncUnit._opened = function(){};
 			});
 		}
 		
-		
-		if (queue.length == 1) {
-			stop();
-			setTimeout(FuncUnit._done, 13)
-		//();
-		}
+        if (queue.length == 1 && incallback_queue.length == 0) {
+            stop();
+            setTimeout(FuncUnit._done, 13)
+        }
 	}
 	FuncUnit._done = function(){
+		var next, timer;
 		if (queue.length > 0) {
-			var next = queue.shift();
-			var timer = setTimeout(function(){
+			if (incallback_queue.length > 0)
+				next = incallback_queue.shift();
+			else
+				next = queue.shift();
+			timer = setTimeout(function(){
 				ok(false, next.error);
 				FuncUnit._done();
 			}, next.timeout || 10000)
@@ -327,6 +330,7 @@ FuncUnit._opened = function(){};
 	wait = function(time, cb){
 		time = time || 10000
 		FuncUnit.add(function(success, error){
+			steal.dev.log("Waiting "+time)
 			setTimeout(success, time)
 		}, cb, "Couldn't wait!", time * 2)
 	}
@@ -506,11 +510,13 @@ FuncUnit._opened = function(){};
 				callback = args.pop();
 			}
 			
+			var selector = this.selector, context = this.context;
 			args.unshift(fname)
 			args.unshift(this.context)
 			args.unshift(this.selector)
 			
 			FuncUnit.add(function(success, error){
+				steal.dev.log("Running "+fname+" on "+selector)
 				var ret = FuncUnit.$.apply(FuncUnit.$, args);//  (selector,fname)
 				success(ret)
 			}, callback, "Can't get text of " + this.selector)
@@ -563,6 +569,7 @@ FuncUnit.init.prototype = {
 	exists: function(cb, timeout){
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
+			steal.dev.log("Checking exists on "+selector)
 			FuncUnit._repeat(function(){
 				//return jQuery(selector, page.document).length
 				return FuncUnit.$(selector, context, "size");
@@ -577,11 +584,12 @@ FuncUnit.init.prototype = {
 	missing: function(cb, timeout){
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
+			steal.dev.log("Checking missing on "+selector)
 			FuncUnit._repeat(function(){
 				//return jQuery(selector, page.document).length
 				return !FuncUnit.$(selector, context, "size");
 			}, success)
-		}, cb, "Could not find " + this.selector, timeout)
+		}, cb, this.selector+" is not missing", timeout)
 	},
 	/**
 	 * Waits until an object is visible
@@ -591,6 +599,7 @@ FuncUnit.init.prototype = {
 	visible: function(cb, timeout){
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
+			steal.dev.log("Checking visible on "+selector)
 			FuncUnit._repeat(function(){
 				//return jQuery(selector, page.document).length
 				return FuncUnit.$(selector+":visible", context, "size");
@@ -605,11 +614,12 @@ FuncUnit.init.prototype = {
 	invisible: function(cb, timeout){
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
+			steal.dev.log("Checking invisible on "+selector)
 			FuncUnit._repeat(function(){
 				//return jQuery(selector, page.document).length
 				return !FuncUnit.$(selector+":visible", context, "size");
 			}, success)
-		}, cb, "Could not find " + this.selector+":visible", timeout)
+		}, cb, this.selector+" is still visible", timeout)
 	},
 	/**
 	 * Types text into the object
@@ -619,12 +629,26 @@ FuncUnit.init.prototype = {
 	type: function(text, callback){
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
+			steal.dev.log("Typing "+text+" on "+selector)
 			for (var c = 0; c < text.length; c++) {
 				FuncUnit.$(selector, context, "synthetic", "key", text.substr(c, 1))
 			}
 			
 			setTimeout(success, 13)
 		}, callback, "Could not type " + text + " into " + this.selector)
+	},
+	dragTo: function(to, options, callback){
+		options = options || {};
+		options.duration = options.duration || 1;
+		options.to = to;
+		var selector = this.selector, context = this.context;
+		FuncUnit.add(function(success, error){
+			steal.dev.log("dragging "+selector)
+			// new Synthetic("drag", {duration: 1, to: "#drop"}).send($("#drag")[0]);
+			FuncUnit.$(selector, context, "synthetic", "drag", options)
+			setTimeout(success, 13)
+		}, callback, "Could not drag " + this.selector)
+		return this;
 	},
 	/**
 	 * Clicks an object
@@ -634,6 +658,7 @@ FuncUnit.init.prototype = {
 	click: function(options, callback){
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
+			steal.dev.log("Clicking "+selector)
 			FuncUnit.$(selector, context, "synthetic", "click", options, FuncUnit.window)
 			setTimeout(success, 13)
 		}, callback, "Could not click " + this.selector)

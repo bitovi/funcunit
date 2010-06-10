@@ -518,7 +518,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			return createEvent(this.type, this.options, element)
 			
 		},
-        drag: function(from, to){
+		// drag requires jquery
+        drag: function(from){
             //get from and to
             var addxy = function(part, options, center){
 				if(!options[part].x || !options[part].y ){
@@ -531,7 +532,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
             	}
             }
             this.options.from = from;
-			this.options.to = to;
+			this.options.to = $(this.options.to, from.ownerDocument)[0];
             addxy('from', this.options);
             addxy('to', this.options, true);
             if(this.options.duration){

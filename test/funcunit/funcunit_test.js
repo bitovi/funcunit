@@ -1,9 +1,9 @@
 module("funcunit test")
 
 test("Back to back opens", function(){
-	S.open("myotherapp.html", null, 10000);
+	S.open("test/myotherapp.html", null, 10000);
 	
-	S.open("myapp.html", null, 10000);
+	S.open("test/myapp.html", null, 10000);
 
 	S("#changelink").click().text(function(t){
 		equals(t, "Changed","href javascript run")
@@ -12,7 +12,7 @@ test("Back to back opens", function(){
 
 test("Copy Test", function(){
 
-	S.open("myapp.html", null, 10000);
+	S.open("test/myapp.html", null, 10000);
 	
 	S("#typehere").type("javascriptmvc")
 	
@@ -39,6 +39,14 @@ test("click href", function(){
 	})
 })
 
+test("drag test", function(){
+	S("#drag").dragTo("#drop")
+	S.wait(2000)
+	S("#drop").hasClass("dropover", function(has){
+		ok(has, "Drop worked ok")
+	})
+})
+
 test("iframe", function(){
 	
 	S("h2",0).text(function(text){
@@ -56,7 +64,7 @@ test("waitHtml", function(){
 
 test("Next Test", function(){
 
-	S.open("myotherapp.html", null, 10000);
+	S.open("test/myotherapp.html", null, 10000);
 	
 	S.wait(1000,function(){
 		ok('coolness')
