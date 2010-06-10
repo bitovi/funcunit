@@ -262,3 +262,6 @@ test("backslash n", function(){
 	equals(__g("here").innerHTML, "submitted" , "\n works")
 	__g("qunit-test-area").innerHTML = "";
 })
+
+// todo make sure you can do new Synthetic("key",{keyCode: 34}).send( __g("myinput") );
+// make a test for this

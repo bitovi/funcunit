@@ -520,6 +520,10 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		},
 		// drag requires jquery
         drag: function(from){
+			if( !jQuery ) {
+				throw "You need jQuery to perform drags in synthetic.js"
+			}
+				
             //get from and to
             var addxy = function(part, options, center){
 				if(!options[part].x || !options[part].y ){
