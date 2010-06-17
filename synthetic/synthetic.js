@@ -554,15 +554,15 @@ if (!navigator.userAgent.match(/Rhino/)) {
             this.create_event(from);
             this.type = 'mousemove';
             for(var i = 0; i < steps; i++){
-                x = this.options.from.x + (i * (this.options.to.x - this.options.from.x )) / steps;
-                y = this.options.from.y + (i * (this.options.to.y - this.options.from.y )) / steps;
+                x = this.options.from.x -  scrollLeft + (i * (this.options.to.x - this.options.from.x )) / steps;
+                y = this.options.from.y - scrollTop + (i * (this.options.to.y - this.options.from.y )) / steps;
                 this.options.clientX = x;
                 this.options.clientY = y;
                 this.create_event(from);
             }
             this.type = 'mouseup';
-            this.options.clientX = this.options.to.x;
-            this.options.clientY = this.options.to.y;
+            this.options.clientX = this.options.to.x - scrollLeft;
+            this.options.clientY = this.options.to.y - scrollTop;
             this.create_event(from);
         }
 		
