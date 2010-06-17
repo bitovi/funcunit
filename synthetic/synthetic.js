@@ -543,8 +543,10 @@ if (!navigator.userAgent.match(/Rhino/)) {
                 return new Drag(from, this.options)
             }
 			
-            var x = this.options.from.x;
-            var y = this.options.from.y;
+		    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+		    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || 0;
+            var x = this.options.from.x - scrollLeft;
+            var y = this.options.from.y - scrollTop;
             var steps = this.options.steps || 100;
             this.type = 'mousedown';
             this.options.clientX = x;
