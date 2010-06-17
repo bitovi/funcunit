@@ -546,6 +546,9 @@ if (!navigator.userAgent.match(/Rhino/)) {
             var x = this.options.from.x;
             var y = this.options.from.y;
             var steps = this.options.steps || 100;
+			if( $(document).scrollTop() > y ) {
+				$(document).scrollTop(y);
+			}
             this.type = 'mousedown';
             this.options.clientX = x;
             this.options.clientY = y;
@@ -560,7 +563,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
             }
             this.type = 'mouseup';
             this.options.clientX = this.options.to.x;
-            this.options.clientY = this.options.to.y ;
+            this.options.clientY = this.options.to.y;
             this.create_event(from);
         }
 		
