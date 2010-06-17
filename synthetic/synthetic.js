@@ -546,9 +546,6 @@ if (!navigator.userAgent.match(/Rhino/)) {
             var x = this.options.from.x;
             var y = this.options.from.y;
             var steps = this.options.steps || 100;
-			if( $(document).scrollTop() > y ) {
-				$(document).scrollTop(y);
-			}
             this.type = 'mousedown';
             this.options.clientX = x;
             this.options.clientY = y;
