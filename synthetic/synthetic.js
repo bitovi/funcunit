@@ -460,8 +460,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			})
 			
 			
-			if(!support.clickSubmits)
-				createEvent("mouseup", {}, element)
+			
 			//record current value, set blur to issue change
 			if(!support.focusChanges){
 				
@@ -478,7 +477,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				
 			}
 			
-			
+			//if(!support.clickSubmits)
+			createEvent("mouseup", {}, element)
 			
 			//jQuery(element).bind("click",set );
 			var res = this.create_event(element);
