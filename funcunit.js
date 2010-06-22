@@ -2,7 +2,7 @@
 steal.plugins('funcunit/qunit',
 	'funcunit/qunit/rhino',
 	'jquery',
-	'jquery/lang/json',		
+	'jquery/lang/json',
 	'funcunit/synthetic'
 	)
 //Now describe FuncUnit
@@ -639,13 +639,12 @@ FuncUnit.init.prototype = {
 	},
 	dragTo: function(to, options, callback){
 		options = options || {};
-		options.duration = options.duration || 1;
 		options.to = to;
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("dragging "+selector)
 			// new Synthetic("drag", {duration: 1, to: "#drop"}).send($("#drag")[0]);
-			FuncUnit.$(selector, context, "synthetic", "drag", options)
+			FuncUnit.$(selector, context, "synthetic", "drag", options, FuncUnit.window)
 			setTimeout(success, 13)
 		}, callback, "Could not drag " + this.selector)
 		return this;

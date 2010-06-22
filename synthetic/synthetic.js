@@ -570,6 +570,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		},
 		// drag requires jquery
         drag: function(from){
+			var doc = this.scope.document;
+			var jq = this.scope.jQuery
 			if( !jQuery ) {
 				throw "You need jQuery to perform drags in synthetic.js"
 			}
@@ -577,7 +579,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
             //get from and to
             var addxy = function(part, options, center){
 				if(!options[part].x || !options[part].y ){
-					var j = jQuery(options[part])
+					var j = jq(options[part], doc)
                 	var o = j.offset();
 	                options[part] = {
 	                    x: o.left+ (center ? j.width() / 2 : 0 ),
@@ -586,7 +588,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
             	}
             }
             this.options.from = from;
-			this.options.to = $(this.options.to, from.ownerDocument)[0];
+			this.options.to = jq(this.options.to, doc)[0];
             addxy('from', this.options);
             addxy('to', this.options, true);
             if(this.options.duration){
