@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <title>Synthetic Typing Test</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            td:nth-child(even) {background: #CCd}
+			#key th:nth-child(even) {background: #CCf}
+			#who th:nth-child(even) {background: #fCb}
+        </style>
+    </head>
+    <body>
+    	<p>Type: <code>1 a [ENTER] [BACKSPACE] [DOWN]</code> with no spaces</p>
+		<input id='manual'/>
+		<p>Synthetic Driven</p>
+		<input id='synthetic'/>
+		
+		<table>
+			<tr id='key'>
+				<td></td>
+				<th colspan='4'>1</th>
+				<th colspan='4'>a</th>
+				<th colspan='4'>[ENTER]</th>
+				<th colspan='4'>[BACKSPACE]</th>
+				<th colspan='4'>[DOWN]</th>
+			</tr>
+			<tr id='who'>
+				<th></th>
+				<th colspan='2'>char</th>
+				<th colspan='2'>key</th>
+				<th colspan='2'>char</th>
+				<th colspan='2'>key</th>
+				<th colspan='2'>char</th>
+				<th colspan='2'>key</th>
+				<th colspan='2'>char</th>
+				<th colspan='2'>key</th>
+				<th colspan='2'>char</th>
+				<th colspan='2'>key</th>
+			</tr>
+			<tr id='types'>
+				<td></td>
+			</td>
+			<tr id='keydown'><td>keydown</td></tr>
+			<tr id='keypress'><td>keypress</td></tr>
+			<tr id='keyup'><td>keyup</td></tr>
+		</table>
+<script type='text/javascript' src='../../steal/steal.js'></script>
+<script type='text/javascript'>
+	steal.plugins('funcunit/synthetic').start();
+</script>
+<script type='text/javascript' id="demo-source">
+	var gId = function(id){
+		return document.getElementById(id)
+	},
+	counters = {
+		manual : {},
+		synthetic : {}
+	},
+	events = ['keydown','keypress','keyup'];
+	
+	gId('manual').value = "";
+	
+	var create = function(type, event){
+		
+		Synthetic.addEventListener(gId(type), event,function(ev){
+			//fill in
+			var where = (4*counters[type][event]) + (type != "synthetic" ? 0 : 1) + 1
+			var row = gId(ev.type)
+			row.childNodes[where].innerHTML = ""+(ev.charCode === undefined ? "u" :ev.charCode ) +"";
+			row.childNodes[where+2].innerHTML = ""+ev.keyCode+"";
+
+			counters[type][event]++;
+		}, false);
+		gId(type).value = ""
+	}
+	var types = gId('types')
+	for(var t=0; t< 20; t++){
+		var td = document.createElement('td')
+		td.innerHTML = t%2 == 1 ? "syn" : "man"
+		types.appendChild(td)
+	}
+	
+	for(var i =0; i < events.length; i++){
+		var row = gId(events[i])
+		for(var c=0; c < 20; c++)
+			row.appendChild(document.createElement('td'))
+		
+		counters.manual[events[i]] = 0
+		counters.synthetic[events[i]] = 0;
+		
+		create("manual",events[i]);
+		create("synthetic",events[i])
+	}
+	
+	window.onload = function(){
+		setTimeout(function(){
+			new Synthetic("key","1").send( gId('synthetic')  );
+			new Synthetic("key","a").send( gId('synthetic')  );
+			new Synthetic("key","\n").send( gId('synthetic')  );
+			new Synthetic("key","\b").send( gId('synthetic')  );
+		},100)
+		
+	}
+	
+	
+</script>
+    </body>
+</html>

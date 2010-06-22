@@ -1,6 +1,8 @@
 if (!navigator.userAgent.match(/Rhino/)) {
-	(function(){
+
+(function(){
 	//check if browser supports change delegation
+
 	var Synthetic = function(type, options, scope){
 			this.type = type;
 			this.options = options || {};
@@ -24,19 +26,23 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		defaults : {
 			keypress : function(options){
 				// if we have to write
+
 				if(support.ready && !support.backspaceWorks && 
 					/input|textarea/i.test(this.nodeName)){
-					if(options.character) {
-						this.value += options.character;
-					}
-					//backspace
 					if (options.keyCode && options.keyCode == 8) {
 						this.value = this.value.substring(0, this.value.length - 1)
+						
+					}else if(options.character && 
+						//dont write \n 
+						!(options.keyCode == 13 && /input/i.test(this.nodeName) )  ) { //don't add \n to inputs
+						this.value += options.character;
 					}
 				}
 				// submit on enter
 				if(support.ready && !support.keypressSubmits 
-				    && ( options.charCode == 10 || options.keyCode == 10 ) 
+				    
+					&& (  options.keyCode == 13 ) 
+					
 					&& this.nodeName.toLowerCase() == "input") {
 					
 					var form = Synthetic.closest(this, "form");
@@ -226,7 +232,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			defaults.keyCode = 8;
 			character = 0;
 		}
-		if (character && character == "\n" && type != 'keypress') {
+		if (character && character == "\n") {
 			defaults.keyCode = 13;
 		}
 		defaults.character = character;
@@ -247,6 +253,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 	create.Event.key = function(part, type, options, element){
 		options = keyOptions(type, options, element );
 		var event
+
 		try {
 			
 			event = element.ownerDocument.createEvent("KeyEvents");
@@ -691,4 +698,5 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		window.Synthetic = Synthetic;
 	
 }());
+
 }

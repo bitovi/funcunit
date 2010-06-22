@@ -190,13 +190,13 @@ test("Select", function(){
 	var change = 0, changef = function(){
 		change++;
 	}
-	console.log(1)
+
 	__g("outer").select.selectedIndex = 0;
-	console.log(2)
+
 	__addEventListener(__g("outer").select,"change",changef );
-	console.log(3)
+
 	new Synthetic("click").send( __g("two") );
-	console.log(4)
+
 	equals(change, 1 , "change called once")
 	equals(__g("outer").select.selectedIndex, 1, "Change Selected Index");
 	__g("qunit-test-area").innerHTML = ""
