@@ -5,7 +5,8 @@ __g = function(id){
 	
 }
 __mylog = function(c){
-	__g("mlog").innerHTML = __g("mlog").innerHTML+c+"<br/>"
+	if(__g("mlog"))
+		__g("mlog").innerHTML = __g("mlog").innerHTML+c+"<br/>"
 }
 
 if(window.addEventListener){ // Mozilla, Netscape, Firefox
@@ -24,12 +25,16 @@ if(window.addEventListener){ // Mozilla, Netscape, Firefox
 	}
 }
 
-	
 
+(function(){
+	for(var name in Synthetic.support){
+		__mylog(name+": "+Synthetic.support[name])
+	}
+})();
 
 
 test("Synthetic basics", function(){
-	return;
+
         ok(Synthetic,"Synthetic exists")
 		
 		__g("qunit-test-area").innerHTML = "<div id='outer'><div id='inner'></div></div>"
@@ -185,12 +190,13 @@ test("Select", function(){
 	var change = 0, changef = function(){
 		change++;
 	}
+	console.log(1)
 	__g("outer").select.selectedIndex = 0;
-	
+	console.log(2)
 	__addEventListener(__g("outer").select,"change",changef );
-	
+	console.log(3)
 	new Synthetic("click").send( __g("two") );
-	
+	console.log(4)
 	equals(change, 1 , "change called once")
 	equals(__g("outer").select.selectedIndex, 1, "Change Selected Index");
 	__g("qunit-test-area").innerHTML = ""
@@ -248,6 +254,8 @@ test("backslash n", function(){
 			"<input id='myinput' type='text' />"+
 			"</form>"+
 			"<div id='here'></div>";
+			
+			
 	__addEventListener(__g("myform"),"submit",function(ev){
 		if ( ev.preventDefault ) {
 			ev.preventDefault();
@@ -259,8 +267,12 @@ test("backslash n", function(){
 	new Synthetic("key","\n").send( __g("myinput") );
 	
 	
-	equals(__g("here").innerHTML, "submitted" , "\n works")
+	equals(__g("here").innerHTML, "submitted" , "\n works");
+	
+	
 	__g("qunit-test-area").innerHTML = "";
+	
+	
 })
 
 // todo make sure you can do new Synthetic("key",{keyCode: 34}).send( __g("myinput") );

@@ -67,6 +67,10 @@ steal(function() {
 	
 	//check for window location change, documentChange, then readyState complete -> fire load if you have one
 	var newDocument = false, poller = function(){
+		if(FuncUnit._window.document  == null){
+			return
+		}
+		
 		if (FuncUnit._window.document !== currentDocument || newDocument) { //we have a new document
 			currentDocument = FuncUnit._window.document;
             newDocument = true;
@@ -82,6 +86,7 @@ steal(function() {
 				
 			}
 		}
+		
 		setTimeout(arguments.callee, 1000)
 	}
 	

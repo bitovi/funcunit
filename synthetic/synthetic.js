@@ -2,33 +2,90 @@ if (!navigator.userAgent.match(/Rhino/)) {
 	(function(){
 	//check if browser supports change delegation
 	var Synthetic = function(type, options, scope){
-		this.type = type;
-		this.options = options || {};
-		this.scope = scope || window
-	}
-	//helpers
-	Synthetic.closest = function(el, type){
-		while(el && el.nodeName.toLowerCase() != type.toLowerCase()){
-			el = el.parentNode
+			this.type = type;
+			this.options = options || {};
+			this.scope = scope || window
+		},
+		extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
+		browser = {
+			msie:     !!(window.attachEvent && !window.opera),
+			opera:  !!window.opera,
+			safari: navigator.userAgent.indexOf('AppleWebKit/') > -1,
+			firefox:  navigator.userAgent.indexOf('Gecko') > -1 && navigator.userAgent.indexOf('KHTML') == -1,
+			mobilesafari: !!navigator.userAgent.match(/Apple.*Mobile.*Safari/),
+			rhino : navigator.userAgent.match(/Rhino/) && true
+		},
+		data = {}, 
+		id = 0, 
+		expando = "_synthetic"+(new Date() - 0);
+		
+	extend(Synthetic,{
+		//default actions by event type
+		defaults : {
+			keypress : function(options){
+				// if we have to write
+				if(support.ready && !support.backspaceWorks && 
+					/input|textarea/i.test(this.nodeName)){
+					if(options.character) {
+						this.value += options.character;
+					}
+					//backspace
+					if (options.keyCode && options.keyCode == 8) {
+						this.value = this.value.substring(0, this.value.length - 1)
+					}
+				}
+				// submit on enter
+				if(support.ready && !support.keypressSubmits 
+				    && ( options.charCode == 10 || options.keyCode == 10 ) 
+					&& this.nodeName.toLowerCase() == "input") {
+					
+					var form = Synthetic.closest(this, "form");
+					if(form)
+						createEvent("submit", {}, form);
+					
+				}
+			}
+			
+		},
+		
+		closest : function(el, type){
+			while(el && el.nodeName.toLowerCase() != type.toLowerCase()){
+				el = el.parentNode
+			}
+			return el;
+		},
+		data : function(el, key, value){
+			var d;
+			if(!el[expando]){
+				el[expando] = id++;
+			}
+			if(!data[el[expando]]){
+				data[el[expando]] = {};
+			}
+			d = data[el[expando]]
+			if(value){
+				data[el[expando]][key] = value;
+			}else{
+				return data[el[expando]][key];
+			}
+		},
+		onParents : function(el, func){
+			var res;
+			while(el && res !== false){
+				res = func(el)
+				el = el.parentNode
+			}
+			return el;
+		},
+		focusable : /^(a|area|frame|iframe|label|input|select|textarea|button|html|object)$/i,
+		isFocusable : function(elem){
+			var attributeNode = elem.getAttributeNode( "tabIndex" );
+
+			return this.focusable.test(elem.nodeName) || attributeNode && attributeNode.specified
 		}
-		return el;
-	}	
-	var data = {}, id = 0, expando = "_synthetic"+(new Date() - 0);
-	Synthetic.data = function(el, key, value){
-		var d;
-		if(!el[expando]){
-			el[expando] = id++;
-		}
-		if(!data[el[expando]]){
-			data[el[expando]] = {};
-		}
-		d = data[el[expando]]
-		if(value){
-			data[el[expando]][key] = value;
-		}else{
-			return data[el[expando]][key];
-		}
-	}
+	})
+	
+
 	
 	
 	if(window.addEventListener){ // Mozilla, Netscape, Firefox
@@ -67,15 +124,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		EventObject : {},
 		Event:{}
 	};
-	var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
-		browser = {
-			msie:     !!(window.attachEvent && !window.opera),
-			opera:  !!window.opera,
-			safari: navigator.userAgent.indexOf('AppleWebKit/') > -1,
-			firefox:  navigator.userAgent.indexOf('Gecko') > -1 && navigator.userAgent.indexOf('KHTML') == -1,
-			mobilesafari: !!navigator.userAgent.match(/Apple.*Mobile.*Safari/),
-			rhino : navigator.userAgent.match(/Rhino/) && true
-		}
+	
 	//-------- Sending the events --------------
 	create.Event.dispatch = function(event, element){
 		return element.dispatchEvent(event)
@@ -192,11 +241,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		event.keyCode = options.keyCode;
 		event.shiftKey = options.shiftKey;
 		var fire_event = part.dispatch(event, element, type);
-		if(fire_event && type == 'keypress' && 
-			(element.nodeName.toLowerCase() == 'input' || element.nodeName.toLowerCase() == 'textarea')) {
-				if(options.character) element.value += options.character;
-				else if(options.keyCode && options.keyCode == 8) element.value = element.value.substring(0,element.value.length-1);
-		}
+		fire_event && Synthetic.defaults[type] && Synthetic.defaults[type].call(element, options)
 		return fire_event;
 	}
 	create.Event.key = function(part, type, options, element){
@@ -225,13 +270,10 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		}
 		part.dispatch(event, element)
 		fire_event = !prevented;
+		// do default events
+		fire_event && Synthetic.defaults[type] && Synthetic.defaults[type].call(element, options)
 		
-		if(fire_event && type == 'keypress' && !support.backspaceWorks && 
-			(element.nodeName.toLowerCase() == 'input' || element.nodeName.toLowerCase() == 'textarea')) {
-				if(options.character) element.value += options.character;
-				if(options.keyCode && options.keyCode == 8) element.value = element.value.substring(0,element.value.length-1);
-		};
-		
+
 		return fire_event;
 	}
 	//---------------------Page EVENTS
@@ -252,9 +294,11 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		mouseupSubmits: false,
 		radioClickChanges : false,
 		focusChanges : false,
-		linkHrefJS : false
+		linkHrefJS : false,
+		keyCharacters : false,
+		backspaceWorks : false
 	};
-	
+	Synthetic.support = support;
 	//support code
 	(function(){
 		var oldSynth = window.__synthTest;
@@ -298,8 +342,10 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			return false;
 		}
 		createEvent("click", {}, submit)
-		if (submitted) 
+		if (submitted) {
 			support.clickSubmits = true;
+		}
+			
 		submitted = false;
 		createEvent("keypress", {
 			character: "\n"
@@ -308,22 +354,31 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			support.keypressSubmits = true;
 			
 		createEvent("keypress", {character: "a"}, form.childNodes[3]);
+		if (form.childNodes[3].value == "a") {
+			support.keyCharacters = true;
+		}
+		form.childNodes[3].value = "a"
 		createEvent("keypress", {character: "\b"}, form.childNodes[3]);
-		if (form.childNodes[3].value == "") 
+		if (form.childNodes[3].value == "") {
 			support.backspaceWorks = true;
+		}
+			
 		
 		form.childNodes[1].onchange = function(){
 			support.radioClickChanges = true;
 		}
 		createEvent("click", {}, form.childNodes[1])
 		
-		form.childNodes[1].onchange = function(){
+		
+		form.childNodes[3].onchange = function(){
 			support.focusChanges = true;
 		}
-		form.childNodes[1].focus();
+		form.childNodes[3].focus();
+		
 		createEvent("keypress", {
 			character: "a"
-		}, form.childNodes[1]);
+		}, form.childNodes[3]);
+		
 		form.childNodes[5].focus();
 		
 		createEvent("click", {}, div.getElementsByTagName('a')[0])
@@ -332,6 +387,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		
 		//check stuff
 		window.__synthTest = oldSynth;
+		support.ready = true;
 	})();
     
 	
@@ -368,16 +424,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		},
 		key : function(element){
 			createEvent("keydown", this.options, element);
-			var options = keyOptions("keypress", this.options, element);
-			createEvent("keypress", options, element);
+			createEvent("keypress", this.options, element);
 			createEvent("keyup", this.options, element);
-			if(options.charCode == 10 || options.keyCode == 10) {
-				if(element.nodeName.toLowerCase() == "input" && !(support.keypressSubmits)){
-					var form = Synthetic.closest(element, "form");
-					if(form)
-						new Synthetic("submit").send( form  );
-				}
-			}
 		},
 		/**
 		 * Mouses down, focuses, up, and clicks an element
@@ -394,10 +442,16 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			}
 			createEvent("mousedown", {}, element);
 			
+			// climb parents, and focus on first that can be focused
+			Synthetic.onParents(element, function(el){
+				if( Synthetic.isFocusable(el) ){
+					try{
+						el.focus();
+					}catch(e){}
+					return false
+				}
+			})
 			
-			try{
-				element.focus();
-			}catch(e){}
 			
 			if(!support.clickSubmits)
 				createEvent("mouseup", {}, element)
@@ -407,14 +461,12 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				
 				Synthetic.data(element,"syntheticvalue", element.value)
 				if(element.nodeName.toLowerCase() == "input"){
-					var f;
-					f= function(){
+					addEventListener(element, "blur", function(){
 						if( Synthetic.data(element,"syntheticvalue") !=  element.value){
 							createEvent("change", {}, element);
 						}
-						removeEventListener(element,"blur", f)
-					}
-					addEventListener(element, "blur", f)
+						removeEventListener(element,"blur", arguments.callee)
+					})
 				}
 				
 			}
@@ -448,10 +500,6 @@ if (!navigator.userAgent.match(/Rhino/)) {
                     }
                 }
                     
-                //}catch(e){
-                //    
-                //}
-                
                 
 			}
 			if(res){
@@ -501,11 +549,6 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			}
 			return res;
 		},
-		/*change : function(element){
-			$(element).val( this.options )
-			return browser.msie ? jQuery(element).change() : this.create_event(element)
- 
-		},*/
 		firefox_autocomplete_off : function(element) {
 			if(browser.firefox && element.nodeName.toLowerCase() == 'input' && element.getAttribute('autocomplete') != 'off')
 				element.setAttribute('autocomplete','off');
