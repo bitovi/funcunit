@@ -1,4 +1,4 @@
-module("synthetic")
+module("funcunit/synthetic")
 
 __g = function(id){
 	return document.getElementById(id)
