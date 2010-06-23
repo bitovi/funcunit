@@ -586,6 +586,16 @@ if (!navigator.userAgent.match(/Rhino/)) {
 	                    y: o.top + (center ? j.height() / 2 : 0 )
 	                };
             	}
+				// relative coordinates
+				if(typeof options[part].x == "string" || typeof options[part].y == "string") {
+					var orig = jq(from, doc).offset()
+					var x = parseInt(options[part].x, 10);
+					var y = parseInt(options[part].y, 10);
+					options[part] = {
+						x: orig.left + x,
+						y: orig.left + y
+					}
+				}
             }
             this.options.from = from;
 			this.options.to = jq(this.options.to, doc)[0];
