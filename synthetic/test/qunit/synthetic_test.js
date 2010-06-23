@@ -275,5 +275,24 @@ test("backslash n", function(){
 	
 })
 
+test("scrolling", function(){
+	__g("qunit-test-area").innerHTML = "<div id='scroller' style='height:100px;width: 100px;overflow:auto'>"+
+			"<div style='height: 200px; width: 100%'>text"+
+			"</div>"+
+			"</div>";
+			
+	__addEventListener(__g("scroller"),"scroll",function(ev){
+		ok(true,"scrolling created just by changing ScrollTop");
+		__g("qunit-test-area").innerHTML ="";
+		start();
+	} );
+	stop();
+	setTimeout(function(){
+		__g("scroller").scrollTop = 10;
+	
+	},10)
+	
+})
+
 // todo make sure you can do new Synthetic("key",{keyCode: 34}).send( __g("myinput") );
 // make a test for this

@@ -267,15 +267,20 @@ FuncUnit.window = {
 };
 FuncUnit._opened = function(){};
 (function(){
-	var queue = [], incallback_queue = [], incallback = false;
+	var queue = [], 
+		incallback = false,
+		//where we should add things in a callback
+		currentPosition = 0;
 	FuncUnit.add = function(f, callback, error, timeout){
+		
 		if (incallback) {
-			incallback_queue.push({
+			queue.splice(currentPosition,0,{
 				method: f,
 				callback: callback,
 				error: error,
 				timeout: timeout
-			});
+			})
+			currentPosition++;
 		}
 		else {
 			queue.push({
@@ -286,36 +291,52 @@ FuncUnit._opened = function(){};
 			});
 		}
 		
-        if (queue.length == 1 && incallback_queue.length == 0) {
-            stop();
+        if (queue.length == 1 && ! incallback) {
+			stop();
             setTimeout(FuncUnit._done, 13)
         }
 	}
 	FuncUnit._done = function(){
-		var next, timer;
-		if (queue.length > 0) {
-			if (incallback_queue.length > 0)
-				next = incallback_queue.shift();
-			else
-				next = queue.shift();
-			timer = setTimeout(function(){
-				ok(false, next.error);
-				FuncUnit._done();
-			}, next.timeout || 10000)
+		var next, 
+			timer;
 			
-			next.method(function(){
-				//mark in callback so the next set of add get added to the front
-				clearTimeout(timer);
-				incallback = true;
-				if (next.callback) 
-					next.callback.apply(null, arguments);
-				incallback = false;
-				FuncUnit._done();
-			}, function(message){
-				clearTimeout(timer);
-				ok(false, message);
-				FuncUnit._done();
-			});
+		if (queue.length > 0) {
+			//if (incallback_queue.length > 0){
+			//	next = incallback_queue.shift();
+			//}else{
+			next = queue.shift();
+			//}
+			currentPosition = 0;
+			// set a timer that will error
+			timer = setTimeout(function(){
+					ok(false, next.error);
+					FuncUnit._done();
+				}, 
+				next.timeout || 10000)
+			
+			//call next method
+			next.method(
+				//success
+				function(){
+					//make sure we don't create an error
+					clearTimeout(timer);
+					
+					//mark in callback so the next set of add get added to the front
+					
+					incallback = true;
+					if (next.callback) 
+						next.callback.apply(null, arguments);
+					incallback = false;
+					
+					
+					FuncUnit._done();
+				},
+				//error
+				function(message){
+					clearTimeout(timer);
+					ok(false, message);
+					FuncUnit._done();
+				});
 		}
 		else {
 			start();
@@ -332,7 +353,8 @@ FuncUnit._opened = function(){};
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Waiting "+time)
 			setTimeout(success, time)
-		}, cb, "Couldn't wait!", time * 2)
+		}, cb, "Couldn't wait!", time + 1000);
+		return this;
 	}
 	
 	FuncUnit._repeat = function(script, callback){
@@ -529,7 +551,9 @@ FuncUnit._opened = function(){};
 			//assume last arg is callback
 			var args = FuncUnit.makeArray(arguments), 
 				callback,
-				tester;
+				tester,
+				errorMessage = "wait"+caps +" on " + this.selector,
+				check;
 			if (typeof args[args.length - 1] == "function") {
 				tester = args.pop();
 			}
@@ -537,6 +561,15 @@ FuncUnit._opened = function(){};
 				callback = tester;
 				tester = args.pop();
 			}
+			// supply tester if it doesn't exists
+			if(!tester){
+				check = args.pop();
+				errorMessage += " != "+args[0]
+				tester = function(val){
+					return val == check
+				}
+			}
+			
 			args.unshift(fname)
 			args.unshift(this.context)
 			args.unshift(this.selector)
@@ -546,7 +579,7 @@ FuncUnit._opened = function(){};
 					var ret = FuncUnit.$.apply(FuncUnit.$, args);
 					return tester(ret)
 				}, success)
-			}, callback, "wait"+caps +" on " + this.selector)
+			}, callback,errorMessage )
 			return this;
 		}
 	}
@@ -574,7 +607,8 @@ FuncUnit.init.prototype = {
 				//return jQuery(selector, page.document).length
 				return FuncUnit.$(selector, context, "size");
 			}, success)
-		}, cb, "Could not find " + this.selector, timeout)
+		}, cb, "Could not find " + this.selector, timeout);
+		return this;
 	},
 	/**
 	 * Waits until an object is missing
@@ -589,7 +623,8 @@ FuncUnit.init.prototype = {
 				//return jQuery(selector, page.document).length
 				return !FuncUnit.$(selector, context, "size");
 			}, success)
-		}, cb, this.selector+" is not missing", timeout)
+		}, cb, this.selector+" is not missing", timeout);
+		return this;
 	},
 	/**
 	 * Waits until an object is visible
@@ -604,7 +639,8 @@ FuncUnit.init.prototype = {
 				//return jQuery(selector, page.document).length
 				return FuncUnit.$(selector+":visible", context, "size");
 			}, success)
-		}, cb, "Could not find " + this.selector+":visible", timeout)
+		}, cb, "Could not find " + this.selector+":visible", timeout);
+		return this;
 	},
 	/**
 	 * Waits until an object is invisible
@@ -619,7 +655,8 @@ FuncUnit.init.prototype = {
 				//return jQuery(selector, page.document).length
 				return !FuncUnit.$(selector+":visible", context, "size");
 			}, success)
-		}, cb, this.selector+" is still visible", timeout)
+		}, cb, this.selector+" is still visible", timeout);
+		return this;
 	},
 	/**
 	 * Types text into the object
