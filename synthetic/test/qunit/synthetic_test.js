@@ -1,4 +1,4 @@
-module("synthetic")
+module("funcunit/synthetic")
 
 __g = function(id){
 	return document.getElementById(id)
@@ -272,6 +272,25 @@ test("backslash n", function(){
 	
 	__g("qunit-test-area").innerHTML = "";
 	
+	
+})
+
+test("scrolling", function(){
+	__g("qunit-test-area").innerHTML = "<div id='scroller' style='height:100px;width: 100px;overflow:auto'>"+
+			"<div style='height: 200px; width: 100%'>text"+
+			"</div>"+
+			"</div>";
+			
+	__addEventListener(__g("scroller"),"scroll",function(ev){
+		ok(true,"scrolling created just by changing ScrollTop");
+		__g("qunit-test-area").innerHTML ="";
+		start();
+	} );
+	stop();
+	setTimeout(function(){
+		__g("scroller").scrollTop = 10;
+	
+	},10)
 	
 })
 

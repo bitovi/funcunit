@@ -32,19 +32,15 @@ test("Copy Test", function(){
 	})
 })
 
-test("click href", function(){
-	
-	S("#changelink").click().text(function(t){
-	    equals(t, "Changed","href javascript run")
-	})
-})
-
 test("drag test", function(){
 	S("#drag").dragTo("#drop")
+	S("#drop").waitHasClass("dropover", true)
+	
+	S("#drag").dragTo({ x: 500, y: 500 })
+	S("#drop").waitHasClass("dropout", true)
+	
 	S.wait(2000)
-	S("#drop").hasClass("dropover", function(has){
-		ok(has, "Drop worked ok")
-	})
+	S("#drag").dragTo({ x: "+100", y: "-100" })
 })
 
 test("iframe", function(){
