@@ -294,5 +294,21 @@ test("scrolling", function(){
 	
 })
 
+test("focus", function(){
+	__g("qunit-test-area").innerHTML = "<input type='text' id='focusme'/>";
+	
+	__addEventListener(__g("focusme"),"focus",function(ev){
+		ok(true,"focus creates event");
+		__g("qunit-test-area").innerHTML ="";
+		start();
+	} );
+	stop();
+	setTimeout(function(){
+		__g("focusme").focus();
+	
+	},10)
+	
+})
+
 // todo make sure you can do new Synthetic("key",{keyCode: 34}).send( __g("myinput") );
 // make a test for this

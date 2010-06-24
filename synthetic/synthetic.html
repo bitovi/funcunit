@@ -5,6 +5,7 @@
         <title>Synthetic Typing Test</title>
         <style type='text/css'>
             body {font-family: verdana}
+			td {text-align: right}
             td:nth-child(even) {background: #CCd}
 			#key th:nth-child(even) {background: #CCf}
 			#who th:nth-child(even) {background: #fCb}
@@ -83,8 +84,14 @@
 	
 	for(var i =0; i < events.length; i++){
 		var row = gId(events[i])
-		for(var c=0; c < 20; c++)
-			row.appendChild(document.createElement('td'))
+		for(var c=0; c < 20; c++){
+			var td = document.createElement('td');
+			if(c%2 == 0 ){
+				td.style.borderLeft = "solid 1px black"
+			}
+			row.appendChild(td)
+		}
+			
 		
 		counters.manual[events[i]] = 0
 		counters.synthetic[events[i]] = 0;

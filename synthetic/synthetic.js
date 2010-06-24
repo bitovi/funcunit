@@ -136,6 +136,23 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				try {window.event = event;}catch(e) {}
 				return element.fireEvent('on'+type, event);
 			},
+	createEventObject = function(type, options, element){
+		var event = element.ownerDocument.createEventObject();
+		return extend(event, options);
+	},
+	createBasicStandardEvent = function(type, defaults){
+		var event;
+		try {
+			event = document.createEvent("Events");
+		} catch(e2) {
+			event = document.createEvent("UIEvents");
+		} finally {
+			event.initEvent(type, true, true);
+			extend(event, defaults);
+		}
+		return event;
+	},
+	
 	//object lets you create certain types of events		
 	create = {
 		//-------- MOUSE EVENTS ---------------------
@@ -168,7 +185,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 							defaults.ctrlKey,defaults.altKey,defaults.shiftKey,defaults.metaKey,
 							defaults.button,defaults.relatedTarget);
 					} catch(e) {
-						event = createBasicStandardEvent(defaults)
+						event = createBasicStandardEvent(type,defaults)
 					}
 					event.synthetic = true;
 					return event;
@@ -233,7 +250,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 							options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
 							options.keyCode, options.charCode );
 					} catch(e) {
-						event = createBasicStandardEvent(options)
+						event = createBasicStandardEvent(type,options)
 					}
 					event.synthetic = true;
 					return event;
@@ -255,7 +272,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 					var event = element.ownerDocument.createEvent("Events");
 					event.initEvent(type, true, true ); 
 					return event;
-				} : createEventObject,
+				} : createEventObject
 		}
 	},
 	createEvent = function(type, options, element){
