@@ -1,14 +1,15 @@
 if (!navigator.userAgent.match(/Rhino/)) {
 
 (function(){
-	//check if browser supports change delegation
 
 	var Synthetic = function(type, options, scope){
 			this.type = type;
 			this.options = options || {};
 			this.scope = scope || window
 		},
+		
 		extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
+		// only uses browser detection for key events
 		browser = {
 			msie:     !!(window.attachEvent && !window.opera),
 			opera:  !!window.opera,
@@ -19,7 +20,27 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		},
 		data = {}, 
 		id = 0, 
-		expando = "_synthetic"+(new Date() - 0);
+		expando = "_synthetic"+(new Date() - 0),
+		addEventListener,
+		removeEventListener;
+		
+		
+	if(window.addEventListener){ // Mozilla, Netscape, Firefox
+		addEventListener = function(el, ev, f){
+			el.addEventListener(ev, f, false)
+		}
+		removeEventListener = function(el, ev, f){
+			el.removeEventListener(ev, f, false)
+		}
+	}else{
+		addEventListener = function(el, ev, f){
+			el.attachEvent("on"+ev, f)
+		}
+		removeEventListener = function(el, ev, f){
+			el.detachEvent("on"+ev, f)
+		}
+	}
+		
 		
 	extend(Synthetic,{
 		//default actions by event type
@@ -88,213 +109,177 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			var attributeNode = elem.getAttributeNode( "tabIndex" );
 
 			return this.focusable.test(elem.nodeName) || attributeNode && attributeNode.specified
-		}
-	})
+		},
+		addEventListener : addEventListener,
+		removeEventListener : removeEventListener
+	});
 	
 
-	
-	
-	if(window.addEventListener){ // Mozilla, Netscape, Firefox
-		var addEventListener = function(el, ev, f){
-			el.addEventListener(ev, f, false)
-		}
-		var removeEventListener = function(el, ev, f){
-			el.removeEventListener(ev, f, false)
-		}
-	}else{
-		var addEventListener = function(el, ev, f){
-			el.attachEvent("on"+ev, f)
-		}
-		var removeEventListener = function(el, ev, f){
-			el.detachEvent("on"+ev, f)
-		}
-	}
-	Synthetic.addEventListener = addEventListener;
-	Synthetic.removeEventListener = removeEventListener;
-	var createEvent = function(type, options, element){
-		return dispatchType(
-			document.createEvent ?  create.Event : create.EventObject,
-			 type, options, element
-		)
-	}
-	var dispatchType = function(part, type, options, element){
-		if(/keypress|keyup|keydown/.test(type) )
-			return part.key.apply(null, arguments);
-		else if(/load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll/.test(type) )
-			return part.page.apply(null, arguments);
-		else 
-			return part.mouse.apply(null, arguments);
-	}
+	var key = /keypress|keyup|keydown/,
+		
+	page = /load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll/,
 
-	var create = {
-		EventObject : {},
-		Event:{}
-	};
-	
-	//-------- Sending the events --------------
-	create.Event.dispatch = function(event, element){
-		return element.dispatchEvent(event)
-	}
-	create.EventObject.dispatch = function(event, element, type){
-		try {window.event = event;}catch(e) {}
-		return element.fireEvent('on'+type, event);
-	}
-	
-	
-	//-------- MOUSE EVENTS ---------------------
-	
-	//creates default options for all mouse types
-	var mouseOptions = function(type, options, element){
-			var doc = document.documentElement, body = document.body;
-			var center = [options.pageX || 0, options.pageY] 
-			return extend({
-				bubbles : true,cancelable : true,
-				view : window,detail : 1,
-				screenX : 1, screenY : 1,
-				clientX : center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
-				clientY : center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
-				ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
-				button : (type == 'contextmenu' ? 2 : 0), 
-				relatedTarget : document.documentElement
-			}, options);
-	}
-	
-	create.EventObject.mouse = function(part, type, options, element){ //IE
-
-		var event = element.ownerDocument.createEventObject();
-		extend(event, mouseOptions(type, options, element));
-		if( (element.nodeName.toLowerCase() == 'input' || 
-			(element.type && element.type.toLowerCase() == 'checkbox'))) 
-			element.checked = (element.checked ? false : true);
-		return part.dispatch(event, element, type);
-	}
-	create.Event.mouse = function(part, type, options, element){  //Everyone Else
-		var defaults = mouseOptions(type, options, element), event;
+	//dispatches an event
+	dispatch = document.documentElement.dispatchEvent ? 
+			function(event, element){
+				var preventDefault = event.preventDefault, 
+					prevented = false;
+				
+				event.preventDefault = function(){
+					preventDefault.apply(this,[]);
+					prevented = true;
+				}
+				element.dispatchEvent(event)
+				return !prevented
+			} : 
+			function(event, element, type){
+				try {window.event = event;}catch(e) {}
+				return element.fireEvent('on'+type, event);
+			},
+	//object lets you create certain types of events		
+	create = {
+		//-------- MOUSE EVENTS ---------------------
+		mouse : {
+			options : function(type, options, element){
+				var doc = document.documentElement, body = document.body,
+					center = [options.pageX || 0, options.pageY || 0] 
+				return extend({
+					bubbles : true,cancelable : true,
+					view : window,detail : 1,
+					screenX : 1, screenY : 1,
+					clientX : center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
+					clientY : center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
+					ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
+					button : (type == 'contextmenu' ? 2 : 0), 
+					relatedTarget : document.documentElement
+				}, options);
+			},
+			event : document.createEvent ? 
+				function(type, defaults, element){  //Everyone Else
+					var event;
+					
+					try {
+						event = element.ownerDocument.createEvent('MouseEvents');
+						event.initMouseEvent(type, 
+							defaults.bubbles, defaults.cancelable, 
+							defaults.view, 
+							defaults.detail, 
+							defaults.screenX, defaults.screenY,defaults.clientX,defaults.clientY,
+							defaults.ctrlKey,defaults.altKey,defaults.shiftKey,defaults.metaKey,
+							defaults.button,defaults.relatedTarget);
+					} catch(e) {
+						event = createBasicStandardEvent(defaults)
+					}
+					event.synthetic = true;
+					return event;
+				} : 
+				createEventObject
+		},
+		// -----------------  Key Events --------------------
+		key : {
+			options : function(type, options, element){
 		
-		try {
-			event = element.ownerDocument.createEvent('MouseEvents');
-			event.initMouseEvent(type, 
-				defaults.bubbles, defaults.cancelable, 
-				defaults.view, 
-				defaults.detail, 
-				defaults.screenX, defaults.screenY,defaults.clientX,defaults.clientY,
-				defaults.ctrlKey,defaults.altKey,defaults.shiftKey,defaults.metaKey,
-				defaults.button,defaults.relatedTarget);
-		} catch(e) {
-			try {
-				event = document.createEvent("Events");
-			} catch(e2) {
-				event = document.createEvent("UIEvents");
-			} finally {
-				event.initEvent(type, true, true);
-				extend(event, options);
-			}
-		}
+				//if keyCode and charCode should be reversed
+				var reverse = browser.opera || browser.msie,
+					
+					// if keyCode and charCode are in both places
+					both = browser.safari || type != 'keypress', 
+					character = "", v, defaults;
+					
+				if(options.keyCode == 8 || options.charCode == 8) options = "\b";
+				defaults  = typeof options != "object" ? {character : options} : options;
+					
+				//add basics
+				defaults = extend({
+					ctrlKey: false,
+					altKey: false,
+					shiftKey: false,
+					metaKey: false,
+					charCode: 0, keyCode: 0
+				}, defaults);
 		
-		var doc = document.documentElement, body = document.body;
-		event.synthetic = true;
-		return part.dispatch(event, element);
-	}
-	
-	// -----------------  Key Events --------------------
-	var keyOptions = function(type, options, element){
-		
-		var reverse = browser.opera || browser.msie,//if keyCode and charCode should be reversed
-			both = browser.safari || type != 'keypress', //if keyCode and charCode are in both places
-			character = "", v, defaults;
+				if(typeof defaults.character == "number"){
+					character = String.fromCharCode(defaults.character);
+					v = defaults.character
+					defaults = extend(defaults,{keyCode :  v,charCode:  both ? v : 0})
+				}else if(typeof defaults.character == "string"){
+					character = defaults.character;
+					v = (type == "keypress" ? character.charCodeAt(0) : character.toUpperCase().charCodeAt(0) );
+					defaults = extend(defaults,{
+						keyCode : both ? v : (reverse ? v : 0),
+						charCode: both ? v : (reverse ? 0: v)
+					})
+				}
+				
+				if(character && character == "\b") {
+					defaults.keyCode = 8;
+					character = 0;
+				}
+				if (character && character == "\n") {
+					defaults.keyCode = 13;
+				}
+				defaults.character = character;
+				options.keyCode = defaults.keyCode;
+				return defaults
+			},
+			event : document.createEvent ? 
+				function(type, options, element){  //Everyone Else
+					var event;
+					
+					try {
 			
-		if(options.keyCode == 8 || options.charCode == 8) options = "\b";
-		defaults  = typeof options != "object" ? {character : options} : options;
-			
-		//add basics
-		defaults = extend({
-			ctrlKey: false,
-			altKey: false,
-			shiftKey: false,
-			metaKey: false,
-			charCode: 0, keyCode: 0
-		}, defaults);
-
-		if(typeof defaults.character == "number"){
-			character = String.fromCharCode(defaults.character);
-			v = defaults.character
-			defaults = extend(defaults,{keyCode :  v,charCode:  both ? v : 0})
-		}else if(typeof defaults.character == "string"){
-			character = defaults.character;
-			v = (type == "keypress" ? character.charCodeAt(0) : character.toUpperCase().charCodeAt(0) );
-			defaults = extend(defaults,{
-				keyCode : both ? v : (reverse ? v : 0),
-				charCode: both ? v : (reverse ? 0: v)
-			})
+						event = element.ownerDocument.createEvent("KeyEvents");
+						event.initKeyEvent(type, true, true, window, 
+							options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
+							options.keyCode, options.charCode );
+					} catch(e) {
+						event = createBasicStandardEvent(options)
+					}
+					event.synthetic = true;
+					return event;
+	
+				} : 
+				function(type, options, element){
+					var event = createEventObject.apply(this,arguments);
+	
+					event.charCode = options.charCode;
+					event.keyCode = options.keyCode;
+					event.shiftKey = options.shiftKey;
+	
+					return event;
+				}
+		},
+		//-------- PAGE EVENTS ---------------------
+		page : {
+			event : document.createEvent ? function(type, options, element){
+					var event = element.ownerDocument.createEvent("Events");
+					event.initEvent(type, true, true ); 
+					return event;
+				} : createEventObject,
 		}
+	},
+	createEvent = function(type, options, element){
+		//get kind
+		var kind = key.test(type) ? 
+			'key' : 
+			( page.test(type) ?
+				"page" : "mouse" ),
+			event,
+			ret;
+		//convert options
+		options = create[kind].options ? create[kind].options(type,options,element) : options;
 		
-		if(character && character == "\b") {
-			defaults.keyCode = 8;
-			character = 0;
-		}
-		if (character && character == "\n") {
-			defaults.keyCode = 13;
-		}
-		defaults.character = character;
-		options.keyCode = defaults.keyCode;
-		return defaults
-	}
-	
-	create.EventObject.key = function(part, type, options, element){
-		var event = element.ownerDocument.createEventObject();
-		options = keyOptions(type, options, element );
-		event.charCode = options.charCode;
-		event.keyCode = options.keyCode;
-		event.shiftKey = options.shiftKey;
-		var fire_event = part.dispatch(event, element, type);
-		fire_event && Synthetic.defaults[type] && Synthetic.defaults[type].call(element, options)
-		return fire_event;
-	}
-	create.Event.key = function(part, type, options, element){
-		options = keyOptions(type, options, element );
-		var event
-
-		try {
-			
-			event = element.ownerDocument.createEvent("KeyEvents");
-			event.initKeyEvent(type, true, true, window, 
-			options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
-			options.keyCode, options.charCode );
-		} catch(e) {
-			try {
-				event = document.createEvent("Events");
-			} catch(e2) {
-				event = document.createEvent("UIEvents");
-			} finally {
-				event.initEvent(type, true, true);
-				extend(event, options);
-			}
-		}
-		var preventDefault = event.preventDefault, prevented = false, fire_event;
-		event.preventDefault = function(){
-			preventDefault.apply(this,[]);
-			prevented = true;
-		}
-		part.dispatch(event, element)
-		fire_event = !prevented;
-		// do default events
-		fire_event && Synthetic.defaults[type] && Synthetic.defaults[type].call(element, options)
+		event = create[kind].event(type,options,element)
 		
-
-		return fire_event;
-	}
-	//---------------------Page EVENTS
+		//send the event
+		ret = dispatch(event, element, type)
+		
+		//run default behavior
+		ret && Synthetic.defaults[type] && Synthetic.defaults[type].call(element, options);
+		return ret;
+	},
 	
-	create.Event.page = function(part, type, options, element){
-		var event = element.ownerDocument.createEvent("Events");
-			event.initEvent(type, true, true ); 
-		return part.dispatch(event, element);
-	}
-	create.EventObject.page = function(part, type, options, element){
-		return part.dispatch(event, element, type);
-	}
-	
-	var support = {
+	support = {
 		clickChanges : false,
 		clickSubmits : false,
 		keypressSubmits : false,
@@ -305,6 +290,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		keyCharacters : false,
 		backspaceWorks : false
 	};
+	
 	Synthetic.support = support;
 	//support code
 	(function(){
@@ -407,27 +393,17 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		 * @param {HTMLElement} element the element that will be the target of the event.
 		 */
 		send : function(element){
-			this.firefox_autocomplete_off(element);
-			
-			if(browser.opera && /focus|blur/.test(this.type) ) return this.createEvents(element);
-			if(typeof this[this.type] == "function") return this[this.type].apply(this, arguments)
+			//turn auto complete off
+			if(element.nodeName.toLowerCase() == 'input' 
+				&& element.getAttribute('autocomplete') != 'off'){
+				element.setAttribute('autocomplete','off');
+			}
+				
+			if(typeof this[this.type] == "function") {
+				return this[this.type].apply(this, arguments)
+			}
+				
 			return this.create_event(element)
-		},
-		check : function(element){
-			if(!element.checked){
-				element.checked = true;
-				this.type = 'change'
-				return browser.msie ? jQuery(element).change() : this.create_event(element)
-			}
-			return null;
-		},
-		uncheck : function(element){
-			if(element.checked){
-				element.checked = false;
-				this.type = 'change'
-				return browser.msie ? jQuery(element).change() : this.create_event(element)
-			}
-			return null;
 		},
 		key : function(element){
 			createEvent("keydown", this.options, element);
@@ -439,12 +415,20 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		 * @param {Object} element
 		 */
 		click : function(element){
-			var href, checked
+			var href, 
+				checked;
+				
 			try{
 				checked = !!element.checked;
 			}catch(e){}
-			if( (browser.safari||browser.opera) && element.nodeName.toLowerCase() == "a" && element.href  && !/^\s*javascript:/.test(element.href)){
-				href = element.href; //remove b/c safari/opera will open a new tab
+			
+			//not sure how to feature detect this ...
+			if( (browser.safari||browser.opera) 
+				&& element.nodeName.toLowerCase() == "a" 
+				&& element.href  
+				&& !/^\s*javascript:/.test(element.href)){
+					
+				href = element.href; 
 				element.removeAttribute('href')
 			}
 			createEvent("mousedown", {}, element);
@@ -555,10 +539,6 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				
 			}
 			return res;
-		},
-		firefox_autocomplete_off : function(element) {
-			if(browser.firefox && element.nodeName.toLowerCase() == 'input' && element.getAttribute('autocomplete') != 'off')
-				element.setAttribute('autocomplete','off');
 		},
 		/**
 		 * Picks how to create the event
