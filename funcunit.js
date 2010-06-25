@@ -235,7 +235,7 @@ open = function(path, callback, timeout){
 			FuncUnit._opened();
 			success()
 		}, error);
-	}, callback, "Page " + path + " not loaded in time!", timeout);
+	}, callback, "Page " + path + " not loaded in time!", timeout || 30000);
 };
 
 FuncUnit.getAbsolutePath = function(path){
