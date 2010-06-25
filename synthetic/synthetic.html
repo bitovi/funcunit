@@ -140,6 +140,7 @@
 		})
 		Synthetic.addEventListener(gId('link'),"mouseup",function(ev){
 			console.log('mouseup')
+			ev.preventDefault();
 		})
 		Synthetic.addEventListener(gId('run'),"click",function(){
 			setTimeout(function(){

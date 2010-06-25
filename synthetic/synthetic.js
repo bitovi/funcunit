@@ -61,7 +61,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				}
 				// submit on enter
 				if( !support.keypressSubmits 
-				    
+					
 					&& (  options.keyCode == 13 ) 
 					
 					&& this.nodeName.toLowerCase() == "input") {
@@ -99,9 +99,9 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				// prevents the access denied issue in IE if the click causes the element to be destroyed
 				var element = this;
 				try {
-				    element.nodeType;
+					element.nodeType;
 				} catch(e){
-				    return;
+					return;
 				}
 				//get old values
 				var href,
@@ -110,7 +110,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				
 				if(href = Synthetic.data(element,"href")){
 					element.setAttribute('href',href)
-	            }
+				}
 
 				
 				
@@ -120,14 +120,14 @@ if (!navigator.userAgent.match(/Rhino/)) {
 					//eval js
 					var code = element.href.replace(/^\s*javascript:/,"")
 						
-	                //try{
-		            if (code != "//" && code.indexOf("void(0)") == -1) {
-	                    if(window.selenium){
-	                        eval("with(selenium.browserbot.getCurrentWindow()){"+code+"}")
-	                    }else{
-	                        eval("with(scope){"+code+"}")
-	                    }
-	                }
+					//try{
+					if (code != "//" && code.indexOf("void(0)") == -1) {
+						if(window.selenium){
+							eval("with(selenium.browserbot.getCurrentWindow()){"+code+"}")
+						}else{
+							eval("with(scope){"+code+"}")
+						}
+					}
 				}
 				
 				//submit a form
@@ -564,7 +564,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		window.__synthTest = oldSynth;
 		support.ready = true;
 	})();
-    
+	
 	
 	Synthetic.createEvent = createEvent;
 	
@@ -629,23 +629,23 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			
 		},
 		// drag requires jquery
-        drag: function(from){
+		drag: function(from){
 			var doc = this.scope.document;
 			var jq = this.scope.jQuery
 			if( !jQuery ) {
 				throw "You need jQuery to perform drags in synthetic.js"
 			}
 				
-            //get from and to
-            var addxy = function(part, options, center){
+			//get from and to
+			var addxy = function(part, options, center){
 				if(!options[part].x || !options[part].y ){
 					var j = jq(options[part], doc)
-                	var o = j.offset();
-	                options[part] = {
-	                    x: o.left+ (center ? j.width() / 2 : 0 ),
-	                    y: o.top + (center ? j.height() / 2 : 0 )
-	                };
-            	}
+					var o = j.offset();
+					options[part] = {
+						x: o.left+ (center ? j.width() / 2 : 0 ),
+						y: o.top + (center ? j.height() / 2 : 0 )
+					};
+				}
 				// relative coordinates
 				if(typeof options[part].x == "string" || typeof options[part].y == "string") {
 					var orig = jq(from, doc).offset()
@@ -656,97 +656,97 @@ if (!navigator.userAgent.match(/Rhino/)) {
 						y: orig.left + y
 					}
 				}
-            }
-            this.options.from = from;
+			}
+			this.options.from = from;
 			this.options.to = jq(this.options.to, doc)[0];
-            addxy('from', this.options);
-            addxy('to', this.options, true);
-            if(this.options.duration){
-                return new Drag(from, this.options)
-            }
+			addxy('from', this.options);
+			addxy('to', this.options, true);
+			if(this.options.duration){
+				return new Drag(from, this.options)
+			}
 			
-		    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-		    var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || 0;
-            var x = this.options.from.x - scrollLeft;
-            var y = this.options.from.y - scrollTop;
-            var steps = this.options.steps || 100;
-            this.type = 'mousedown';
-            this.options.clientX = x;
-            this.options.clientY = y;
-            this.create_event(from);
-            this.type = 'mousemove';
-            for(var i = 0; i < steps; i++){
-                x = this.options.from.x -  scrollLeft + (i * (this.options.to.x - this.options.from.x )) / steps;
-                y = this.options.from.y - scrollTop + (i * (this.options.to.y - this.options.from.y )) / steps;
-                this.options.clientX = x;
-                this.options.clientY = y;
-                this.create_event(from);
-            }
-            this.type = 'mouseup';
-            this.options.clientX = this.options.to.x - scrollLeft;
-            this.options.clientY = this.options.to.y - scrollTop;
-            this.create_event(from);
-        }
+			var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+			var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft || 0;
+			var x = this.options.from.x - scrollLeft;
+			var y = this.options.from.y - scrollTop;
+			var steps = this.options.steps || 100;
+			this.type = 'mousedown';
+			this.options.clientX = x;
+			this.options.clientY = y;
+			this.create_event(from);
+			this.type = 'mousemove';
+			for(var i = 0; i < steps; i++){
+				x = this.options.from.x -  scrollLeft + (i * (this.options.to.x - this.options.from.x )) / steps;
+				y = this.options.from.y - scrollTop + (i * (this.options.to.y - this.options.from.y )) / steps;
+				this.options.clientX = x;
+				this.options.clientY = y;
+				this.create_event(from);
+			}
+			this.type = 'mouseup';
+			this.options.clientX = this.options.to.x - scrollLeft;
+			this.options.clientY = this.options.to.y - scrollTop;
+			this.create_event(from);
+		}
 		
 	}
 	
 	var Drag = function(target, options){
-	    this.callback = options.callback;
-        this.start_x = options.from.x;
-        this.end_x = options.to.x;
-        this.delta_x = this.end_x - this.start_x;
-        this.start_y = options.from.y;
-        this.end_y = options.to.y;
-        this.delta_y = this.end_y - this.start_y;
-        this.target = target;
-        this.duration = options.duration ? options.duration*1000 : 1000;
-        this.start = new Date();
+		this.callback = options.callback;
+		this.start_x = options.from.x;
+		this.end_x = options.to.x;
+		this.delta_x = this.end_x - this.start_x;
+		this.start_y = options.from.y;
+		this.end_y = options.to.y;
+		this.delta_y = this.end_y - this.start_y;
+		this.target = target;
+		this.duration = options.duration ? options.duration*1000 : 1000;
+		this.start = new Date();
 
-        new Synthetic('mousedown', {clientX: this.start_x, clientY: this.start_y}).send(target);
+		new Synthetic('mousedown', {clientX: this.start_x, clientY: this.start_y}).send(target);
 
 		// create a mouse cursor
-        this.pointer = document.createElement('div');
-        this.pointer.style.width = '10px';
-        this.pointer.style.height = '10px';
-        this.pointer.style.backgroundColor = 'RED';
-        this.pointer.style.position = 'absolute';
-        this.pointer.style.left = ''+this.start_x+'px';
-	    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-	    var pointerY = this.start_y+scrollTop;
-        this.pointer.style.top = ''+pointerY+'px';
-        this.pointer.style.lineHeight = '1px';
-        document.body.appendChild(this.pointer);
+		this.pointer = document.createElement('div');
+		this.pointer.style.width = '10px';
+		this.pointer.style.height = '10px';
+		this.pointer.style.backgroundColor = 'RED';
+		this.pointer.style.position = 'absolute';
+		this.pointer.style.left = ''+this.start_x+'px';
+		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+		var pointerY = this.start_y+scrollTop;
+		this.pointer.style.top = ''+pointerY+'px';
+		this.pointer.style.lineHeight = '1px';
+		document.body.appendChild(this.pointer);
 		
-        setTimeout(this.next_callback(), 20);
+		setTimeout(this.next_callback(), 20);
 	};
 	Drag.prototype = {
-        next: function(){
-            var now = new Date();
-            var difference = now - this.start;
-            if( difference > this.duration ){
-                new Synthetic('mousemove', {clientX: this.end_x, clientY: this.end_y}).send(this.target);
-                var event = new Synthetic('mouseup', {clientX: this.end_x, clientY: this.end_y}).send(this.target);
-                this.pointer.parentNode.removeChild(this.pointer);
-                if(this.callback) this.callback({event: event, element: this.target});
-            }else{
-                var percent = difference / this.duration;
-                var x =  this.start_x + percent * this.delta_x;
-                var y = this.start_y + percent * this.delta_y;
+		next: function(){
+			var now = new Date();
+			var difference = now - this.start;
+			if( difference > this.duration ){
+				new Synthetic('mousemove', {clientX: this.end_x, clientY: this.end_y}).send(this.target);
+				var event = new Synthetic('mouseup', {clientX: this.end_x, clientY: this.end_y}).send(this.target);
+				this.pointer.parentNode.removeChild(this.pointer);
+				if(this.callback) this.callback({event: event, element: this.target});
+			}else{
+				var percent = difference / this.duration;
+				var x =  this.start_x + percent * this.delta_x;
+				var y = this.start_y + percent * this.delta_y;
 
-                this.pointer.style.left = ''+x+'px';
-	            var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-	            var pointerY = y+scrollTop;
-                this.pointer.style.top = ''+pointerY+'px';
-                new Synthetic('mousemove', {clientX: x, clientY: y}).send(this.target);
-                setTimeout(this.next_callback(), 20);
-            }
-        },
-        next_callback : function(){
-            var t = this;
-            return function(){
-                t.next();
-            };
-        }
+				this.pointer.style.left = ''+x+'px';
+				var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+				var pointerY = y+scrollTop;
+				this.pointer.style.top = ''+pointerY+'px';
+				new Synthetic('mousemove', {clientX: x, clientY: y}).send(this.target);
+				setTimeout(this.next_callback(), 20);
+			}
+		},
+		next_callback : function(){
+			var t = this;
+			return function(){
+				t.next();
+			};
+		}
 	};
 
 
