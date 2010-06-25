@@ -696,7 +696,7 @@ FuncUnit.init.prototype = {
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Clicking "+selector)
 			FuncUnit.$(selector, context, "synthetic", "clicker", options, FuncUnit.window)
-			setTimeout(success, 13)
+			setTimeout(success, 23)
 		}, callback, "Could not click " + this.selector)
 		return this;
 	}
