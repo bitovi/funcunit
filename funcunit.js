@@ -371,9 +371,9 @@ FuncUnit._opened = function(){};
 		if (callback) {
 			var interval = null;
 			var time = new Date();
-			interval = setInterval(function(){
+			setTimeout(function(){
 				if (callback.failed) {
-					clearInterval(interval);
+					//clearInterval(interval);
 				}
 				else {
 					var result = null;
@@ -384,11 +384,13 @@ FuncUnit._opened = function(){};
 					}
 					
 					if (result) {
-						clearInterval(interval);
+						//clearInterval(interval);
 						callback();
+					}else{
+						setTimeout(arguments.callee, 10)
 					}
 				}
-			}, 1);
+			}, 10);
 			
 		}
 		else {
