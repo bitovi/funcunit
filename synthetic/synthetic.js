@@ -13,7 +13,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		browser = {
 			msie:     !!(window.attachEvent && !window.opera),
 			opera:  !!window.opera,
-			safari: navigator.userAgent.indexOf('AppleWebKit/') > -1,
+			safari: navigator.userAgent.indexOf('AppleWebKit/') > -1 && navigator.userAgent.indexOf('Chrome/') == -1,
 			firefox:  navigator.userAgent.indexOf('Gecko') > -1 && navigator.userAgent.indexOf('KHTML') == -1,
 			mobilesafari: !!navigator.userAgent.match(/Apple.*Mobile.*Safari/),
 			rhino : navigator.userAgent.match(/Rhino/) && true
@@ -47,8 +47,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		defaults : {
 			keypress : function(options){
 				// if we have to write
-
-				if(support.ready && !support.backspaceWorks && 
+				
+				if( !support.backspaceWorks && 
 					/input|textarea/i.test(this.nodeName)){
 					if (options.keyCode && options.keyCode == 8) {
 						this.value = this.value.substring(0, this.value.length - 1)
@@ -60,7 +60,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 					}
 				}
 				// submit on enter
-				if(support.ready && !support.keypressSubmits 
+				if( !support.keypressSubmits 
 				    
 					&& (  options.keyCode == 13 ) 
 					
@@ -71,8 +71,126 @@ if (!navigator.userAgent.match(/Rhino/)) {
 						createEvent("submit", {}, form);
 					
 				}
+			},
+			mousedown : function(options){
+				createEvent("focus", {}, this)
+			},
+			focus : function(){
+				if(!support.focusChanges){
+					var element = this;
+					Synthetic.data(element,"syntheticvalue", element.value)
+					
+					if(element.nodeName.toLowerCase() == "input"){
+						
+						addEventListener(element, "blur", function(){
+							
+							
+							if( Synthetic.data(element,"syntheticvalue") !=  element.value){
+								
+								createEvent("change", {}, element);
+							}
+							removeEventListener(element,"blur", arguments.callee)
+						})
+						
+					}
+				}
+			},
+			click : function(){
+				// prevents the access denied issue in IE if the click causes the element to be destroyed
+				var element = this;
+				try {
+				    element.nodeType;
+				} catch(e){
+				    return;
+				}
+				//get old values
+				var href,
+					checked = Synthetic.data(element,"checked"),
+					scope = element.ownerDocument.defaultView || element.ownerDocument.parentWindow
+				
+				if(href = Synthetic.data(element,"href")){
+					element.setAttribute('href',href)
+	            }
+
+				
+				
+				//run href javascript
+				if(!support.linkHrefJS 
+					&& /^\s*javascript:/.test(element.href)){
+					//eval js
+					var code = element.href.replace(/^\s*javascript:/,"")
+						
+	                //try{
+		            if (code != "//" && code.indexOf("void(0)") == -1) {
+	                    if(window.selenium){
+	                        eval("with(selenium.browserbot.getCurrentWindow()){"+code+"}")
+	                    }else{
+	                        eval("with(scope){"+code+"}")
+	                    }
+	                }
+				}
+				
+				//submit a form
+				if(element.nodeName.toLowerCase() == "input" 
+					&& element.type == "submit" 
+					&& !(support.clickSubmits)){
+						
+					var form =  Synthetic.closest(element, "form");
+					if(form)
+						new Synthetic("submit").send( form );
+					
+				}
+				//follow a link
+				if(element.nodeName.toLowerCase() == "a" 
+					&& element.href 
+					&& !/^\s*javascript:/.test(element.href)){
+						
+					scope.location.href = element.href;
+					
+				}
+				
+				//change a checkbox
+				if(element.nodeName.toLowerCase() == "input" 
+					&& element.type == "checkbox"){
+					
+					if(!support.clickChecks && !support.changeChecks){
+						element.checked = !element.checked;
+					}
+					if(!support.clickChanges)
+						new Synthetic("change").send(  element );
+					
+				}
+				
+				//change a radio button
+				if(element.nodeName.toLowerCase() == "input" && element.type == "radio"){  // need to uncheck others if not checked
+					
+					if(!support.clickChecks && !support.changeChecks){
+						//do the checks manually 
+						if(!element.checked){ //do nothing, no change
+							element.checked = true;
+						}
+					}
+					if(checked != element.checked && !support.radioClickChanges){
+						new Synthetic("change").send(  element );
+					}
+				}
+				
+				// change options
+				if(element.nodeName.toLowerCase() == "option"){
+					//check if we should change
+					//find which selectedIndex this is
+					var children = element.parentNode.childNodes;
+					for(var i =0; i< children.length; i++){
+						if(children[i] == element) break;
+					}
+					if(i !== element.parentNode.selectedIndex){
+						element.parentNode.selectedIndex = i;
+						new Synthetic("change").send(  element.parentNode );
+					}
+				}
+					
+				
 			}
-			
 		},
 		
 		closest : function(el, type){
@@ -273,26 +391,65 @@ if (!navigator.userAgent.match(/Rhino/)) {
 					event.initEvent(type, true, true ); 
 					return event;
 				} : createEventObject
+		},
+		// unique events
+		focus : {
+			event : function(type, options, element){
+				Synthetic.onParents(element, function(el){
+					if( Synthetic.isFocusable(el) ){
+						el.focus();
+						return false
+					}
+				})
+				return true;
+			}
+		},
+		click : {
+			setup : function(type, options, element){
+				try{
+					Synthetic.data(element,"checked", element.checked);
+				}catch(e){}
+				if( 
+					element.nodeName.toLowerCase() == "a" 
+					&& element.href  
+					&& !/^\s*javascript:/.test(element.href)){
+					
+					//save href
+					Synthetic.data(element,"href", element.href)
+					
+					//remove b/c safari/opera will open a new tab instead of changing the page
+					element.setAttribute('href','javascript://')
+				}
+			}
 		}
 	},
 	createEvent = function(type, options, element){
+		//any setup code?
+		create[type] && create[type].setup 
+			&& create[type].setup(type, options, element)
+		
 		//get kind
 		var kind = key.test(type) ? 
-			'key' : 
-			( page.test(type) ?
-				"page" : "mouse" ),
-			event,
-			ret;
-		//convert options
-		options = create[kind].options ? create[kind].options(type,options,element) : options;
-		
-		event = create[kind].event(type,options,element)
-		
-		//send the event
-		ret = dispatch(event, element, type)
+				'key' : 
+				( page.test(type) ?
+					"page" : "mouse" ),
+				event,
+				ret;
+				
+		if(create[type] && create[type].event){
+			ret = create[type].event(type, options, element)
+		}else{
+			//convert options
+			options = create[kind].options ? create[kind].options(type,options,element) : options;
+			
+			event = create[kind].event(type,options,element)
+			
+			//send the event
+			ret = dispatch(event, element, type)
+		}
 		
 		//run default behavior
-		ret && Synthetic.defaults[type] && Synthetic.defaults[type].call(element, options);
+		ret && support.ready && Synthetic.defaults[type] && Synthetic.defaults[type].call(element, options);
 		return ret;
 	},
 	
@@ -305,7 +462,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		focusChanges : false,
 		linkHrefJS : false,
 		keyCharacters : false,
-		backspaceWorks : false
+		backspaceWorks : false,
+		mouseDownUpClicks : false
 	};
 	
 	Synthetic.support = support;
@@ -393,6 +551,13 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		
 		createEvent("click", {}, div.getElementsByTagName('a')[0])
 		
+		//test if mousedown followed by mouseup causes click (opera)
+		div.onclick = function(){
+			support.mouseDownUpClicks = true;
+		}
+		createEvent("mousedown",{},div)
+		createEvent("mouseup",{},div)
+		
 		document.documentElement.removeChild(div);
 		
 		//check stuff
@@ -401,7 +566,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 	})();
     
 	
-	
+	Synthetic.createEvent = createEvent;
 	
 	Synthetic.prototype = 
 	{
@@ -431,131 +596,29 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		 * Mouses down, focuses, up, and clicks an element
 		 * @param {Object} element
 		 */
-		click : function(element){
-			var href, 
-				checked;
-				
-			try{
-				checked = !!element.checked;
-			}catch(e){}
+		clicker : function(element){
+			var options = this.options,
+				nodeName = element.nodeName.toLowerCase();
 			
-			//not sure how to feature detect this ...
-			if( (browser.safari||browser.opera) 
-				&& element.nodeName.toLowerCase() == "a" 
-				&& element.href  
-				&& !/^\s*javascript:/.test(element.href)){
-					
-				href = element.href; 
-				element.removeAttribute('href')
+			//safari freezes JS mousedown on select or options
+			// no way to feature detect :(
+			// and this keeps mousedowns from happening.
+			if(! (browser.safari && (nodeName == "select" || nodeName == "option" )) ){
+				createEvent("mousedown", options, element);
+			}else{
+				//do the focus anyway
+				createEvent("focus", {}, element);
 			}
-			createEvent("mousedown", {}, element);
-			
-			// climb parents, and focus on first that can be focused
-			Synthetic.onParents(element, function(el){
-				if( Synthetic.isFocusable(el) ){
-					try{
-						el.focus();
-					}catch(e){}
-					return false
-				}
-			})
-			
-			
-			
-			//record current value, set blur to issue change
-			if(!support.focusChanges){
-				
-				
-				Synthetic.data(element,"syntheticvalue", element.value)
-				if(element.nodeName.toLowerCase() == "input"){
-					addEventListener(element, "blur", function(){
-						if( Synthetic.data(element,"syntheticvalue") !=  element.value){
-							createEvent("change", {}, element);
-						}
-						removeEventListener(element,"blur", arguments.callee)
-					})
+			setTimeout(function(){
+				createEvent("mouseup", options, element)
+				if(!support.mouseDownUpClicks){
+					createEvent("click", options, element)
 				}
 				
-			}
-			
-			//if(!support.clickSubmits)
-			createEvent("mouseup", {}, element)
+			},1)
 			
 			//jQuery(element).bind("click",set );
-			var res = this.create_event(element);
-			
-			//jQuery(element).unbind("click", set)
-			if(href){
-				element.setAttribute('href',href)
-            }
-			
-			// prevents the access denied issue in IE if the click causes the element to be destroyed
-			try {
-			    element.nodeType;
-			} catch(e){
-			    return res;
-			}
-
-			if(!support.linkHrefJS && /^\s*javascript:/.test(element.href)){
-				//eval js
-				var code = element.href.replace(/^\s*javascript:/,"")
-                //try{
-	            if (code != "//" && code.indexOf("void(0)") == -1) {
-                    if(window.selenium){
-                        eval("with(selenium.browserbot.getCurrentWindow()){"+code+"}")
-                    }else{
-                        eval("with(this.scope){"+code+"}")
-                    }
-                }
-                    
-                
-			}
-			if(res){
-				if(element.nodeName.toLowerCase() == "input" && element.type == "submit" && !(support.clickSubmits)){
-					var form =  Synthetic.closest(element, "form");
-					if(form)
-						new Synthetic("submit").send( form );
-				}
-				if(element.nodeName.toLowerCase() == "a" && element.href && !/^\s*javascript:/.test(element.href)){
-					this.scope.location.href = element.href;
-				}
-				
-				if(element.nodeName.toLowerCase() == "input" && element.type == "checkbox"){
-					
-					if(!support.clickChecks && !support.changeChecks){
-						element.checked = !element.checked;
-					}
-					if(!support.clickChanges)
-						new Synthetic("change").send(  element );
-					
-				}
-				if(element.nodeName.toLowerCase() == "input" && element.type == "radio"){  // need to uncheck others if not checked
-					
-					if(!support.clickChecks && !support.changeChecks){
-						//do the checks manually 
-						if(!element.checked){ //do nothing, no change
-							element.checked = true;
-						}
-					}
-					if(checked != element.checked && !support.radioClickChanges){
-						new Synthetic("change").send(  element );
-					}
-				}
-				if(element.nodeName.toLowerCase() == "option"){
-					//check if we should change
-					//find which selectedIndex this is
-					var children = element.parentNode.childNodes;
-					for(var i =0; i< children.length; i++){
-						if(children[i] == element) break;
-					}
-					if(i !== element.parentNode.selectedIndex){
-						element.parentNode.selectedIndex = i;
-						new Synthetic("change").send(  element.parentNode );
-					}
-				}
-				
-			}
-			return res;
+			return;
 		},
 		/**
 		 * Picks how to create the event

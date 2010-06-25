@@ -46,6 +46,24 @@
 			<tr id='keypress'><td>keypress</td></tr>
 			<tr id='keyup'><td>keyup</td></tr>
 		</table>
+		
+		<h2>
+			Other things
+		</h2>
+		<input id='link'/>
+		<a href='javascript://' id='run'>run</a>
+		
+		
+		<form id='outer'>
+			<select name='select' id='select'>
+				<option value='1' id='one'>one</option>
+				<option value='2' id='two'>two</option>
+			</select>
+		</form>
+		<br/>
+		<br/>
+		<div id='counter' tabindex='0'></div>
+		<div id='outer'></div>
 <script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript'>
 	steal.plugins('funcunit/synthetic').start();
@@ -96,20 +114,60 @@
 		counters.manual[events[i]] = 0
 		counters.synthetic[events[i]] = 0;
 		
-		create("manual",events[i]);
-		create("synthetic",events[i])
+		
 	}
 	
 	window.onload = function(){
+		create("manual",events[i]);
+		create("synthetic",events[i])
+		
 		setTimeout(function(){
 			new Synthetic("key","1").send( gId('synthetic')  );
 			new Synthetic("key","a").send( gId('synthetic')  );
 			new Synthetic("key","\n").send( gId('synthetic')  );
 			new Synthetic("key","\b").send( gId('synthetic')  );
-		},100)
+		},1)
 		
+		
+		Synthetic.addEventListener(gId('link'),"click",function(ev){
+			console.log('click')
+		})
+		Synthetic.addEventListener(gId('link'),"focus",function(ev){
+			console.log('focus')
+		})
+		Synthetic.addEventListener(gId('link'),"mousedown",function(ev){
+			console.log('mousedown')
+		})
+		Synthetic.addEventListener(gId('link'),"mouseup",function(ev){
+			console.log('mouseup')
+		})
+		Synthetic.addEventListener(gId('run'),"click",function(){
+			setTimeout(function(){
+				new Synthetic("clicker").send( gId('link') )
+				
+				//console.log(document.defaultView.getComputedStyle(gId('link'),null))
+			},500)
+			
+		})
+		
+		go = function(){
+			Synthetic.createEvent('mousedown',{}, gId('one') )
+			
+			//
+			
+		}
+		var count = 0
+		setInterval(function(){
+			gId('counter').innerHTML = (count++)
+		},1000)
 	}
-	
+	if(!window.console){
+		console = {
+			log : function(txt){
+				gId('outer').innerHTML = gId('outer').innerHTML +"<p>"+txt+"</p>"
+			}
+		}
+	}
 	
 </script>
     </body>

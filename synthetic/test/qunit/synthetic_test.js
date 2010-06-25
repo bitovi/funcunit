@@ -83,7 +83,6 @@ test("Click", function(){
 	__addEventListener(__g("inner"),"click",clickf );
 	
 	
-	
 	new Synthetic("click").send( __g("submit") );
 	
 	equals(submit, 2, "Submit prevented");
@@ -132,9 +131,41 @@ test("Click", function(){
 	
 	ok( !__g("radio1").checked, "radio unchecked" );
 	
+	
 	__g("qunit-test-area").innerHTML = "";
+});
+
+test("click event order", 4, function(){
+	var order = 0;
+	__g("qunit-test-area").innerHTML = "<input id='focusme'/>";
+	
+	
+	__addEventListener(__g("focusme"),"mousedown",function(){
+		equals(++order,1,"mousedown")
+	});
+	
+	__addEventListener(__g("focusme"),"focus",function(){
+		equals(++order, 2,"focus")
+	});
+	
+	__addEventListener(__g("focusme"),"mouseup",function(){
+		equals(++order,3,"mouseup")
+	});
+	__addEventListener(__g("focusme"),"click",function(ev){
+		equals(++order,4,"click")
+		if(ev.preventDefault)
+			ev.preventDefault();
+		ev.returnValue = false;
+	});
+	stop();
+	new Synthetic("clicker").send( __g("focusme") );
+	setTimeout(function(){
+		start();
+	}, 100)
 })
-test("Click link", function(){
+
+
+test("Clicker link", function(){
 	var didSomething = false;
 	window.doSomething = function(){
 		didSomething = true;
@@ -185,7 +216,8 @@ test("Keypress", function(){
 	
 })
 test("Select", function(){
-	__g("qunit-test-area").innerHTML = "<form id='outer'><select name='select'><option value='1' id='one'>one</option><option value='2' id='two'>two</option></select></form>";
+	__g("qunit-test-area").innerHTML = 
+		"<form id='outer'><select name='select'><option value='1' id='one'>one</option><option value='2' id='two'>two</option></select></form>";
 	
 	var change = 0, changef = function(){
 		change++;
@@ -208,17 +240,25 @@ test("Change by typing then clicking elsewhere", function(){
 		change++;
 	}
 	__addEventListener(__g("one"),"change",changef );
-	
-	new Synthetic("click").send( __g("one") );
-	new Synthetic("keypress","a").send( __g("one") );
-	new Synthetic("click").send( __g("two") );
 	stop();
+	new Synthetic("clicker").send( __g("one") );
 	setTimeout(function(){
-		start()
+		new Synthetic("keypress","a").send( __g("one") );
+		new Synthetic("clicker").send( __g("two") );
 		
-		equals(change, 1 , "Change called once");
-		__g("qunit-test-area").innerHTML = "";
-	},100)
+		setTimeout(function(){
+			start()
+			
+			equals(change, 1 , "Change called once");
+			__g("qunit-test-area").innerHTML = "";
+		},100)
+		
+	},10)
+	
+	
+	
+	
+	
 	
 })
 
@@ -308,6 +348,27 @@ test("focus", function(){
 	
 	},10)
 	
+})
+
+test("click focuses on a link", function(){
+	__g("qunit-test-area").innerHTML = "<a href='#abc' id='focusme'/>";
+	
+	__addEventListener(__g("focusme"),"focus",function(ev){
+		ok(true,"focused");
+	} );
+	__addEventListener(__g("focusme"),"click",function(ev){
+		ok(true,"clicked");
+		__g("qunit-test-area").innerHTML ="";
+		start();
+		if(ev.preventDefault)
+			ev.preventDefault();
+		ev.returnValue = false;
+		return false;
+	} );
+	stop();
+	setTimeout(function(){
+		new Synthetic('click').send( __g("focusme") );
+	},10)
 })
 
 // todo make sure you can do new Synthetic("key",{keyCode: 34}).send( __g("myinput") );
