@@ -21,22 +21,22 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		data = {}, 
 		id = 0, 
 		expando = "_synthetic"+(new Date() - 0),
-		addEventListener,
-		removeEventListener;
+		bind,
+		unbind;
 		
 		
 	if(window.addEventListener){ // Mozilla, Netscape, Firefox
-		addEventListener = function(el, ev, f){
+		bind = function(el, ev, f){
 			el.addEventListener(ev, f, false)
 		}
-		removeEventListener = function(el, ev, f){
+		unbind = function(el, ev, f){
 			el.removeEventListener(ev, f, false)
 		}
 	}else{
-		addEventListener = function(el, ev, f){
+		bind = function(el, ev, f){
 			el.attachEvent("on"+ev, f)
 		}
-		removeEventListener = function(el, ev, f){
+		unbind = function(el, ev, f){
 			el.detachEvent("on"+ev, f)
 		}
 	}
@@ -82,14 +82,14 @@ if (!navigator.userAgent.match(/Rhino/)) {
 					
 					if(element.nodeName.toLowerCase() == "input"){
 						
-						addEventListener(element, "blur", function(){
+						bind(element, "blur", function(){
 							
 							
 							if( Synthetic.data(element,"syntheticvalue") !=  element.value){
 								
 								createEvent("change", {}, element);
 							}
-							removeEventListener(element,"blur", arguments.callee)
+							unbind(element,"blur", arguments.callee)
 						})
 						
 					}
@@ -106,7 +106,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				//get old values
 				var href,
 					checked = Synthetic.data(element,"checked"),
-					scope = element.ownerDocument.defaultView || element.ownerDocument.parentWindow
+					scope = element.ownerDocument.defaultView || element.ownerDocument.parentWindow,
+					nodeName = element.nodeName.toLowerCase();
 				
 				if(href = Synthetic.data(element,"href")){
 					element.setAttribute('href',href)
@@ -131,7 +132,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				}
 				
 				//submit a form
-				if(element.nodeName.toLowerCase() == "input" 
+				if(nodeName == "input" 
 					&& element.type == "submit" 
 					&& !(support.clickSubmits)){
 						
@@ -140,8 +141,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 						new Synthetic("submit").send( form );
 					
 				}
-				//follow a link
-				if(element.nodeName.toLowerCase() == "a" 
+				//follow a link, probably needs to check if in an a.
+				if(nodeName == "a" 
 					&& element.href 
 					&& !/^\s*javascript:/.test(element.href)){
 						
@@ -150,7 +151,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				}
 				
 				//change a checkbox
-				if(element.nodeName.toLowerCase() == "input" 
+				if(nodeName == "input" 
 					&& element.type == "checkbox"){
 					
 					if(!support.clickChecks && !support.changeChecks){
@@ -162,7 +163,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				}
 				
 				//change a radio button
-				if(element.nodeName.toLowerCase() == "input" && element.type == "radio"){  // need to uncheck others if not checked
+				if(nodeName == "input" && nodeName == "radio"){  // need to uncheck others if not checked
 					
 					if(!support.clickChecks && !support.changeChecks){
 						//do the checks manually 
@@ -176,7 +177,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				}
 				
 				// change options
-				if(element.nodeName.toLowerCase() == "option"){
+				if(nodeName == "option"){
 					//check if we should change
 					//find which selectedIndex this is
 					var children = element.parentNode.childNodes;
@@ -228,8 +229,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 
 			return this.focusable.test(elem.nodeName) || attributeNode && attributeNode.specified
 		},
-		addEventListener : addEventListener,
-		removeEventListener : removeEventListener
+		bind : bind,
+		unbind : unbind
 	});
 	
 
@@ -239,16 +240,28 @@ if (!navigator.userAgent.match(/Rhino/)) {
 
 	//dispatches an event
 	dispatch = document.documentElement.dispatchEvent ? 
-			function(event, element){
+			function(event, element, type, autoPrevent){
 				var preventDefault = event.preventDefault, 
-					prevented = false;
+					prevents = autoPrevent ? -1 : 0;
+				
+				//automatically prevents the default behavior for this event
+				//this is to protect agianst nasty browser freezing bug in safari
+				if(autoPrevent){
+					bind(element, type, function(ev){
+						ev.preventDefault()
+						unbind(this, type, arguments.callee)
+					})
+				}
+				
 				
 				event.preventDefault = function(){
-					preventDefault.apply(this,[]);
-					prevented = true;
+					prevents++;
+					if(++prevents > 0){
+						preventDefault.apply(this,[]);
+					}
 				}
 				element.dispatchEvent(event)
-				return !prevented
+				return prevents <= 0;
 			} : 
 			function(event, element, type){
 				try {window.event = event;}catch(e) {}
@@ -421,12 +434,25 @@ if (!navigator.userAgent.match(/Rhino/)) {
 					element.setAttribute('href','javascript://')
 				}
 			}
+		},
+		mousedown : {
+			setup : function(type,options, element){
+				var nn = element.nodeName.toLowerCase();
+				//we have to auto prevent default to prevent freezing error in safari
+				if(browser.safari && (nn == "select" || nn == "option" )){
+					options._autoPrevent = true;
+				}
+				
+				
+			}
 		}
 	},
 	createEvent = function(type, options, element){
+		options || (options = {});
 		//any setup code?
 		create[type] && create[type].setup 
 			&& create[type].setup(type, options, element)
+		
 		
 		//get kind
 		var kind = key.test(type) ? 
@@ -434,8 +460,11 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				( page.test(type) ?
 					"page" : "mouse" ),
 				event,
-				ret;
-				
+				ret,
+			autoPrevent = options._autoPrevent;
+		
+		delete options._autoPrevent;
+			
 		if(create[type] && create[type].event){
 			ret = create[type].event(type, options, element)
 		}else{
@@ -445,11 +474,13 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			event = create[kind].event(type,options,element)
 			
 			//send the event
-			ret = dispatch(event, element, type)
+			ret = dispatch(event, element, type, autoPrevent)
 		}
 		
 		//run default behavior
-		ret && support.ready && Synthetic.defaults[type] && Synthetic.defaults[type].call(element, options);
+		ret && support.ready 
+			&& Synthetic.defaults[type] 
+			&& Synthetic.defaults[type].call(element, options, autoPrevent);
 		return ret;
 	},
 	
@@ -603,12 +634,9 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			//safari freezes JS mousedown on select or options
 			// no way to feature detect :(
 			// and this keeps mousedowns from happening.
-			if(! (browser.safari && (nodeName == "select" || nodeName == "option" )) ){
-				createEvent("mousedown", options, element);
-			}else{
-				//do the focus anyway
-				createEvent("focus", {}, element);
-			}
+			
+			createEvent("mousedown", options, element);
+			
 			setTimeout(function(){
 				createEvent("mouseup", options, element)
 				if(!support.mouseDownUpClicks){

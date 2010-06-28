@@ -72,6 +72,9 @@
 	var gId = function(id){
 		return document.getElementById(id)
 	},
+	bind = function(el, ev, func){
+		Synthetic.bind(gId(el), ev,func);
+	}
 	counters = {
 		manual : {},
 		synthetic : {}
@@ -82,7 +85,7 @@
 	
 	var create = function(type, event){
 		
-		Synthetic.addEventListener(gId(type), event,function(ev){
+		Synthetic.bind(gId(type), event,function(ev){
 			//fill in
 			var where = (4*counters[type][event]) + (type != "synthetic" ? 0 : 1) + 1
 			var row = gId(ev.type)
@@ -129,20 +132,24 @@
 		},1)
 		
 		
-		Synthetic.addEventListener(gId('link'),"click",function(ev){
+		Synthetic.bind(gId('link'),"click",function(ev){
 			console.log('click')
 		})
-		Synthetic.addEventListener(gId('link'),"focus",function(ev){
+		Synthetic.bind(gId('link'),"focus",function(ev){
+			ev.preventDefault();
 			console.log('focus')
 		})
-		Synthetic.addEventListener(gId('link'),"mousedown",function(ev){
+		Synthetic.bind(gId('link'),"mousedown",function(ev){
 			console.log('mousedown')
 		})
-		Synthetic.addEventListener(gId('link'),"mouseup",function(ev){
+		Synthetic.bind(gId('link'),"mouseup",function(ev){
 			console.log('mouseup')
 			ev.preventDefault();
 		})
-		Synthetic.addEventListener(gId('run'),"click",function(){
+		
+		
+		
+		Synthetic.bind(gId('run'),"click",function(){
 			setTimeout(function(){
 				new Synthetic("clicker").send( gId('link') )
 				
@@ -150,7 +157,25 @@
 			},500)
 			
 		})
+		var pd = function(ev){
+			if(ev.preventDefault)
+				ev.preventDefault();
+
+			ev.returnValue = false;
+		}
 		
+		bind('select','mousedown',function(ev){
+			pd(ev)
+			console.log('md')
+		})
+		bind('select','focus',function(ev){
+			pd(ev)
+			console.log('focus')
+		})
+		bind('select','click',function(ev){
+			console.log('click')
+			pd(ev)
+		})
 		go = function(){
 			Synthetic.createEvent('mousedown',{}, gId('one') )
 			
