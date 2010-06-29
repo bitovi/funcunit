@@ -52,7 +52,7 @@ test("Synthetic basics", function(){
 		
 })
 
-test("Click", function(){
+test("Basic Click", function(){
 
 	__g("qunit-test-area").innerHTML = "<form id='outer' onsubmit='return false'><div id='inner'>"+
 			"<input type='checkbox' id='checkbox'/>"+
@@ -132,7 +132,7 @@ test("Click", function(){
 	ok( !__g("radio1").checked, "radio unchecked" );
 	
 	
-	__g("qunit-test-area").innerHTML = "";
+	//__g("qunit-test-area").innerHTML = "";
 });
 
 test("click event order", 4, function(){
@@ -178,13 +178,14 @@ test("Clicker link", function(){
 })
 
 
-test("Keypress", function(){
+test("BasicKey", function(){
 	__g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'><input type='input' id='key' value=''/></div></form>";
 	var submit = 0, submitf = function(ev){
 		submit++;
 		if ( ev.preventDefault ) {
 			ev.preventDefault();
 		}
+		ev.returnValue = false;
 		return false;
 	};
 	var keyEl = __g("key")
@@ -195,19 +196,18 @@ test("Keypress", function(){
 	__addEventListener(__g("outer"),"keypress",keypressf );
 	keyEl.value = "";
 	
-	new Synthetic("keypress","a").send(keyEl);
+	new Synthetic("key","a").send(keyEl);
 	equals(keyEl.value, "a", "A written");
 	
 	equals(keypress, 1, "Keypress called once");
 	
-	new Synthetic("keypress","5").send(keyEl);
+	new Synthetic("key","5").send(keyEl);
 	equals(keyEl.value, "a5", "5 written");
 	
-	new Synthetic("keypress","\b").send(keyEl);
+	new Synthetic("key","\b").send(keyEl);
 	equals(keyEl.value, "a", "Backspace works");
 	
-	
-	new Synthetic("keypress","\n").send(keyEl);
+	new Synthetic("key","\r").send(keyEl);
 	equals(submit, 1, "submit on keypress");
 	
 	__removeEventListener(__g("outer"),"submit",submitf );
@@ -264,50 +264,59 @@ test("Change by typing then clicking elsewhere", function(){
 
 
 test("Key Something", function(){
-	__g("qunit-test-area").innerHTML = "<input id='one'/><div id='two'></div><div id='three'></div><div id='four'></div>";
+	__g("qunit-test-area").innerHTML = "<input id='one'/>";
+	var upVal,
+		pressVal,
+		downVal
 	__addEventListener(__g("one"),"keyup",function(){
-		__g("two").innerHTML = __g("one").value+ " is moderately impressive"
-		
+		upVal = __g("one").value
 	} );
 	__addEventListener(__g("one"),"keypress",function(){
-		__g("three").innerHTML = __g("one").value+ " is moderately impressive"
+		pressVal = __g("one").value
 		
 	} );
 	__addEventListener(__g("one"),"keydown",function(){
-		__g("four").innerHTML = __g("one").value+ " is moderately impressive"
-		
+		downVal = __g("one").value
 	} );
+
 	new Synthetic("key","J").send( __g("one") );
 	new Synthetic("key","M").send( __g("one") );
 	new Synthetic("key","V").send( __g("one") );
 	new Synthetic("key","C").send( __g("one") );
+	equals(upVal, "JMVC" , "Up Typing works")
+	equals(pressVal, "JMV" , "Press Typing works")
+	equals(downVal, "JMV" , "Down Typing works")
+	start();
+
 	
 	
-	equals(__g("two").innerHTML, "JMVC is moderately impressive" , "Typing works")
-	equals(__g("three").innerHTML, "JMV is moderately impressive" , "Typing works")
-	equals(__g("four").innerHTML, "JMV is moderately impressive" , "Typing works")
-	__g("qunit-test-area").innerHTML = "";
+	
+	
+	
+	//__g("qunit-test-area").innerHTML = "";
 })
 
-test("backslash n", function(){
+test("enter (\\r) submits form", function(){
 	__g("qunit-test-area").innerHTML = "<form id='myform' onsubmit='return false'>"+
 			"<input id='myinput' type='text' />"+
 			"</form>"+
 			"<div id='here'></div>";
 			
-			
+	var submitted= false;
 	__addEventListener(__g("myform"),"submit",function(ev){
 		if ( ev.preventDefault ) {
 			ev.preventDefault();
+		}else{
+			ev.returnValue = false;
 		}
-		__g("here").innerHTML = "submitted"
+		submitted = true;
 	} );
 	//new Synthetic("submit").send( __g("myform")  );
 
-	new Synthetic("key","\n").send( __g("myinput") );
+	new Synthetic("key","\r").send( __g("myinput") );
 	
 	
-	equals(__g("here").innerHTML, "submitted" , "\n works");
+	ok(submitted , "submitted");
 	
 	
 	__g("qunit-test-area").innerHTML = "";
@@ -328,9 +337,10 @@ test("scrolling", function(){
 	} );
 	stop();
 	setTimeout(function(){
-		__g("scroller").scrollTop = 10;
+		var sc = __g("scroller");
+		sc && (sc.scrollTop = 10);
 	
-	},10)
+	},13)
 	
 })
 

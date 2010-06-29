@@ -1,6 +1,6 @@
-if (!navigator.userAgent.match(/Rhino/)) {
 
-(function(){
+
+steal(function(){
 
 	var Synthetic = function(type, options, scope){
 			this.type = type;
@@ -13,8 +13,9 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		browser = {
 			msie:     !!(window.attachEvent && !window.opera),
 			opera:  !!window.opera,
+			webkit : navigator.userAgent.indexOf('AppleWebKit/') > -1,
 			safari: navigator.userAgent.indexOf('AppleWebKit/') > -1 && navigator.userAgent.indexOf('Chrome/') == -1,
-			firefox:  navigator.userAgent.indexOf('Gecko') > -1 && navigator.userAgent.indexOf('KHTML') == -1,
+			gecko:  navigator.userAgent.indexOf('Gecko') > -1,
 			mobilesafari: !!navigator.userAgent.match(/Apple.*Mobile.*Safari/),
 			rhino : navigator.userAgent.match(/Rhino/) && true
 		},
@@ -44,34 +45,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		
 	extend(Synthetic,{
 		//default actions by event type
+		extend:  extend,
 		defaults : {
-			keypress : function(options){
-				// if we have to write
-				
-				if( !support.backspaceWorks && 
-					/input|textarea/i.test(this.nodeName)){
-					if (options.keyCode && options.keyCode == 8) {
-						this.value = this.value.substring(0, this.value.length - 1)
-						
-					}else if(options.character && 
-						//dont write \n 
-						!(options.keyCode == 13 && /input/i.test(this.nodeName) )  ) { //don't add \n to inputs
-						this.value += options.character;
-					}
-				}
-				// submit on enter
-				if( !support.keypressSubmits 
-					
-					&& (  options.keyCode == 13 ) 
-					
-					&& this.nodeName.toLowerCase() == "input") {
-					
-					var form = Synthetic.closest(this, "form");
-					if(form)
-						createEvent("submit", {}, form);
-					
-				}
-			},
 			mousedown : function(options){
 				createEvent("focus", {}, this)
 			},
@@ -109,7 +84,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 					scope = element.ownerDocument.defaultView || element.ownerDocument.parentWindow,
 					nodeName = element.nodeName.toLowerCase();
 				
-				if(href = Synthetic.data(element,"href")){
+				if( (href = Synthetic.data(element,"href") ) ){
 					element.setAttribute('href',href)
 				}
 
@@ -163,7 +138,7 @@ if (!navigator.userAgent.match(/Rhino/)) {
 				}
 				
 				//change a radio button
-				if(nodeName == "input" && nodeName == "radio"){  // need to uncheck others if not checked
+				if(nodeName == "input" && element.type == "radio"){  // need to uncheck others if not checked
 					
 					if(!support.clickChecks && !support.changeChecks){
 						//do the checks manually 
@@ -229,8 +204,13 @@ if (!navigator.userAgent.match(/Rhino/)) {
 
 			return this.focusable.test(elem.nodeName) || attributeNode && attributeNode.specified
 		},
+		tabIndex : function(elem){
+			var attributeNode = elem.getAttributeNode( "tabIndex" );
+			return attributeNode && attributeNode.specified && elem.getAttribute('tabIndex')
+		},
 		bind : bind,
-		unbind : unbind
+		unbind : unbind,
+		browser: browser
 	});
 	
 
@@ -325,6 +305,17 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		},
 		// -----------------  Key Events --------------------
 		key : {
+			rules : {
+				firefox : {
+					character : {
+								
+					},
+					modifier :{
+						
+					}
+				}
+			},
+			
 			options : function(type, options, element){
 		
 				//if keyCode and charCode should be reversed
@@ -549,8 +540,10 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		createEvent("keypress", {
 			character: "\n"
 		}, form.childNodes[3]);
-		if (submitted) 
+		if (submitted) {
 			support.keypressSubmits = true;
+		}
+			
 			
 		createEvent("keypress", {character: "a"}, form.childNodes[3]);
 		if (form.childNodes[3].value == "a") {
@@ -794,9 +787,8 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			return this;
 		};
 	}
-	//else 
-		window.Synthetic = Synthetic;
-	
-}());
 
-}
+	window.Synthetic = Synthetic;
+	
+}).then('keys','browser_keys');
+
