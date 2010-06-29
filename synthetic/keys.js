@@ -177,13 +177,13 @@ Synthetic.extend(Synthetic,{
 					getWindow(this).document.documentElement.scrollTop = document.documentElement.scrollHeight;
 				}
 			},
-			'pagedown' : function(){
+			'page-down' : function(){
 				if(!Synthetic.focusable.test(this.nodeName)){
 					var ch = getWindow(this).document.documentElement.clientHeight
 					getWindow(this).document.documentElement.scrollTop += ch;
 				}
 			},
-			'pageup' : function(){
+			'page-up' : function(){
 				if(!Synthetic.focusable.test(this.nodeName)){
 					var ch = getWindow(this).document.documentElement.clientHeight
 					getWindow(this).document.documentElement.scrollTop -= ch;
@@ -232,6 +232,10 @@ Synthetic.extend(Synthetic,{
 						Synthetic.createEvent("submit", {}, form);
 					}
 						
+				}
+				//newline in textarea
+				if(!support.keyCharacters && nodeName == 'textarea'){
+					Synthetic.key.defaults.character.call(this, options, scope, "\n")
 				}
 				// 'click' hyperlinks
 				if(!support.keypressSubmits && nodeName == 'a'){
