@@ -232,7 +232,7 @@ Synthetic.extend(Synthetic.key,{
 			}	
 		},
 		'delete' : function(){
-			if(support.keyCharacters && Synthetic.typeable.test(this.nodeName)){
+			if(!support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
 				var current = this.value,
 					start = selectionStart(this),
 					end = selectionEnd(this),

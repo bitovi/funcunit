@@ -172,17 +172,19 @@ test("range tests", function(){
 	var textAreaEl = __g("mytextarea")
 	
 	// test delete range
-	keyEl.value = "123456";
-	selectText(keyEl, 1, 3)
+	keyEl.value = "012345";
+	selectText(keyEl, 1, 3);
 	new Synthetic("key","delete").send(keyEl);
-	equals(keyEl.value, "156", "delete range works");
-	
+	equals(keyEl.value, "0345", "delete range works");
+
 	// test delete key
-	keyEl.value = "123456";
+	keyEl.value = "012345";
 	selectText(keyEl, 2);
+
 	new Synthetic("key","delete").send(keyEl);
-	equals(keyEl.value, "12456", "delete works");
-	
+	equals(keyEl.value, "01345", "delete works");
+
+
 	// test character range
 	keyEl.value = "123456";
 	selectText(keyEl, 1, 3)
@@ -193,7 +195,7 @@ test("range tests", function(){
 	keyEl.value = "123456";
 	selectText(keyEl, 2);
 	new Synthetic("key","a").send(keyEl);
-	equals(keyEl.value, "12a3456", "character works");
+	equals(keyEl.value, "12a3456", "character insertion works");
 	
 	// test backspace range
 	keyEl.value = "123456";
@@ -211,7 +213,7 @@ test("range tests", function(){
 	textAreaEl.value = "123456";
 	selectText(textAreaEl, 1, 3)
 	new Synthetic("key","delete").send(textAreaEl);
-	equals(textAreaEl.value, "156", "delete range works in a textarea");
+	equals(textAreaEl.value, "1456", "delete range works in a textarea");
 	
 	// test textarea ranges
 	textAreaEl.value = "123456";
