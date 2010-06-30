@@ -20,7 +20,7 @@
 </div>
 <div>
 	Type  [backspace]
-	<input id='t_backspace' /> - specialChars
+	<input id='t_\\b' /> - specialChars
 </div>
 <div>
 	Type [Enter]
@@ -44,7 +44,7 @@
 </div>
 <div>
 	Type [tab]
-	<input id='t_tab' /><input id='t_tab2' />
+	<input id='t_\\t' /><input id='t_tab2' />
 </div>
 <div>
 	Type [pause-break]
@@ -171,13 +171,13 @@
 		tests.push(test)
 	}
 	binder('a','character')
-	binder('backspace','specialChars')
+	binder('\\b','specialChars')
 	binder('down','navigation')
 	binder('shift','special')
-	binder('tab','tab')
+	binder('\\t')
 	bind('t_tab2','keyup', function(ev){
-		data.tab.keyup = [ (isChar("tab", ev.charCode) ?  "char" : ev.charCode),
-						   keyOrChar("tab", ev.keyCode)]
+		data["\\t"].keyup = [ (isChar("\\t", ev.charCode) ?  "char" : ev.charCode),
+						   keyOrChar("\\t", ev.keyCode)]
 	    update();
 	})
 	binder('pause-break')

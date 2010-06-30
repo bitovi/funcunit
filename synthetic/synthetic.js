@@ -325,7 +325,9 @@ steal(function(){
 					both = browser.safari || type != 'keypress', 
 					character = "", v, defaults;
 					
-				if(options.keyCode == 8 || options.charCode == 8) options = "\b";
+				if(options.keyCode == 8 || options.charCode == 8) {
+					options = "\b";
+				}
 				defaults  = typeof options != "object" ? {character : options} : options;
 					
 				//add basics
@@ -551,6 +553,7 @@ steal(function(){
 		}
 		form.childNodes[3].value = "a"
 		createEvent("keypress", {character: "\b"}, form.childNodes[3]);
+		
 		if (form.childNodes[3].value == "") {
 			support.backspaceWorks = true;
 		}
