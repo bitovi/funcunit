@@ -189,11 +189,17 @@
 			//
 			
 		}
+		
+		bind('manual', 'change',function(){
+			console.log('change')
+		})
 		var count = 0
 		setInterval(function(){
 			gId('counter').innerHTML = (count++)
 		},1000)
 	}
+	
+	
 	if(!window.console){
 		console = {
 			log : function(txt){
