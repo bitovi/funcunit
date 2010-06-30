@@ -50,7 +50,7 @@ test("Select", function(){
 	__g("qunit-test-area").innerHTML = ""
 })
 
-test("scrolling", function(){
+asyncTest("scrolling", function(){
 	__g("qunit-test-area").innerHTML = "<div id='scroller' style='height:100px;width: 100px;overflow:auto'>"+
 			"<div style='height: 200px; width: 100%'>text"+
 			"</div>"+
