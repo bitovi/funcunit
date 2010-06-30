@@ -15,7 +15,7 @@ getSelection = function(el){
 	if (el.createTextRange) {
 		//check if we aren't focused
 		if(document.activeElement && document.activeElement != el){
-			return el.value.length;
+			return {start: el.value.length, end: el.value.length};
 		}
 		//try 2 different methods that work differently
 		if(el.nodeName.toLowerCase() == 'input'){
