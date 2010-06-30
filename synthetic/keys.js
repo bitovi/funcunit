@@ -11,30 +11,33 @@ var inArray = function(item, array){
 getWindow = function(element){
 	return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
 },
-selectionStart = function(el){
+getSelection = function(el){
 	if (el.createTextRange) {
 		//check if we aren't focused
 		if(document.activeElement && document.activeElement != el){
 			return el.value.length;
 		}
-		
-		var r = getWindow(el).document.selection.createRange().duplicate()
-		r.moveEnd('character', el.value.length)
-		if (r.text == '') return el.value.length
-		return el.value.lastIndexOf(r.text)
-	} else {
-		return el.selectionStart 
-	}
-},
-selectionEnd = function(el){
-	if (el.createTextRange) {
-		if(document.activeElement && document.activeElement != el){
-			return el.value.length;
+		//try 2 different methods that work differently
+		if(el.nodeName.toLowerCase() == 'input'){
+			var real = getWindow(el).document.selection.createRange(),
+				r = el.createTextRange();
+			r.setEndPoint("EndToStart", real);
+	
+			var start = r.text.length
+			return {start: start, end: start+real.text.length}
+		}else{
+			var real = getWindow(el).document.selection.createRange(),
+			r = real.duplicate();
+			//select all of our element
+			r.moveToElementText(el)
+			//now move our endpoint to the end of our real range
+			r.setEndPoint('EndToEnd',real);
+			var start = r.text.length - real.text.length
+			return {start: start, end: r.text.length}
 		}
-		var r = getWindow(el).document.selection.createRange().duplicate()
-		r.moveStart('character', -el.value.length)
-		return r.text.length 
-	} else return el.selectionEnd 
+	} else {
+		return  {start: el.selectionStart, end: el.selectionEnd}
+	}
 },
 support = Synthetic.support,
 createEvent = Synthetic.createEvent,
@@ -166,17 +169,13 @@ Synthetic.extend(Synthetic.key,{
 		'character' : function(options, scope, key){
 			if(!support.keyCharacters && Synthetic.typeable.test(this.nodeName)){
 				var current = this.value,
-					start = selectionStart(this),
-					end = selectionEnd(this),
-					before = current.substr(0,start),
-					after = current.substr(end),
+					sel = getSelection(this),
+					before = current.substr(0,sel.start),
+					after = current.substr(sel.end),
 					character = key;
-				if(start == end && start < this.value.length - 1){
-					//remove a character
-					this.value = before+character;
-				}else{
-					this.value = before+character+after;
-				}
+					
+				this.value = before+character+after;
+
 			}		
 		},
 		'home' : function(){
@@ -218,12 +217,11 @@ Synthetic.extend(Synthetic.key,{
 			//this assumes we are deleting from the end
 			if(!support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
 				var current = this.value,
-					start = selectionStart(this),
-					end = selectionEnd(this),
-					before = current.substr(0,start),
-					after = current.substr(end);
+					sel = getSelection(this),
+					before = current.substr(0,sel.start),
+					after = current.substr(sel.end);
 				
-				if(start == end && start > 0){
+				if(sel.start == sel.end && sel.start > 0){
 					//remove a character
 					this.value = before.substring(0, before.length - 1)+after
 				}else{
@@ -234,12 +232,11 @@ Synthetic.extend(Synthetic.key,{
 		'delete' : function(){
 			if(!support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
 				var current = this.value,
-					start = selectionStart(this),
-					end = selectionEnd(this),
-					before = current.substr(0,start),
-					after = current.substr(end);
+					sel = getSelection(this),
+					before = current.substr(0,sel.start),
+					after = current.substr(sel.end);
 				
-				if(start == end && start < this.value.length - 1){
+				if(sel.start == sel.end && sel.start < this.value.length - 1){
 					//remove a character
 					this.value = before+after.substring(1)
 				}else{
@@ -247,7 +244,7 @@ Synthetic.extend(Synthetic.key,{
 				}
 			}		
 		},
-		'\r' : function(){
+		'\r' : function(options, scope){
 			
 			var nodeName = this.nodeName.toLowerCase()
 			// submit a form
