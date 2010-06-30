@@ -36,7 +36,8 @@ selectionEnd = function(el){
 		return r.text.length 
 	} else return el.selectionEnd 
 },
-support = Synthetic.support;
+support = Synthetic.support,
+createEvent = Synthetic.createEvent;
 
 
 Synthetic.extend(Synthetic,{
@@ -130,153 +131,152 @@ Synthetic.extend(Synthetic,{
 			result.charCode = charCode;
 		}
 		return result
+	}
+});
+Synthetic.extend(Synthetic.key,{
+	kinds : {
+		special : ["shift",'ctrl','alt','caps'],
+		specialChars : ["\b"],
+		navigation: ["page-up",'page-down','end','home','left','up','right','down','insert','delete'],
+		'function' : ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12']
 	},
-	key : {
-		kinds : {
-			special : ["shift",'ctrl','alt','caps'],
-			specialChars : ["\b"],
-			navigation: ["page-up",'page-down','end','home','left','up','right','down','insert','delete'],
-			'function' : ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12']
-		},
-		getDefault : function(key){
-			//check if it is described directly
-			if(Synthetic.key.defaults[key]){
-				return Synthetic.key.defaults[key];
+	getDefault : function(key){
+		//check if it is described directly
+		if(Synthetic.key.defaults[key]){
+			return Synthetic.key.defaults[key];
+		}
+		for(var kind in Synthetic.key.kinds){
+			if(inArray(key, Synthetic.key.kinds[kind])> -1 && Synthetic.key.defaults[kind]  ){
+				return Synthetic.key.defaults[kind];
 			}
-			for(var kind in Synthetic.key.kinds){
-				if(inArray(key, Synthetic.key.kinds[kind])> -1 && Synthetic.key.defaults[kind]  ){
-					return Synthetic.key.defaults[kind];
+		}
+		return Synthetic.key.defaults.character
+	},
+	defaults : 	{
+		'character' : function(options, scope, key){
+			if(!support.keyCharacters && Synthetic.typeable.test(this.nodeName)){
+				var current = this.value,
+					start = selectionStart(this),
+					end = selectionEnd(this),
+					before = current.substr(0,start),
+					after = current.substr(end),
+					character = key;
+				if(start == end && start < this.value.length - 1){
+					//remove a character
+					this.value = before+character;
+				}else{
+					this.value = before+character+after;
 				}
-			}
-			return Synthetic.key.defaults.character
+			}		
 		},
-		defaults : 	{
-			'character' : function(options, scope, key){
-				if(!support.keyCharacters && Synthetic.typeable.test(this.nodeName)){
-					var current = this.value,
-						start = selectionStart(this),
-						end = selectionEnd(this),
-						before = current.substr(0,start),
-						after = current.substr(end),
-						character = key;
-					if(start == end && start < this.value.length - 1){
-						//remove a character
-						this.value = before+character;
-					}else{
-						this.value = before+character+after;
-					}
-				}		
-			},
-			'home' : function(){
-				if(!Synthetic.focusable.test(this.nodeName)){
-					getWindow(this).document.documentElement.scrollTop = 0;
-				}
-			},
-			'end' : function(){
-				if(!Synthetic.focusable.test(this.nodeName)){
-					getWindow(this).document.documentElement.scrollTop = document.documentElement.scrollHeight;
-				}
-			},
-			'page-down' : function(){
-				if(!Synthetic.focusable.test(this.nodeName)){
-					var ch = getWindow(this).document.documentElement.clientHeight
-					getWindow(this).document.documentElement.scrollTop += ch;
-				}
-			},
-			'page-up' : function(){
-				if(!Synthetic.focusable.test(this.nodeName)){
-					var ch = getWindow(this).document.documentElement.clientHeight
-					getWindow(this).document.documentElement.scrollTop -= ch;
-				}
-			},
-			'\b' : function(){
-				//this assumes we are deleting from the end
-				if(!support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
-					var current = this.value,
-						start = selectionStart(this),
-						end = selectionEnd(this),
-						before = current.substr(0,start),
-						after = current.substr(end);
-					
-					if(start == end && start > 0){
-						//remove a character
-						this.value = before.substring(0, before.length - 1)+after
-					}else{
-						this.value = before+after;
-					}
-				}	
-			},
-			'delete' : function(){
-				if(support.keyCharacters && Synthetic.typeable.test(this.nodeName)){
-					var current = this.value,
-						start = selectionStart(this),
-						end = selectionEnd(this),
-						before = current.substr(0,start),
-						after = current.substr(end);
-					
-					if(start == end && start < this.value.length - 1){
-						//remove a character
-						this.value = before+after.substring(1)
-					}else{
-						this.value = before+after;
-					}
-				}		
-			},
-			'\r' : function(){
+		'home' : function(){
+			if(!Synthetic.focusable.test(this.nodeName)){
+				getWindow(this).document.documentElement.scrollTop = 0;
+			}
+		},
+		'end' : function(){
+			if(!Synthetic.focusable.test(this.nodeName)){
+				getWindow(this).document.documentElement.scrollTop = document.documentElement.scrollHeight;
+			}
+		},
+		'page-down' : function(){
+			if(!Synthetic.focusable.test(this.nodeName)){
+				var ch = getWindow(this).document.documentElement.clientHeight
+				getWindow(this).document.documentElement.scrollTop += ch;
+			}
+		},
+		'page-up' : function(){
+			if(!Synthetic.focusable.test(this.nodeName)){
+				var ch = getWindow(this).document.documentElement.clientHeight
+				getWindow(this).document.documentElement.scrollTop -= ch;
+			}
+		},
+		'\b' : function(){
+			//this assumes we are deleting from the end
+			if(!support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
+				var current = this.value,
+					start = selectionStart(this),
+					end = selectionEnd(this),
+					before = current.substr(0,start),
+					after = current.substr(end);
 				
-				var nodeName = this.nodeName.toLowerCase()
-				// submit a form
-				if(!support.keypressSubmits && nodeName == 'input'){
-					var form = Synthetic.closest(this, "form");
-					if(form){
-						Synthetic.createEvent("submit", {}, form);
-					}
-						
+				if(start == end && start > 0){
+					//remove a character
+					this.value = before.substring(0, before.length - 1)+after
+				}else{
+					this.value = before+after;
 				}
-				//newline in textarea
-				if(!support.keyCharacters && nodeName == 'textarea'){
-					Synthetic.key.defaults.character.call(this, options, scope, "\n")
+			}	
+		},
+		'delete' : function(){
+			if(support.keyCharacters && Synthetic.typeable.test(this.nodeName)){
+				var current = this.value,
+					start = selectionStart(this),
+					end = selectionEnd(this),
+					before = current.substr(0,start),
+					after = current.substr(end);
+				
+				if(start == end && start < this.value.length - 1){
+					//remove a character
+					this.value = before+after.substring(1)
+				}else{
+					this.value = before+after;
 				}
-				// 'click' hyperlinks
-				if(!support.keypressSubmits && nodeName == 'a'){
-					Synthetic.createEvent("click", {}, this);
+			}		
+		},
+		'\r' : function(){
+			
+			var nodeName = this.nodeName.toLowerCase()
+			// submit a form
+			if(!support.keypressSubmits && nodeName == 'input'){
+				var form = Synthetic.closest(this, "form");
+				if(form){
+					Synthetic.createEvent("submit", {}, form);
 				}
-			},
-			'\t' : function(options, scope){
-				//we need jQuery for this
-				if(!support.keypressSubmits){
-					var focusable = "a,area,frame,iframe,label,input,select,textarea,button,html,object"
 					
-					var focusEls = jQuery("[tabindex],"+focusable, getWindow(this).document.documentElement );
-					
-					var tabIndex = Synthetic.tabIndex(this),
-						current = null,
-						currentIndex = 1000000000,
-						found = false;
-					for(var i=0; i< focusEls.length; i++){
-						var el = focusEls[i],
-							elIndex = Synthetic.tabIndex(el)
-						if(tabIndex 
-							&& (found ? elIndex >= tabIndex : elIndex > tabIndex )  
-							&& elIndex < currentIndex){
-								currentIndex = elIndex;
-								current = el;
-						}
-						if(!tabIndex && found){
+			}
+			//newline in textarea
+			if(!support.keyCharacters && nodeName == 'textarea'){
+				Synthetic.key.defaults.character.call(this, options, scope, "\n")
+			}
+			// 'click' hyperlinks
+			if(!support.keypressSubmits && nodeName == 'a'){
+				Synthetic.createEvent("click", {}, this);
+			}
+		},
+		'\t' : function(options, scope){
+			//we need jQuery for this
+			if(!support.keypressSubmits){
+				var focusable = "a,area,frame,iframe,label,input,select,textarea,button,html,object"
+				
+				var focusEls = jQuery("[tabindex],"+focusable, getWindow(this).document.documentElement );
+				
+				var tabIndex = Synthetic.tabIndex(this),
+					current = null,
+					currentIndex = 1000000000,
+					found = false;
+				for(var i=0; i< focusEls.length; i++){
+					var el = focusEls[i],
+						elIndex = Synthetic.tabIndex(el)
+					if(tabIndex 
+						&& (found ? elIndex >= tabIndex : elIndex > tabIndex )  
+						&& elIndex < currentIndex){
+							currentIndex = elIndex;
 							current = el;
-							break;
-						}
-						if(this === el){
-							found= true;
-						}
 					}
-					current && current.focus();
+					if(!tabIndex && found){
+						current = el;
+						break;
+					}
+					if(this === el){
+						found= true;
+					}
 				}
+				current && current.focus();
 			}
 		}
 	}
-});
-
+})
 
 
 
@@ -329,12 +329,76 @@ Synthetic.prototype.key = function(element){
 	// is there a keypress? .. if not , run default
 	// yes -> did we prevent it?, if not run ...
 	
-}	
+};
 
 
 
 
+//do support code
 
+(function(){
+
+
+	var div = document.createElement("div"), 
+		checkbox, 
+		submit, 
+		form, 
+		input, 
+		submitted = false;
+		
+	div.innerHTML = "<form id='outer'>"+
+		"<input name='checkbox' type='checkbox'/>"+
+		"<input name='radio' type='radio' />"+
+		"<input type='submit' name='submitter'/>"+
+		"<input type='input' name='inputter'/>"+
+		"<input name='one'>"+
+		"<input name='two'/>"+
+		"<a href='javascript:__synthTest()' id='synlink'></a>"+
+		"</form>";
+		
+	document.documentElement.appendChild(div);
+	form = div.firstChild;
+	checkbox = form.childNodes[0];
+	submit = form.childNodes[2];
+	
+	form.onsubmit = function(ev){
+		if (ev.preventDefault) 
+			ev.preventDefault();
+		submitted = true;
+		ev.returnValue = false;
+		return false;
+	}
+	createEvent("keypress", {
+		character: "\n"
+	}, form.childNodes[3]);
+	
+	support.keypressSubmits = submitted;
+	
+	
+	createEvent("keypress", {character: "a"}, form.childNodes[3]);
+	support.keyCharacters = form.childNodes[3].value == "a";
+	
+	
+	form.childNodes[3].value = "a"
+	createEvent("keypress", {character: "\b"}, form.childNodes[3]);
+	support.backspaceWorks = form.childNodes[3].value == "";
+	
+		
+	
+	form.childNodes[3].onchange = function(){
+		support.focusChanges = true;
+	}
+	form.childNodes[3].focus();
+	createEvent("keypress", {
+		character: "a"
+	}, form.childNodes[3]);
+	form.childNodes[5].focus();
+	
+
+	document.documentElement.removeChild(div);
+	
+	support.ready = true;
+})();
 
 
 
