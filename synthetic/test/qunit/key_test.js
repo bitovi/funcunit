@@ -115,7 +115,7 @@ test("Delete range test", function(){
 			el.focus();
 			var r = document.selection.createRange();
 			r.moveStart('character', start);
-			r.moveEnd('character', end);
+			r.moveEnd('character', end-1);
 			r.select();
 		} else {
 			el.selectionStart = start;
@@ -125,17 +125,25 @@ test("Delete range test", function(){
 	
 	__g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'><input type='input' id='key' value=''/></div></form>";
 	var keyEl = __g("key")
-	keyEl.value = "";
 	
-	new Synthetic("key","1").send(keyEl);
-	new Synthetic("key","2").send(keyEl);
-	new Synthetic("key","3").send(keyEl);
-	new Synthetic("key","4").send(keyEl);
-	new Synthetic("key","5").send(keyEl);
-	new Synthetic("key","6").send(keyEl);
+	// test delete range
+	keyEl.value = "123456";
 	selectText(keyEl, 1, 3)
 	new Synthetic("key","delete").send(keyEl);
 	equals(keyEl.value, "156", "delete range works");
+	
+	// test character range
+	keyEl.value = "123456";
+	selectText(keyEl, 1, 3)
+	new Synthetic("key","a").send(keyEl);
+	equals(keyEl.value, "1a456", "character range works");
+	
+	// test character range
+	keyEl.value = "123456";
+	selectText(keyEl, 1, 3)
+	new Synthetic("key","\b").send(keyEl);
+	equals(keyEl.value, "1456", "backspace range works");
+	
     __g("qunit-test-area").innerHTML = "";
 	
 })
