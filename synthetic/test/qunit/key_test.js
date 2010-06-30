@@ -109,7 +109,7 @@ asyncTest("page down, page up, home, end", function(){
 		new Synthetic("key","page-down").send(window);
 	},13)
 })
-test("Delete range test", function(){
+test("range tests", function(){
 	var selectText = function(el, start, end){
 		if (el.createTextRange) {
 			el.focus();
@@ -123,8 +123,11 @@ test("Delete range test", function(){
 		}
 	}
 	
-	__g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'><input type='input' id='key' value=''/></div></form>";
+	__g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'><input type='input' id='key' value=''/></div></form>"+
+		"<textarea id='mytextarea' />";
+	
 	var keyEl = __g("key")
+	var textAreaEl = __g("mytextarea")
 	
 	// test delete range
 	keyEl.value = "123456";
@@ -138,12 +141,36 @@ test("Delete range test", function(){
 	new Synthetic("key","a").send(keyEl);
 	equals(keyEl.value, "1a456", "character range works");
 	
-	// test character range
+	// test backspace range
 	keyEl.value = "123456";
 	selectText(keyEl, 1, 3)
 	new Synthetic("key","\b").send(keyEl);
 	equals(keyEl.value, "1456", "backspace range works");
 	
-    __g("qunit-test-area").innerHTML = "";
+	// test textarea ranges
+	textAreaEl.value = "123456";
+	selectText(textAreaEl, 1, 3)
+	new Synthetic("key","delete").send(textAreaEl);
+	equals(textAreaEl.value, "156", "delete range works in a textarea");
+	
+	// test textarea ranges
+	textAreaEl.value = "123456";
+	selectText(textAreaEl, 1, 3)
+	new Synthetic("key","a").send(textAreaEl);
+	equals(textAreaEl.value, "1a456", "character range works in a textarea");
+	
+	// test textarea ranges
+	textAreaEl.value = "123456";
+	selectText(textAreaEl, 1, 3)
+	new Synthetic("key","\b").send(textAreaEl);
+	equals(textAreaEl.value, "1456", "backspace range works in a textarea");
+	
+	// test textarea ranges
+	textAreaEl.value = "123456";
+	selectText(textAreaEl, 1, 3)
+	new Synthetic("key","\r").send(textAreaEl);
+	equals(textAreaEl.value, "1\n456", "return range works in a textarea");
+	
+    //__g("qunit-test-area").innerHTML = "";
 	
 })
