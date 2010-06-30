@@ -37,23 +37,26 @@ selectionEnd = function(el){
 	} else return el.selectionEnd 
 },
 support = Synthetic.support,
-createEvent = Synthetic.createEvent;
+createEvent = Synthetic.createEvent,
+createEventObject = Synthetic.helpers.createEventObject,
+createBasicStandardEvent = Synthetic.helpers.createBasicStandardEvent,
+extend = Synthetic.extend,
+browser = Synthetic.browser;
 
 
 Synthetic.extend(Synthetic,{
 	keycodes: {
+		//backspace
 		'\b':'8',
 		
+		//tab
 		'\t':'9',
 		
+		//enter
+		'\r':'13',
 		
 		//special
 		'shift':'16','ctrl':'17','alt':'18',
-		
-		
-		
-		
-		
 		
 		//weird
 		'pause-break':'19',
@@ -66,9 +69,6 @@ Synthetic.extend(Synthetic,{
 		//navigation
 		'page-up':'33','page-down':'34','end':'35','home':'36',
 		'left':'37','up':'38','right':'39','down':'40','insert':'45','delete':'46',
-		
-		//enter
-		'\r':'13',
 		
 		//normal characters
 		' ':'32',
@@ -98,12 +98,13 @@ Synthetic.extend(Synthetic,{
 		
 		'f1':'112','f2':'113','f3':'114','f4':'115','f5':'116','f6':'117',
 		'f7':'118','f8':'119','f9':'120','f10':'121','f11':'122','f12':'123'
-		
-		
 	},
-
-	typeable : /input|textarea/i,
-	getKeyData : function(key){
+	// what we can type in
+	typeable : /input|textarea/i
+});
+Synthetic.extend(Synthetic.key,{
+	// retrieves a description of what events for this character should look like
+	data : function(key){
 		//check if it is described directly
 		if(Synthetic.key.browser[key]){
 			return Synthetic.key.browser[key];
@@ -115,9 +116,19 @@ Synthetic.extend(Synthetic,{
 		}
 		return Synthetic.key.browser.character
 	},
-	getKeyOptions : function(key, keyData, event){
-		var charCode = keyData[event][0];
-		var keyCode = keyData[event][1],
+	//gets the options for a particular key and key event
+	options : function(key, event){
+
+		var keyData = Synthetic.key.data(key);
+		
+		if(!keyData[event]){
+			//we shouldn't be creating this event
+			return null;
+		}
+			
+		
+		var	charCode = keyData[event][0],
+			keyCode = keyData[event][1],
 			result = {};
 		if(keyCode == 'key'){
 			result.keyCode = Synthetic.keycodes[key]
@@ -131,9 +142,8 @@ Synthetic.extend(Synthetic,{
 			result.charCode = charCode;
 		}
 		return result
-	}
-});
-Synthetic.extend(Synthetic.key,{
+	},
+	
 	kinds : {
 		special : ["shift",'ctrl','alt','caps'],
 		specialChars : ["\b"],
@@ -276,7 +286,57 @@ Synthetic.extend(Synthetic.key,{
 			}
 		}
 	}
+});
+
+
+Synthetic.extend(Synthetic.create,{
+	key : {
+			options : function(type, options, element){
+				//check if options is character or has character
+				options = typeof options != "object" ? {character : options} : options;
+				
+				//don't change the orignial
+				options = extend({}, options)
+				if(options.character){
+					extend(options, Synthetic.key.options(options.character, type));
+					delete options.character;
+				}
+				options = extend({
+					ctrlKey: false,
+					altKey: false,
+					shiftKey: false,
+					metaKey: false
+				}, options)
+				
+				return options;
+			},
+			event : document.createEvent ? 
+				function(type, options, element){  //Everyone Else
+					var event;
+					
+					try {
+			
+						event = element.ownerDocument.createEvent("KeyEvents");
+						event.initKeyEvent(type, true, true, window, 
+							options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
+							options.keyCode, options.charCode );
+					} catch(e) {
+						event = createBasicStandardEvent(type,options)
+					}
+					event.synthetic = true;
+					return event;
+	
+				} : 
+				function(type, options, element){
+					var event = createEventObject.apply(this,arguments);
+					extend(event, options)
+	
+					return event;
+				}
+		}
 })
+
+
 
 
 
@@ -292,37 +352,31 @@ var convert = {
 
 Synthetic.prototype.key = function(element){
 	var key = convert[this.options] || this.options,
-		data = Synthetic.getKeyData(key),
-		options = Synthetic.getKeyOptions(key, data, 'keydown'),
-		result = Synthetic.createEvent('keydown',options, element ),
+		result = Synthetic.createEvent('keydown',key, element ),
 		getDefault = Synthetic.key.getDefault,
 		prevent = Synthetic.key.browser.prevent;
 	
+	//options for keypress
+	options = Synthetic.key.options(key, 'keypress');
+	
 	if(result){
 		//is there is not a keypress, run default
-		if(!data.keypress){
+		if(!options){
 			getDefault(key).call(element, options, this.scope, key)
 		}else{
 			//do keypress
-			result = Synthetic.createEvent(
-				'keypress',
-				Synthetic.getKeyOptions(key, data, 'keypress'), 
-				element )
+			result = createEvent('keypress',options, element )
 			if(result){
 				getDefault(key).call(element, options, this.scope, key)
 			}
-			
 		}
 	}else{
 		//canceled ... possibly don't run keypress
-		if(!data.keypress && inArray('keypress',prevent.keydown) == -1 ){
-			Synthetic.createEvent(
-				'keypress',
-				Synthetic.getKeyOptions(key, data, 'keypress'), 
-				element )
+		if(options && inArray('keypress',prevent.keydown) == -1 ){
+			createEvent('keypress',options, element )
 		}
 	}
-	Synthetic.createEvent('keyup',Synthetic.getKeyOptions(key, data, 'keyup'), element )
+	Synthetic.createEvent('keyup',Synthetic.key.options(key, 'keyup'), element )
 	//do mouseup
 	
 	return result
@@ -334,8 +388,9 @@ Synthetic.prototype.key = function(element){
 
 
 
-//do support code
 
+
+//do support code
 (function(){
 
 
@@ -364,23 +419,19 @@ Synthetic.prototype.key = function(element){
 	form.onsubmit = function(ev){
 		if (ev.preventDefault) 
 			ev.preventDefault();
-		submitted = true;
+		support.keypressSubmits = true;
 		ev.returnValue = false;
 		return false;
 	}
-	createEvent("keypress", {
-		character: "\n"
-	}, form.childNodes[3]);
-	
-	support.keypressSubmits = submitted;
+	createEvent("keypress", "\r", form.childNodes[3]);
 	
 	
-	createEvent("keypress", {character: "a"}, form.childNodes[3]);
+	createEvent("keypress", "a", form.childNodes[3]);
 	support.keyCharacters = form.childNodes[3].value == "a";
 	
 	
 	form.childNodes[3].value = "a"
-	createEvent("keypress", {character: "\b"}, form.childNodes[3]);
+	createEvent("keypress", "\b", form.childNodes[3]);
 	support.backspaceWorks = form.childNodes[3].value == "";
 	
 		
@@ -389,9 +440,7 @@ Synthetic.prototype.key = function(element){
 		support.focusChanges = true;
 	}
 	form.childNodes[3].focus();
-	createEvent("keypress", {
-		character: "a"
-	}, form.childNodes[3]);
+	createEvent("keypress", "a", form.childNodes[3]);
 	form.childNodes[5].focus();
 	
 

@@ -95,7 +95,8 @@ test("enter (\\r) submits form", function(){
 })
 
 asyncTest("page down, page up, home, end", function(){
-	__g("qunit-test-area").innerHTML = "<div id='scrolldiv' style='width:100px;height:200px;overflow-y:scroll;'>"+
+	__g("qunit-test-area").innerHTML = 
+		"<div id='scrolldiv' style='width:100px;height:200px;overflow-y:scroll;' tabindex='0'>"+
 		"<div id='innerdiv' style='height:1000px;'></div></div>";
 			
 	__addEventListener(__g("scrolldiv"),"scroll",function(ev){
@@ -106,7 +107,7 @@ asyncTest("page down, page up, home, end", function(){
 	stop(400);
 	setTimeout(function(){
 		 __g("scrolldiv").focus();
-		new Synthetic("key","page-down").send(window);
+		new Synthetic("key","page-down").send(document.documentElement);
 	},13)
 })
 test("range tests", function(){
