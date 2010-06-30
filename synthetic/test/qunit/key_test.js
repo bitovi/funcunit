@@ -62,7 +62,6 @@ test("Key Something", function(){
 	equals(upVal, "JMVC" , "Up Typing works")
 	equals(pressVal, "JMV" , "Press Typing works")
 	equals(downVal, "JMV" , "Down Typing works")
-	start();
 	//__g("qunit-test-area").innerHTML = "";
 })
 
@@ -86,4 +85,20 @@ test("enter (\\r) submits form", function(){
 	new Synthetic("key","\r").send( __g("myinput") );
 	ok(submitted , "submitted");
 	__g("qunit-test-area").innerHTML = "";
+})
+
+asyncTest("page down", function(){
+	__g("qunit-test-area").innerHTML = "<div id='scrolldiv' style='width:100px;height:200px;overflow-y:scroll;'>"+
+		"<div id='innerdiv' style='height:1000px;'></div></div>";
+			
+	__addEventListener(__g("scrolldiv"),"scroll",function(ev){
+		ok(true,"scrolling created by pressing page down");
+		__g("qunit-test-area").innerHTML ="";
+		start();
+	} );
+	stop(400);
+	setTimeout(function(){
+		 __g("scrolldiv").focus();
+		new Synthetic("key","page-down").send(window);
+	},13)
 })
