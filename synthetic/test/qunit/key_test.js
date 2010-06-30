@@ -115,11 +115,18 @@ test("range tests", function(){
 			el.focus();
 			var r = document.selection.createRange();
 			r.moveStart('character', start);
-			r.moveEnd('character', end-1);
+			if (end) {
+				r.moveEnd('character', end - 1);
+			}
 			r.select();
 		} else {
-			el.selectionStart = start;
-			el.selectionEnd = end;
+			if(!end){
+                el.focus();
+                el.setSelectionRange(start, start);
+			} else {
+				el.selectionStart = start;
+				el.selectionEnd = end;
+			}
 		}
 	}
 	
@@ -135,17 +142,35 @@ test("range tests", function(){
 	new Synthetic("key","delete").send(keyEl);
 	equals(keyEl.value, "156", "delete range works");
 	
+	// test delete key
+	keyEl.value = "123456";
+	selectText(keyEl, 2);
+	new Synthetic("key","delete").send(keyEl);
+	equals(keyEl.value, "12456", "delete works");
+	
 	// test character range
 	keyEl.value = "123456";
 	selectText(keyEl, 1, 3)
 	new Synthetic("key","a").send(keyEl);
 	equals(keyEl.value, "1a456", "character range works");
 	
+	// test character key
+	keyEl.value = "123456";
+	selectText(keyEl, 2);
+	new Synthetic("key","a").send(keyEl);
+	equals(keyEl.value, "12a3456", "character works");
+	
 	// test backspace range
 	keyEl.value = "123456";
 	selectText(keyEl, 1, 3)
 	new Synthetic("key","\b").send(keyEl);
 	equals(keyEl.value, "1456", "backspace range works");
+	
+	// test backspace key
+	keyEl.value = "123456";
+	selectText(keyEl, 2);
+	new Synthetic("key","\b").send(keyEl);
+	equals(keyEl.value, "13456", "backspace works");
 	
 	// test textarea ranges
 	textAreaEl.value = "123456";
