@@ -189,6 +189,10 @@
 			//
 			
 		}
+		
+		bind('manual', 'change',function(){
+			console.log('change')
+		})
 		var count = 0
 		setInterval(function(){
 			gId('counter').innerHTML = (count++)

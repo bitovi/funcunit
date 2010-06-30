@@ -23,7 +23,9 @@ steal(function(){
 		id = 0, 
 		expando = "_synthetic"+(new Date() - 0),
 		bind,
-		unbind;
+		unbind,
+		key = /keypress|keyup|keydown/,
+		page = /load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll/;
 		
 		
 	if(window.addEventListener){ // Mozilla, Netscape, Firefox
@@ -46,10 +48,9 @@ steal(function(){
 	extend(Synthetic,{
 		//default actions by event type
 		extend:  extend,
+		
+		//default behavior for events
 		defaults : {
-			mousedown : function(options){
-				createEvent("focus", {}, this)
-			},
 			focus : function(){
 				if(!support.focusChanges){
 					var element = this;
@@ -69,106 +70,9 @@ steal(function(){
 						
 					}
 				}
-			},
-			click : function(){
-				// prevents the access denied issue in IE if the click causes the element to be destroyed
-				var element = this;
-				try {
-					element.nodeType;
-				} catch(e){
-					return;
-				}
-				//get old values
-				var href,
-					checked = Synthetic.data(element,"checked"),
-					scope = element.ownerDocument.defaultView || element.ownerDocument.parentWindow,
-					nodeName = element.nodeName.toLowerCase();
-				
-				if( (href = Synthetic.data(element,"href") ) ){
-					element.setAttribute('href',href)
-				}
-
-				
-				
-				//run href javascript
-				if(!support.linkHrefJS 
-					&& /^\s*javascript:/.test(element.href)){
-					//eval js
-					var code = element.href.replace(/^\s*javascript:/,"")
-						
-					//try{
-					if (code != "//" && code.indexOf("void(0)") == -1) {
-						if(window.selenium){
-							eval("with(selenium.browserbot.getCurrentWindow()){"+code+"}")
-						}else{
-							eval("with(scope){"+code+"}")
-						}
-					}
-				}
-				
-				//submit a form
-				if(nodeName == "input" 
-					&& element.type == "submit" 
-					&& !(support.clickSubmits)){
-						
-					var form =  Synthetic.closest(element, "form");
-					if(form)
-						new Synthetic("submit").send( form );
-					
-				}
-				//follow a link, probably needs to check if in an a.
-				if(nodeName == "a" 
-					&& element.href 
-					&& !/^\s*javascript:/.test(element.href)){
-						
-					scope.location.href = element.href;
-					
-				}
-				
-				//change a checkbox
-				if(nodeName == "input" 
-					&& element.type == "checkbox"){
-					
-					if(!support.clickChecks && !support.changeChecks){
-						element.checked = !element.checked;
-					}
-					if(!support.clickChanges)
-						new Synthetic("change").send(  element );
-					
-				}
-				
-				//change a radio button
-				if(nodeName == "input" && element.type == "radio"){  // need to uncheck others if not checked
-					
-					if(!support.clickChecks && !support.changeChecks){
-						//do the checks manually 
-						if(!element.checked){ //do nothing, no change
-							element.checked = true;
-						}
-					}
-					if(checked != element.checked && !support.radioClickChanges){
-						new Synthetic("change").send(  element );
-					}
-				}
-				
-				// change options
-				if(nodeName == "option"){
-					//check if we should change
-					//find which selectedIndex this is
-					var children = element.parentNode.childNodes;
-					for(var i =0; i< children.length; i++){
-						if(children[i] == element) break;
-					}
-					if(i !== element.parentNode.selectedIndex){
-						element.parentNode.selectedIndex = i;
-						new Synthetic("change").send(  element.parentNode );
-					}
-				}
-					
-				
 			}
 		},
-		
+		//returns the closest element of type
 		closest : function(el, type){
 			while(el && el.nodeName.toLowerCase() != type.toLowerCase()){
 				el = el.parentNode
@@ -210,112 +114,71 @@ steal(function(){
 		},
 		bind : bind,
 		unbind : unbind,
-		browser: browser
+		browser: browser,
+		helpers : {
+			createEventObject : function(type, options, element){
+				var event = element.ownerDocument.createEventObject();
+				return extend(event, options);
+			},
+			createBasicStandardEvent : function(type, defaults){
+				var event;
+				try {
+					event = document.createEvent("Events");
+				} catch(e2) {
+					event = document.createEvent("UIEvents");
+				} finally {
+					event.initEvent(type, true, true);
+					extend(event, defaults);
+				}
+				return event;
+			}
+		},
+		//triggers an event on an element, returns true if default events should be run
+		dispatch : (document.documentElement.dispatchEvent ? 
+					function(event, element, type, autoPrevent){
+						var preventDefault = event.preventDefault, 
+							prevents = autoPrevent ? -1 : 0;
+						
+						//automatically prevents the default behavior for this event
+						//this is to protect agianst nasty browser freezing bug in safari
+						if(autoPrevent){
+							bind(element, type, function(ev){
+								ev.preventDefault()
+								unbind(this, type, arguments.callee)
+							})
+						}
+						
+						
+						event.preventDefault = function(){
+							prevents++;
+							if(++prevents > 0){
+								preventDefault.apply(this,[]);
+							}
+						}
+						element.dispatchEvent(event)
+						return prevents <= 0;
+					} : 
+					function(event, element, type){
+						try {window.event = event;}catch(e) {}
+						return element.fireEvent('on'+type, event);
+					}
+				)
+		
 	});
 	
 
-	var key = /keypress|keyup|keydown/,
-		
-	page = /load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll/,
+	
 
 	//dispatches an event
-	dispatch = document.documentElement.dispatchEvent ? 
-			function(event, element, type, autoPrevent){
-				var preventDefault = event.preventDefault, 
-					prevents = autoPrevent ? -1 : 0;
-				
-				//automatically prevents the default behavior for this event
-				//this is to protect agianst nasty browser freezing bug in safari
-				if(autoPrevent){
-					bind(element, type, function(ev){
-						ev.preventDefault()
-						unbind(this, type, arguments.callee)
-					})
-				}
-				
-				
-				event.preventDefault = function(){
-					prevents++;
-					if(++prevents > 0){
-						preventDefault.apply(this,[]);
-					}
-				}
-				element.dispatchEvent(event)
-				return prevents <= 0;
-			} : 
-			function(event, element, type){
-				try {window.event = event;}catch(e) {}
-				return element.fireEvent('on'+type, event);
-			},
-	createEventObject = function(type, options, element){
-		var event = element.ownerDocument.createEventObject();
-		return extend(event, options);
-	},
-	createBasicStandardEvent = function(type, defaults){
-		var event;
-		try {
-			event = document.createEvent("Events");
-		} catch(e2) {
-			event = document.createEvent("UIEvents");
-		} finally {
-			event.initEvent(type, true, true);
-			extend(event, defaults);
-		}
-		return event;
-	},
+	var createEventObject = Synthetic.helpers.createEventObject,
+		createBasicStandardEvent = Synthetic.helpers.createBasicStandardEvent,
 	
 	//object lets you create certain types of events		
-	create = {
+	create = (Synthetic.create =  {
 		//-------- MOUSE EVENTS ---------------------
-		mouse : {
-			options : function(type, options, element){
-				var doc = document.documentElement, body = document.body,
-					center = [options.pageX || 0, options.pageY || 0] 
-				return extend({
-					bubbles : true,cancelable : true,
-					view : window,detail : 1,
-					screenX : 1, screenY : 1,
-					clientX : center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
-					clientY : center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
-					ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
-					button : (type == 'contextmenu' ? 2 : 0), 
-					relatedTarget : document.documentElement
-				}, options);
-			},
-			event : document.createEvent ? 
-				function(type, defaults, element){  //Everyone Else
-					var event;
-					
-					try {
-						event = element.ownerDocument.createEvent('MouseEvents');
-						event.initMouseEvent(type, 
-							defaults.bubbles, defaults.cancelable, 
-							defaults.view, 
-							defaults.detail, 
-							defaults.screenX, defaults.screenY,defaults.clientX,defaults.clientY,
-							defaults.ctrlKey,defaults.altKey,defaults.shiftKey,defaults.metaKey,
-							defaults.button,defaults.relatedTarget);
-					} catch(e) {
-						event = createBasicStandardEvent(type,defaults)
-					}
-					event.synthetic = true;
-					return event;
-				} : 
-				createEventObject
-		},
+		
 		// -----------------  Key Events --------------------
 		key : {
-			rules : {
-				firefox : {
-					character : {
-								
-					},
-					modifier :{
-						
-					}
-				}
-			},
-			
 			options : function(type, options, element){
 		
 				//if keyCode and charCode should be reversed
@@ -409,37 +272,8 @@ steal(function(){
 				})
 				return true;
 			}
-		},
-		click : {
-			setup : function(type, options, element){
-				try{
-					Synthetic.data(element,"checked", element.checked);
-				}catch(e){}
-				if( 
-					element.nodeName.toLowerCase() == "a" 
-					&& element.href  
-					&& !/^\s*javascript:/.test(element.href)){
-					
-					//save href
-					Synthetic.data(element,"href", element.href)
-					
-					//remove b/c safari/opera will open a new tab instead of changing the page
-					element.setAttribute('href','javascript://')
-				}
-			}
-		},
-		mousedown : {
-			setup : function(type,options, element){
-				var nn = element.nodeName.toLowerCase();
-				//we have to auto prevent default to prevent freezing error in safari
-				if(browser.safari && (nn == "select" || nn == "option" )){
-					options._autoPrevent = true;
-				}
-				
-				
-			}
 		}
-	},
+	}),
 	createEvent = function(type, options, element){
 		options || (options = {});
 		//any setup code?
@@ -467,7 +301,7 @@ steal(function(){
 			event = create[kind].event(type,options,element)
 			
 			//send the event
-			ret = dispatch(event, element, type, autoPrevent)
+			ret = Synthetic.dispatch(event, element, type, autoPrevent)
 		}
 		
 		//run default behavior
@@ -493,11 +327,15 @@ steal(function(){
 	Synthetic.support = support;
 	//support code
 	(function(){
-		var oldSynth = window.__synthTest;
-		window.__synthTest = function(){
-			support.linkHrefJS = true;
-		}
-		var div = document.createElement("div"), checkbox, submit, form, input, submitted = false;
+
+
+		var div = document.createElement("div"), 
+			checkbox, 
+			submit, 
+			form, 
+			input, 
+			submitted = false;
+			
 		div.innerHTML = "<form id='outer'>"+
 			"<input name='checkbox' type='checkbox'/>"+
 			"<input name='radio' type='radio' />"+
@@ -507,89 +345,49 @@ steal(function(){
 			"<input name='two'/>"+
 			"<a href='javascript:__synthTest()' id='synlink'></a>"+
 			"</form>";
+			
 		document.documentElement.appendChild(div);
-		form = div.firstChild
+		form = div.firstChild;
 		checkbox = form.childNodes[0];
 		submit = form.childNodes[2];
-		
-		
-		checkbox.checked = false;
-		checkbox.onchange = function(){
-			support.clickChanges = true;
-		}
-		//document.body.appendChild(div);
-		createEvent("click", {}, checkbox)
-		support.clickChecks = checkbox.checked;
-		checkbox.checked = false;
-		
-		
-		createEvent("change", {}, checkbox);
-		
-		support.changeChecks = checkbox.checked;
 		
 		form.onsubmit = function(ev){
 			if (ev.preventDefault) 
 				ev.preventDefault();
 			submitted = true;
+			ev.returnValue = false;
 			return false;
 		}
-		createEvent("click", {}, submit)
-		if (submitted) {
-			support.clickSubmits = true;
-		}
-			
-		submitted = false;
 		createEvent("keypress", {
 			character: "\n"
 		}, form.childNodes[3]);
-		if (submitted) {
-			support.keypressSubmits = true;
-		}
-			
-			
+		
+		support.keypressSubmits = submitted;
+		
+		
 		createEvent("keypress", {character: "a"}, form.childNodes[3]);
-		if (form.childNodes[3].value == "a") {
-			support.keyCharacters = true;
-		}
+		support.keyCharacters = form.childNodes[3].value == "a";
+		
+		
 		form.childNodes[3].value = "a"
 		createEvent("keypress", {character: "\b"}, form.childNodes[3]);
+		support.backspaceWorks = form.childNodes[3].value == "";
 		
-		if (form.childNodes[3].value == "") {
-			support.backspaceWorks = true;
-		}
 			
-		
-		form.childNodes[1].onchange = function(){
-			support.radioClickChanges = true;
-		}
-		createEvent("click", {}, form.childNodes[1])
-		
 		
 		form.childNodes[3].onchange = function(){
 			support.focusChanges = true;
 		}
 		form.childNodes[3].focus();
-		
 		createEvent("keypress", {
 			character: "a"
 		}, form.childNodes[3]);
-		
 		form.childNodes[5].focus();
 		
-		createEvent("click", {}, div.getElementsByTagName('a')[0])
-		
-		//test if mousedown followed by mouseup causes click (opera)
-		div.onclick = function(){
-			support.mouseDownUpClicks = true;
-		}
-		createEvent("mousedown",{},div)
-		createEvent("mouseup",{},div)
-		
+
 		document.documentElement.removeChild(div);
 		
-		//check stuff
-		window.__synthTest = oldSynth;
-		support.ready = true;
+		//support.ready = true;
 	})();
 	
 	
@@ -613,11 +411,6 @@ steal(function(){
 			}
 				
 			return this.create_event(element)
-		},
-		key : function(element){
-			createEvent("keydown", this.options, element);
-			createEvent("keypress", this.options, element);
-			createEvent("keyup", this.options, element);
 		},
 		/**
 		 * Mouses down, focuses, up, and clicks an element
@@ -793,5 +586,5 @@ steal(function(){
 
 	window.Synthetic = Synthetic;
 	
-}).then('keys','browser_keys');
+}).then('mouse','keys','browser_keys');
 
