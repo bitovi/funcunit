@@ -12,7 +12,17 @@ getWindow = function(element){
 	return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
 },
 getSelection = function(el){
-	if (el.createTextRange) {
+	if (el.selectionStart !== undefined) {
+		//this is for opera, so we don't have to focus to type how we think we would
+		if(document.activeElement 
+		 	&& document.activeElement != el 
+			&& el.selectionStart == el.selectionEnd 
+			&& el.selectionStart == 0){
+			return {start: el.value.length, end: el.value.length};
+		}
+		
+		return  {start: el.selectionStart, end: el.selectionEnd}
+	}else{
 		//check if we aren't focused
 		if(document.activeElement && document.activeElement != el){
 			return {start: el.value.length, end: el.value.length};
@@ -35,9 +45,7 @@ getSelection = function(el){
 			var start = r.text.length - real.text.length
 			return {start: start, end: r.text.length}
 		}
-	} else {
-		return  {start: el.selectionStart, end: el.selectionEnd}
-	}
+	} 
 },
 support = Synthetic.support,
 createEvent = Synthetic.createEvent,

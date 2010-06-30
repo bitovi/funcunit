@@ -41,7 +41,7 @@ test("BasicKey", function(){
 	
 	__removeEventListener(__g("outer"),"submit",submitf );
 	__removeEventListener(__g("outer"),"keypress",keypressf );
-    __g("qunit-test-area").innerHTML = "";
+    //__g("qunit-test-area").innerHTML = "";
 	
 })
 
@@ -146,15 +146,7 @@ asyncTest("page down, page up, home, end", function(){
 })
 test("range tests", function(){
 	var selectText = function(el, start, end){
-		if (el.createTextRange) {
-			//el.focus();
-			var r = el.createTextRange();
-			r.moveStart('character', start);
-			end = end || start;
-			r.moveEnd('character', end - el.value.length);
-			
-			r.select();
-		} else {
+		if(el.setSelectionRange){
 			if(!end){
                 el.focus();
                 el.setSelectionRange(start, start);
@@ -162,9 +154,16 @@ test("range tests", function(){
 				el.selectionStart = start;
 				el.selectionEnd = end;
 			}
-		}
+		}else if (el.createTextRange) {
+			//el.focus();
+			var r = el.createTextRange();
+			r.moveStart('character', start);
+			end = end || start;
+			r.moveEnd('character', end - el.value.length);
+			
+			r.select();
+		} 
 	}
-	
 	__g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'><input type='input' id='key' value=''/></div></form>"+
 		"<textarea id='mytextarea' />";
 	
