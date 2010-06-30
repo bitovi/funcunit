@@ -191,7 +191,7 @@ Synthetic.extend(Synthetic,{
 			},
 			'\b' : function(){
 				//this assumes we are deleting from the end
-				if(!support.keyCharacters && Synthetic.typeable.test(this.nodeName)){
+				if(!support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
 					var current = this.value,
 						start = selectionStart(this),
 						end = selectionEnd(this),

@@ -36,13 +36,13 @@ steal(function(){
 			'character':
 			 {"keydown":[0,"key"],"keypress":["char",0],"keyup":[0,"key"]},
 			'specialChars':
-			 {"keydown":[0,"char"],"keypress":[0,"char"],"keyup":[0,"char"]},
+			 {"keydown":[0,"key"],"keypress":[0,"key"],"keyup":[0,"key"]},
 			'navigation':
 			 {"keydown":[0,"key"],"keypress":[0,"key"],"keyup":[0,"key"]},
 			'special':
 			 {"keydown":[0,"key"],"keyup":[0,"key"]},
-			'tab':
-			 {"keydown":[0,"char"],"keypress":[0,"char"],"keyup":[0,"char"]},
+			'\t':
+			 {"keydown":[0,"key"],"keypress":[0,"key"],"keyup":[0,"key"]},
 			'pause-break':
 			 {"keydown":[0,"key"],"keypress":[0,"key"],"keyup":[0,"key"]},
 			'caps':
@@ -56,7 +56,7 @@ steal(function(){
 			'print':
 			 {"keyup":[0,"key"]},
 			'function':
-			 {"keydown":[0,"key"],"keypress":[0,"key"],"keyup":[0,"key"]},
+			 {"keydown":[0,"key"],"keyup":[0,"key"]},
 			'\r':
 			 {"keydown":[0,"key"],"keypress":[0,"key"],"keyup":[0,"key"]}
 		},
