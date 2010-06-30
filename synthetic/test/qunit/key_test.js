@@ -97,18 +97,52 @@ test("enter (\\r) submits form", function(){
 asyncTest("page down, page up, home, end", function(){
 	__g("qunit-test-area").innerHTML = 
 		"<div id='scrolldiv' style='width:100px;height:200px;overflow-y:scroll;' tabindex='0'>"+
-		"<div id='innerdiv' style='height:1000px;'></div></div>";
+		"<div id='innerdiv' style='height:1000px;'><a href='javascript://'>Scroll on me</a></div></div>";
+	
+	//reset the scroll top	
+	__g("scrolldiv").scrollTop =0;
+	
+	//list of keys to press and what to test after the scroll event
+	var keyTest = {
+		"page-down": function(){
+			ok( __g("scrolldiv").scrollTop > 10 , "Moved down")
+		},
+		"page-up": function(){
+			ok( __g("scrolldiv").scrollTop == 0 , "Moved back up (page-up)")
+		},
+		"end" : function(){
+			var sd = __g("scrolldiv")
+			ok( sd.scrollTop == sd.scrollHeight - sd.clientHeight , "Moved to the end")
+		},
+		"home" : function(){
+			ok( __g("scrolldiv").scrollTop == 0 , "Moved back up (home)")
+		}
+	},
+	order = [],
+	i = 0,
+	runNext = function(){
+		var name = order[i];
+		if(!name){
+			start();
+			return;
+		}
+		new Synthetic("key",name).send(__g("scrolldiv"))
+	};
+	for(var name in keyTest){
+		order.push(name)
+	}
 			
 	__addEventListener(__g("scrolldiv"),"scroll",function(ev){
-		ok(true,"scrolling created by pressing page down");
-		//__g("qunit-test-area").innerHTML ="";
-		start();
+		keyTest[order[i]]()
+		i++;
+		setTimeout(runNext,1)
+
 	} );
-	stop(400);
-	setTimeout(function(){
-		 __g("scrolldiv").focus();
-		new Synthetic("key","page-down").send(document.documentElement);
-	},13)
+	stop(1000);
+
+	 __g("scrolldiv").focus();
+	runNext();
+
 })
 test("range tests", function(){
 	var selectText = function(el, start, end){

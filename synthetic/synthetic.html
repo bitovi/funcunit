@@ -207,8 +207,12 @@
 			gId('counter').innerHTML = (count++)
 		},1000)
 	}
-	
-	
+	bind('scrolldiv','keypress',function(ev){
+		console.log('press', ev)
+	})
+	bind('scrolldiv','keydown',function(ev){
+		console.log('down', ev)
+	})
 	if(!window.console){
 		console = {
 			log : function(txt){

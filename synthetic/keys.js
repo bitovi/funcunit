@@ -180,26 +180,39 @@ Synthetic.extend(Synthetic.key,{
 			}		
 		},
 		'home' : function(){
-			if(!Synthetic.focusable.test(this.nodeName)){
-				getWindow(this).document.documentElement.scrollTop = 0;
-			}
+			Synthetic.onParents(this, function(el){
+				if(el.scrollHeight != el.clientHeight){
+					el.scrollTop = 0;
+					return false;
+				}
+			})
 		},
 		'end' : function(){
-			if(!Synthetic.focusable.test(this.nodeName)){
-				getWindow(this).document.documentElement.scrollTop = document.documentElement.scrollHeight;
-			}
+			Synthetic.onParents(this, function(el){
+				if(el.scrollHeight != el.clientHeight){
+					el.scrollTop = el.scrollHeight;
+					return false;
+				}
+			})
 		},
 		'page-down' : function(){
-			if(!Synthetic.focusable.test(this.nodeName)){
-				var ch = getWindow(this).document.documentElement.clientHeight
-				getWindow(this).document.documentElement.scrollTop += ch;
-			}
+			//find the first parent we can scroll
+			Synthetic.onParents(this, function(el){
+				if(el.scrollHeight != el.clientHeight){
+					var ch = el.clientHeight
+					el.scrollTop += ch;
+					return false;
+				}
+			})
 		},
 		'page-up' : function(){
-			if(!Synthetic.focusable.test(this.nodeName)){
-				var ch = getWindow(this).document.documentElement.clientHeight
-				getWindow(this).document.documentElement.scrollTop -= ch;
-			}
+			Synthetic.onParents(this, function(el){
+				if(el.scrollHeight != el.clientHeight){
+					var ch = el.clientHeight
+					el.scrollTop -= ch;
+					return false;
+				}
+			})
 		},
 		'\b' : function(){
 			//this assumes we are deleting from the end
