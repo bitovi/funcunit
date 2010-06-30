@@ -109,3 +109,33 @@ asyncTest("page down, page up, home, end", function(){
 		new Synthetic("key","page-down").send(window);
 	},13)
 })
+test("Delete range test", function(){
+	var selectText = function(el, start, end){
+		if (el.createTextRange) {
+			el.focus();
+			var r = document.selection.createRange();
+			r.moveStart('character', start);
+			r.moveEnd('character', end);
+			r.select();
+		} else {
+			el.selectionStart = start;
+			el.selectionEnd = end;
+		}
+	}
+	
+	__g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'><input type='input' id='key' value=''/></div></form>";
+	var keyEl = __g("key")
+	keyEl.value = "";
+	
+	new Synthetic("key","1").send(keyEl);
+	new Synthetic("key","2").send(keyEl);
+	new Synthetic("key","3").send(keyEl);
+	new Synthetic("key","4").send(keyEl);
+	new Synthetic("key","5").send(keyEl);
+	new Synthetic("key","6").send(keyEl);
+	selectText(keyEl, 1, 3)
+	new Synthetic("key","delete").send(keyEl);
+	equals(keyEl.value, "156", "delete range works");
+    __g("qunit-test-area").innerHTML = "";
+	
+})
