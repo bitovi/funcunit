@@ -3,7 +3,7 @@
 steal(function(){
 
 	var Synthetic = function(type, options, scope){
-			this.type = type;
+			this.eventType = type;
 			this.options = options || {};
 			this.scope = scope || window
 		},
@@ -46,9 +46,7 @@ steal(function(){
 		
 		
 	extend(Synthetic,{
-		//default actions by event type
-		extend:  extend,
-		
+
 		//default behavior for events
 		defaults : {
 			focus : function(){
@@ -105,9 +103,9 @@ steal(function(){
 		},
 		focusable : /^(a|area|frame|iframe|label|input|select|textarea|button|html|object)$/i,
 		isFocusable : function(elem){
-			var attributeNode = elem.getAttributeNode( "tabIndex" );
-
-			return this.focusable.test(elem.nodeName) || attributeNode && attributeNode.specified
+			var attributeNode;
+			return this.focusable.test(elem.nodeName) || (
+				(attributeNode = elem.getAttributeNode( "tabIndex" )) && attributeNode.specified )
 		},
 		tabIndex : function(elem){
 			var attributeNode = elem.getAttributeNode( "tabIndex" );
@@ -132,7 +130,19 @@ steal(function(){
 					extend(event, defaults);
 				}
 				return event;
-			}
+			},
+			inArray : function(item, array){
+				for(var i =0; i < array.length; i++){
+					if(array[i] == item){
+						return i;
+					}
+				}
+				return -1;
+			},
+			getWindow : function(element){
+				return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
+			},
+			extend:  extend,
 		},
 		//place for key
 		key : {},
@@ -246,7 +256,8 @@ steal(function(){
 		linkHrefJS : false,
 		keyCharacters : false,
 		backspaceWorks : false,
-		mouseDownUpClicks : false
+		mouseDownUpClicks : false,
+		tabKeyTabs : false
 	};
 	
 	Synthetic.support = support;
@@ -268,11 +279,11 @@ steal(function(){
 				&& element.getAttribute('autocomplete') != 'off'){
 				element.setAttribute('autocomplete','off');
 			}
-			if(typeof this[this.type] == "function") {
-				return this[this.type].apply(this, arguments)
+			if(typeof this[this.eventType] == "function") {
+				return this[this.eventType].apply(this, arguments)
 			}
 				
-			return createEvent(this.type, this.options, element)
+			return createEvent(this.eventType, this.options, element)
 		}
 	}
 	/**

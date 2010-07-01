@@ -1,16 +1,8 @@
 steal(function(){
 
-var inArray = function(item, array){
-	for(var i =0; i < array.length; i++){
-		if(array[i] == item){
-			return i;
-		}
-	}
-	return -1;
-},
-getWindow = function(element){
-	return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
-},
+var h = Synthetic.helpers,
+	S = Synthetic,
+//gets the selection of an input or textarea
 getSelection = function(el){
 	if (el.selectionStart !== undefined) {
 		//this is for opera, so we don't have to focus to type how we think we would
@@ -20,23 +12,22 @@ getSelection = function(el){
 			&& el.selectionStart == 0){
 			return {start: el.value.length, end: el.value.length};
 		}
-		
 		return  {start: el.selectionStart, end: el.selectionEnd}
 	}else{
 		//check if we aren't focused
 		if(document.activeElement && document.activeElement != el){
 			return {start: el.value.length, end: el.value.length};
 		}
-		//try 2 different methods that work differently
+		//try 2 different methods that work differently (IE breaks depending on type)
 		if(el.nodeName.toLowerCase() == 'input'){
-			var real = getWindow(el).document.selection.createRange(),
+			var real = h.getWindow(el).document.selection.createRange(),
 				r = el.createTextRange();
 			r.setEndPoint("EndToStart", real);
 	
 			var start = r.text.length
 			return {start: start, end: start+real.text.length}
 		}else{
-			var real = getWindow(el).document.selection.createRange(),
+			var real = h.getWindow(el).document.selection.createRange(),
 			r = real.duplicate();
 			//select all of our element
 			r.moveToElementText(el)
@@ -47,15 +38,25 @@ getSelection = function(el){
 		}
 	} 
 },
-support = Synthetic.support,
-createEvent = Synthetic.createEvent,
-createEventObject = Synthetic.helpers.createEventObject,
-createBasicStandardEvent = Synthetic.helpers.createBasicStandardEvent,
-extend = Synthetic.extend,
-browser = Synthetic.browser;
+//gets all focusable elements
+getFocusable = function(el){
+	var document = h.getWindow(el).document,
+		res = [];
+	if(window.jQuery){
+		return jQuery("[tabindex],a,area,frame,iframe,label,input,select,textarea,button,html,object", document.documentElement )
+	}else{
+		var els = document.getElementsByTagName('*'),
+			len = els.length
+		for(var i=0;  i< len; i++){
+			Synthetic.isFocusable(els[i]) && res.push(els[i])
+		}
+		return res;
+	}
+	
+};
 
 
-Synthetic.extend(Synthetic,{
+h.extend(Synthetic,{
 	keycodes: {
 		//backspace
 		'\b':'8',
@@ -113,23 +114,23 @@ Synthetic.extend(Synthetic,{
 	// what we can type in
 	typeable : /input|textarea/i
 });
-Synthetic.extend(Synthetic.key,{
+
+h.extend(Synthetic.key,{
 	// retrieves a description of what events for this character should look like
 	data : function(key){
 		//check if it is described directly
-		if(Synthetic.key.browser[key]){
-			return Synthetic.key.browser[key];
+		if(S.key.browser[key]){
+			return S.key.browser[key];
 		}
-		for(var kind in Synthetic.key.kinds){
-			if(inArray(key, Synthetic.key.kinds[kind] ) > -1){
-				return Synthetic.key.browser[kind]
+		for(var kind in S.key.kinds){
+			if(h.inArray(key, S.key.kinds[kind] ) > -1){
+				return S.key.browser[kind]
 			}
 		}
-		return Synthetic.key.browser.character
+		return S.key.browser.character
 	},
 	//gets the options for a particular key and key event
 	options : function(key, event){
-
 		var keyData = Synthetic.key.data(key);
 		
 		if(!keyData[event]){
@@ -137,10 +138,10 @@ Synthetic.extend(Synthetic.key,{
 			return null;
 		}
 			
-		
 		var	charCode = keyData[event][0],
 			keyCode = keyData[event][1],
 			result = {};
+			
 		if(keyCode == 'key'){
 			result.keyCode = Synthetic.keycodes[key]
 		}else{
@@ -154,20 +155,21 @@ Synthetic.extend(Synthetic.key,{
 		}
 		return result
 	},
-	
+	//types of event keys
 	kinds : {
 		special : ["shift",'ctrl','alt','caps'],
 		specialChars : ["\b"],
 		navigation: ["page-up",'page-down','end','home','left','up','right','down','insert','delete'],
 		'function' : ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12']
 	},
+	//returns the default function
 	getDefault : function(key){
 		//check if it is described directly
 		if(Synthetic.key.defaults[key]){
 			return Synthetic.key.defaults[key];
 		}
 		for(var kind in Synthetic.key.kinds){
-			if(inArray(key, Synthetic.key.kinds[kind])> -1 && Synthetic.key.defaults[kind]  ){
+			if(h.inArray(key, Synthetic.key.kinds[kind])> -1 && Synthetic.key.defaults[kind]  ){
 				return Synthetic.key.defaults[kind];
 			}
 		}
@@ -175,7 +177,7 @@ Synthetic.extend(Synthetic.key,{
 	},
 	defaults : 	{
 		'character' : function(options, scope, key){
-			if(!support.keyCharacters && Synthetic.typeable.test(this.nodeName)){
+			if(!S.support.keyCharacters && Synthetic.typeable.test(this.nodeName)){
 				var current = this.value,
 					sel = getSelection(this),
 					before = current.substr(0,sel.start),
@@ -223,7 +225,7 @@ Synthetic.extend(Synthetic.key,{
 		},
 		'\b' : function(){
 			//this assumes we are deleting from the end
-			if(!support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
+			if(!S.support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
 				var current = this.value,
 					sel = getSelection(this),
 					before = current.substr(0,sel.start),
@@ -238,7 +240,7 @@ Synthetic.extend(Synthetic.key,{
 			}	
 		},
 		'delete' : function(){
-			if(!support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
+			if(!S.support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
 				var current = this.value,
 					sel = getSelection(this),
 					before = current.substr(0,sel.start),
@@ -256,70 +258,84 @@ Synthetic.extend(Synthetic.key,{
 			
 			var nodeName = this.nodeName.toLowerCase()
 			// submit a form
-			if(!support.keypressSubmits && nodeName == 'input'){
+			if(!S.support.keypressSubmits && nodeName == 'input'){
 				var form = Synthetic.closest(this, "form");
 				if(form){
-					Synthetic.createEvent("submit", {}, form);
+					S.createEvent("submit", {}, form);
 				}
 					
 			}
 			//newline in textarea
-			if(!support.keyCharacters && nodeName == 'textarea'){
+			if(!S.support.keyCharacters && nodeName == 'textarea'){
 				Synthetic.key.defaults.character.call(this, options, scope, "\n")
 			}
 			// 'click' hyperlinks
-			if(!support.keypressSubmits && nodeName == 'a'){
-				Synthetic.createEvent("click", {}, this);
+			if(!S.support.keypressSubmits && nodeName == 'a'){
+				S.createEvent("click", {}, this);
 			}
 		},
+		/**
+		 * Gets all focusable elements.  If the element (this)
+		 * doesn't have a tabindex, finds the next element after.
+		 * If the element (this) has a tabindex finds the element 
+		 * with the next higher tabindex OR the element with the same
+		 * tabindex after it in the document.
+		 * @return the next element
+		 */
 		'\t' : function(options, scope){
-			//we need jQuery for this
-			if(!support.keypressSubmits){
-				var focusable = "a,area,frame,iframe,label,input,select,textarea,button,html,object"
+				// focusable elements
+			var focusEls = getFocusable(this),
+				// the current element's tabindex
+				tabIndex = Synthetic.tabIndex(this),
+				// will be set to our guess for the next element
+				current = null,
+				// the next index we care about
+				currentIndex = 1000000000,
+				// set to true once we found 'this' element
+				found = false,
+				i = 0,
+				el, 
+				//the tabindex of the tabable element we are looking at
+				elIndex;
 				
-				var focusEls = jQuery("[tabindex],"+focusable, getWindow(this).document.documentElement );
-				
-				var tabIndex = Synthetic.tabIndex(this),
-					current = null,
-					currentIndex = 1000000000,
-					found = false;
-				for(var i=0; i< focusEls.length; i++){
-					var el = focusEls[i],
-						elIndex = Synthetic.tabIndex(el)
-					if(tabIndex 
-						&& (found ? elIndex >= tabIndex : elIndex > tabIndex )  
-						&& elIndex < currentIndex){
-							currentIndex = elIndex;
-							current = el;
-					}
-					if(!tabIndex && found){
+			for(; i< focusEls.length; i++){
+				el = focusEls[i];
+				elIndex = Synthetic.tabIndex(el);
+				if(tabIndex 
+					&& (found ? elIndex >= tabIndex : elIndex > tabIndex )  
+					&& elIndex < currentIndex){
+						currentIndex = elIndex;
 						current = el;
-						break;
-					}
-					if(this === el){
-						found= true;
-					}
 				}
-				current && current.focus();
+				if(!tabIndex && found){
+					current = el;
+					break;
+				}
+				if(this === el){
+					found= true;
+				}
 			}
+			current && current.focus();
+			return current;
 		}
 	}
 });
 
 
-Synthetic.extend(Synthetic.create,{
+h.extend(Synthetic.create,{
 	key : {
+			// return the options for a key event
 			options : function(type, options, element){
 				//check if options is character or has character
 				options = typeof options != "object" ? {character : options} : options;
 				
 				//don't change the orignial
-				options = extend({}, options)
+				options = h.extend({}, options)
 				if(options.character){
-					extend(options, Synthetic.key.options(options.character, type));
+					h.extend(options, S.key.options(options.character, type));
 					delete options.character;
 				}
-				options = extend({
+				options = h.extend({
 					ctrlKey: false,
 					altKey: false,
 					shiftKey: false,
@@ -328,6 +344,7 @@ Synthetic.extend(Synthetic.create,{
 				
 				return options;
 			},
+			// creates a key event
 			event : document.createEvent ? 
 				function(type, options, element){  //Everyone Else
 					var event;
@@ -339,15 +356,15 @@ Synthetic.extend(Synthetic.create,{
 							options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
 							options.keyCode, options.charCode );
 					} catch(e) {
-						event = createBasicStandardEvent(type,options)
+						event = h.createBasicStandardEvent(type,options)
 					}
 					event.synthetic = true;
 					return event;
 	
 				} : 
 				function(type, options, element){
-					var event = createEventObject.apply(this,arguments);
-					extend(event, options)
+					var event = h.createEventObject.apply(this,arguments);
+					h.extend(event, options)
 	
 					return event;
 				}
@@ -366,42 +383,65 @@ var convert = {
 }
 
 
-
-
-Synthetic.prototype.key = function(element){
-	var key = convert[this.options] || this.options,
-		result = Synthetic.createEvent('keydown',key, element ),
-		getDefault = Synthetic.key.getDefault,
-		prevent = Synthetic.key.browser.prevent;
-	
-	//options for keypress
-	options = Synthetic.key.options(key, 'keypress');
-	
-	if(result){
-		//is there is not a keypress, run default
-		if(!options){
-			getDefault(key).call(element, options, this.scope, key)
+h.extend(Synthetic.prototype,{
+	key : function(element){
+		var key = convert[this.options] || this.options,
+			result = S.createEvent('keydown',key, element ),
+			getDefault = S.key.getDefault,
+			prevent = S.key.browser.prevent,
+			defaultResult;
+		
+		//options for keypress
+		options = Synthetic.key.options(key, 'keypress');
+		
+		if(result){
+			//is there is not a keypress, run default
+			if(!options){
+				defaultResult = getDefault(key).call(element, options, this.scope, key)
+			}else{
+				//do keypress
+				result = S.createEvent('keypress',options, element )
+				if(result){
+					defaultResult = getDefault(key).call(element, options, this.scope, key)
+				}
+			}
 		}else{
-			//do keypress
-			result = createEvent('keypress',options, element )
-			if(result){
-				getDefault(key).call(element, options, this.scope, key)
+			//canceled ... possibly don't run keypress
+			if(options && h.inArray('keypress',prevent.keydown) == -1 ){
+				S.createEvent('keypress',options, element )
 			}
 		}
-	}else{
-		//canceled ... possibly don't run keypress
-		if(options && inArray('keypress',prevent.keydown) == -1 ){
-			createEvent('keypress',options, element )
+		if(defaultResult && defaultResult.nodeName){
+			element = defaultResult
 		}
+		S.createEvent('keyup',Synthetic.key.options(key, 'keyup'), element )
+		//do mouseup
+		
+		return element;
+		// is there a keypress? .. if not , run default
+		// yes -> did we prevent it?, if not run ...
+		
+	},
+	type : function(element){
+		var parts = this.options.match(/(\[[^\]]+\])|([^\[])/g);
+		//break it up into parts ...
+		//go through each type and run
+		for(var i=0; i < parts.length; i++){
+			var part = parts[i];
+			if(part.length > 1){
+				part = part.substr(1,part.length - 2)
+			}
+			
+			this.options = part;
+			var element = this.key(element);
+			
+			
+		}
+		
+		
+		
 	}
-	Synthetic.createEvent('keyup',Synthetic.key.options(key, 'keyup'), element )
-	//do mouseup
-	
-	return result
-	// is there a keypress? .. if not , run default
-	// yes -> did we prevent it?, if not run ...
-	
-};
+});
 
 
 
@@ -437,34 +477,36 @@ Synthetic.prototype.key = function(element){
 	form.onsubmit = function(ev){
 		if (ev.preventDefault) 
 			ev.preventDefault();
-		support.keypressSubmits = true;
+		S.support.keypressSubmits = true;
 		ev.returnValue = false;
 		return false;
 	}
-	createEvent("keypress", "\r", form.childNodes[3]);
+	S.createEvent("keypress", "\r", form.childNodes[3]);
 	
 	
-	createEvent("keypress", "a", form.childNodes[3]);
-	support.keyCharacters = form.childNodes[3].value == "a";
+	S.createEvent("keypress", "a", form.childNodes[3]);
+	S.support.keyCharacters = form.childNodes[3].value == "a";
 	
 	
 	form.childNodes[3].value = "a"
-	createEvent("keypress", "\b", form.childNodes[3]);
-	support.backspaceWorks = form.childNodes[3].value == "";
+	S.createEvent("keypress", "\b", form.childNodes[3]);
+	S.support.backspaceWorks = form.childNodes[3].value == "";
 	
 		
 	
 	form.childNodes[3].onchange = function(){
-		support.focusChanges = true;
+		S.support.focusChanges = true;
 	}
 	form.childNodes[3].focus();
-	createEvent("keypress", "a", form.childNodes[3]);
+	S.createEvent("keypress", "a", form.childNodes[3]);
 	form.childNodes[5].focus();
+	
+	
 	
 
 	document.documentElement.removeChild(div);
 	
-	support.ready = true;
+	S.support.ready = true;
 })();
 
 

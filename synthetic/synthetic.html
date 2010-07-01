@@ -213,6 +213,17 @@
 	bind('scrolldiv','keydown',function(ev){
 		console.log('down', ev)
 	})
+	
+	bind('manual', 'focus',function(){
+			console.log('focus')
+	})
+	
+	quickTest = function(){
+		gId('manual').select();
+		console.log('after focus')
+	}
+	
+	
 	if(!window.console){
 		console = {
 			log : function(txt){

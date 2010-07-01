@@ -1,14 +1,12 @@
 //handles mosue events
 steal(function(){
 
-var createEventObject = Synthetic.helpers.createEventObject,
-	createBasicStandardEvent = Synthetic.helpers.createBasicStandardEvent,
+var h = Synthetic.helpers,
 	createEvent = Synthetic.createEvent,
-	extend = Synthetic.extend,
 	browser = Synthetic.browser;
 
 
-extend(Synthetic.defaults,{
+h.extend(Synthetic.defaults,{
 	mousedown : function(options){
 		createEvent("focus", {}, this)
 	},
@@ -23,7 +21,7 @@ extend(Synthetic.defaults,{
 		//get old values
 		var href,
 			checked = Synthetic.data(element,"checked"),
-			scope = element.ownerDocument.defaultView || element.ownerDocument.parentWindow,
+			scope = Synthetic.helpers.getWindow(element),
 			nodeName = element.nodeName.toLowerCase();
 		
 		if( (href = Synthetic.data(element,"href") ) ){
@@ -113,12 +111,12 @@ extend(Synthetic.defaults,{
 	
 
 //add create and setup behavior for mosue events
-Synthetic.extend(Synthetic.create,{
+h.extend(Synthetic.create,{
 	mouse : {
 		options : function(type, options, element){
 			var doc = document.documentElement, body = document.body,
 				center = [options.pageX || 0, options.pageY || 0] 
-			return extend({
+			return h.extend({
 				bubbles : true,cancelable : true,
 				view : window,detail : 1,
 				screenX : 1, screenY : 1,
@@ -143,12 +141,12 @@ Synthetic.extend(Synthetic.create,{
 						defaults.ctrlKey,defaults.altKey,defaults.shiftKey,defaults.metaKey,
 						defaults.button,defaults.relatedTarget);
 				} catch(e) {
-					event = createBasicStandardEvent(type,defaults)
+					event = h.createBasicStandardEvent(type,defaults)
 				}
 				event.synthetic = true;
 				return event;
 			} : 
-			createEventObject
+			h.createEventObject
 	},
 	click : {
 		setup : function(type, options, element){
@@ -266,6 +264,8 @@ var support = Synthetic.support;
 			
 			createEvent("mousedown", options, element);
 			
+			//timeout is b/c IE is stupid and won't call focus handlers
+			//synchronously.  So everyone has to suffer :(
 			setTimeout(function(){
 				createEvent("mouseup", options, element)
 				if(!support.mouseDownUpClicks){
