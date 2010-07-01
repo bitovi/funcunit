@@ -1,4 +1,4 @@
-steal(function(){
+steal.plugins('funcunit/synthetic').then(function(){
 	
 	
 	var createEvent = Synthetic.createEvent,
@@ -12,23 +12,23 @@ steal(function(){
 		this.end_y = options.to.y;
 		this.delta_y = this.end_y - this.start_y;
 		this.target = target;
-		this.duration = options.duration ? options.duration*1000 : 1000;
+		this.duration = options.duration ? options.duration : 1000;
 		this.start = new Date();
 
 		new Synthetic('mousedown', {clientX: this.start_x, clientY: this.start_y}).send(target);
 
 		// create a mouse cursor
-		this.pointer = document.createElement('div');
-		this.pointer.style.width = '10px';
-		this.pointer.style.height = '10px';
-		this.pointer.style.backgroundColor = 'RED';
-		this.pointer.style.position = 'absolute';
-		this.pointer.style.left = ''+this.start_x+'px';
 		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
 		var pointerY = this.start_y+scrollTop;
-		this.pointer.style.top = ''+pointerY+'px';
-		this.pointer.style.lineHeight = '1px';
-		document.body.appendChild(this.pointer);
+		this.pointer = $("<div />").css({
+				width: 10,
+				height: 10, 
+				backgroundColor: "red",
+				position: "absolute",
+				left: this.start_x,
+				top: pointerY,
+				lineHeight: 1
+			}).appendTo($(document.body))
 		
 		setTimeout(this.next_callback(), 20);
 	};
@@ -39,17 +39,24 @@ steal(function(){
 			if( difference > this.duration ){
 				new Synthetic('mousemove', {clientX: this.end_x, clientY: this.end_y}).send(this.target);
 				var event = new Synthetic('mouseup', {clientX: this.end_x, clientY: this.end_y}).send(this.target);
-				this.pointer.parentNode.removeChild(this.pointer);
-				if(this.callback) this.callback({event: event, element: this.target});
+				this.pointer.parent().remove(this.pointer);
+				if (this.callback) {
+					this.callback({
+						event: event,
+						element: this.target
+					});
+				}
 			}else{
 				var percent = difference / this.duration;
 				var x =  this.start_x + percent * this.delta_x;
 				var y = this.start_y + percent * this.delta_y;
 
-				this.pointer.style.left = ''+x+'px';
 				var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
-				var pointerY = y+scrollTop;
-				this.pointer.style.top = ''+pointerY+'px';
+				var pointerY = y + scrollTop;
+				this.pointer.offset({
+					left: x,
+					top: pointerY
+				})
 				new Synthetic('mousemove', {clientX: x, clientY: y}).send(this.target);
 				setTimeout(this.next_callback(), 20);
 			}
@@ -69,7 +76,7 @@ steal(function(){
 			if( !jQuery ) {
 				throw "You need jQuery to perform drags in synthetic.js"
 			}
-				
+			
 			//get from and to
 			var addxy = function(part, options, center){
 				if(!options[part].x || !options[part].y ){

@@ -294,5 +294,5 @@ steal(function(){
 
 	window.Synthetic = Synthetic;
 	
-}).then('mouse','browser_keys','keys','drag');
+}).then('mouse','browser_keys','keys','drag/drag');
 
