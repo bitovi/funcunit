@@ -46,7 +46,6 @@ steal(function(){
 		
 		//run event
 		if(typeof this[type] == "function") {
-			console.log('running ', type)
 			this[type](options, element, function(defaults,el ){
 				callback && callback.apply(self, arguments);
 				self.done.apply(self, arguments)		
@@ -93,7 +92,6 @@ steal(function(){
 			return this;
 		},
 		done : function( defaults, el){
-			console.log('done is called', el)
 			if(el){
 				this.element = el
 			}
@@ -114,7 +112,6 @@ steal(function(){
 				if(!support.mouseDownUpClicks){
 					createEvent("click", options, element)
 				}
-				console.log('done clicking')
 				callback(true)
 			},1)
 		},
@@ -137,7 +134,6 @@ steal(function(){
 				if(!keypressOptions){
 					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
 				}else{
-					console.log('keypress', element)
 					//do keypress
 					result = S.createEvent('keypress',keypressOptions, element )
 					if(result){
@@ -154,7 +150,6 @@ steal(function(){
 				element = defaultResult
 			}
 			setTimeout(function(){
-				console.log('keyup', element)
 				S.createEvent('keyup',Synthetic.key.options(key, 'keyup'), element )
 				callback(result, element)
 			},1)
