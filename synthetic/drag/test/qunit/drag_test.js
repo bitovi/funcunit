@@ -1,5 +1,8 @@
-module("funcunit/synthetic/drag")
-test("dragging an element", function(){
+var drags = {}, drops ={};
+
+module("funcunit/synthetic/drag", { 
+	setup: function(){
+	drags = {}, drops ={};
 	var div = $("<div>"+
 			"<div id='drag'></div>"+
 			"<div id='midpoint'></div>"+
@@ -18,7 +21,6 @@ test("dragging an element", function(){
 	$("#drop").css(basicCss).css({top: "30px", left: "30px", backgroundColor: "yellow"});
 	
 	
-	var drags = {}, drops ={};
 	
 	$('#drag')
 		.live("dragdown", function(){
@@ -58,6 +60,10 @@ test("dragging an element", function(){
 		.live("dropend", function(){ 
 			drops.dropend = true;
 		})
+	}
+})
+
+test("dragging an element", function(){
 	new Synthetic("drag", {to: "#midpoint"}).send($("#drag")[0]);
 	ok(drags.draginit, "draginit fired correctly")
 	ok(drags.dragmove, "dragmove fired correctly")
@@ -78,5 +84,36 @@ test("dragging an element", function(){
 	ok(drags.dragout, 	"dragout fired correctly")
 	
 	ok(drops.dropout, 	"dropout fired correctly")
-	div.remove();
+	$("#qunit-test-area").innerHTML = "";
+})
+
+asyncTest("dragging an element with duration", function(){
+	new Synthetic("drag", {to: "#midpoint", duration: 2000}).send($("#drag")[0]);
+	setTimeout(function(){
+		ok(drags.draginit, "draginit fired correctly")
+		ok(drags.dragmove, "dragmove fired correctly")
+		ok(!drags.dragover,"dragover not fired yet")
+		
+		ok(!drops.dropover,"dropover fired correctly")
+		ok(!drops.dropon,	"dropon not fired yet")
+		ok(drops.dropend, 	"dropend fired")
+	
+		new Synthetic("drag", {to: "#drop", duration: 2000}).send($("#drag")[0]);
+		setTimeout(function(){
+			ok(drags.dragover,"dragover fired correctly")
+			
+			ok(drops.dropover, "dropmover fired correctly")
+			ok(drops.dropmove, "dropmove fired correctly")
+			ok(drops.dropon,	"dropon fired correctly")
+			
+			new Synthetic("drag", {to: "#midpoint", duration: 2000}).send($("#drag")[0]);
+			setTimeout(function(){
+				ok(drags.dragout, 	"dragout fired correctly")
+				ok(drops.dropout, 	"dropout fired correctly")
+				$("#qunit-test-area").innerHTML = "";
+				start();
+			}, 3000)
+		}, 3000)
+	}, 3000)
+	stop(20000)
 })

@@ -27,7 +27,8 @@ steal.plugins('funcunit/synthetic').then(function(){
 				position: "absolute",
 				left: this.start_x,
 				top: pointerY,
-				lineHeight: 1
+				lineHeight: 1,
+				zIndex: 99999
 			}).appendTo($(document.body))
 		
 		setTimeout(this.next_callback(), 20);
@@ -39,7 +40,7 @@ steal.plugins('funcunit/synthetic').then(function(){
 			if( difference > this.duration ){
 				new Synthetic('mousemove', {clientX: this.end_x, clientY: this.end_y}).send(this.target);
 				var event = new Synthetic('mouseup', {clientX: this.end_x, clientY: this.end_y}).send(this.target);
-				this.pointer.parent().remove(this.pointer);
+				this.pointer.remove();
 				if (this.callback) {
 					this.callback({
 						event: event,
