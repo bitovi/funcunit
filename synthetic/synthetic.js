@@ -1,7 +1,8 @@
 
 
 steal(function(){
-
+	
+	
 	var Synthetic = function(type, options, scope){
 			this.eventType = type;
 			this.options = options || {};
@@ -27,7 +28,169 @@ steal(function(){
 		key = /keypress|keyup|keydown/,
 		page = /load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll/;
 		
+	Syn = function(type, options, element, callback){
+		var temp;
+		if(options.nodeName){ //in case they are reversed
+			temp = element;
+			element = options;
+			options = element;
+		}
 		
+		return ( new Syn.init(type, options, element, callback) )
+
+	}
+	Syn.init = function(type, options, element, callback){
+		var self = this;
+		this.queue = [];
+		this.element = element;
+		
+		//run event
+		if(typeof this[type] == "function") {
+			console.log('running ', type)
+			this[type](options, element, function(defaults,el ){
+				callback && callback.apply(self, arguments);
+				self.done.apply(self, arguments)		
+			})
+		}else{
+			this.result = createEvent(type, options, element);
+			callback && callback.call(this, element, this.result);
+		}
+	}
+	var S = Synthetic;
+	extend(Syn.init.prototype,{
+		then : function(type, options, element, callback){
+			options = options || {}
+			if(options.nodeName){ //in case they are reversed
+				temp = element;
+				element = options;
+				options = element;
+			}
+			if(typeof element == 'function'){
+				callback = element;
+				element = undefined;
+			}
+			var runNow = this.queue.length,
+				self = this;
+
+			
+			//if stack is empty run right away
+			
+			//otherwise ... unshift it
+			this.queue.unshift(function(el, prevented){
+				
+				if(typeof this[type] == "function") {
+					this.element = element || el;
+					this[type](options, this.element, function(defaults, el){
+						callback && callback.apply(self, arguments);
+						self.done.apply(self, arguments)		
+					})
+				}else{
+					this.result = createEvent(type, options, element);
+					callback && callback.call(this, element, this.result);
+					return this.result;
+				}
+			})
+			return this;
+		},
+		done : function( defaults, el){
+			console.log('done is called', el)
+			if(el){
+				this.element = el
+			}
+			if(this.queue.length){
+				this.queue.pop().call(this, this.element, defaults)
+			}
+			
+		},
+		clicker : function(options, element, callback){
+			var nodeName = element.nodeName.toLowerCase();
+			
+			createEvent("mousedown", options, element);
+			
+			//timeout is b/c IE is stupid and won't call focus handlers
+			//synchronously.  So everyone has to suffer :(
+			setTimeout(function(){
+				createEvent("mouseup", options, element)
+				if(!support.mouseDownUpClicks){
+					createEvent("click", options, element)
+				}
+				console.log('done clicking')
+				callback(true)
+			},1)
+		},
+		key : function(options, element, callback){
+			var key = convert[options] || options,
+				runDefaults = S.createEvent('keydown',key, element ),
+				getDefault = S.key.getDefault,
+				prevent = S.key.browser.prevent,
+				defaultResult;
+			
+			
+			
+			//options for keypress
+			var keypressOptions = Synthetic.key.options(key, 'keypress');
+			
+			
+			
+			if(runDefaults){
+				//is there is not a keypress, run default
+				if(!keypressOptions){
+					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
+				}else{
+					console.log('keypress', element)
+					//do keypress
+					result = S.createEvent('keypress',keypressOptions, element )
+					if(result){
+						defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
+					}
+				}
+			}else{
+				//canceled ... possibly don't run keypress
+				if(keypressOptions && h.inArray('keypress',prevent.keydown) == -1 ){
+					S.createEvent('keypress',keypressOptions, element )
+				}
+			}
+			if(defaultResult && defaultResult.nodeName){
+				element = defaultResult
+			}
+			setTimeout(function(){
+				console.log('keyup', element)
+				S.createEvent('keyup',Synthetic.key.options(key, 'keyup'), element )
+				callback(result, element)
+			},1)
+			
+			//do mouseup
+			
+			return element;
+			// is there a keypress? .. if not , run default
+			// yes -> did we prevent it?, if not run ...
+			
+		},
+		type : function(options, element, callback){
+			var parts = options.match(/(\[[^\]]+\])|([^\[])/g);
+			//break it up into parts ...
+			//go through each type and run
+			var self  = this;
+			
+			function runNextPart(runDefaults, el){
+				var part = parts.shift();
+				if(!part){
+					callback(runDefaults, el);
+					return;
+				}
+				el = el || element;
+				if(part.length > 1){
+					part = part.substr(1,part.length - 2)
+				}
+				self.key(part, el, runNextPart)
+			}
+			
+			
+			runNextPart();
+			
+		}
+	})
+	
 	if(window.addEventListener){ // Mozilla, Netscape, Firefox
 		bind = function(el, ev, f){
 			el.addEventListener(ev, f, false)
@@ -178,7 +341,7 @@ steal(function(){
 				)
 		
 	});
-	
+	var h = S.helpers
 
 	
 

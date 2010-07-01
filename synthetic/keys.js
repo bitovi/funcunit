@@ -397,12 +397,12 @@ h.extend(Synthetic.prototype,{
 		if(result){
 			//is there is not a keypress, run default
 			if(!options){
-				defaultResult = getDefault(key).call(element, options, this.scope, key)
+				defaultResult = getDefault(key).call(element, options, h.getWindow(element), key)
 			}else{
 				//do keypress
 				result = S.createEvent('keypress',options, element )
 				if(result){
-					defaultResult = getDefault(key).call(element, options, this.scope, key)
+					defaultResult = getDefault(key).call(element, options, h.getWindow(element), key)
 				}
 			}
 		}else{
