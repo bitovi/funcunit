@@ -1,90 +1,94 @@
 module("funcunit/synthetic")
 
-__g = function(id){
-	return document.getElementById(id)
-	
-}
-__mylog = function(c){
-	if(__g("mlog"))
-		__g("mlog").innerHTML = __g("mlog").innerHTML+c+"<br/>"
-}
+st = {
+	g : function(id){
+		return document.getElementById(id)
+	},
+	log :function(c){
+		if(st.g("mlog"))
+			st.g("mlog").innerHTML = st.g("mlog").innerHTML+c+"<br/>"
+	},
+	binder : function(id, ev, f){
+		st.bind(st.g(id), ev, f)
+	},
+	unbinder : function(id, ev, f){
+		st.unbind(st.g(id), ev, f)
+	},
+	bind : window.addEventListener ? 
+			function(el, ev, f){el.addEventListener(ev, f, false)} : 
+			function(el, ev, f){ el.attachEvent("on"+ev, f) },
+	unbind : window.addEventListener ?
+			function(el, ev, f){ el.removeEventListener(ev, f, false)} :
+			function(el, ev, f){ el.detachEvent("on"+ev, f) }
+};
 
-if(window.addEventListener){ // Mozilla, Netscape, Firefox
-	__addEventListener = function(el, ev, f){
-		el.addEventListener(ev, f, false)
-	}
-	__removeEventListener = function(el, ev, f){
-		el.removeEventListener(ev, f, false)
-	}
-}else{
-	__addEventListener = function(el, ev, f){
-		el.attachEvent("on"+ev, f)
-	}
-	__removeEventListener = function(el, ev, f){
-		el.detachEvent("on"+ev, f)
-	}
-}
 
 (function(){
 	for(var name in Synthetic.support){
-		__mylog(name+": "+Synthetic.support[name])
+		st.log(name+": "+Synthetic.support[name])
 	}
 })();
 
-test("Select", function(){
-	__g("qunit-test-area").innerHTML = 
+test("Selecting a select element", function(){
+	st.g("qunit-test-area").innerHTML = 
 		"<form id='outer'><select name='select'><option value='1' id='one'>one</option><option value='2' id='two'>two</option></select></form>";
 	
 	var change = 0, changef = function(){
 		change++;
 	}
 
-	__g("outer").select.selectedIndex = 0;
+	st.g("outer").select.selectedIndex = 0;
 
-	__addEventListener(__g("outer").select,"change",changef );
+	st.bind(st.g("outer").select,"change",changef );
+	
+	stop()
+	Syn("click!", st.g("two"), function(){
+		equals(change, 1 , "change called once")
+		equals(st.g("outer").select.selectedIndex, 1, "Change Selected Index");
+		//st.g("qunit-test-area").innerHTML = ""
+		start();
+	})
 
-	new Synthetic("click").send( __g("two") );
 
-	equals(change, 1 , "change called once")
-	equals(__g("outer").select.selectedIndex, 1, "Change Selected Index");
-	__g("qunit-test-area").innerHTML = ""
+
+	
 })
 
-asyncTest("scrolling", function(){
-	__g("qunit-test-area").innerHTML = "<div id='scroller' style='height:100px;width: 100px;overflow:auto'>"+
+asyncTest("scrollTop triggers scroll events", function(){
+	st.g("qunit-test-area").innerHTML = "<div id='scroller' style='height:100px;width: 100px;overflow:auto'>"+
 			"<div style='height: 200px; width: 100%'>text"+
 			"</div>"+
 			"</div>";
 			
-	__addEventListener(__g("scroller"),"scroll",function(ev){
+	st.binder("scroller","scroll",function(ev){
 		ok(true,"scrolling created just by changing ScrollTop");
-		__g("qunit-test-area").innerHTML ="";
+		st.g("qunit-test-area").innerHTML ="";
 		start();
 	} );
 	stop();
 	setTimeout(function(){
-		var sc = __g("scroller");
+		var sc = st.g("scroller");
 		sc && (sc.scrollTop = 10);
 	
 	},13)
 	
 })
 
-test("focus", function(){
-	__g("qunit-test-area").innerHTML = "<input type='text' id='focusme'/>";
+test("focus triggers focus events", function(){
+	st.g("qunit-test-area").innerHTML = "<input type='text' id='focusme'/>";
 	
-	__addEventListener(__g("focusme"),"focus",function(ev){
+	st.binder("focusme","focus",function(ev){
 		ok(true,"focus creates event");
-		__g("qunit-test-area").innerHTML ="";
+		st.g("qunit-test-area").innerHTML ="";
 		start();
 	} );
 	stop();
 	setTimeout(function(){
-		__g("focusme").focus();
+		st.g("focusme").focus();
 	
 	},10)
 	
 })
 
-// todo make sure you can do new Synthetic("key",{keyCode: 34}).send( __g("myinput") );
+// todo make sure you can do new Synthetic("key",{keyCode: 34}).send( st.g("myinput") );
 // make a test for this

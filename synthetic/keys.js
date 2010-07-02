@@ -42,16 +42,15 @@ getSelection = function(el){
 getFocusable = function(el){
 	var document = h.getWindow(el).document,
 		res = [];
-	if(window.jQuery){
-		return jQuery("[tabindex],a,area,frame,iframe,label,input,select,textarea,button,html,object", document.documentElement )
-	}else{
-		var els = document.getElementsByTagName('*'),
-			len = els.length
-		for(var i=0;  i< len; i++){
-			Synthetic.isFocusable(els[i]) && res.push(els[i])
-		}
-		return res;
+
+	var els = document.getElementsByTagName('*'),
+		len = els.length;
+		
+	for(var i=0;  i< len; i++){
+		Synthetic.isFocusable(els[i]) && els[i] != document.documentElement && res.push(els[i])
 	}
+	return res;
+	
 	
 };
 
@@ -270,7 +269,7 @@ h.extend(Synthetic.key,{
 				Synthetic.key.defaults.character.call(this, options, scope, "\n")
 			}
 			// 'click' hyperlinks
-			if(!S.support.keypressSubmits && nodeName == 'a'){
+			if(!S.support.keypressOnAnchorClicks && nodeName == 'a'){
 				S.createEvent("click", {}, this);
 			}
 		},
@@ -296,24 +295,36 @@ h.extend(Synthetic.key,{
 				i = 0,
 				el, 
 				//the tabindex of the tabable element we are looking at
-				elIndex;
+				elIndex,
+				firstNotIndexed;
 				
 			for(; i< focusEls.length; i++){
 				el = focusEls[i];
-				elIndex = Synthetic.tabIndex(el);
+				elIndex = Synthetic.tabIndex(el) || 0;
+				if(!firstNotIndexed && elIndex === 0){
+					firstNotIndexed = el;
+				}
+				
 				if(tabIndex 
 					&& (found ? elIndex >= tabIndex : elIndex > tabIndex )  
 					&& elIndex < currentIndex){
 						currentIndex = elIndex;
 						current = el;
 				}
-				if(!tabIndex && found){
+				
+				if(!tabIndex && found && !elIndex){
 					current = el;
 					break;
 				}
+				
 				if(this === el){
 					found= true;
 				}
+			}
+			
+			//restart if we didn't find anything
+			if(!current){
+				current = firstNotIndexed;
 			}
 			current && current.focus();
 			return current;
@@ -457,7 +468,8 @@ h.extend(Synthetic.prototype,{
 		submit, 
 		form, 
 		input, 
-		submitted = false;
+		submitted = false,
+		anchor;
 		
 	div.innerHTML = "<form id='outer'>"+
 		"<input name='checkbox' type='checkbox'/>"+
@@ -466,14 +478,14 @@ h.extend(Synthetic.prototype,{
 		"<input type='input' name='inputter'/>"+
 		"<input name='one'>"+
 		"<input name='two'/>"+
-		"<a href='javascript:__synthTest()' id='synlink'></a>"+
+		"<a href='#abc'></a>"+
 		"</form>";
 		
 	document.documentElement.appendChild(div);
 	form = div.firstChild;
 	checkbox = form.childNodes[0];
 	submit = form.childNodes[2];
-	
+	anchor = form.getElementsByTagName("a")[0]
 	form.onsubmit = function(ev){
 		if (ev.preventDefault) 
 			ev.preventDefault();
@@ -501,9 +513,16 @@ h.extend(Synthetic.prototype,{
 	S.createEvent("keypress", "a", form.childNodes[3]);
 	form.childNodes[5].focus();
 	
+	//test keypress \r on anchor submits
+	S.bind(anchor,"click",function(ev){
+		if (ev.preventDefault) 
+			ev.preventDefault();
+		S.support.keypressOnAnchorClicks = true;
+		ev.returnValue = false;
+		return false;
+	})
+	S.createEvent("keypress", "\r", anchor);
 	
-	
-
 	document.documentElement.removeChild(div);
 	
 	S.support.ready = true;

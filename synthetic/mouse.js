@@ -90,7 +90,6 @@ h.extend(Synthetic.defaults,{
 				new Synthetic("change").send(  element );
 			}
 		}
-		
 		// change options
 		if(nodeName == "option"){
 			//check if we should change
@@ -101,7 +100,7 @@ h.extend(Synthetic.defaults,{
 			}
 			if(i !== element.parentNode.selectedIndex){
 				element.parentNode.selectedIndex = i;
-				new Synthetic("change").send(  element.parentNode );
+				Synthetic.createEvent("change",{}, element.parentNode)
 			}
 		}
 			

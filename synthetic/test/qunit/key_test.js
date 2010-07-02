@@ -1,121 +1,147 @@
-module("funcunit/synthetic/key")
+module("funcunit/synthetic/key",{
+	setup : function(){
+		st.g("qunit-test-area").innerHTML = "<form id='outer'>"+
+			"<div id='inner'>"+
+				"<input type='input' id='key' value=''/>"+
+				"<a href='#abc' id='focusLink'>click me</a>"+
+				"<textarea id='synTextArea'></textarea>"
+				"</div></form>";
+	}
+})
+test("Key Characters", function(){
+	st.g("key").value = "";
+	Syn("key","a","key");
+	equals(st.g("key").value, "a", "a written");
+	
+	st.g("key").value = "";
+	Syn("key","A","key");
+	equals(st.g("key").value, "A", "A written");
+	
+	st.g("key").value = "";
+	Syn("key","1","key");
+	equals(st.g("key").value, "1", "1 written");
+})
 
-test("BasicKey", function(){
-	__g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'><input type='input' id='key' value=''/></div></form>";
-	var submit = 0, submitf = function(ev){
+test("Key Event Order", 1, function(){
+	var order = [],
+		recorder = function(ev){
+			order.push(ev.type)
+		};
+	
+	st.binder("key","keydown", recorder );
+	st.binder("key","keypress", recorder );
+	st.binder("key","keyup", recorder );
+	stop();
+	Syn("key","B","key", function(){
+		same(order,["keydown","keypress","keyup"],"Key order is correct")
+		start();
+	});
+	
+})
+
+test("Key \\r Submits Forms", 1, function(){
+	var submit = 0;
+	st.binder("outer","submit",function(ev){
 		submit++;
 		if ( ev.preventDefault ) {
 			ev.preventDefault();
 		}
 		ev.returnValue = false;
 		return false;
-	};
-	var keyEl = __g("key")
-	__addEventListener(__g("outer"),"submit",submitf );
-	var keypress = 0, keypressf = function(ev){
-		keypress++;
-	};
-	__addEventListener(__g("outer"),"keypress",keypressf );
-	keyEl.value = "";
-	
-	new Synthetic("key","a").send(keyEl);
-	equals(keyEl.value, "a", "A written");
-	
-	equals(keypress, 1, "Keypress called once");
-	
-	new Synthetic("key","5").send(keyEl);
-	equals(keyEl.value, "a5", "5 written");
-	
-	new Synthetic("key","\b").send(keyEl);
-	equals(keyEl.value, "a", "Backspace works");
-	
-	new Synthetic("key","\r").send(keyEl);
-	equals(submit, 1, "submit on keypress");
-	
-	new Synthetic("key","1").send(keyEl);
-	new Synthetic("key","2").send(keyEl);
-	new Synthetic("key","3").send(keyEl);
-	keyEl.select();
-	new Synthetic("key","delete").send(keyEl);
-	equals(keyEl.value, "", "Delete works");
-	
-	__removeEventListener(__g("outer"),"submit",submitf );
-	__removeEventListener(__g("outer"),"keypress",keypressf );
-    //__g("qunit-test-area").innerHTML = "";
-	
+	});
+	stop()
+	Syn("key","\r","key", function(){
+		equals(submit, 1, "submit on keypress");
+		start();
+	})
+})
+
+test("Key \\r Clicks Links", 1, function(){
+	var clicked = 0;
+	st.binder("focusLink","click",function(ev){
+		clicked++;
+		if ( ev.preventDefault ) {
+			ev.preventDefault();
+		}
+		ev.returnValue = false;
+		return false;
+	});
+	stop()
+	Syn("key","\r","focusLink", function(){
+		equals(clicked, 1, "clicked");
+		start();
+	})
+});
+
+test("Key \\r Adds Newline in Textarea", function(){
+	st.g('synTextArea').value = "";
+	stop()
+	Syn("type","ab\rcd","synTextArea", function(){
+		equals(  st.g('synTextArea').value.replace("\r","")  , "ab\ncd" ,"typed new line correctly")
+		start();
+	})
+});
+
+test("Key \\b", function(){
+	st.g("key").value = "";
+	stop();
+	Syn("type","abc","key", function(){
+		equals(st.g("key").value, "abc", "abc written");
+		Syn("key","\b","key");
+		equals(st.g("key").value, "ab", "ab written (key deleted)");
+		start();
+	});
 })
 
 
-test("Key Something", function(){
-	__g("qunit-test-area").innerHTML = "<input id='one'/>";
+//tests when the key is inserted
+test("Key Character Order", function(){
+	
 	var upVal,
 		pressVal,
 		downVal
-	__addEventListener(__g("one"),"keyup",function(){
-		upVal = __g("one").value
+	st.binder("key","keyup",function(){
+		upVal = st.g("key").value
 	} );
-	__addEventListener(__g("one"),"keypress",function(){
-		pressVal = __g("one").value
+	st.binder("key","keypress",function(){
+		pressVal = st.g("key").value
 		
 	} );
-	__addEventListener(__g("one"),"keydown",function(){
-		downVal = __g("one").value
+	st.binder("key","keydown",function(){
+		downVal = st.g("key").value
 	} );
+	stop();
+	Syn("key","J","key", function(){
+		equals(upVal, "J" , "Up Typing works")
+		equals(pressVal, "" , "Press Typing works")
+		equals(downVal, "" , "Down Typing works");
+		start();
+	})
 
-	new Synthetic("key","J").send( __g("one") );
-	new Synthetic("key","M").send( __g("one") );
-	new Synthetic("key","V").send( __g("one") );
-	new Synthetic("key","C").send( __g("one") );
-	equals(upVal, "JMVC" , "Up Typing works")
-	equals(pressVal, "JMV" , "Press Typing works")
-	equals(downVal, "JMV" , "Down Typing works")
-	//__g("qunit-test-area").innerHTML = "";
-})
-
-test("enter (\\r) submits form", function(){
-	__g("qunit-test-area").innerHTML = "<form id='myform' onsubmit='return false'>"+
-			"<input id='myinput' type='text' />"+
-			"</form>"+
-			"<div id='here'></div>";
-			
-	var submitted= false;
-	__addEventListener(__g("myform"),"submit",function(ev){
-		if ( ev.preventDefault ) {
-			ev.preventDefault();
-		}else{
-			ev.returnValue = false;
-		}
-		submitted = true;
-	} );
-	//new Synthetic("submit").send( __g("myform")  );
-
-	new Synthetic("key","\r").send( __g("myinput") );
-	ok(submitted , "submitted");
-	__g("qunit-test-area").innerHTML = "";
 })
 
 asyncTest("page down, page up, home, end", function(){
-	__g("qunit-test-area").innerHTML = 
+	st.g("qunit-test-area").innerHTML = 
 		"<div id='scrolldiv' style='width:100px;height:200px;overflow-y:scroll;' tabindex='0'>"+
 		"<div id='innerdiv' style='height:1000px;'><a href='javascript://'>Scroll on me</a></div></div>";
 	
 	//reset the scroll top	
-	__g("scrolldiv").scrollTop =0;
+	st.g("scrolldiv").scrollTop =0;
 	
 	//list of keys to press and what to test after the scroll event
 	var keyTest = {
 		"page-down": function(){
-			ok( __g("scrolldiv").scrollTop > 10 , "Moved down")
+			ok( st.g("scrolldiv").scrollTop > 10 , "Moved down")
 		},
 		"page-up": function(){
-			ok( __g("scrolldiv").scrollTop == 0 , "Moved back up (page-up)")
+			ok( st.g("scrolldiv").scrollTop == 0 , "Moved back up (page-up)")
 		},
 		"end" : function(){
-			var sd = __g("scrolldiv")
+			var sd = st.g("scrolldiv")
 			ok( sd.scrollTop == sd.scrollHeight - sd.clientHeight , "Moved to the end")
 		},
 		"home" : function(){
-			ok( __g("scrolldiv").scrollTop == 0 , "Moved back up (home)")
+			ok( st.g("scrolldiv").scrollTop == 0 , "Moved back up (home)")
 		}
 	},
 	order = [],
@@ -126,13 +152,13 @@ asyncTest("page down, page up, home, end", function(){
 			start();
 			return;
 		}
-		new Synthetic("key",name).send(__g("scrolldiv"))
+		new Synthetic("key",name).send(st.g("scrolldiv"))
 	};
 	for(var name in keyTest){
 		order.push(name)
 	}
 			
-	__addEventListener(__g("scrolldiv"),"scroll",function(ev){
+	st.bind(st.g("scrolldiv"),"scroll",function(ev){
 		keyTest[order[i]]()
 		i++;
 		setTimeout(runNext,1)
@@ -140,7 +166,7 @@ asyncTest("page down, page up, home, end", function(){
 	} );
 	stop(1000);
 
-	 __g("scrolldiv").focus();
+	 st.g("scrolldiv").focus();
 	runNext();
 
 })
@@ -164,11 +190,11 @@ test("range tests", function(){
 			r.select();
 		} 
 	}
-	__g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'><input type='input' id='key' value=''/></div></form>"+
+	st.g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'><input type='input' id='key' value=''/></div></form>"+
 		"<textarea id='mytextarea' />";
 	
-	var keyEl = __g("key")
-	var textAreaEl = __g("mytextarea")
+	var keyEl = st.g("key")
+	var textAreaEl = st.g("mytextarea")
 	
 	// test delete range
 	keyEl.value = "012345";
@@ -243,6 +269,31 @@ test("range tests", function(){
 	
 	equals(textAreaEl.value.replace("\r",""), "1\n456", "return range works in a textarea");
 	
-    //__g("qunit-test-area").innerHTML = "";
+    //st.g("qunit-test-area").innerHTML = "";
 	
+})
+
+test("Type with tabs", function(){
+	st.g("qunit-test-area").innerHTML 
+		= 	"<input id='third'/>" +
+			"<a tabindex='1' id='first' href='javascript://'>First</a>"+
+			"<input tabindex='2' id='second'/>"+
+			"<input id='fourth'/>"
+	st.g('first').focus();
+	
+	var clicked = 0;
+	st.binder('first', 'click', function(){
+		clicked++;
+	})
+	stop();
+	//give ie a second to focus
+	setTimeout(function(){
+		Syn('type','\r\tSecond\tThird\tFourth', 'first', function(){
+			equals(clicked,1,"clickd first");
+			equals(st.g('second').value,"Second","moved to second");
+			equals(st.g('third').value,"Third","moved to Third");
+			equals(st.g('fourth').value,"Fourth","moved to Fourth");
+			start();
+		})
+	},1)
 })

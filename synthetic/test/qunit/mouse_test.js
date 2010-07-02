@@ -1,45 +1,52 @@
-module("funcunit/synthetic/mouse")
+module("funcunit/synthetic/mouse",{
+	setup : function(){
+		st.g("qunit-test-area").innerHTML = "<form id='outer'><div id='inner'>"+
+			"<input type='checkbox' id='checkbox'/>"+
+			"<input type='radio' name='radio' value='radio1' id='radio1'/>"+
+			"<input type='radio' name='radio' value='radio2' id='radio2'/>"+
+			"<a href='javascript:doSomething()' id='jsHref'>click me</a>"+
+			"<input type='submit' id='submit'/></div></form>"
+			
+	}
+})
 
 test("Synthetic basics", function(){
 
         ok(Synthetic,"Synthetic exists")
 		
-		__g("qunit-test-area").innerHTML = "<div id='outer'><div id='inner'></div></div>"
+		st.g("qunit-test-area").innerHTML = "<div id='outer'><div id='inner'></div></div>"
 		var mouseover = 0, mouseoverf = function(){
 			mouseover++;
 		};
-		__addEventListener(__g("outer"),"mouseover",mouseoverf );
-		new Synthetic("mouseover").send( __g("inner") );
+		st.bind(st.g("outer"),"mouseover",mouseoverf );
+		Syn("mouseover",st.g("inner"))
 		
-		__removeEventListener(__g("outer"),"mouseover",mouseoverf );
+		st.unbinder("outer","mouseover",mouseoverf );
 		equals(mouseover, 1, "Mouseover");
-		new Synthetic("mouseover").send( __g("inner") );
+		Syn("mouseover",{},'inner')
+
 		equals(mouseover, 1, "Mouseover on no event handlers");
-		__g("qunit-test-area").innerHTML = "";
+		st.g("qunit-test-area").innerHTML = "";
 		
 })
 
-test("Basic Click", function(){
-
-	__g("qunit-test-area").innerHTML = "<form id='outer' onsubmit='return false'><div id='inner'>"+
-			"<input type='checkbox' id='checkbox'/>"+
-			"<input type='radio' name='radio' value='radio1' id='radio1'/>"+
-			"<input type='radio' name='radio' value='radio2' id='radio2'/>"+
-			"<input type='submit' id='submit'/></div></form>";
-			
+test("Click Forms", function(){
 	var submit = 0, submitf = function(ev){
 		submit++;
 		if ( ev.preventDefault ) {
 			ev.preventDefault();
 		}
+		ev.returnValue = false;
 		return false;
 	};
-	__addEventListener(__g("outer"),"submit",submitf );
-	new Synthetic("click").send( __g("submit") );
-	new Synthetic("submit").send( __g("outer")  );
+	st.bind(st.g("outer"),"submit",submitf );
+	Syn("click",{},"submit");
+	Syn("submit",{},"outer")
+	
 	
 	equals(submit, 2, "Click on submit");
 	
+	//make sure clicking the div does not submit the form
 	var click =0, clickf = function(ev){
 		click++;
 		if ( ev.preventDefault ) {
@@ -47,135 +54,148 @@ test("Basic Click", function(){
 		}
 		return false;	
 	}
-	__addEventListener(__g("inner"),"click",clickf );
+	st.binder("inner","click",clickf );
 	
-	new Synthetic("click").send( __g("submit") );
+	Syn("click",{},"submit");
 	
 	equals(submit, 2, "Submit prevented");
 	equals(click, 1, "Clicked");
 	
-	__removeEventListener(__g("outer"),"submit",submitf );
-	__removeEventListener(__g("inner"),"click",clickf );
+	st.unbinder("outer","submit",submitf );
+	st.unbinder("inner","click",clickf );
+})
+test("Click Checkboxes", function(){
+	var checkbox =0;
 	
-	var checkbox =0, checkboxf = function(ev){
+	st.binder("checkbox","change",function(ev){
 		checkbox++;	
-	}
-	__addEventListener(__g("checkbox"),"change",checkboxf );
+	});
 
-	__g("checkbox").checked = false;
-	new Synthetic("click").send( __g("checkbox") );
+	st.g("checkbox").checked = false;
 	
-	ok(__g("checkbox").checked, "click checks");
+	Syn("click",{},"checkbox");
 	
-	//test radio
+	ok(st.g("checkbox").checked, "click checks on");
 	
-	var radio1=0; radio1f = function(ev){
+	Syn("click",{},"checkbox");
+	
+	ok(!st.g("checkbox").checked, "click checks off");
+})
+
+test("Click Radio Buttons", function(){
+
+	var radio1=0,
+		radio2=0;
+		
+	st.g("radio1").checked = false;
+	//make sure changes are called
+	st.bind(st.g("radio1"),"change",function(ev){
 		radio1++;
-	}
-	var radio2=0; radio2f = function(ev){
+	} );
+	st.bind(st.g("radio2"),"change",function(ev){
 		radio2++;
-	}
-	__g("radio1").checked = false;
-	__addEventListener(__g("radio1"),"change",radio1f );
-	__addEventListener(__g("radio2"),"change",radio2f );
+	} );
 	
-	new Synthetic("click").send( __g("radio1") );
+	Syn("click",{},"radio1" );
 	
 	equals(radio1, 1, "radio event");
-	ok( __g("radio1").checked, "radio checked" );
+	ok( st.g("radio1").checked, "radio checked" );
 	
-	new Synthetic("click").send( __g("radio2") );
+	Syn("click",{},"radio2" );
 	
 	equals(radio2, 1, "radio event");
-	ok( __g("radio2").checked, "radio checked" );
+	ok( st.g("radio2").checked, "radio checked" );
 	
 	
-	ok( !__g("radio1").checked, "radio unchecked" );
+	ok( !st.g("radio1").checked, "radio unchecked" );
 	
-	
-	//__g("qunit-test-area").innerHTML = "";
 });
 
-test("click event order", 4, function(){
+test("Click! Event Order", 4, function(){
 	var order = 0;
-	__g("qunit-test-area").innerHTML = "<input id='focusme'/>";
+	st.g("qunit-test-area").innerHTML = "<input id='focusme'/>";
 	
 	
-	__addEventListener(__g("focusme"),"mousedown",function(){
+	st.binder("focusme","mousedown",function(){
 		equals(++order,1,"mousedown")
 	});
 	
-	__addEventListener(__g("focusme"),"focus",function(){
+	st.binder("focusme","focus",function(){
 		equals(++order, 2,"focus")
 	});
 	
-	__addEventListener(__g("focusme"),"mouseup",function(){
+	st.binder("focusme","mouseup",function(){
 		equals(++order,3,"mouseup")
 	});
-	__addEventListener(__g("focusme"),"click",function(ev){
+	st.binder("focusme","click",function(ev){
 		equals(++order,4,"click")
 		if(ev.preventDefault)
 			ev.preventDefault();
 		ev.returnValue = false;
 	});
+	
 	stop();
-	new Synthetic("clicker").send( __g("focusme") );
-	setTimeout(function(){
+	Syn("click!",{},"focusme", function(){
 		start();
-	}, 100)
+	})
+	//new Synthetic("clicker").send( st.g("focusme") );
+	
 })
 
-test("Clicker link", function(){
-	var didSomething = false;
+test("Click Anchor Runs HREF JavaScript", function(){
+	var didSomething = false,
+		doSomething = window.doSomething;
 	window.doSomething = function(){
 		didSomething = true;
 	}
-	__g("qunit-test-area").innerHTML = "<a href='javascript:doSomething()' id='holler'>click me</a>";
-	
-	new Synthetic("click").send( __g("holler") );
-	
-	ok( didSomething, "link href does something" );
-})
 
-test("Change by typing then clicking elsewhere", function(){
-	__g("qunit-test-area").innerHTML = "<input id='one'/><input id='two'/>";
-	var change = 0, changef = function(){
-		change++;
-	}
-	__addEventListener(__g("one"),"change",changef );
-	stop();
-	new Synthetic("clicker").send( __g("one") );
-	setTimeout(function(){
-		new Synthetic("keypress","a").send( __g("one") );
-		new Synthetic("clicker").send( __g("two") );
-		
-		setTimeout(function(){
-			start()
-			
-			equals(change, 1 , "Change called once");
-			__g("qunit-test-area").innerHTML = "";
-		},100)
-		
-	},10)
-})
-
-test("click focuses on a link", function(){
-	__g("qunit-test-area").innerHTML = "<a href='#abc' id='focusme'/>";
 	
-	__addEventListener(__g("focusme"),"focus",function(ev){
+	Syn("click",{},"jsHref")
+	
+	ok( didSomething, "link href JS run" );
+	
+	window.doSomething = doSomething;
+})
+test
+("Click! Anchor Focuses", 2, function(){
+	st.g("qunit-test-area").innerHTML = "<a href='#abc' id='focusme'>I am visible</a>";
+	
+	st.binder("focusme","focus",function(ev){
 		ok(true,"focused");
 	} );
-	__addEventListener(__g("focusme"),"click",function(ev){
+	st.binder("focusme","click",function(ev){
 		ok(true,"clicked");
-		__g("qunit-test-area").innerHTML ="";
-		start();
+		st.g("qunit-test-area").innerHTML ="";
 		if(ev.preventDefault)
 			ev.preventDefault();
 		ev.returnValue = false;
 		return false;
-	} );
+	});
 	stop();
-	setTimeout(function(){
-		new Synthetic('click').send( __g("focusme") );
-	},10)
+	//need to give browsers a second to show element
+	
+	Syn("click!",{},"focusme", function(){
+		start();
+	})
+	
+	
+
 })
+test("Click away causes Blur", function(){
+	st.g("qunit-test-area").innerHTML = "<input id='one'/><input id='two'/>";
+	
+	var change = 0;
+	st.binder("one","change",function(){
+		change++;
+	} );
+	
+	stop();
+	Syn("click!",{},"one")
+		.then("key","a")
+		.then("click!",{},"two", function(){
+			start()
+			equals(change, 1 , "Change called once");
+		})
+	
+})
+

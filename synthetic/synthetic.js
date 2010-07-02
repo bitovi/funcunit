@@ -28,47 +28,47 @@ steal(function(){
 		key = /keypress|keyup|keydown/,
 		page = /load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll/;
 		
-	Syn = function(type, options, element, callback){
-		var temp;
-		if(options.nodeName){ //in case they are reversed
-			temp = element;
-			element = options;
-			options = element;
-		}
-		
+	Syn = function(type, options, element, callback){		
 		return ( new Syn.init(type, options, element, callback) )
 
 	}
 	Syn.init = function(type, options, element, callback){
-		var self = this;
+		var args = Syn.args(options,element, callback),
+			self = this;
 		this.queue = [];
-		this.element = element;
+		this.element = args.element;
 		
 		//run event
 		if(typeof this[type] == "function") {
-			this[type](options, element, function(defaults,el ){
-				callback && callback.apply(self, arguments);
+			this[type](args.options, args.element, function(defaults,el ){
+				args.callback && args.callback.apply(self, arguments);
 				self.done.apply(self, arguments)		
 			})
 		}else{
-			this.result = createEvent(type, options, element);
-			callback && callback.call(this, element, this.result);
+			this.result = createEvent(type, args.options, args.element);
+			args.callback && args.callback.call(this, args.element, this.result);
 		}
+	}
+	Syn.args = function(){
+		var res = {}
+		for(var i=0; i < arguments.length; i++){
+			if(typeof arguments[i] == 'function'){
+				res.callback = arguments[i]
+			}else if(arguments[i] && arguments[i].nodeName){
+				res.element = arguments[i];
+			}else if(res.options && typeof arguments[i] == 'string'){ //we can get by id
+				res.element = document.getElementById(arguments[i])
+			}
+			else if(arguments[i]){
+				res.options = arguments[i];
+			}
+		}
+		return res;
 	}
 	var S = Synthetic;
 	extend(Syn.init.prototype,{
 		then : function(type, options, element, callback){
-			options = options || {}
-			if(options.nodeName){ //in case they are reversed
-				temp = element;
-				element = options;
-				options = element;
-			}
-			if(typeof element == 'function'){
-				callback = element;
-				element = undefined;
-			}
-			var runNow = this.queue.length,
+			var args = Syn.args(options,element, callback),
 				self = this;
 
 			
@@ -78,15 +78,15 @@ steal(function(){
 			this.queue.unshift(function(el, prevented){
 				
 				if(typeof this[type] == "function") {
-					this.element = element || el;
-					this[type](options, this.element, function(defaults, el){
-						callback && callback.apply(self, arguments);
+					this.element = args.element || el;
+					this[type](args.options, this.element, function(defaults, el){
+						args.callback && args.callback.apply(self, arguments);
 						self.done.apply(self, arguments)		
 					})
 				}else{
-					this.result = createEvent(type, options, element);
-					callback && callback.call(this, element, this.result);
-					return this.result;
+					this.result = createEvent(type, args.options, args.element);
+					args.callback && args.callback.call(this, args.element, this.result);
+					return this;
 				}
 			})
 			return this;
@@ -100,8 +100,8 @@ steal(function(){
 			}
 			
 		},
-		clicker : function(options, element, callback){
-			var nodeName = element.nodeName.toLowerCase();
+		"click!" : function(options, element, callback){
+
 			
 			createEvent("mousedown", options, element);
 			
@@ -111,11 +111,21 @@ steal(function(){
 				createEvent("mouseup", options, element)
 				if(!support.mouseDownUpClicks){
 					createEvent("click", options, element)
+				}else{
+					//we still have to run the default (presumably)
+					Synthetic.defaults.click.call(element)
 				}
 				callback(true)
 			},1)
 		},
 		key : function(options, element, callback){
+			var convert = {
+				"enter" : "\r",
+				"backspace" : "\b",
+				"tab" : "\t",
+				"space" : " "
+			}
+			
 			var key = convert[options] || options,
 				runDefaults = S.createEvent('keydown',key, element ),
 				getDefault = S.key.getDefault,
@@ -262,12 +272,16 @@ steal(function(){
 		focusable : /^(a|area|frame|iframe|label|input|select|textarea|button|html|object)$/i,
 		isFocusable : function(elem){
 			var attributeNode;
-			return this.focusable.test(elem.nodeName) || (
-				(attributeNode = elem.getAttributeNode( "tabIndex" )) && attributeNode.specified )
+			return ( this.focusable.test(elem.nodeName) || (
+				(attributeNode = elem.getAttributeNode( "tabIndex" )) && attributeNode.specified ) )
+				&& Synthetic.isVisible(elem)
+		},
+		isVisible : function(elem){
+			return (elem.offsetWidth && elem.offsetHeight) || (elem.clientWidth && elem.clientHeight)
 		},
 		tabIndex : function(elem){
 			var attributeNode = elem.getAttributeNode( "tabIndex" );
-			return attributeNode && attributeNode.specified && elem.getAttribute('tabIndex')
+			return attributeNode && attributeNode.specified && ( parseInt( elem.getAttribute('tabIndex') ) || null )
 		},
 		bind : bind,
 		unbind : unbind,
@@ -300,7 +314,7 @@ steal(function(){
 			getWindow : function(element){
 				return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
 			},
-			extend:  extend,
+			extend:  extend
 		},
 		//place for key
 		key : {},
@@ -331,12 +345,14 @@ steal(function(){
 					} : 
 					function(event, element, type){
 						try {window.event = event;}catch(e) {}
-						return element.fireEvent('on'+type, event);
+						//source element makes sure element is still in the document
+						return element.sourceIndex <= 0 || element.fireEvent('on'+type, event)
 					}
 				)
 		
 	});
-	var h = S.helpers
+	var h = S.helpers;
+	Syn.helpers = h;
 
 	
 
@@ -415,7 +431,8 @@ steal(function(){
 		keyCharacters : false,
 		backspaceWorks : false,
 		mouseDownUpClicks : false,
-		tabKeyTabs : false
+		tabKeyTabs : false,
+		keypressOnAnchorClicks : false
 	};
 	
 	Synthetic.support = support;
