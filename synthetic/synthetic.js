@@ -472,8 +472,8 @@ steal(function(){
 	 */
 	
 	if (window.jQuery) {
-		jQuery.fn.synthetic = function(type, options, context){
-			new Synthetic(type, options, context).send(this[0]);
+		jQuery.fn.synthetic = function(type, options, callback){
+			Syn(type, options, this[0], callback)
 			return this;
 		};
 	}
