@@ -1,7 +1,7 @@
 steal(function(){
 
-var h = Synthetic.helpers,
-	S = Synthetic,
+var h = Syn.helpers,
+	S = Syn,
 //gets the selection of an input or textarea
 getSelection = function(el){
 	if (el.selectionStart !== undefined) {
@@ -47,7 +47,7 @@ getFocusable = function(el){
 		len = els.length;
 		
 	for(var i=0;  i< len; i++){
-		Synthetic.isFocusable(els[i]) && els[i] != document.documentElement && res.push(els[i])
+		Syn.isFocusable(els[i]) && els[i] != document.documentElement && res.push(els[i])
 	}
 	return res;
 	
@@ -55,7 +55,7 @@ getFocusable = function(el){
 };
 
 
-h.extend(Synthetic,{
+h.extend(Syn,{
 	keycodes: {
 		//backspace
 		'\b':'8',
@@ -114,7 +114,7 @@ h.extend(Synthetic,{
 	typeable : /input|textarea/i
 });
 
-h.extend(Synthetic.key,{
+h.extend(Syn.key,{
 	// retrieves a description of what events for this character should look like
 	data : function(key){
 		//check if it is described directly
@@ -130,7 +130,7 @@ h.extend(Synthetic.key,{
 	},
 	//gets the options for a particular key and key event
 	options : function(key, event){
-		var keyData = Synthetic.key.data(key);
+		var keyData = Syn.key.data(key);
 		
 		if(!keyData[event]){
 			//we shouldn't be creating this event
@@ -142,7 +142,7 @@ h.extend(Synthetic.key,{
 			result = {};
 			
 		if(keyCode == 'key'){
-			result.keyCode = Synthetic.keycodes[key]
+			result.keyCode = Syn.keycodes[key]
 		}else{
 			result.keyCode = keyCode;
 		}
@@ -164,19 +164,19 @@ h.extend(Synthetic.key,{
 	//returns the default function
 	getDefault : function(key){
 		//check if it is described directly
-		if(Synthetic.key.defaults[key]){
-			return Synthetic.key.defaults[key];
+		if(Syn.key.defaults[key]){
+			return Syn.key.defaults[key];
 		}
-		for(var kind in Synthetic.key.kinds){
-			if(h.inArray(key, Synthetic.key.kinds[kind])> -1 && Synthetic.key.defaults[kind]  ){
-				return Synthetic.key.defaults[kind];
+		for(var kind in Syn.key.kinds){
+			if(h.inArray(key, Syn.key.kinds[kind])> -1 && Syn.key.defaults[kind]  ){
+				return Syn.key.defaults[kind];
 			}
 		}
-		return Synthetic.key.defaults.character
+		return Syn.key.defaults.character
 	},
 	defaults : 	{
 		'character' : function(options, scope, key){
-			if(!S.support.keyCharacters && Synthetic.typeable.test(this.nodeName)){
+			if(!S.support.keyCharacters && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
 					sel = getSelection(this),
 					before = current.substr(0,sel.start),
@@ -188,7 +188,7 @@ h.extend(Synthetic.key,{
 			}		
 		},
 		'home' : function(){
-			Synthetic.onParents(this, function(el){
+			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
 					el.scrollTop = 0;
 					return false;
@@ -196,7 +196,7 @@ h.extend(Synthetic.key,{
 			})
 		},
 		'end' : function(){
-			Synthetic.onParents(this, function(el){
+			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
 					el.scrollTop = el.scrollHeight;
 					return false;
@@ -205,7 +205,7 @@ h.extend(Synthetic.key,{
 		},
 		'page-down' : function(){
 			//find the first parent we can scroll
-			Synthetic.onParents(this, function(el){
+			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
 					var ch = el.clientHeight
 					el.scrollTop += ch;
@@ -214,7 +214,7 @@ h.extend(Synthetic.key,{
 			})
 		},
 		'page-up' : function(){
-			Synthetic.onParents(this, function(el){
+			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
 					var ch = el.clientHeight
 					el.scrollTop -= ch;
@@ -224,7 +224,7 @@ h.extend(Synthetic.key,{
 		},
 		'\b' : function(){
 			//this assumes we are deleting from the end
-			if(!S.support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
+			if(!S.support.backspaceWorks && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
 					sel = getSelection(this),
 					before = current.substr(0,sel.start),
@@ -239,7 +239,7 @@ h.extend(Synthetic.key,{
 			}	
 		},
 		'delete' : function(){
-			if(!S.support.backspaceWorks && Synthetic.typeable.test(this.nodeName)){
+			if(!S.support.backspaceWorks && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
 					sel = getSelection(this),
 					before = current.substr(0,sel.start),
@@ -258,7 +258,7 @@ h.extend(Synthetic.key,{
 			var nodeName = this.nodeName.toLowerCase()
 			// submit a form
 			if(!S.support.keypressSubmits && nodeName == 'input'){
-				var form = Synthetic.closest(this, "form");
+				var form = Syn.closest(this, "form");
 				if(form){
 					S.createEvent("submit", {}, form);
 				}
@@ -266,7 +266,7 @@ h.extend(Synthetic.key,{
 			}
 			//newline in textarea
 			if(!S.support.keyCharacters && nodeName == 'textarea'){
-				Synthetic.key.defaults.character.call(this, options, scope, "\n")
+				Syn.key.defaults.character.call(this, options, scope, "\n")
 			}
 			// 'click' hyperlinks
 			if(!S.support.keypressOnAnchorClicks && nodeName == 'a'){
@@ -285,7 +285,7 @@ h.extend(Synthetic.key,{
 				// focusable elements
 			var focusEls = getFocusable(this),
 				// the current element's tabindex
-				tabIndex = Synthetic.tabIndex(this),
+				tabIndex = Syn.tabIndex(this),
 				// will be set to our guess for the next element
 				current = null,
 				// the next index we care about
@@ -300,7 +300,7 @@ h.extend(Synthetic.key,{
 				
 			for(; i< focusEls.length; i++){
 				el = focusEls[i];
-				elIndex = Synthetic.tabIndex(el) || 0;
+				elIndex = Syn.tabIndex(el) || 0;
 				if(!firstNotIndexed && elIndex === 0){
 					firstNotIndexed = el;
 				}
@@ -333,7 +333,7 @@ h.extend(Synthetic.key,{
 });
 
 
-h.extend(Synthetic.create,{
+h.extend(Syn.create,{
 	key : {
 			// return the options for a key event
 			options : function(type, options, element){
@@ -391,68 +391,8 @@ var convert = {
 	"backspace" : "\b",
 	"tab" : "\t",
 	"space" : " "
-}
+};
 
-
-h.extend(Synthetic.prototype,{
-	key : function(element){
-		var key = convert[this.options] || this.options,
-			result = S.createEvent('keydown',key, element ),
-			getDefault = S.key.getDefault,
-			prevent = S.key.browser.prevent,
-			defaultResult;
-		
-		//options for keypress
-		options = Synthetic.key.options(key, 'keypress');
-		
-		if(result){
-			//is there is not a keypress, run default
-			if(!options){
-				defaultResult = getDefault(key).call(element, options, h.getWindow(element), key)
-			}else{
-				//do keypress
-				result = S.createEvent('keypress',options, element )
-				if(result){
-					defaultResult = getDefault(key).call(element, options, h.getWindow(element), key)
-				}
-			}
-		}else{
-			//canceled ... possibly don't run keypress
-			if(options && h.inArray('keypress',prevent.keydown) == -1 ){
-				S.createEvent('keypress',options, element )
-			}
-		}
-		if(defaultResult && defaultResult.nodeName){
-			element = defaultResult
-		}
-		S.createEvent('keyup',Synthetic.key.options(key, 'keyup'), element )
-		//do mouseup
-		
-		return element;
-		// is there a keypress? .. if not , run default
-		// yes -> did we prevent it?, if not run ...
-		
-	},
-	type : function(element){
-		var parts = this.options.match(/(\[[^\]]+\])|([^\[])/g);
-		//break it up into parts ...
-		//go through each type and run
-		for(var i=0; i < parts.length; i++){
-			var part = parts[i];
-			if(part.length > 1){
-				part = part.substr(1,part.length - 2)
-			}
-			
-			this.options = part;
-			var element = this.key(element);
-			
-			
-		}
-		
-		
-		
-	}
-});
 
 
 

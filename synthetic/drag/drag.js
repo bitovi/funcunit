@@ -1,7 +1,7 @@
 steal.plugins('funcunit/synthetic').then(function(){
 	
 	
-	var createEvent = Synthetic.createEvent,
+	var createEvent = Syn.createEvent,
 	
 	Drag = function(target, options){
 		this.callback = options.callback;
@@ -15,7 +15,7 @@ steal.plugins('funcunit/synthetic').then(function(){
 		this.duration = options.duration ? options.duration : 1000;
 		this.start = new Date();
 
-		new Synthetic('mousedown', {clientX: this.start_x, clientY: this.start_y}).send(target);
+		Syn('mousedown', {clientX: this.start_x, clientY: this.start_y},target);
 
 		// create a mouse cursor
 		var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -38,8 +38,8 @@ steal.plugins('funcunit/synthetic').then(function(){
 			var now = new Date();
 			var difference = now - this.start;
 			if( difference > this.duration ){
-				new Synthetic('mousemove', {clientX: this.end_x, clientY: this.end_y}).send(this.target);
-				var event = new Synthetic('mouseup', {clientX: this.end_x, clientY: this.end_y}).send(this.target);
+				Syn('mousemove', {clientX: this.end_x, clientY: this.end_y},this.target);
+				var event = Syn('mouseup', {clientX: this.end_x, clientY: this.end_y},this.target);
 				this.pointer.remove();
 				if (this.callback) {
 					this.callback({
@@ -58,7 +58,7 @@ steal.plugins('funcunit/synthetic').then(function(){
 					left: x,
 					top: pointerY
 				})
-				new Synthetic('mousemove', {clientX: x, clientY: y}).send(this.target);
+				Syn('mousemove', {clientX: x, clientY: y},this.target);
 				setTimeout(this.next_callback(), 20);
 			}
 		},
@@ -71,7 +71,7 @@ steal.plugins('funcunit/synthetic').then(function(){
 	};
 	
 	
-	Synthetic.prototype.drag = function(from){
+	Syn.init.prototype.drag = function(from){
 			var doc = this.scope.document;
 			var jq = this.scope.jQuery
 			if( !jQuery ) {

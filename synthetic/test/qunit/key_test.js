@@ -152,7 +152,7 @@ asyncTest("page down, page up, home, end", function(){
 			start();
 			return;
 		}
-		new Synthetic("key",name).send(st.g("scrolldiv"))
+		Syn("key", name, "scrolldiv")
 	};
 	for(var name in keyTest){
 		order.push(name)
@@ -166,7 +166,7 @@ asyncTest("page down, page up, home, end", function(){
 	} );
 	stop(1000);
 
-	 st.g("scrolldiv").focus();
+	st.g("scrolldiv").focus();
 	runNext();
 
 })
@@ -200,7 +200,7 @@ test("range tests", function(){
 	keyEl.value = "012345";
 	selectText(keyEl, 1, 3);
 	
-	new Synthetic("key","delete").send(keyEl);
+	Syn("key","delete","key")
 	
 	equals(keyEl.value, "0345", "delete range works");
 	
@@ -208,7 +208,7 @@ test("range tests", function(){
 	keyEl.value = "012345";
 	selectText(keyEl, 2);
 
-	new Synthetic("key","delete").send(keyEl);
+	Syn("key","delete","key");
 	equals(keyEl.value, "01345", "delete works");
 
 
@@ -217,55 +217,51 @@ test("range tests", function(){
 	selectText(keyEl, 1, 3);
 
 	
-	new Synthetic("key","a").send(keyEl);
+	Syn("key","a","key");
 	equals(keyEl.value, "1a456", "character range works");
 
 	// test character key
 	keyEl.value = "123456";
 	selectText(keyEl, 2);
 	
-	new Synthetic("key","a").send(keyEl);
+	Syn("key","a","key");
 	equals(keyEl.value, "12a3456", "character insertion works");
 
 	// test backspace range
 	keyEl.value = "123456";
 	selectText(keyEl, 1, 3);
-	new Synthetic("key","\b").send(keyEl);
+	Syn("key","\b","key");
 	equals(keyEl.value, "1456", "backspace range works");
 	
 	// test backspace key
 	keyEl.value = "123456";
 	selectText(keyEl, 2);
-	new Synthetic("key","\b").send(keyEl);
+	Syn("key","\b","key");
 	equals(keyEl.value, "13456", "backspace works");
 	
 	// test textarea ranges
 	textAreaEl.value = "123456";
 	selectText(textAreaEl, 1, 3);
 	
-	new Synthetic("key","delete").send(textAreaEl);
+	Syn("key","delete",textAreaEl);
 	equals(textAreaEl.value, "1456", "delete range works in a textarea");
 
 	// test textarea ranges
 	textAreaEl.value = "123456";
 	selectText(textAreaEl, 1, 3);
-	new Synthetic("key","a").send(textAreaEl);
+	Syn("key","a",textAreaEl);
 	equals(textAreaEl.value, "1a456", "character range works in a textarea");
 	
 	// test textarea ranges
 	textAreaEl.value = "123456";
 	selectText(textAreaEl, 1, 3);
-	new Synthetic("key","\b").send(textAreaEl);
+	Syn("key","\b",textAreaEl);
 	equals(textAreaEl.value, "1456", "backspace range works in a textarea");
 	
 	// test textarea ranges
 	textAreaEl.value = "123456";
 	selectText(textAreaEl, 1, 3);
-	new Synthetic("key","\r").send(textAreaEl);
-	//for(var i =0; i < textAreaEl.value.length; i++){
-	//	console.log("1\n456".substr(i,1)," ","1\n456".charCodeAt(i)," ",textAreaEl.value.substr(i,1)," ", textAreaEl.value.charCodeAt(i))
-	//}
-	
+	Syn("key","\r",textAreaEl);
 	
 	equals(textAreaEl.value.replace("\r",""), "1\n456", "return range works in a textarea");
 	

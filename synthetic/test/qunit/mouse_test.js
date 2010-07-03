@@ -10,9 +10,9 @@ module("funcunit/synthetic/mouse",{
 	}
 })
 
-test("Synthetic basics", function(){
+test("Syn basics", function(){
 
-        ok(Synthetic,"Synthetic exists")
+        ok(Syn,"Syn exists")
 		
 		st.g("qunit-test-area").innerHTML = "<div id='outer'><div id='inner'></div></div>"
 		var mouseover = 0, mouseoverf = function(){
@@ -138,7 +138,6 @@ test("Click! Event Order", 4, function(){
 	Syn("click!",{},"focusme", function(){
 		start();
 	})
-	//new Synthetic("clicker").send( st.g("focusme") );
 	
 })
 

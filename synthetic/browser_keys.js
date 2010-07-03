@@ -1,5 +1,5 @@
 steal(function(){
-	Synthetic.key.browsers = {
+	Syn.key.browsers = {
 		webkit : {
 			'prevent':
 			 {"keyup":[],"keydown":["char","keypress"],"keypress":["char"]},
@@ -106,18 +106,18 @@ steal(function(){
 			'\r':
 			 {"keydown":[null,"key"],"keypress":[null,"key"],"keyup":[null,"key"]}	
 		}
-	}
+	};
 	
 	
 	//set browser
-	Synthetic.key.browser = 
+	Syn.key.browser = 
 	(function(){
-		for(var browser in Synthetic.browser){
-			if(Synthetic.browser[browser] && Synthetic.key.browsers[browser]){
-				return Synthetic.key.browsers[browser]
+		for(var browser in Syn.browser){
+			if(Syn.browser[browser] && Syn.key.browsers[browser]){
+				return Syn.key.browsers[browser]
 			}
 		}
-		return Synthetic.key.browsers.gecko;
+		return Syn.key.browsers.gecko;
 	})();
 	
 })

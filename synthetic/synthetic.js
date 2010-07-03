@@ -3,13 +3,7 @@
 steal(function(){
 	
 	
-	var Synthetic = function(type, options, scope){
-			this.eventType = type;
-			this.options = options || {};
-			this.scope = scope || window
-		},
-		
-		extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
+	var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 		// only uses browser detection for key events
 		browser = {
 			msie:     !!(window.attachEvent && !window.opera),
@@ -28,7 +22,7 @@ steal(function(){
 		key = /keypress|keyup|keydown/,
 		page = /load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll/;
 		
-	Syn = function(type, options, element, callback){		
+	var Syn = function(type, options, element, callback){		
 		return ( new Syn.init(type, options, element, callback) )
 
 	}
@@ -65,7 +59,7 @@ steal(function(){
 		}
 		return res;
 	}
-	var S = Synthetic;
+
 	extend(Syn.init.prototype,{
 		then : function(type, options, element, callback){
 			var args = Syn.args(options,element, callback),
@@ -106,14 +100,13 @@ steal(function(){
 			createEvent("mousedown", options, element);
 			
 			//timeout is b/c IE is stupid and won't call focus handlers
-			//synchronously.  So everyone has to suffer :(
 			setTimeout(function(){
 				createEvent("mouseup", options, element)
-				if(!support.mouseDownUpClicks){
+				if(!Syn.support.mouseDownUpClicks){
 					createEvent("click", options, element)
 				}else{
 					//we still have to run the default (presumably)
-					Synthetic.defaults.click.call(element)
+					Syn.defaults.click.call(element)
 				}
 				callback(true)
 			},1)
@@ -127,15 +120,15 @@ steal(function(){
 			}
 			
 			var key = convert[options] || options,
-				runDefaults = S.createEvent('keydown',key, element ),
-				getDefault = S.key.getDefault,
-				prevent = S.key.browser.prevent,
+				runDefaults = Syn.createEvent('keydown',key, element ),
+				getDefault = Syn.key.getDefault,
+				prevent = Syn.key.browser.prevent,
 				defaultResult;
 			
 			
 			
 			//options for keypress
-			var keypressOptions = Synthetic.key.options(key, 'keypress');
+			var keypressOptions = Syn.key.options(key, 'keypress');
 			
 			
 			
@@ -145,7 +138,7 @@ steal(function(){
 					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
 				}else{
 					//do keypress
-					result = S.createEvent('keypress',keypressOptions, element )
+					result = Syn.createEvent('keypress',keypressOptions, element )
 					if(result){
 						defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
 					}
@@ -153,14 +146,14 @@ steal(function(){
 			}else{
 				//canceled ... possibly don't run keypress
 				if(keypressOptions && h.inArray('keypress',prevent.keydown) == -1 ){
-					S.createEvent('keypress',keypressOptions, element )
+					Syn.createEvent('keypress',keypressOptions, element )
 				}
 			}
 			if(defaultResult && defaultResult.nodeName){
 				element = defaultResult
 			}
 			setTimeout(function(){
-				S.createEvent('keyup',Synthetic.key.options(key, 'keyup'), element )
+				Syn.createEvent('keyup',Syn.key.options(key, 'keyup'), element )
 				callback(result, element)
 			},1)
 			
@@ -213,21 +206,21 @@ steal(function(){
 	}
 		
 		
-	extend(Synthetic,{
+	extend(Syn,{
 
 		//default behavior for events
 		defaults : {
 			focus : function(){
-				if(!support.focusChanges){
+				if(!Syn.support.focusChanges){
 					var element = this;
-					Synthetic.data(element,"syntheticvalue", element.value)
+					Syn.data(element,"syntheticvalue", element.value)
 					
 					if(element.nodeName.toLowerCase() == "input"){
 						
 						bind(element, "blur", function(){
 							
 							
-							if( Synthetic.data(element,"syntheticvalue") !=  element.value){
+							if( Syn.data(element,"syntheticvalue") !=  element.value){
 								
 								createEvent("change", {}, element);
 							}
@@ -274,7 +267,7 @@ steal(function(){
 			var attributeNode;
 			return ( this.focusable.test(elem.nodeName) || (
 				(attributeNode = elem.getAttributeNode( "tabIndex" )) && attributeNode.specified ) )
-				&& Synthetic.isVisible(elem)
+				&& Syn.isVisible(elem)
 		},
 		isVisible : function(elem){
 			return (elem.offsetWidth && elem.offsetHeight) || (elem.clientWidth && elem.clientHeight)
@@ -348,123 +341,91 @@ steal(function(){
 						//source element makes sure element is still in the document
 						return element.sourceIndex <= 0 || element.fireEvent('on'+type, event)
 					}
-				)
+				),
+		create :  {
+			//-------- PAGE EVENTS ---------------------
+			page : {
+				event : document.createEvent ? function(type, options, element){
+						var event = element.ownerDocument.createEvent("Events");
+						event.initEvent(type, true, true ); 
+						return event;
+					} : h.createEventObject
+			},
+			// unique events
+			focus : {
+				event : function(type, options, element){
+					Syn.onParents(element, function(el){
+						if( Syn.isFocusable(el) ){
+							el.focus();
+							return false
+						}
+					})
+					return true;
+				}
+			}
+		},
+		support : {
+			clickChanges : false,
+			clickSubmits : false,
+			keypressSubmits : false,
+			mouseupSubmits: false,
+			radioClickChanges : false,
+			focusChanges : false,
+			linkHrefJS : false,
+			keyCharacters : false,
+			backspaceWorks : false,
+			mouseDownUpClicks : false,
+			tabKeyTabs : false,
+			keypressOnAnchorClicks : false
+		},
+		createEvent : function(type, options, element){
+			var create = Syn.create;
+			options || (options = {});
+			//any setup code?
+			create[type] && create[type].setup 
+				&& create[type].setup(type, options, element)
+			
+			
+			//get kind
+			var kind = key.test(type) ? 
+					'key' : 
+					( page.test(type) ?
+						"page" : "mouse" ),
+					event,
+					ret,
+				autoPrevent = options._autoPrevent;
+			
+			delete options._autoPrevent;
+				
+			if(create[type] && create[type].event){
+				ret = create[type].event(type, options, element)
+			}else{
+				//convert options
+				options = create[kind].options ? create[kind].options(type,options,element) : options;
+				
+				event = create[kind].event(type,options,element)
+				
+				//send the event
+				ret = Syn.dispatch(event, element, type, autoPrevent)
+			}
+			
+			//run default behavior
+			ret && Syn.support.ready 
+				&& Syn.defaults[type] 
+				&& Syn.defaults[type].call(element, options, autoPrevent);
+			return ret;
+		}
 		
 	});
-	var h = S.helpers;
-	Syn.helpers = h;
-
-	
-
-	//dispatches an event
-	var createEventObject = Synthetic.helpers.createEventObject,
-		createBasicStandardEvent = Synthetic.helpers.createBasicStandardEvent,
-	
-	//object lets you create certain types of events		
-	create = (Synthetic.create =  {
-		//-------- PAGE EVENTS ---------------------
-		page : {
-			event : document.createEvent ? function(type, options, element){
-					var event = element.ownerDocument.createEvent("Events");
-					event.initEvent(type, true, true ); 
-					return event;
-				} : createEventObject
-		},
-		// unique events
-		focus : {
-			event : function(type, options, element){
-				Synthetic.onParents(element, function(el){
-					if( Synthetic.isFocusable(el) ){
-						el.focus();
-						return false
-					}
-				})
-				return true;
-			}
-		}
-	}),
-	createEvent = function(type, options, element){
-		options || (options = {});
-		//any setup code?
-		create[type] && create[type].setup 
-			&& create[type].setup(type, options, element)
-		
-		
-		//get kind
-		var kind = key.test(type) ? 
-				'key' : 
-				( page.test(type) ?
-					"page" : "mouse" ),
-				event,
-				ret,
-			autoPrevent = options._autoPrevent;
-		
-		delete options._autoPrevent;
-			
-		if(create[type] && create[type].event){
-			ret = create[type].event(type, options, element)
-		}else{
-			//convert options
-			options = create[kind].options ? create[kind].options(type,options,element) : options;
-			
-			event = create[kind].event(type,options,element)
-			
-			//send the event
-			ret = Synthetic.dispatch(event, element, type, autoPrevent)
-		}
-		
-		//run default behavior
-		ret && support.ready 
-			&& Synthetic.defaults[type] 
-			&& Synthetic.defaults[type].call(element, options, autoPrevent);
-		return ret;
-	},
-	
-	support = {
-		clickChanges : false,
-		clickSubmits : false,
-		keypressSubmits : false,
-		mouseupSubmits: false,
-		radioClickChanges : false,
-		focusChanges : false,
-		linkHrefJS : false,
-		keyCharacters : false,
-		backspaceWorks : false,
-		mouseDownUpClicks : false,
-		tabKeyTabs : false,
-		keypressOnAnchorClicks : false
-	};
-	
-	Synthetic.support = support;
+	var h = Syn.helpers,
+	//object lets you create certain types of eventss
+	createEvent = Syn.createEvent;
 	//support code
-	
-	
-	
-	Synthetic.createEvent = createEvent;
-	
-	Synthetic.prototype = 
-	{
-		/**
-		 * Dispatches the event on the given element
-		 * @param {HTMLElement} element the element that will be the target of the event.
-		 */
-		send : function(element){
-			//turn auto complete off
-			if(element.nodeName.toLowerCase() == 'input' 
-				&& element.getAttribute('autocomplete') != 'off'){
-				element.setAttribute('autocomplete','off');
-			}
-			if(typeof this[this.eventType] == "function") {
-				return this[this.eventType].apply(this, arguments)
-			}
-				
-			return createEvent(this.eventType, this.options, element)
-		}
-	}
+
 	/**
 	 * Used for creating and dispatching synthetic events.
 	 * @codestart
-	 * new MVC.Synthetic('click').send(MVC.$E('id'))
+	 * new MVC.Syn('click').send(MVC.$E('id'))
 	 * @codeend
 	 * @init Sets up a synthetic event.
 	 * @param {String} type type of event, ex: 'click'
@@ -472,13 +433,13 @@ steal(function(){
 	 */
 	
 	if (window.jQuery) {
-		jQuery.fn.synthetic = function(type, options, callback){
+		jQuery.fn.syn = function(type, options, callback){
 			Syn(type, options, this[0], callback)
 			return this;
 		};
 	}
 
-	window.Synthetic = Synthetic;
+	window.Syn = Syn;
 	
 }).then('mouse','browser_keys','keys','drag/drag');
 

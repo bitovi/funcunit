@@ -1,12 +1,12 @@
 //handles mosue events
 steal(function(){
 
-var h = Synthetic.helpers,
-	createEvent = Synthetic.createEvent,
-	browser = Synthetic.browser;
+var h = Syn.helpers,
+	createEvent = Syn.createEvent,
+	browser = Syn.browser;
 
 
-h.extend(Synthetic.defaults,{
+h.extend(Syn.defaults,{
 	mousedown : function(options){
 		createEvent("focus", {}, this)
 	},
@@ -20,11 +20,11 @@ h.extend(Synthetic.defaults,{
 		}
 		//get old values
 		var href,
-			checked = Synthetic.data(element,"checked"),
-			scope = Synthetic.helpers.getWindow(element),
+			checked = Syn.data(element,"checked"),
+			scope = Syn.helpers.getWindow(element),
 			nodeName = element.nodeName.toLowerCase();
 		
-		if( (href = Synthetic.data(element,"href") ) ){
+		if( (href = Syn.data(element,"href") ) ){
 			element.setAttribute('href',href)
 		}
 
@@ -51,9 +51,10 @@ h.extend(Synthetic.defaults,{
 			&& element.type == "submit" 
 			&& !(support.clickSubmits)){
 				
-			var form =  Synthetic.closest(element, "form");
-			if(form)
-				new Synthetic("submit").send( form );
+			var form =  Syn.closest(element, "form");
+			if(form){
+				createEvent("submit",{},form)
+			}
 			
 		}
 		//follow a link, probably needs to check if in an a.
@@ -73,7 +74,7 @@ h.extend(Synthetic.defaults,{
 				element.checked = !element.checked;
 			}
 			if(!support.clickChanges)
-				new Synthetic("change").send(  element );
+				createEvent("change",{},  element );
 			
 		}
 		
@@ -87,7 +88,7 @@ h.extend(Synthetic.defaults,{
 				}
 			}
 			if(checked != element.checked && !support.radioClickChanges){
-				new Synthetic("change").send(  element );
+				createEvent("change",{},  element );
 			}
 		}
 		// change options
@@ -100,7 +101,7 @@ h.extend(Synthetic.defaults,{
 			}
 			if(i !== element.parentNode.selectedIndex){
 				element.parentNode.selectedIndex = i;
-				Synthetic.createEvent("change",{}, element.parentNode)
+				Syn.createEvent("change",{}, element.parentNode)
 			}
 		}
 			
@@ -110,7 +111,7 @@ h.extend(Synthetic.defaults,{
 	
 
 //add create and setup behavior for mosue events
-h.extend(Synthetic.create,{
+h.extend(Syn.create,{
 	mouse : {
 		options : function(type, options, element){
 			var doc = document.documentElement, body = document.body,
@@ -150,7 +151,7 @@ h.extend(Synthetic.create,{
 	click : {
 		setup : function(type, options, element){
 			try{
-				Synthetic.data(element,"checked", element.checked);
+				Syn.data(element,"checked", element.checked);
 			}catch(e){}
 			if( 
 				element.nodeName.toLowerCase() == "a" 
@@ -158,7 +159,7 @@ h.extend(Synthetic.create,{
 				&& !/^\s*javascript:/.test(element.href)){
 				
 				//save href
-				Synthetic.data(element,"href", element.href)
+				Syn.data(element,"href", element.href)
 				
 				//remove b/c safari/opera will open a new tab instead of changing the page
 				element.setAttribute('href','javascript://')
@@ -177,7 +178,7 @@ h.extend(Synthetic.create,{
 		}
 	}
 });
-var support = Synthetic.support;
+var support = Syn.support;
 //do support code
 (function(){
 		var oldSynth = window.__synthTest;
@@ -249,33 +250,4 @@ var support = Synthetic.support;
 	})();
 
 
-	Synthetic.prototype./**
-		 * Mouses down, focuses, up, and clicks an element
-		 * @param {Object} element
-		 */
-		clicker = function(element){
-			var options = this.options,
-				nodeName = element.nodeName.toLowerCase();
-			
-			//safari freezes JS mousedown on select or options
-			// no way to feature detect :(
-			// and this keeps mousedowns from happening.
-			
-			createEvent("mousedown", options, element);
-			
-			//timeout is b/c IE is stupid and won't call focus handlers
-			//synchronously.  So everyone has to suffer :(
-			setTimeout(function(){
-				createEvent("mouseup", options, element)
-				if(!support.mouseDownUpClicks){
-					createEvent("click", options, element)
-				}
-				
-			},1)
-			
-			//jQuery(element).bind("click",set );
-			return;
-		}
-
-	
 })

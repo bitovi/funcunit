@@ -24,8 +24,8 @@ st = {
 
 
 (function(){
-	for(var name in Synthetic.support){
-		st.log(name+": "+Synthetic.support[name])
+	for(var name in Syn.support){
+		st.log(name+": "+Syn.support[name])
 	}
 })();
 
@@ -89,6 +89,3 @@ test("focus triggers focus events", function(){
 	},10)
 	
 })
-
-// todo make sure you can do new Synthetic("key",{keyCode: 34}).send( st.g("myinput") );
-// make a test for this
