@@ -2,10 +2,12 @@ steal(function(){
 
 var h = Syn.helpers,
 	S = Syn,
-//gets the selection of an input or textarea
+
+// gets the selection of an input or textarea
 getSelection = function(el){
+	// use selectionStart if we can
 	if (el.selectionStart !== undefined) {
-		//this is for opera, so we don't have to focus to type how we think we would
+		// this is for opera, so we don't have to focus to type how we think we would
 		if(document.activeElement 
 		 	&& document.activeElement != el 
 			&& el.selectionStart == el.selectionEnd 
@@ -38,7 +40,7 @@ getSelection = function(el){
 		}
 	} 
 },
-//gets all focusable elements
+// gets all focusable elements
 getFocusable = function(el){
 	var document = h.getWindow(el).document,
 		res = [];
@@ -56,6 +58,7 @@ getFocusable = function(el){
 
 
 h.extend(Syn,{
+	// key codes for a standard english keyboard
 	keycodes: {
 		//backspace
 		'\b':'8',
@@ -110,8 +113,30 @@ h.extend(Syn,{
 		'f1':'112','f2':'113','f3':'114','f4':'115','f5':'116','f6':'117',
 		'f7':'118','f8':'119','f9':'120','f10':'121','f11':'122','f12':'123'
 	},
+	
 	// what we can type in
-	typeable : /input|textarea/i
+	typeable : /input|textarea/i,
+	
+	// selects text on an element
+	selectText: function(el, start, end){
+		if(el.setSelectionRange){
+			if(!end){
+                el.focus();
+                el.setSelectionRange(start, start);
+			} else {
+				el.selectionStart = start;
+				el.selectionEnd = end;
+			}
+		}else if (el.createTextRange) {
+			//el.focus();
+			var r = el.createTextRange();
+			r.moveStart('character', start);
+			end = end || start;
+			r.moveEnd('character', end - el.value.length);
+			
+			r.select();
+		} 
+	}
 });
 
 h.extend(Syn.key,{
@@ -128,7 +153,7 @@ h.extend(Syn.key,{
 		}
 		return S.key.browser.character
 	},
-	//gets the options for a particular key and key event
+	// gets the options for a particular key and key event
 	options : function(key, event){
 		var keyData = Syn.key.data(key);
 		
@@ -174,6 +199,7 @@ h.extend(Syn.key,{
 		}
 		return Syn.key.defaults.character
 	},
+	// default behavior when typing
 	defaults : 	{
 		'character' : function(options, scope, key){
 			if(!S.support.keyCharacters && Syn.typeable.test(this.nodeName)){
@@ -260,7 +286,7 @@ h.extend(Syn.key,{
 			if(!S.support.keypressSubmits && nodeName == 'input'){
 				var form = Syn.closest(this, "form");
 				if(form){
-					S.createEvent("submit", {}, form);
+					Syn.trigger("submit", {}, form);
 				}
 					
 			}
@@ -270,7 +296,7 @@ h.extend(Syn.key,{
 			}
 			// 'click' hyperlinks
 			if(!S.support.keypressOnAnchorClicks && nodeName == 'a'){
-				S.createEvent("click", {}, this);
+				Syn.trigger("click", {}, this);
 			}
 		},
 		/**
@@ -328,6 +354,24 @@ h.extend(Syn.key,{
 			}
 			current && current.focus();
 			return current;
+		},
+		'left' : function(){
+			if( Syn.typeable.test(this.nodeName) ){
+
+				var sel = getSelection(this);
+					
+				Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1)
+
+			}	
+		},
+		'right' : function(){
+			if( Syn.typeable.test(this.nodeName) ){
+
+				var sel = getSelection(this);
+					
+				Syn.selectText(this, sel.end+1 > this.value.length ? this.value.length  : sel.end+1)
+
+			}	
 		}
 	}
 });
@@ -416,15 +460,15 @@ h.extend(Syn.create,{
 		ev.returnValue = false;
 		return false;
 	}
-	S.createEvent("keypress", "\r", form.childNodes[3]);
+	Syn.trigger("keypress", "\r", form.childNodes[3]);
 	
 	
-	S.createEvent("keypress", "a", form.childNodes[3]);
+	Syn.trigger("keypress", "a", form.childNodes[3]);
 	S.support.keyCharacters = form.childNodes[3].value == "a";
 	
 	
 	form.childNodes[3].value = "a"
-	S.createEvent("keypress", "\b", form.childNodes[3]);
+	Syn.trigger("keypress", "\b", form.childNodes[3]);
 	S.support.backspaceWorks = form.childNodes[3].value == "";
 	
 		
@@ -433,7 +477,7 @@ h.extend(Syn.create,{
 		S.support.focusChanges = true;
 	}
 	form.childNodes[3].focus();
-	S.createEvent("keypress", "a", form.childNodes[3]);
+	Syn.trigger("keypress", "a", form.childNodes[3]);
 	form.childNodes[5].focus();
 	
 	//test keypress \r on anchor submits
@@ -444,7 +488,7 @@ h.extend(Syn.create,{
 		ev.returnValue = false;
 		return false;
 	})
-	S.createEvent("keypress", "\r", anchor);
+	Syn.trigger("keypress", "\r", anchor);
 	
 	document.documentElement.removeChild(div);
 	

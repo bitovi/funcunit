@@ -6,7 +6,7 @@ var h = Syn.helpers;
 
 h.extend(Syn.defaults,{
 	mousedown : function(options){
-		Syn.createEvent("focus", {}, this)
+		Syn.trigger("focus", {}, this)
 	},
 	click : function(){
 		// prevents the access denied issue in IE if the click causes the element to be destroyed
@@ -51,7 +51,7 @@ h.extend(Syn.defaults,{
 				
 			var form =  Syn.closest(element, "form");
 			if(form){
-				Syn.createEvent("submit",{},form)
+				Syn.trigger("submit",{},form)
 			}
 			
 		}
@@ -71,9 +71,9 @@ h.extend(Syn.defaults,{
 			if(!Syn.support.clickChecks && !Syn.support.changeChecks){
 				element.checked = !element.checked;
 			}
-			if(!Syn.support.clickChanges)
-				Syn.createEvent("change",{},  element );
-			
+			if(!Syn.support.clickChanges){
+				Syn.trigger("change",{},  element );
+			}
 		}
 		
 		//change a radio button
@@ -86,7 +86,7 @@ h.extend(Syn.defaults,{
 				}
 			}
 			if(checked != element.checked && !Syn.support.radioClickChanges){
-				Syn.createEvent("change",{},  element );
+				Syn.trigger("change",{},  element );
 			}
 		}
 		// change options
@@ -99,11 +99,9 @@ h.extend(Syn.defaults,{
 			}
 			if(i !== element.parentNode.selectedIndex){
 				element.parentNode.selectedIndex = i;
-				Syn.createEvent("change",{}, element.parentNode)
+				Syn.trigger("change",{}, element.parentNode)
 			}
 		}
-			
-		
 	}
 })
 	
@@ -171,80 +169,80 @@ h.extend(Syn.create,{
 			if(Syn.browser.safari && (nn == "select" || nn == "option" )){
 				options._autoPrevent = true;
 			}
-			
-			
 		}
 	}
 });
 //do support code
 (function(){
-		var oldSynth = window.__synthTest;
-		window.__synthTest = function(){
-			Syn.support.linkHrefJS = true;
-		}
-		var div = document.createElement("div"), checkbox, submit, form, input, submitted = false;
-		div.innerHTML = "<form id='outer'>"+
-			"<input name='checkbox' type='checkbox'/>"+
-			"<input name='radio' type='radio' />"+
-			"<input type='submit' name='submitter'/>"+
-			"<input type='input' name='inputter'/>"+
-			"<input name='one'>"+
-			"<input name='two'/>"+
-			"<a href='javascript:__synthTest()' id='synlink'></a>"+
-			"</form>";
-		document.documentElement.appendChild(div);
-		form = div.firstChild
-		checkbox = form.childNodes[0];
-		submit = form.childNodes[2];
+	var oldSynth = window.__synthTest;
+	window.__synthTest = function(){
+		Syn.support.linkHrefJS = true;
+	}
+	var div = document.createElement("div"), 
+		checkbox, 
+		submit, 
+		form, 
+		input, 
+		submitted = false;
 		
-		
-		checkbox.checked = false;
-		checkbox.onchange = function(){
-			Syn.support.clickChanges = true;
-		}
+	div.innerHTML = "<form id='outer'>"+
+		"<input name='checkbox' type='checkbox'/>"+
+		"<input name='radio' type='radio' />"+
+		"<input type='submit' name='submitter'/>"+
+		"<input type='input' name='inputter'/>"+
+		"<input name='one'>"+
+		"<input name='two'/>"+
+		"<a href='javascript:__synthTest()' id='synlink'></a>"+
+		"</form>";
+	document.documentElement.appendChild(div);
+	form = div.firstChild
+	checkbox = form.childNodes[0];
+	submit = form.childNodes[2];
+	
+	
+	checkbox.checked = false;
+	checkbox.onchange = function(){
+		Syn.support.clickChanges = true;
+	}
 
-		Syn.createEvent("click", {}, checkbox)
-		Syn.support.clickChecks = checkbox.checked;
-		checkbox.checked = false;
+	Syn.trigger("click", {}, checkbox)
+	Syn.support.clickChecks = checkbox.checked;
+	checkbox.checked = false;
+	
+	Syn.trigger("change", {}, checkbox);
+	
+	Syn.support.changeChecks = checkbox.checked;
+	
+	form.onsubmit = function(ev){
+		if (ev.preventDefault) 
+			ev.preventDefault();
+		submitted = true;
+		return false;
+	}
+	Syn.trigger("click", {}, submit)
+	if (submitted) {
+		Syn.support.clickSubmits = true;
+	}
 		
-		Syn.createEvent("change", {}, checkbox);
-		
-		Syn.support.changeChecks = checkbox.checked;
-		
-		form.onsubmit = function(ev){
-			if (ev.preventDefault) 
-				ev.preventDefault();
-			submitted = true;
-			return false;
-		}
-		Syn.createEvent("click", {}, submit)
-		if (submitted) {
-			Syn.support.clickSubmits = true;
-		}
-			
-		
-		form.childNodes[1].onchange = function(){
-			Syn.support.radioClickChanges = true;
-		}
-		Syn.createEvent("click", {}, form.childNodes[1])
-		
-		
-		
-
-		
-		//test if mousedown followed by mouseup causes click (opera)
-		div.onclick = function(){
-			Syn.support.mouseDownUpClicks = true;
-		}
-		Syn.createEvent("mousedown",{},div)
-		Syn.createEvent("mouseup",{},div)
-		
-		document.documentElement.removeChild(div);
-		
-		//check stuff
-		window.__synthTest = oldSynth;
-		//support.ready = true;
-	})();
+	
+	form.childNodes[1].onchange = function(){
+		Syn.support.radioClickChanges = true;
+	}
+	Syn.trigger("click", {}, form.childNodes[1])
+	
+	//test if mousedown followed by mouseup causes click (opera)
+	div.onclick = function(){
+		Syn.support.mouseDownUpClicks = true;
+	}
+	Syn.trigger("mousedown",{},div)
+	Syn.trigger("mouseup",{},div)
+	
+	document.documentElement.removeChild(div);
+	
+	//check stuff
+	window.__synthTest = oldSynth;
+	//support.ready = true;
+})();
 
 
 })

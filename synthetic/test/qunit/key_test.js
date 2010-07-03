@@ -293,3 +293,14 @@ test("Type with tabs", function(){
 		})
 	},1)
 })
+
+test("Type left and right", function(){
+	stop()
+	Syn('type',"012345678[left][left][left]\b",'key', function(){
+		equals( st.g('key').value, "01234678", "left works" );
+		Syn('type',"[right][right]a",'key', function(){
+			equals( st.g('key').value, "0123467a8", "right works" );
+			start();
+		})
+	})
+})
