@@ -441,5 +441,5 @@ steal(function(){
 
 	window.Syn = Syn;
 	
-}).then('mouse','browser_keys','keys','drag/drag');
+}).then('mouse','browsers','key','drag/drag');
 
