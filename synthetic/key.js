@@ -380,24 +380,7 @@ h.extend(Syn.create,{
 					return event;
 				}
 		}
-})
-
-
-
-
-
-var convert = {
-	"enter" : "\r",
-	"backspace" : "\b",
-	"tab" : "\t",
-	"space" : " "
-};
-
-
-
-
-
-
+});
 
 //do support code
 (function(){

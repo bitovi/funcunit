@@ -1,14 +1,12 @@
 //handles mosue events
 steal(function(){
 
-var h = Syn.helpers,
-	createEvent = Syn.createEvent,
-	browser = Syn.browser;
+var h = Syn.helpers;
 
 
 h.extend(Syn.defaults,{
 	mousedown : function(options){
-		createEvent("focus", {}, this)
+		Syn.createEvent("focus", {}, this)
 	},
 	click : function(){
 		// prevents the access denied issue in IE if the click causes the element to be destroyed
@@ -31,7 +29,7 @@ h.extend(Syn.defaults,{
 		
 		
 		//run href javascript
-		if(!support.linkHrefJS 
+		if(!Syn.support.linkHrefJS 
 			&& /^\s*javascript:/.test(element.href)){
 			//eval js
 			var code = element.href.replace(/^\s*javascript:/,"")
@@ -49,11 +47,11 @@ h.extend(Syn.defaults,{
 		//submit a form
 		if(nodeName == "input" 
 			&& element.type == "submit" 
-			&& !(support.clickSubmits)){
+			&& !(Syn.support.clickSubmits)){
 				
 			var form =  Syn.closest(element, "form");
 			if(form){
-				createEvent("submit",{},form)
+				Syn.createEvent("submit",{},form)
 			}
 			
 		}
@@ -70,25 +68,25 @@ h.extend(Syn.defaults,{
 		if(nodeName == "input" 
 			&& element.type == "checkbox"){
 			
-			if(!support.clickChecks && !support.changeChecks){
+			if(!Syn.support.clickChecks && !Syn.support.changeChecks){
 				element.checked = !element.checked;
 			}
-			if(!support.clickChanges)
-				createEvent("change",{},  element );
+			if(!Syn.support.clickChanges)
+				Syn.createEvent("change",{},  element );
 			
 		}
 		
 		//change a radio button
 		if(nodeName == "input" && element.type == "radio"){  // need to uncheck others if not checked
 			
-			if(!support.clickChecks && !support.changeChecks){
+			if(!Syn.support.clickChecks && !Syn.support.changeChecks){
 				//do the checks manually 
 				if(!element.checked){ //do nothing, no change
 					element.checked = true;
 				}
 			}
-			if(checked != element.checked && !support.radioClickChanges){
-				createEvent("change",{},  element );
+			if(checked != element.checked && !Syn.support.radioClickChanges){
+				Syn.createEvent("change",{},  element );
 			}
 		}
 		// change options
@@ -170,7 +168,7 @@ h.extend(Syn.create,{
 		setup : function(type,options, element){
 			var nn = element.nodeName.toLowerCase();
 			//we have to auto prevent default to prevent freezing error in safari
-			if(browser.safari && (nn == "select" || nn == "option" )){
+			if(Syn.browser.safari && (nn == "select" || nn == "option" )){
 				options._autoPrevent = true;
 			}
 			
@@ -178,12 +176,11 @@ h.extend(Syn.create,{
 		}
 	}
 });
-var support = Syn.support;
 //do support code
 (function(){
 		var oldSynth = window.__synthTest;
 		window.__synthTest = function(){
-			support.linkHrefJS = true;
+			Syn.support.linkHrefJS = true;
 		}
 		var div = document.createElement("div"), checkbox, submit, form, input, submitted = false;
 		div.innerHTML = "<form id='outer'>"+
@@ -203,16 +200,16 @@ var support = Syn.support;
 		
 		checkbox.checked = false;
 		checkbox.onchange = function(){
-			support.clickChanges = true;
+			Syn.support.clickChanges = true;
 		}
 
-		createEvent("click", {}, checkbox)
-		support.clickChecks = checkbox.checked;
+		Syn.createEvent("click", {}, checkbox)
+		Syn.support.clickChecks = checkbox.checked;
 		checkbox.checked = false;
 		
-		createEvent("change", {}, checkbox);
+		Syn.createEvent("change", {}, checkbox);
 		
-		support.changeChecks = checkbox.checked;
+		Syn.support.changeChecks = checkbox.checked;
 		
 		form.onsubmit = function(ev){
 			if (ev.preventDefault) 
@@ -220,16 +217,16 @@ var support = Syn.support;
 			submitted = true;
 			return false;
 		}
-		createEvent("click", {}, submit)
+		Syn.createEvent("click", {}, submit)
 		if (submitted) {
-			support.clickSubmits = true;
+			Syn.support.clickSubmits = true;
 		}
 			
 		
 		form.childNodes[1].onchange = function(){
-			support.radioClickChanges = true;
+			Syn.support.radioClickChanges = true;
 		}
-		createEvent("click", {}, form.childNodes[1])
+		Syn.createEvent("click", {}, form.childNodes[1])
 		
 		
 		
@@ -237,10 +234,10 @@ var support = Syn.support;
 		
 		//test if mousedown followed by mouseup causes click (opera)
 		div.onclick = function(){
-			support.mouseDownUpClicks = true;
+			Syn.support.mouseDownUpClicks = true;
 		}
-		createEvent("mousedown",{},div)
-		createEvent("mouseup",{},div)
+		Syn.createEvent("mousedown",{},div)
+		Syn.createEvent("mouseup",{},div)
 		
 		document.documentElement.removeChild(div);
 		
