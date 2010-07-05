@@ -112,6 +112,9 @@ steal(function(){
 	//set browser
 	Syn.key.browser = 
 	(function(){
+		if(Syn.key.browsers[window.navigator.userAgent]){
+			return Syn.key.browsers[window.navigator.userAgent];
+		}
 		for(var browser in Syn.browser){
 			if(Syn.browser[browser] && Syn.key.browsers[browser]){
 				return Syn.key.browsers[browser]

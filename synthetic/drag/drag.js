@@ -71,10 +71,11 @@ steal.plugins('funcunit/synthetic').then(function(){
 	};
 	
 	
-	Syn.init.prototype.drag = function(from){
-			var doc = this.scope.document;
-			var jq = this.scope.jQuery
-			if( !jQuery ) {
+	Syn.init.prototype.drag = function(options,from, callback){
+			var scope = Syn.helpers.getWindow(from)
+			var doc = scope.document,
+				jq = scope.jQuery
+			if( !jq ) {
 				throw "You need jQuery to perform drags in synthetic.js"
 			}
 			
@@ -103,6 +104,8 @@ steal.plugins('funcunit/synthetic').then(function(){
 			this.options.to = jq(this.options.to, doc)[0];
 			addxy('from', this.options);
 			addxy('to', this.options, true);
+			
+			
 			if(this.options.duration){
 				return new Drag(from, this.options)
 			}
@@ -112,6 +115,7 @@ steal.plugins('funcunit/synthetic').then(function(){
 			var x = this.options.from.x - scrollLeft;
 			var y = this.options.from.y - scrollTop;
 			var steps = this.options.steps || 100;
+			
 			this.type = 'mousedown';
 			this.options.clientX = x;
 			this.options.clientY = y;

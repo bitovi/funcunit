@@ -26,7 +26,13 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 
 /**
  * @constructor Syn
- * Creates a synthetic event on the element.
+ * Simulate user actions (self contained)
+ * - clicking, or typing something.
+ * - drag motions
+ * - create a basic event
+ * - add your own browser
+ * - roll your own testing framework
+ * - callbacks / chainable
  * 
  * @init 
  * Creates a synthetic event on the element.
@@ -340,7 +346,7 @@ extend(Syn,{
 				autoPrevent = options._autoPrevent;
 		
 		//any setup code?
-		setup && setup(type, options, element)
+		setup && setup(type, options, element);
 		
 		
 		//get kind
