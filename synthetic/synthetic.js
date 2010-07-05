@@ -12,6 +12,10 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 		mobilesafari: !!navigator.userAgent.match(/Apple.*Mobile.*Safari/),
 		rhino : navigator.userAgent.match(/Rhino/) && true
 	},
+	createEventObject = function(type, options, element){
+		var event = element.ownerDocument.createEventObject();
+		return extend(event, options);
+	},
 	data = {}, 
 	id = 0, 
 	expando = "_synthetic"+(new Date() - 0),
@@ -20,7 +24,18 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 	key = /keypress|keyup|keydown/,
 	page = /load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll/,
 
-//creates a new syn and returns its
+/**
+ * @constructor Syn
+ * Creates a synthetic event on the element.
+ * 
+ * @init 
+ * Creates a synthetic event on the element.
+ * @param {Object} type
+ * @param {Object} options
+ * @param {Object} element
+ * @param {Object} callback
+ * @return Syn
+ */
 Syn = function(type, options, element, callback){		
 	return ( new Syn.init(type, options, element, callback) )
 }
@@ -192,10 +207,7 @@ extend(Syn,{
 	browser: browser,
 	//some generic helpers
 	helpers : {
-		createEventObject : function(type, options, element){
-			var event = element.ownerDocument.createEventObject();
-			return extend(event, options);
-		},
+		createEventObject : createEventObject,
 		createBasicStandardEvent : function(type, defaults){
 			var event;
 			try {
@@ -272,7 +284,7 @@ extend(Syn,{
 					var event = element.ownerDocument.createEvent("Events");
 					event.initEvent(type, true, true ); 
 					return event;
-				} : h.createEventObject
+				} : createEventObject
 		},
 		// unique events
 		focus : {

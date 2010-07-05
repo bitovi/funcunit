@@ -18,6 +18,7 @@ getSelection = function(el){
 	}else{
 		//check if we aren't focused
 		if(document.activeElement && document.activeElement != el){
+			
 			return {start: el.value.length, end: el.value.length};
 		}
 		//try 2 different methods that work differently (IE breaks depending on type)
@@ -259,9 +260,12 @@ h.extend(Syn.key,{
 				if(sel.start == sel.end && sel.start > 0){
 					//remove a character
 					this.value = before.substring(0, before.length - 1)+after
+					Syn.selectText(this, sel.start-1)
 				}else{
 					this.value = before+after;
 				}
+				
+				//set back the selection
 			}	
 		},
 		'delete' : function(){
@@ -357,18 +361,14 @@ h.extend(Syn.key,{
 		},
 		'left' : function(){
 			if( Syn.typeable.test(this.nodeName) ){
-
 				var sel = getSelection(this);
-					
 				Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1)
 
 			}	
 		},
 		'right' : function(){
 			if( Syn.typeable.test(this.nodeName) ){
-
 				var sel = getSelection(this);
-					
 				Syn.selectText(this, sel.end+1 > this.value.length ? this.value.length  : sel.end+1)
 
 			}	
