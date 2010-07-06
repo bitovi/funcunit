@@ -98,7 +98,7 @@ steal(function(){
 			backgroundColor: "red",
 			position: "absolute",
 			zIndex: 19999,
-			lineHeight: "1px"
+			fontSize: "1px"
 		})
 		win.document.body.appendChild(cursor)
 		move();
