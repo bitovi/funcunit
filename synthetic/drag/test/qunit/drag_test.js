@@ -67,6 +67,7 @@ module("funcunit/synthetic/drag", {
 
 
 test("move", function(){
+	return;
 	var drags = {}, drops ={};
 	var div = $("<div id='wrap'>"+
 			"<div id='left'></div>"+
@@ -110,7 +111,7 @@ test("move", function(){
 		start : {clientX: 2, clientY: 50},
 		end :	{clientX: 199, clientY: 50},
 		duration: 1000
-	}, "green", function(){
+	}, "wrap", function(){
 		
 		equals(clientX, 199)
 		equals(clientY, 50)
