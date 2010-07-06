@@ -237,7 +237,16 @@ extend(Syn,{
 		getWindow : function(element){
 			return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
 		},
-		extend:  extend
+		extend:  extend,
+		scrollOffset : function(){
+			var doc = document.documentElement,
+				body = document.body;
+			return {
+				left :  (doc && doc.scrollLeft || body && body.scrollLeft || 0) + (doc.clientLeft || 0),
+				top : (doc && doc.scrollTop || body && body.scrollTop || 0) + (doc.clientTop || 0)
+			}
+				
+		}
 	},
 	// place for key data
 	key : {},

@@ -2,6 +2,39 @@ steal.plugins('funcunit/synthetic').then(function(){
 	
 	
 	var createEvent = Syn.createEvent,
+	//start and end are in clientX, clientY
+	startMove = function(start, end, duration, element, callback){
+		var startTime = new Date(),
+			distX =  end.clientX -start.clientX,
+			distY = end.clientY -start.clientY ;
+		
+		
+		var move = function(){
+			//get what fraction we are at
+			var now = new Date(),
+				scrollOffset = Syn.helpers.scrollOffset();
+			
+			var fraction =  (now - startTime) / duration,
+				options = {
+					clientX : distX * fraction+start.clientX,
+					clientY : distY * fraction+start.clientY
+				};
+			
+			if(fraction < 1){
+				var el = document.elementFromPoint(options.clientX, options.clientY);
+				Syn.trigger("mousemove",options,el)
+				setTimeout(arguments.callee, 15)
+			}else{
+				var el = document.elementFromPoint(end.clientX, end.clientY);
+				Syn.trigger("mousemove",end,el)
+				callback();
+			}
+			
+		}
+		
+		move();
+		
+	}
 	
 	Drag = function(target, options){
 		this.callback = options.callback;
@@ -71,8 +104,11 @@ steal.plugins('funcunit/synthetic').then(function(){
 	};
 	
 	
-	Syn.init.prototype.drag = function(options,from, callback){
-			var scope = Syn.helpers.getWindow(from)
+	Syn.init.prototype.move = function(options,from, callback){
+			
+			startMove(options.start, options.end, options.duration, from, callback);
+			return;
+			//var scope = Syn.helpers.getWindow(from)
 			var doc = scope.document,
 				jq = scope.jQuery
 			if( !jq ) {

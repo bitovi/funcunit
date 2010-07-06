@@ -116,8 +116,8 @@ h.extend(Syn.create,{
 				bubbles : true,cancelable : true,
 				view : window,detail : 1,
 				screenX : 1, screenY : 1,
-				clientX : center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
-				clientY : center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
+				clientX : options.clientX || center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
+				clientY : options.clientY || center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
 				ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
 				button : (type == 'contextmenu' ? 2 : 0), 
 				relatedTarget : document.documentElement
