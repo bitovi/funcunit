@@ -96,6 +96,9 @@ extend(Syn,{
 		for(var i=0; i < arguments.length; i++){
 			if(typeof arguments[i] == 'function'){
 				res.callback = arguments[i]
+				if(res.callback == Selenium.resume){
+					Selenium.pause();
+				}
 			}else if(arguments[i] && arguments[i].nodeName){
 				res.element = arguments[i];
 			}else if(res.options && typeof arguments[i] == 'string'){ //we can get by id

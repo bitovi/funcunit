@@ -443,7 +443,7 @@ FuncUnit._opened = function(){};
 	//list of jQuery functions we want
 	FuncUnit.funcs = [
 	
-	'synthetic', 
+	'triggerSyn', 
 	/**
 	 * @function size
 	 * Calls back with the size
@@ -670,7 +670,7 @@ FuncUnit.init.prototype = {
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Typing "+text+" on "+selector)
 			for (var c = 0; c < text.length; c++) {
-				FuncUnit.$(selector, context, "synthetic", "key", text.substr(c, 1))
+				FuncUnit.$(selector, context, "triggerSyn", "key", text.substr(c, 1))
 			}
 			
 			setTimeout(success, 13)
@@ -682,11 +682,30 @@ FuncUnit.init.prototype = {
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("dragging "+selector)
-			// new Synthetic("drag", {duration: 1, to: "#drop"}).send($("#drag")[0]);
-			FuncUnit.$(selector, context, "synthetic", "drag", options, FuncUnit.window)
+			// new triggerSyn("drag", {duration: 1, to: "#drop"}).send($("#drag")[0]);
+			FuncUnit.$(selector, context, "triggerSyn", "drag", options, FuncUnit.window)
 			setTimeout(success, 13)
 		}, callback, "Could not drag " + this.selector)
 		return this;
+	},
+	moveTo: function(to, options, callback){
+		options = options || {duration: 1000};
+		options.from = this.selector;
+		options.to = to;
+		var selector = this.selector, context = this.context;
+		FuncUnit.add(function(success, error){
+			steal.dev.log("moving "+selector)
+			// new triggerSyn("moving", {duration: 1, to: "#drop"}).send($("#drag")[0]);
+			FuncUnit.$(selector, context, "triggerSyn", "move", options, success)
+		}, callback, "Could not drag " + this.selector)
+		return this;
+		/*
+		Syn("move",{
+			from: "#start",
+			to: "#end",
+			duration: 1000
+		},"start")
+		*/
 	},
 	/**
 	 * Clicks an object
@@ -694,11 +713,11 @@ FuncUnit.init.prototype = {
 	 * @param {Object} callback
 	 */
 	click: function(options, callback){
+		options = options || {};
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Clicking "+selector)
-			FuncUnit.$(selector, context, "synthetic", "clicker", options, FuncUnit.window)
-			setTimeout(success, 23)
+			FuncUnit.$(selector, context, "triggerSyn", "click!", options, success)
 		}, callback, "Could not click " + this.selector)
 		return this;
 	}

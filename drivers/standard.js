@@ -132,17 +132,13 @@ steal(function() {
 		//convert context	
 		if (context == FuncUnit.window.document) {
 			context = FuncUnit._window.document
+		} else if (typeof context == "number" || typeof context == "string") {
+			context = FuncUnit._window.frames[context].document;
 		}
-		else 
-			if (typeof context == "number" || typeof context == "string") {
-				context = FuncUnit._window.frames[context].document;
-			}
-		
 		
 		if (FuncUnit._window.jQuery && parseFloat(FuncUnit._window.jQuery().jquery) >= 1.3) {
 			q = jQuery(FuncUnit._window.jQuery(selector, context).get());
-		}
-		else {
+		} else {
 			q = jQuery(selector, context);
 		}
 		

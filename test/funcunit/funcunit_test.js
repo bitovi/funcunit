@@ -10,6 +10,15 @@ test("Back to back opens", function(){
 	})
 })
 
+test("asynchronous test", function(){
+	S.open("test/drag.html", null, 10000);
+	S("#start").moveTo("#end")
+	S("#typer").type("javascriptmvc")
+	S("#typer").val(function(val){
+		equals(val, "javascriptmvc","move test worked correctly");
+	})
+})
+
 test("Copy Test", function(){
 
 	S.open("test/myapp.html", null, 10000);
@@ -32,7 +41,7 @@ test("Copy Test", function(){
 	})
 })
 
-test("drag test", function(){
+/*test("drag test", function(){
 	S("#drag").dragTo("#drop")
 	S("#drop").waitHasClass("dropover", true)
 	
@@ -41,7 +50,7 @@ test("drag test", function(){
 	
 	S.wait(2000)
 	S("#drag").dragTo({ x: "+100", y: "-100" })
-})
+})*/
 
 test("iframe", function(){
 	

@@ -80,12 +80,13 @@ steal(function(){
 			}
 			FuncUnit.$ = function(selector, context, method){
 				var args = FuncUnit.makeArray(arguments);
+				var callbackPresent = false;
 				for (var a = 0; a < args.length; a++) {
 					if (a == 1) { //context
 						if (args[a] == FuncUnit.window.document) {
 							args[a] = "_doc()"
 						}
-						else 
+						else {
 							if (typeof args[a] == "number") {
 								args[a] = "_win()[" + args[a] + "].document"
 							}
@@ -93,12 +94,24 @@ steal(function(){
 								if (typeof args[a] == "string") {
 									args[a] = "_win()['" + args[a] + "'].document"
 								}
+						}
 					}
-					else 
-						args[a] = convertToJson(args[a]);
+					else {
+						if (typeof args[a] == "function") {
+							callbackPresent = true;
+							var callback = args[a];
+							args[a] = "Selenium.resume";
+						}
+						else 
+							args[a] = convertToJson(args[a]);
+					}
 				}
 				var response = FuncUnit.selenium.getEval("jQuery.wrapped(" + args.join(',') + ")");
-				return eval("(" + response + ")")//  q[method].apply(q, args);
+				if(callbackPresent){
+					return callback( eval("(" + response + ")") )
+				} else {
+					return eval("(" + response + ")")//  q[method].apply(q, args);
+				}
 			}
 			
 			
