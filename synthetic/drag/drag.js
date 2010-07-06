@@ -1,6 +1,10 @@
 steal(function(){
 	// document body has to exists for this test
-	setTimeout(function(){
+	(function(){
+		if(!document.body){
+			setTimeout(arguments.callee,1)
+			return;
+		}
 		var div = document.createElement('div')
 		document.body.appendChild(div);
 		Syn.helpers.extend(div.style,{
@@ -10,7 +14,7 @@ steal(function(){
 			position: "absolute",
 			top: "10px",
 			left: "0px",
-			zIndex: 9999
+			zIndex: 19999
 		});
 		document.body.scrollTop = 11;
 		var el = document.elementFromPoint(3, 1)
@@ -21,7 +25,7 @@ steal(function(){
 		}
 		document.body.removeChild(div);
 		document.body.scrollTop = 0;
-	},1);
+	})();
 	
 	
 	//gets an element from a point
@@ -75,7 +79,6 @@ steal(function(){
 						clientX : distX * fraction+start.clientX,
 						clientY : distY * fraction+start.clientY
 					};
-				
 				if(fraction < 1){
 					Syn.helpers.extend(cursor.style,{
 						left: (options.clientX+scrollOffset.left+2)+"px",
@@ -93,7 +96,9 @@ steal(function(){
 			height: "5px",
 			width: "5px",
 			backgroundColor: "red",
-			position: "absolute"
+			position: "absolute",
+			zIndex: 19999,
+			lineHeight: "1px"
 		})
 		win.document.body.appendChild(cursor)
 		move();
@@ -120,26 +125,26 @@ steal(function(){
 		if(option.nodeName){
 			var j = jQuery(option)
 				o = j.offset();
-			options = {
+			option = {
 				pageX: o.left+ (j.width() / 2 ),
 				pageY: o.top + (j.height() / 2 )
 			}
 		}
-		if(options.pageX){
+		if(option.pageX){
 			var off = Syn.helpers.scrollOffset(win);
-			options = {
-				clientX : options.pageX - off.left,
-				clientY : options.pageY - off.top
+			option = {
+				clientX : option.pageX - off.left,
+				clientY : option.pageY - off.top
 			}
 		}
 				
-		return options;
+		return option;
 	}
 	
 	Syn.init.prototype.move = function(options,from, callback){
 		//need to convert if elements
 		var win =  Syn.helpers.getWindow(from),
-			fro = convertOption(options.from, win),
+			fro = convertOption(options.from || from, win),
 			to = convertOption(options.to, win);
 		
 		startMove(fro, to, options.duration, from, callback);
@@ -148,7 +153,7 @@ steal(function(){
 	Syn.init.prototype.drag = function(options,from, callback){
 		//need to convert if elements
 		var win =  Syn.helpers.getWindow(from),
-			fro = convertOption(options.from, win),
+			fro = convertOption(options.from || from, win),
 			to = convertOption(options.to, win);
 		
 		startDrag(fro, to, options.duration, from, callback);

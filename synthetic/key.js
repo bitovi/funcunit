@@ -428,7 +428,10 @@ h.extend(Syn.create,{
 
 //do support code
 (function(){
-
+	if(!document.body){
+		setTimeout(arguments.callee,1)
+		return;
+	}
 
 	var div = document.createElement("div"), 
 		checkbox, 

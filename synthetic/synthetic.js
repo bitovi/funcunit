@@ -305,11 +305,13 @@ extend(Syn,{
 		focus : {
 			event : function(type, options, element){
 				Syn.onParents(element, function(el){
-					if( Syn.isFocusable(el) ){
-						el.focus();
+					if( Syn.isFocusable(el)){
+						if(el.nodeName.toLowerCase() != 'html'){
+							el.focus();
+						}
 						return false
 					}
-				})
+				});
 				return true;
 			}
 		}
@@ -359,8 +361,6 @@ extend(Syn,{
 		
 		
 		//get kind
-
-			
 		
 		delete options._autoPrevent;
 			
