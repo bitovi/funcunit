@@ -357,6 +357,18 @@ extend(Syn,{
 				top : (doc && doc.scrollTop || body && body.scrollTop || 0) + (doc.clientTop || 0)
 			}
 				
+		},
+		addOffset : function(options, el){
+			if(typeof options == 'object' &&
+			   options.clientX === undefined &&
+			   options.clientY === undefined &&
+			   options.pageX   === undefined &&
+			   options.pageY   === undefined && window.jQuery){
+				var el = window.jQuery(el)
+					off = el.offset();
+				options.pageX = off.left + el.width() /2 ;
+				options.pageY = off.top + el.height() /2 ;
+			}
 		}
 	},
 	// place for key data
@@ -567,13 +579,33 @@ extend(Syn.init.prototype,{
 		
 	},
 	/**
-	 * Clicks an element, triggering a mousedown, mouseup, and a click event.
+	 * Clicks an element by triggering a mousedown, 
+	 * mouseup, 
+	 * and a click event.
+	 * <h3>Example</h3>
+	 * @codestart
+	 * Syn("click!",{},'create',function(){
+	 *   //check something
+	 * })
+	 * @codeend
+	 * You can also provide the coordinates of the click.  
+	 * If jQuery is present, it will set clientX and clientY
+	 * for you.  Here's how to set it yourself:
+	 * @codestart
+	 * Syn("click!",
+	 *     {clientX: 20, clientY: 100},
+	 *     'create',
+	 *     function(){
+	 *       //check something
+	 *     })
+	 * @codeend
+	 * You can also provide pageX and pageY and Syn will convert it for you.
 	 * @param {Object} options
-	 * @param {Object} element
-	 * @param {Object} callback
+	 * @param {HTMLElement} element
+	 * @param {Function} callback
 	 */
 	"click!" : function(options, element, callback){
-
+		Syn.helpers.addOffset(options, element);
 		Syn.trigger("mousedown", options, element);
 		
 		//timeout is b/c IE is stupid and won't call focus handlers
@@ -595,6 +627,7 @@ extend(Syn.init.prototype,{
 	 * @param {Object} callback
 	 */
 	"dblclick!" : function(options, element, callback){
+		Syn.helpers.addOffset(options);
 		var self = this;
 		this["click!"](options, element, function(){
 			self["click!"](options, element, function(){
@@ -714,24 +747,24 @@ extend(Syn.init.prototype,{
 	}
 })
 	
-	/**
-	 * Used for creating and dispatching synthetic events.
-	 * @codestart
-	 * new MVC.Syn('click').send(MVC.$E('id'))
-	 * @codeend
-	 * @init Sets up a synthetic event.
-	 * @param {String} type type of event, ex: 'click'
-	 * @param {optional:Object} options
-	 */
-	
-	if (window.jQuery) {
-		jQuery.fn.triggerSyn = function(type, options, callback){
-			Syn(type, options, this[0], callback)
-			return this;
-		};
-	}
+/**
+ * Used for creating and dispatching synthetic events.
+ * @codestart
+ * new MVC.Syn('click').send(MVC.$E('id'))
+ * @codeend
+ * @init Sets up a synthetic event.
+ * @param {String} type type of event, ex: 'click'
+ * @param {optional:Object} options
+ */
 
-	window.Syn = Syn;
+if (window.jQuery) {
+	jQuery.fn.triggerSyn = function(type, options, callback){
+		Syn(type, options, this[0], callback)
+		return this;
+	};
+}
+
+window.Syn = Syn;
 	
 }).then('mouse','browsers','key','drag/drag');
 

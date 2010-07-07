@@ -47,18 +47,20 @@ steal(function(){
 	}, //creates an event at a certain point
 	createEventAtPoint = function(event, point, element){
 		var el = elementFromPoint(point, element)
-		Syn.trigger(event, point, el)
+		Syn.trigger(event, point, el || element)
 		return el;
 	}, // creates a mousemove event, but first triggering mouseout / mouseover if appropriate
 	mouseMove = function(point, element, last){
 		var el = elementFromPoint(point, element)
-		if (last != el) {
-			Syn.trigger("mouseout", point, last);
-			Syn.trigger("mouseover", point, el);
-			//need to create mouseenter / mouseleave for IE
+		if (last != el && el) {
+			var options = Syn.helpers.extend({},point);
+			options.relatedTarget = el;
+			Syn.trigger("mouseout", options, last);
+			options.relatedTarget = last;
+			Syn.trigger("mouseover", options, el);
 		}
 		
-		Syn.trigger("mousemove", point, el)
+		Syn.trigger("mousemove", point, el || element)
 		return el;
 	}, // start and end are in clientX, clientY
 	startMove = function(start, end, duration, element, callback){
