@@ -1,6 +1,6 @@
 steal(function(){
 	// document body has to exists for this test
-if (!navigator.userAgent.match(/Rhino/)) {
+
 	(function(){
 		if (!document.body) {
 			setTimeout(arguments.callee, 1)
@@ -18,6 +18,9 @@ if (!navigator.userAgent.match(/Rhino/)) {
 			zIndex: 19999
 		});
 		document.body.scrollTop = 11;
+		if(!document.elementFromPoint){
+			return;
+		}
 		var el = document.elementFromPoint(3, 1)
 		if (el == div) {
 			Syn.support.elementFromClient = true;
@@ -125,19 +128,34 @@ if (!navigator.userAgent.match(/Rhino/)) {
 		
 		return option;
 	}
-	
-	Syn.init.prototype.move = function(options, from, callback){
+/**
+ * @add Syn prototype
+ */	
+Syn.helpers.extend(Syn.init.prototype,{
+	/**
+	 * Moves the cursor from one point to another
+	 * @param {Object} options
+	 * @param {Object} from
+	 * @param {Object} callback
+	 */
+	move : function(options, from, callback){
 		//need to convert if elements
 		var win = Syn.helpers.getWindow(from), fro = convertOption(options.from || from, win), to = convertOption(options.to, win);
 		
 		startMove(fro, to, options.duration, from, callback);
-	};
-	
-	Syn.init.prototype.drag = function(options, from, callback){
+	},
+	/**
+	 * Creates a mousedown and drags from one point to another.
+	 * @param {Object} options
+	 * @param {Object} from
+	 * @param {Object} callback
+	 */
+	drag : function(options, from, callback){
 		//need to convert if elements
 		var win = Syn.helpers.getWindow(from), fro = convertOption(options.from || from, win), to = convertOption(options.to, win);
 		
 		startDrag(fro, to, options.duration, from, callback);
 	}
-}
+})
+
 })

@@ -26,6 +26,36 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 
 /**
  * @constructor Syn
+ * Syn is used to simulate user actions.  It creates synthetic events and
+ * performs their default behaviors.
+ * 
+ * <h2>Basic Use</h2>
+ * The following clicks an input element with <code>id='description'</code>
+ * and then types <code>'Hello World'</code>.
+ * 
+@codestart
+Syn('click!',{},'description')
+  .then("type","Hello World")
+@codeend
+ * <h2>User Actions and Events</h2>
+ * <p>Syn is typically used to simulate user actions as opposed to triggering events. Typing characters
+ * is an example of a user action.  The keypress that represents an <code>'a'</code>
+ * character being typed is an example of an event. 
+ * </p>
+ * <p>
+ *   While triggering events is supported, it's much more useful to simulate actual user behavior.  The 
+ *   following actions are supported by Syn:
+ * </p>
+ * <ul>
+ *   <li><code>[Syn.prototype.click! click!]</code> - a mousedown, focus, mouseup, and click.</li>
+ *   <li><code>[Syn.prototype.dblclick! dblclick!]</code> - two <code>click!</code> events followed by a <code>dblclick</code>.</li>
+ *   <li><code>[Syn.prototype.key key]</code> - types a single character (keydown, keypress, keyup).</li>
+ *   <li><code>[Syn.prototype.type type]</code> - types multiple characters into an element.</li>
+ *   <li><code>[Syn.prototype.move move]</code> - moves the mouse from one position to another (triggering mouseover / mouseouts).</li>
+ *   <li><code>[Syn.prototype.drag drag]</code> - a mousedown, followed by mousemoves, and a mouseup.</li>
+ * </ul>
+ * All of these actions run asynchronously.   
+ * 
  * Simulate user actions (self contained)
  * - clicking, or typing something.
  * - drag motions
@@ -33,7 +63,37 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
  * - add your own browser
  * - roll your own testing framework
  * - callbacks / chainable
- * 
+ * <h2>Key Event Recording</h2>
+ * <p>Every browser has very different rules for dispatching key events.  
+ * As there is no way to feature detect how a browser handles key events,
+ * synthetic uses a description of how the browser behaves generated
+ * by a recording application.  </p>
+ * <p>
+ * If you want to support a browser not currently supported, you can
+ * record that browser's key event description and add it to
+ * <code>Syn.key.browsers<code> by it's navigator agent.
+ * </p>
+@codestart
+Syn.key.browsers["Envjs\ Resig/20070309 PilotFish/1.2.0.10\1.6"] = {
+  'prevent':
+    {"keyup":[],"keydown":["char","keypress"],"keypress":["char"]},
+  'character':
+    { ... }
+}
+@codeend
+ * <h2>Limitations</h2>
+ * Syn fully supports IE 6+, FF 3+, Chrome, Safari, Opera 10+.
+ * With FF 1+, drag / move events are only partially supported. They will
+ * not trigger mouseover / mouseout events.
+ * <h2>Contributing to Synthetic</h2>
+ * Have we missed something? We happily accept patches.  The following are 
+ * important objects and properties of Syn:
+ * <ul>
+ * 	<li><code>Syn.create</code> - contains methods to setup, convert options, and create an event of a specific type.</li>
+ *  <li><code>Syn.defaults</code> - default behavior by event type (except for keys).</li>
+ *  <li><code>Syn.key.defaults</code> - default behavior by key.</li>
+ *  <li><code>Syn.keycodes</code> - supported keys you can type.</li>
+ * </ul>
  * @init 
  * Creates a synthetic event on the element.
  * @param {Object} type
@@ -61,10 +121,13 @@ if(window.addEventListener){ // Mozilla, Netscape, Firefox
 		el.detachEvent("on"+ev, f)
 	}
 }	
-		
+/**
+ * @Static
+ */	
 extend(Syn,{
 	/**
 	 * Creates a new synthetic event instance
+	 * @hide
 	 * @param {Object} type
 	 * @param {Object} options
 	 * @param {Object} element
@@ -89,7 +152,8 @@ extend(Syn,{
 	},
 	/**
 	 * Returns an object with the args for a Syn.
-	 * @return {objec}
+	 * @hide
+	 * @return {Object}
 	 */
 	args : function(){
 		var res = {}
@@ -115,7 +179,7 @@ extend(Syn,{
 	 * Default actions for events.  Each default function is called with this as its 
 	 * element.  It should return true if a timeout 
 	 * should happen after it.  If it returns an element, a timeout will happen
-	 * and the next event will happen on that element.s
+	 * and the next event will happen on that element.
 	 */
 	defaults : {
 		focus : function(){
@@ -140,6 +204,7 @@ extend(Syn,{
 	},
 	/**
 	 * Returns the closest element of a particular type.
+	 * @hide
 	 * @param {Object} el
 	 * @param {Object} type
 	 */
@@ -151,6 +216,7 @@ extend(Syn,{
 	},
 	/**
 	 * adds jQuery like data (adds an expando) and data exists FOREVER :)
+	 * @hide
 	 * @param {Object} el
 	 * @param {Object} key
 	 * @param {Object} value
@@ -173,6 +239,7 @@ extend(Syn,{
 	/**
 	 * Calls a function on the element and all parents of the element until the function returns
 	 * false.
+	 * @hide
 	 * @param {Object} el
 	 * @param {Object} func
 	 */
@@ -188,6 +255,7 @@ extend(Syn,{
 	focusable : /^(a|area|frame|iframe|label|input|select|textarea|button|html|object)$/i,
 	/**
 	 * Returns if an element is focusable
+	 * @hide
 	 * @param {Object} elem
 	 */
 	isFocusable : function(elem){
@@ -198,6 +266,7 @@ extend(Syn,{
 	},
 	/**
 	 * Returns if an element is visible or not
+	 * @hide
 	 * @param {Object} elem
 	 */
 	isVisible : function(elem){
@@ -205,6 +274,7 @@ extend(Syn,{
 	},
 	/**
 	 * Gets the tabIndex as a number or null
+	 * @hide
 	 * @param {Object} elem
 	 */
 	tabIndex : function(elem){
@@ -256,6 +326,7 @@ extend(Syn,{
 	//triggers an event on an element, returns true if default events should be run
 	/**
 	 * Dispatches an event and returns true if default events should be run.
+	 * @hide
 	 * @param {Object} event
 	 * @param {Object} element
 	 * @param {Object} type
@@ -293,7 +364,8 @@ extend(Syn,{
 			),
 	/**
 	 * @attribute
-	 * creates an event of a particular type.
+	 * @hide
+	 * An object of eventType -> function that create that event.
 	 */
 	create :  {
 		//-------- PAGE EVENTS ---------------------
@@ -322,6 +394,18 @@ extend(Syn,{
 	/**
 	 * @attribute support
 	 * Feature detected properties of a browser's event system.
+	 * Support has the following properties:
+	 * <ul>
+	 * 	<li><code>clickChanges</code> - clicking on an option element creates a change event.</li>
+	 *  <li><code>clickSubmits</code> - clicking on a form button submits the form.</li>
+	 *  <li><code>mouseupSubmits</code> - a mouseup on a form button submits the form.</li>
+	 *  <li><code>radioClickChanges</code> - clicking a radio button changes the radio.</li>
+	 *  <li><code>focusChanges</code> - focus/blur creates a change event.</li>
+	 *  <li><code>linkHrefJS</code> - An achor's href JavaScript is run.</li>
+	 *  <li><code>mouseDownUpClicks</code> - A mousedown followed by mouseup creates a click event.</li>
+	 *  <li><code>tabKeyTabs</code> - A tab key changes tabs.</li>
+	 *  <li><code>keypressOnAnchorClicks</code> - Keying enter on an anchor triggers a click.</li>
+	 * </ul>
 	 */
 	support : {
 		clickChanges : false,
@@ -340,9 +424,11 @@ extend(Syn,{
 	/**
 	 * Creates a synthetic event and dispatches it on the element.  
 	 * This will run any default actions for the element.
-	 * @param {Object} type
+	 * Typically you want to use Syn, but if you want the return value, use this.
+	 * @param {String} type
 	 * @param {Object} options
-	 * @param {String} element
+	 * @param {HTMLElement} element
+	 * @return {Boolean} true if default events were run, false if otherwise.
 	 */
 	trigger : function(type, options, element){
 		options || (options = {});
@@ -395,156 +481,176 @@ extend(Syn,{
 			"tab" : "\t",
 			"space" : " "
 		};
-	//support code
-	
-	
-	extend(Syn.init.prototype,{
-		/**
-		 * Calls another synthetic event after the current ones are done running.
-		 * @param {Object} type
-		 * @param {Object} options
-		 * @param {Object} element
-		 * @param {Object} callback
-		 */
-		then : function(type, options, element, callback){
-			var args = Syn.args(options,element, callback),
-				self = this;
+/**
+ * @Prototype
+ */
+extend(Syn.init.prototype,{
+	/**
+	 * Calls another synthetic event after the current ones are done running.
+	 * If no element is provided, the last element is used.
+	 * @codestart
+	 * Syn('click!',{},'age')
+	 *   .then('type','I am 12')
+	 * @codeend
+	 * @param {Object} type
+	 * @param {Object} options
+	 * @param {Object} element
+	 * @param {Object} callback
+	 */
+	then : function(type, options, element, callback){
+		var args = Syn.args(options,element, callback),
+			self = this;
 
+		
+		//if stack is empty run right away
+		
+		//otherwise ... unshift it
+		this.queue.unshift(function(el, prevented){
 			
-			//if stack is empty run right away
-			
-			//otherwise ... unshift it
-			this.queue.unshift(function(el, prevented){
-				
-				if(typeof this[type] == "function") {
-					this.element = args.element || el;
-					this[type](args.options, this.element, function(defaults, el){
-						args.callback && args.callback.apply(self, arguments);
-						self.done.apply(self, arguments)		
-					})
-				}else{
-					this.result = Syn.trigger(type, args.options, args.element);
-					args.callback && args.callback.call(this, args.element, this.result);
-					return this;
-				}
-			})
-			return this;
-		},
-		done : function( defaults, el){
-			el && (this.element = el);;
-			if(this.queue.length){
-				this.queue.pop().call(this, this.element, defaults);
-			}
-			
-		},
-		/**
-		 * Clicks an element, triggering a mousedown, mouseup, and a click event.
-		 * @param {Object} options
-		 * @param {Object} element
-		 * @param {Object} callback
-		 */
-		"click!" : function(options, element, callback){
-
-			Syn.trigger("mousedown", options, element);
-			
-			//timeout is b/c IE is stupid and won't call focus handlers
-			setTimeout(function(){
-				Syn.trigger("mouseup", options, element)
-				if(!Syn.support.mouseDownUpClicks){
-					Syn.trigger("click", options, element)
-				}else{
-					//we still have to run the default (presumably)
-					Syn.defaults.click.call(element)
-				}
-				callback(true)
-			},1)
-		},
-		/**
-		 * Types a single key
-		 * @param {Object} options
-		 * @param {Object} element
-		 * @param {Object} callback
-		 */
-		key : function(options, element, callback){
-			
-			
-			var key = convert[options] || options,
-				// should we run default events
-				runDefaults = Syn.trigger('keydown',key, element ),
-				
-				// a function that gets the default behavior for a key
-				getDefault = Syn.key.getDefault,
-				
-				// how this browser handles preventing default events
-				prevent = Syn.key.browser.prevent,
-				
-				// the result of the default event
-				defaultResult,
-				
-				// options for keypress
-				keypressOptions = Syn.key.options(key, 'keypress')
-			
-			
-			if(runDefaults){
-				//if the browser doesn't create keypresses for this key, run default
-				if(!keypressOptions){
-					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
-				}else{
-					//do keypress
-					result = Syn.trigger('keypress',keypressOptions, element )
-					if(result){
-						defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
-					}
-				}
+			if(typeof this[type] == "function") {
+				this.element = args.element || el;
+				this[type](args.options, this.element, function(defaults, el){
+					args.callback && args.callback.apply(self, arguments);
+					self.done.apply(self, arguments)		
+				})
 			}else{
-				//canceled ... possibly don't run keypress
-				if(keypressOptions && h.inArray('keypress',prevent.keydown) == -1 ){
-					Syn.trigger('keypress',keypressOptions, element )
-				}
+				this.result = Syn.trigger(type, args.options, args.element);
+				args.callback && args.callback.call(this, args.element, this.result);
+				return this;
 			}
-			if(defaultResult && defaultResult.nodeName){
-				element = defaultResult
-			}
-			setTimeout(function(){
-				Syn.trigger('keyup',Syn.key.options(key, 'keyup'), element )
-				callback(result, element)
-			},1)
-			
-			//do mouseup
-			
-			return element;
-			// is there a keypress? .. if not , run default
-			// yes -> did we prevent it?, if not run ...
-			
-		},
-		/**
-		 * Types multiple characters
-		 * @param {Object} options
-		 * @param {Object} element
-		 * @param {Object} callback
-		 */
-		type : function(options, element, callback){
-			//break it up into parts ...
-			//go through each type and run
-			var parts = options.match(/(\[[^\]]+\])|([^\[])/g),
-				self  = this,
-				runNextPart = function(runDefaults, el){
-					var part = parts.shift();
-					if(!part){
-						callback(runDefaults, el);
-						return;
-					}
-					el = el || element;
-					if(part.length > 1){
-						part = part.substr(1,part.length - 2)
-					}
-					self.key(part, el, runNextPart)
-				}
-			
-			runNextPart();
-			
+		})
+		return this;
+	},
+	done : function( defaults, el){
+		el && (this.element = el);;
+		if(this.queue.length){
+			this.queue.pop().call(this, this.element, defaults);
 		}
-	})
+		
+	},
+	/**
+	 * Clicks an element, triggering a mousedown, mouseup, and a click event.
+	 * @param {Object} options
+	 * @param {Object} element
+	 * @param {Object} callback
+	 */
+	"click!" : function(options, element, callback){
+
+		Syn.trigger("mousedown", options, element);
+		
+		//timeout is b/c IE is stupid and won't call focus handlers
+		setTimeout(function(){
+			Syn.trigger("mouseup", options, element)
+			if(!Syn.support.mouseDownUpClicks){
+				Syn.trigger("click", options, element)
+			}else{
+				//we still have to run the default (presumably)
+				Syn.defaults.click.call(element)
+			}
+			callback(true)
+		},1)
+	},
+	/**
+	 * Dblclicks an element
+	 * @param {Object} options
+	 * @param {Object} element
+	 * @param {Object} callback
+	 */
+	"dblclick!" : function(options, element, callback){
+		var self = this;
+		this["click!"](options, element, function(){
+			self["click!"](options, element, function(){
+				Syn.trigger("dblclick", options, element)
+				callback(true)
+			})
+		})
+	},
+	/**
+	 * Types a single key
+	 * @param {Object} options
+	 * @param {Object} element
+	 * @param {Object} callback
+	 */
+	key : function(options, element, callback){
+		
+		
+		var key = convert[options] || options,
+			// should we run default events
+			runDefaults = Syn.trigger('keydown',key, element ),
+			
+			// a function that gets the default behavior for a key
+			getDefault = Syn.key.getDefault,
+			
+			// how this browser handles preventing default events
+			prevent = Syn.key.browser.prevent,
+			
+			// the result of the default event
+			defaultResult,
+			
+			// options for keypress
+			keypressOptions = Syn.key.options(key, 'keypress')
+		
+		
+		if(runDefaults){
+			//if the browser doesn't create keypresses for this key, run default
+			if(!keypressOptions){
+				defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
+			}else{
+				//do keypress
+				result = Syn.trigger('keypress',keypressOptions, element )
+				if(result){
+					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
+				}
+			}
+		}else{
+			//canceled ... possibly don't run keypress
+			if(keypressOptions && h.inArray('keypress',prevent.keydown) == -1 ){
+				Syn.trigger('keypress',keypressOptions, element )
+			}
+		}
+		if(defaultResult && defaultResult.nodeName){
+			element = defaultResult
+		}
+		setTimeout(function(){
+			Syn.trigger('keyup',Syn.key.options(key, 'keyup'), element )
+			callback(result, element)
+		},1)
+		
+		//do mouseup
+		
+		return element;
+		// is there a keypress? .. if not , run default
+		// yes -> did we prevent it?, if not run ...
+		
+	},
+	/**
+	 * Types multiple characters
+	 * @param {Object} options
+	 * @param {Object} element
+	 * @param {Object} callback
+	 */
+	type : function(options, element, callback){
+		//break it up into parts ...
+		//go through each type and run
+		var parts = options.match(/(\[[^\]]+\])|([^\[])/g),
+			self  = this,
+			runNextPart = function(runDefaults, el){
+				var part = parts.shift();
+				if(!part){
+					callback(runDefaults, el);
+					return;
+				}
+				el = el || element;
+				if(part.length > 1){
+					part = part.substr(1,part.length - 2)
+				}
+				self.key(part, el, runNextPart)
+			}
+		
+		runNextPart();
+		
+	}
+})
 	
 	/**
 	 * Used for creating and dispatching synthetic events.
