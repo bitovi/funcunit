@@ -296,24 +296,23 @@ test("Type with tabs", function(){
 
 test("Type left and right", function(){
 	stop()
-	st.g('key').focus()
+	Syn('type',"012345678[left][left][left]\b",'key', function(){
+		equals( st.g('key').value, "01234678", "left works" );
+		
+		
+			Syn('type',"[right][right]a",'key', function(){
+				equals( st.g('key').value, "0123467a8", "right works" );
+				start();
+			})
 
-		Syn('type',"012345678[left][left][left]\b",'key', function(){
-			equals( st.g('key').value, "01234678", "left works" );
-			
-			
-				Syn('type',"[right][right]a",'key', function(){
-					equals( st.g('key').value, "0123467a8", "right works" );
-					start();
-				})
-
-		})
+	})
 
 	
 });
 test("Typing Shift", function(){
 	stop()
-	st.g('key').focus()
+
+	
 	var shift = false;
 	st.binder('key','keypress', function(ev){
 		shift = ev.shiftKey
@@ -325,7 +324,7 @@ test("Typing Shift", function(){
 })
 test("Typing Shift then clicking", function(){
 	stop()
-	st.g('key').focus()
+
 	var shift = false;
 	st.binder('inner','click', function(ev){
 		shift = ev.shiftKey
@@ -341,18 +340,17 @@ test("Typing Shift then clicking", function(){
 
 test("Typing Shift Left and Right", function(){
 	stop()
-	st.g('key').focus()
 
 	Syn('type',"012345678[shift][left][left][left][shift-up]\b[left]\b",'key', function(){
 		equals( st.g('key').value, "01235", "shift left works" );
 
 		
 		
-			
+
 		Syn('type',"[left][left][shift][right][right]\b[shift-up]",'key', function(){
-			start();
-			equals( st.g('key').value, "015", "shift right works" );
 			
+			equals( st.g('key').value, "015", "shift right works" );
+			start();
 		})
 
 	})
