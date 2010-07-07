@@ -1,8 +1,4 @@
-module("funcunit/synthetic/drag", { 
-	setup: function(){
-
-	}
-});
+module("funcunit/synthetic/drag");
 
 
 test("move", function(){
@@ -45,7 +41,6 @@ test("move", function(){
 	$(document.documentElement).bind('mousemove',move )
 	
 	stop();
-	//setTimeout(function(){
 	Syn("move",{
 		from : {clientX: 2, clientY: 50},
 		to :	{clientX: 199, clientY: 50},
@@ -62,33 +57,7 @@ test("move", function(){
 		$("#qunit-test-area").html("")
 		start();
 	})
-		
-	//},13)
 	
-})
-
-test("dragging an element", function(){
-	/*Syn("drag", {to: "#midpoint"}, $("#drag")[0]);
-	ok(drags.draginit, "draginit fired correctly")
-	ok(drags.dragmove, "dragmove fired correctly")
-	ok(!drags.dragover,"dragover not fired yet")
-	
-	ok(!drops.dropover,"dropover fired correctly")
-	ok(!drops.dropon,	"dropon not fired yet")
-	ok(drops.dropend, 	"dropend fired")
-
-	Syn("drag", {to: "#drop"},$("#drag")[0]);
-	ok(drags.dragover,"dragover fired correctly")
-	
-	ok(drops.dropover, "dropmover fired correctly")
-	ok(drops.dropmove, "dropmove fired correctly")
-	ok(drops.dropon,	"dropon fired correctly")
-	
-	Syn("drag", {to: "#midpoint"}, $("#drag")[0] );
-	ok(drags.dragout, 	"dragout fired correctly")
-	
-	ok(drops.dropout, 	"dropout fired correctly")
-	$("#qunit-test-area").innerHTML = "";*/
 })
 
 test("dragging an element with duration", function(){
