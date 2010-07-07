@@ -96,7 +96,7 @@ extend(Syn,{
 		for(var i=0; i < arguments.length; i++){
 			if(typeof arguments[i] == 'function'){
 				res.callback = arguments[i]
-				if(res.callback == Selenium.resume){
+				if(typeof (Selenium) != "undefined" && res.callback == Selenium.resume){
 					Selenium.pause();
 				}
 			}else if(arguments[i] && arguments[i].nodeName){
