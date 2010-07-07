@@ -677,14 +677,14 @@ FuncUnit.init.prototype = {
 		}, callback, "Could not type " + text + " into " + this.selector)
 	},
 	dragTo: function(to, options, callback){
-		options = options || {};
+		options = options || {duration: 1000};
+		options.from = this.selector;
 		options.to = to;
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("dragging "+selector)
 			// new triggerSyn("drag", {duration: 1, to: "#drop"}).send($("#drag")[0]);
-			FuncUnit.$(selector, context, "triggerSyn", "drag", options, FuncUnit.window)
-			setTimeout(success, 13)
+			FuncUnit.$(selector, context, "triggerSyn", "drag", options, success)
 		}, callback, "Could not drag " + this.selector)
 		return this;
 	},
