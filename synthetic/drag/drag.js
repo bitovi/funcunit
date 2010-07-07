@@ -140,14 +140,80 @@ steal(function(){
  */	
 Syn.helpers.extend(Syn.init.prototype,{
 	/**
-	 * Moves the cursor from one point to another
+	 * Moves the cursor from one point to another.  
+	 * <h3>Quick Example</h3>
+	 * The following moves the cursor from (0,0) in
+	 * the window to (100,100) in 1 second.
+	 * @codestart
+	 * Syn( 'move',
+	 *      {
+	 *        from: {clientX: 0, clientY: 0},
+	 *        to: {clientX: 100, clientY: 100},
+	 *        duration: 1000
+	 *      },
+	 *      document.document)
+	 * @codeend
+	 * <h2>Options</h2>
+	 * There are many ways to configure the endpoints of the move.
+	 * 
+	 * <h3>PageX and PageY</h3>
+	 * If you pass pageX or pageY, these will get converted
+	 * to client coordinates.
+	 * @codestart
+	 * Syn( 'move',
+	 *      {
+	 *        from: {pageX: 0, pageY: 0},
+	 *        to: {pageX: 100, pageY: 100}
+	 *      },
+	 *      document.document)
+	 * @codeend
+	 * <h3>String Coordinates</h3>
+	 * You can set the pageX and pageY as strings like:
+	 * @codestart
+	 * Syn( 'move',
+	 *      {
+	 *        from: "0x0",
+	 *        to: "100x100"
+	 *      },
+	 *      document.document)
+	 * @codeend
+	 * <h3>Element Coordinates</h3>
+	 * If jQuery is present, you can pass an element as the from or to option
+	 * and the coordinate will be set as the center of the element.
+	 * @codestart
+	 * Syn( 'move',
+	 *      {
+	 *        from: $(".recipe")[0],
+	 *        to: $("#trash")[0]
+	 *      },
+	 *      document.document)
+	 * @codeend
+	 * <h3>Query Strings</h3>
+	 * If jQuery is present, you can pass a query string as the from or to option.
+	 * @codestart
+	 * Syn( 'move',
+	 *      {
+	 *        from: ".recipe",
+	 *        to: "#trash"
+	 *      },
+	 *      document.document)
+	 * @codeend   
+	 * <h3>No From</h3>
+	 * If you don't provide a from, the element argument passed to Syn is used.
+	 * @codestart
+	 * Syn( 'move',
+	 *      { to: "#trash" },
+	 *      'myrecipe')
+	 * @codeend  
 	 * @param {Object} options
-	 * @param {Object} from
-	 * @param {Object} callback
+	 * @param {HTMLElement} from
+	 * @param {Function} callback
 	 */
 	move : function(options, from, callback){
 		//need to convert if elements
-		var win = Syn.helpers.getWindow(from), fro = convertOption(options.from || from, win), to = convertOption(options.to, win);
+		var win = Syn.helpers.getWindow(from), 
+			fro = convertOption(options.from || from, win), 
+			to = convertOption(options.to || options, win);
 		
 		startMove(fro, to, options.duration, from, callback);
 	},
@@ -159,7 +225,9 @@ Syn.helpers.extend(Syn.init.prototype,{
 	 */
 	drag : function(options, from, callback){
 		//need to convert if elements
-		var win = Syn.helpers.getWindow(from), fro = convertOption(options.from || from, win), to = convertOption(options.to, win);
+		var win = Syn.helpers.getWindow(from), 
+			fro = convertOption(options.from || from, win), 
+			to = convertOption(options.to || options, win);
 		
 		startDrag(fro, to, options.duration, from, callback);
 	}

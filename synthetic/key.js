@@ -195,7 +195,21 @@ h.extend(Syn.key,{
 		}
 		return S.key.browser.character
 	},
-	// gets the options for a particular key and key event
+	//returns the special key if special
+	isSpecial : function(keyCode){
+		var specials = S.key.kinds.special;
+		for(var i=0; i < specials.length; i++){
+			if(Syn.keycodes[ specials[i] ] == keyCode){
+				return specials[i];
+			}
+		}
+	},
+	/**
+	 * @hide
+	 * gets the options for a key and event type ...
+	 * @param {Object} key
+	 * @param {Object} event
+	 */
 	options : function(key, event){
 		var keyData = Syn.key.data(key);
 		
@@ -403,69 +417,234 @@ h.extend(Syn.key,{
 		'left' : function(){
 			if( Syn.typeable.test(this.nodeName) ){
 				var sel = getSelection(this);
-				Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1)
-
+				
+				if(Syn.key.shiftKey){
+					Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1, sel.end)
+				}else{
+					Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1)
+				}
 			}	
 		},
 		'right' : function(){
 			if( Syn.typeable.test(this.nodeName) ){
 				var sel = getSelection(this);
-				Syn.selectText(this, sel.end+1 > this.value.length ? this.value.length  : sel.end+1)
-
+				
+				if(Syn.key.shiftKey){
+					Syn.selectText(this, sel.start, sel.end+1 > this.value.length ? this.value.length  : sel.end+1)
+				}else{
+					Syn.selectText(this, sel.end+1 > this.value.length ? this.value.length  : sel.end+1)
+				}
 			}	
+		},
+		'shift' : function(){
+			return null;
 		}
 	}
 });
 
 
 h.extend(Syn.create,{
+	keydown : {
+		setup : function(type, options, element){
+			if(h.inArray(options,Syn.key.kinds.special ) != -1){
+				Syn.key[options+"Key"] = element;
+			}
+		}
+	},
+	keyup : {
+		setup : function(type, options, element){
+			if(h.inArray(options,Syn.key.kinds.special )!= -1){
+				Syn.key[options+"Key"] = null;
+			}
+		}
+		},
 	key : {
-			// return the options for a key event
-			options : function(type, options, element){
-				//check if options is character or has character
-				options = typeof options != "object" ? {character : options} : options;
-				
-				//don't change the orignial
-				options = h.extend({}, options)
-				if(options.character){
-					h.extend(options, S.key.options(options.character, type));
-					delete options.character;
-				}
-				options = h.extend({
-					ctrlKey: false,
-					altKey: false,
-					shiftKey: false,
-					metaKey: false
-				}, options)
-				
-				return options;
-			},
-			// creates a key event
-			event : document.createEvent ? 
-				function(type, options, element){  //Everyone Else
-					var event;
-					
-					try {
+		// return the options for a key event
+		options : function(type, options, element){
+			//check if options is character or has character
+			options = typeof options != "object" ? {character : options} : options;
 			
-						event = element.ownerDocument.createEvent("KeyEvents");
-						event.initKeyEvent(type, true, true, window, 
-							options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
-							options.keyCode, options.charCode );
-					} catch(e) {
-						event = h.createBasicStandardEvent(type,options)
-					}
-					event.synthetic = true;
-					return event;
-	
-				} : 
-				function(type, options, element){
-					var event = h.createEventObject.apply(this,arguments);
-					h.extend(event, options)
-	
-					return event;
+			//don't change the orignial
+			options = h.extend({}, options)
+			if(options.character){
+				h.extend(options, S.key.options(options.character, type));
+				delete options.character;
+			}
+			
+			options = h.extend({
+				ctrlKey: !!Syn.key.ctrlKey,
+				altKey: !!Syn.key.altKey,
+				shiftKey: !!Syn.key.shiftKey,
+				metaKey: !!Syn.key.metaKey
+			}, options)
+			
+			return options;
+		},
+		// creates a key event
+		event : document.createEvent ? 
+			function(type, options, element){  //Everyone Else
+				var event;
+				
+				try {
+		
+					event = element.ownerDocument.createEvent("KeyEvents");
+					event.initKeyEvent(type, true, true, window, 
+						options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
+						options.keyCode, options.charCode );
+				} catch(e) {
+					event = h.createBasicStandardEvent(type,options)
 				}
+				event.synthetic = true;
+				return event;
+
+			} : 
+			function(type, options, element){
+				var event = h.createEventObject.apply(this,arguments);
+				h.extend(event, options)
+
+				return event;
+			}
 		}
 });
+
+var convert = {
+			"enter" : "\r",
+			"backspace" : "\b",
+			"tab" : "\t",
+			"space" : " "
+		}
+
+/**
+ * @add Syn prototype
+ */
+h.extend(Syn.init.prototype,
+{
+	/**
+	 * Types a single key.  The key should be
+	 * a string that matches a 
+	 * [Syn.keycodes].
+	 * 
+	 * The following sends a carridge return
+	 * to the 'name' element.
+	 * @codestart
+	 * Syn('key','\r','name')
+	 * @codeend
+	 * For each character, a keydown, keypress, and keyup is triggered if
+	 * appropriate.
+	 * @param {String} options
+	 * @param {HTMLElement} element
+	 * @param {Function} callback
+	 * @return {HTMLElement} the element currently focused.
+	 */
+	key : function(options, element, callback){
+		//first check if it is a special up
+		if(/-up$/.test(options) 
+			&& h.inArray(options.replace("-up",""),Syn.key.kinds.special )!= -1){
+			Syn.trigger('keyup',options.replace("-up",""), element )
+			callback(true, element);
+			return;
+		}
+		
+		
+		var key = convert[options] || options,
+			// should we run default events
+			runDefaults = Syn.trigger('keydown',key, element ),
+			
+			// a function that gets the default behavior for a key
+			getDefault = Syn.key.getDefault,
+			
+			// how this browser handles preventing default events
+			prevent = Syn.key.browser.prevent,
+			
+			// the result of the default event
+			defaultResult,
+			
+			// options for keypress
+			keypressOptions = Syn.key.options(key, 'keypress')
+		
+		
+		if(runDefaults){
+			//if the browser doesn't create keypresses for this key, run default
+			if(!keypressOptions){
+				defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
+			}else{
+				//do keypress
+				result = Syn.trigger('keypress',keypressOptions, element )
+				if(result){
+					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
+				}
+			}
+		}else{
+			//canceled ... possibly don't run keypress
+			if(keypressOptions && h.inArray('keypress',prevent.keydown) == -1 ){
+				Syn.trigger('keypress',keypressOptions, element )
+			}
+		}
+		if(defaultResult && defaultResult.nodeName){
+			element = defaultResult
+		}
+		
+		if(defaultResult !== null){
+			setTimeout(function(){
+				Syn.trigger('keyup',Syn.key.options(key, 'keyup'), element )
+				callback(result, element)
+			},1)
+		}else{
+			callback(result, element)
+		}
+		
+		
+		//do mouseup
+		
+		return element;
+		// is there a keypress? .. if not , run default
+		// yes -> did we prevent it?, if not run ...
+		
+	},
+	/**
+	 * Types sequence of key events.  Each
+	 * character is typed, one at a type.
+	 * Multi-character keys like 'left' should be
+	 * enclosed in square brackents.
+	 * 
+	 * The types 'JavaScript MVC' then deletes the space.
+	 * @codestart
+	 * Syn('type','JavaScript MVC[left][left][left]\b','name')
+	 * @codeend
+	 * 
+	 * Type is able to handle (and move with) tabs (\t).  
+	 * The following simulates tabing and entering values in a form and 
+	 * eventually submitting the form.
+	 * @codestart
+	 * Syn('type',"Justin\tMeyer\t27\tjustinbmeyer@gmail.com\r")
+	 * @codeend
+	 * @param {String} options
+	 * @param {HTMLElement} element
+	 * @param {Function} callback
+	 */
+	type : function(options, element, callback){
+		//break it up into parts ...
+		//go through each type and run
+		var parts = options.match(/(\[[^\]]+\])|([^\[])/g),
+			self  = this,
+			runNextPart = function(runDefaults, el){
+				var part = parts.shift();
+				if(!part){
+					callback(runDefaults, el);
+					return;
+				}
+				el = el || element;
+				if(part.length > 1){
+					part = part.substr(1,part.length - 2)
+				}
+				self.key(part, el, runNextPart)
+			}
+		
+		runNextPart();
+		
+	}
+});
+
 
 //do support code
 (function(){

@@ -118,7 +118,10 @@ h.extend(Syn.create,{
 				screenX : 1, screenY : 1,
 				clientX : options.clientX || center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
 				clientY : options.clientY || center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
-				ctrlKey : false, altKey : false, shiftKey : false, metaKey : false,
+				ctrlKey : !!Syn.key.ctrlKey, 
+				altKey : !!Syn.key.altKey, 
+				shiftKey : !!Syn.key.shiftKey, 
+				metaKey : !!Syn.key.metaKey,
 				button : (type == 'contextmenu' ? 2 : 0), 
 				relatedTarget : document.documentElement
 			}, options);

@@ -310,4 +310,50 @@ test("Type left and right", function(){
 		})
 
 	
+});
+test("Typing Shift", function(){
+	stop()
+	st.g('key').focus()
+	var shift = false;
+	st.binder('key','keypress', function(ev){
+		shift = ev.shiftKey
+	})
+	Syn('type',"[shift]A[shift-up]",'key',function(){
+		ok(shift,"Shift key on")
+		start();
+	})
+})
+test("Typing Shift then clicking", function(){
+	stop()
+	st.g('key').focus()
+	var shift = false;
+	st.binder('inner','click', function(ev){
+		shift = ev.shiftKey
+	})
+	Syn('type',"[shift]A",'key')
+		.then('click!',{},'inner')
+		.then('type',"[shift-up]",'key', function(){
+			ok(shift,"Shift key on click")
+			start();
+		})
+})
+
+
+test("Typing Shift Left and Right", function(){
+	stop()
+	st.g('key').focus()
+
+	Syn('type',"012345678[shift][left][left][left][shift-up]\b[left]\b",'key', function(){
+		equals( st.g('key').value, "01235", "shift left works" );
+
+		
+		
+			
+		Syn('type',"[left][left][shift][right][right]\b[shift-up]",'key', function(){
+			start();
+			equals( st.g('key').value, "015", "shift right works" );
+			
+		})
+
+	})
 })

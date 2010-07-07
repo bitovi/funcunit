@@ -26,6 +26,8 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 
 /**
  * @constructor Syn
+ * @download funcunit/dist/syn.js
+ * @test funcunit/synthetic/qunit.html
  * Syn is used to simulate user actions.  It creates synthetic events and
  * performs their default behaviors.
  * 
@@ -93,14 +95,6 @@ If jQuery is present, Syn adds a triggerSyn helper you can use like:
 @codestart
 $("#description").triggerSyn("type","Hello World");
 @codeend
-
- * Simulate user actions (self contained)
- * - clicking, or typing something.
- * - drag motions
- * - create a basic event
- * - add your own browser
- * - roll your own testing framework
- * - callbacks / chainable
  * <h2>Key Event Recording</h2>
  * <p>Every browser has very different rules for dispatching key events.  
  * As there is no way to feature detect how a browser handles key events,
@@ -109,7 +103,7 @@ $("#description").triggerSyn("type","Hello World");
  * <p>
  * If you want to support a browser not currently supported, you can
  * record that browser's key event description and add it to
- * <code>Syn.key.browsers<code> by it's navigator agent.
+ * <code>Syn.key.browsers</code> by it's navigator agent.
  * </p>
 @codestart
 Syn.key.browsers["Envjs\ Resig/20070309 PilotFish/1.2.0.10\1.6"] = {
@@ -132,6 +126,11 @@ Syn.key.browsers["Envjs\ Resig/20070309 PilotFish/1.2.0.10\1.6"] = {
  *  <li><code>Syn.key.defaults</code> - default behavior by key.</li>
  *  <li><code>Syn.keycodes</code> - supported keys you can type.</li>
  * </ul>
+ * <h2>Roll Your Own Functional Test Framework</h2>
+ * <p>Syn is really the foundation of JavaScriptMVC's functional testing framework - [FuncUnit].
+ *   But, we've purposefully made Syn work without any dependencies in the hopes that other frameworks or 
+ *   testing solutions can use it as well.
+ * </p>
  * @init 
  * Creates a synthetic event on the element.
  * @param {Object} type
@@ -372,7 +371,12 @@ extend(Syn,{
 		}
 	},
 	// place for key data
-	key : {},
+	key : {
+		ctrlKey : null,
+		altKey : null,
+		shiftKey : null,
+		metaKey : null
+	},
 	//triggers an event on an element, returns true if default events should be run
 	/**
 	 * Dispatches an event and returns true if default events should be run.
@@ -524,28 +528,32 @@ extend(Syn,{
 	}
 	
 });
-	var h = Syn.helpers,
-		convert = {
-			"enter" : "\r",
-			"backspace" : "\b",
-			"tab" : "\t",
-			"space" : " "
-		};
+	var h = Syn.helpers;
 /**
  * @Prototype
  */
 extend(Syn.init.prototype,{
 	/**
-	 * Calls another synthetic event after the current ones are done running.
-	 * If no element is provided, the last element is used.
+	 * @function then
+	 * <p>
+	 * Then is used to chain a sequence of actions to be run one after the other.
+	 * This is useful when many asynchronous actions need to be performed before some
+	 * final check needs to be made.
+	 * </p>
+	 * <p>The following clicks and types into the <code>id='age'</code> element and then checks that only numeric characters can be entered.</p>
+	 * <h3>Example</h3>
 	 * @codestart
 	 * Syn('click!',{},'age')
-	 *   .then('type','I am 12')
+	 *   .then('type','I am 12',function(){
+	 *   equals($('#age').val(),"12")  
+	 * })
 	 * @codeend
-	 * @param {Object} type
-	 * @param {Object} options
-	 * @param {Object} element
-	 * @param {Object} callback
+	 * If the element argument is undefined, then the last element is used.
+	 * 
+	 * @param {String} type The type of event or action to create: "click!", "dblclick!", "drag", "type".
+	 * @param {Object} options Optiosn to pass to the event.
+	 * @param {String|HTMLElement} [element] A element's id or an element.  If undefined, defaults to the previous element.
+	 * @param {Function} [callback] A function to callback after the action has run, but before any future chained actions are run.
 	 */
 	then : function(type, options, element, callback){
 		var args = Syn.args(options,element, callback),
@@ -621,10 +629,15 @@ extend(Syn.init.prototype,{
 		},1)
 	},
 	/**
-	 * Dblclicks an element
+	 * Dblclicks an element.  This runs two [Syn.prototype.click! click!] events followed by
+	 * a dblclick on the element.
+	 * <h3>Example</h3>
+	 * @codestart
+	 * Syn("dblclick!",{},'open')
+	 * @codeend
 	 * @param {Object} options
-	 * @param {Object} element
-	 * @param {Object} callback
+	 * @param {HTMLElement} element
+	 * @param {Function} callback
 	 */
 	"dblclick!" : function(options, element, callback){
 		Syn.helpers.addOffset(options);
@@ -635,115 +648,6 @@ extend(Syn.init.prototype,{
 				callback(true)
 			})
 		})
-	},
-	/**
-	 * Types a single key.  The key should be
-	 * a string that matches a 
-	 * [Syn.keycodes].
-	 * 
-	 * The following sends a carridge return
-	 * to the 'name' element.
-	 * @codestart
-	 * Syn('key','\r','name')
-	 * @codeend
-	 * For each character, a keydown, keypress, and keyup is triggered if
-	 * appropriate.
-	 * @param {String} options
-	 * @param {HTMLElement} element
-	 * @param {Function} callback
-	 * @return {HTMLElement} the element currently focused.
-	 */
-	key : function(options, element, callback){
-		var key = convert[options] || options,
-			// should we run default events
-			runDefaults = Syn.trigger('keydown',key, element ),
-			
-			// a function that gets the default behavior for a key
-			getDefault = Syn.key.getDefault,
-			
-			// how this browser handles preventing default events
-			prevent = Syn.key.browser.prevent,
-			
-			// the result of the default event
-			defaultResult,
-			
-			// options for keypress
-			keypressOptions = Syn.key.options(key, 'keypress')
-		
-		
-		if(runDefaults){
-			//if the browser doesn't create keypresses for this key, run default
-			if(!keypressOptions){
-				defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
-			}else{
-				//do keypress
-				result = Syn.trigger('keypress',keypressOptions, element )
-				if(result){
-					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
-				}
-			}
-		}else{
-			//canceled ... possibly don't run keypress
-			if(keypressOptions && h.inArray('keypress',prevent.keydown) == -1 ){
-				Syn.trigger('keypress',keypressOptions, element )
-			}
-		}
-		if(defaultResult && defaultResult.nodeName){
-			element = defaultResult
-		}
-		setTimeout(function(){
-			Syn.trigger('keyup',Syn.key.options(key, 'keyup'), element )
-			callback(result, element)
-		},1)
-		
-		//do mouseup
-		
-		return element;
-		// is there a keypress? .. if not , run default
-		// yes -> did we prevent it?, if not run ...
-		
-	},
-	/**
-	 * Types sequence of key events.  Each
-	 * character is typed, one at a type.
-	 * Multi-character keys like 'left' should be
-	 * enclosed in square brackents.
-	 * 
-	 * The types 'JavaScript MVC' then deletes the space.
-	 * @codestart
-	 * Syn('type','JavaScript MVC[left][left][left]\b','name')
-	 * @codeend
-	 * 
-	 * Type is able to handle (and move with) tabs (\t).  
-	 * The following simulates tabing and entering values in a form and 
-	 * eventually submitting the form.
-	 * @codestart
-	 * Syn('type',"Justin\tMeyer\t27\tjustinbmeyer@gmail.com\r")
-	 * @codeend
-	 * @param {String} options
-	 * @param {HTMLElement} element
-	 * @param {Function} callback
-	 */
-	type : function(options, element, callback){
-		//break it up into parts ...
-		//go through each type and run
-		var parts = options.match(/(\[[^\]]+\])|([^\[])/g),
-			self  = this,
-			runNextPart = function(runDefaults, el){
-				var part = parts.shift();
-				if(!part){
-					callback(runDefaults, el);
-					return;
-				}
-				el = el || element;
-				if(part.length > 1){
-					part = part.substr(1,part.length - 2)
-				}
-				self.key(part, el, runNextPart)
-			}
-		
-		runNextPart();
-		
 	}
 })
 	

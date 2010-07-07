@@ -85,13 +85,13 @@
 		return document.getElementById(id)
 	},
 	bind = function(el, ev, func){
-		Synthetic.bind(gId(el.replace("\\","\\\\")), ev,func);
+		Syn.bind(gId(el.replace("\\","\\\\")), ev,func);
 	};
 	$(function(){
 		$("#ua").html(window.navigator.userAgent)
 	});
 	
-	var keycodes = Synthetic.keycodes,
+	var keycodes = Syn.keycodes,
 	special = {
 		backspace : "\b",
 		tab : "\t",
