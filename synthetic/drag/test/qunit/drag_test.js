@@ -107,7 +107,6 @@ test("dragging an element with duration", function(){
 	var basicCss = {
 		width: "20px",
 		height: "20px",
-		position: "absolute",
 		border: "solid 1px black"
 	}
 	$("#drag").css(basicCss).css({top: "300px", left: "0px", backgroundColor: "green", zIndex: 99})
