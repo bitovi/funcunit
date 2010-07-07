@@ -65,10 +65,13 @@ steal(function(){
 		var startTime = new Date(), distX = end.clientX - start.clientX, distY = end.clientY - start.clientY, win = Syn.helpers.getWindow(element), current = elementFromPoint(start, element), cursor = win.document.createElement('div')
 		move = function(){
 			//get what fraction we are at
-			var now = new Date(), scrollOffset = Syn.helpers.scrollOffset(win), fraction = (now - startTime) / duration, options = {
-				clientX: distX * fraction + start.clientX,
-				clientY: distY * fraction + start.clientY
-			};
+			var now = new Date(), 
+				scrollOffset = Syn.helpers.scrollOffset(win), 
+				fraction = (now - startTime) / duration, 
+				options = {
+					clientX: distX * fraction + start.clientX,
+					clientY: distY * fraction + start.clientY
+				};
 			if (fraction < 1) {
 				Syn.helpers.extend(cursor.style, {
 					left: (options.clientX + scrollOffset.left + 2) + "px",
@@ -93,13 +96,15 @@ steal(function(){
 		})
 		win.document.body.appendChild(cursor)
 		move();
-	}, startDrag = function(start, end, duration, element, callback){
+	}, 
+	startDrag = function(start, end, duration, element, callback){
 		createEventAtPoint("mousedown", start, element);
 		startMove(start, end, duration, element, function(){
 			createEventAtPoint("mouseup", end, element);
 			callback();
 		})
-	}, convertOption = function(option, win){
+	}, 
+	convertOption = function(option, win){
 		var reg = /(\d+)x(\d+)/
 		if (typeof option == 'string' && reg.test(option)) {
 			option = {

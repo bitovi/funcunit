@@ -57,9 +57,50 @@ getFocusable = function(el){
 	
 };
 
-
+/**
+ * @add Syn static
+ */
 h.extend(Syn,{
-	// key codes for a standard english keyboard
+	/**
+	 * @attribute
+	 * A list of the keys and their keycodes codes you can type.
+	 * You can add type keys with
+	 * @codestart
+	 * Syn('key','delete','title');
+	 * 
+	 * //or 
+	 * 
+	 * Syn('type','One Two Three[left][left][delete]','title')
+	 * @codeend
+	 * 
+	 * The following are a list of keys you can type:
+	 * @codestart text
+	 * \b        - backspace
+	 * \t        - tab
+	 * \r        - enter
+	 * ' '       - space
+	 * a-Z 0-9   - normal characters
+	 * /!@#$*,.? - All other typeable characters
+	 * page-up   - scrolls up
+	 * page-down - scrolls down
+	 * end       - scrolls to bottom
+	 * home      - scrolls to top
+	 * insert    - changes how keys are entered
+	 * delete    - deletes the next character
+	 * left      - moves cursor left
+	 * right     - moves cursor right
+	 * up        - moves the cursor up
+	 * down      - moves the cursor down
+	 * f1-12     - function buttons
+	 * shift, ctrl, alt - special keys
+	 * pause-break      - the pause button
+	 * scroll-lock      - locks scrolling
+	 * caps      - makes caps
+	 * escape    - escape button
+	 * num-lock  - allows numbers on keypad
+	 * print     - screen capture
+	 * @codeend
+	 */
 	keycodes: {
 		//backspace
 		'\b':'8',
@@ -303,14 +344,14 @@ h.extend(Syn.key,{
 				Syn.trigger("click", {}, this);
 			}
 		},
-		/**
-		 * Gets all focusable elements.  If the element (this)
-		 * doesn't have a tabindex, finds the next element after.
-		 * If the element (this) has a tabindex finds the element 
-		 * with the next higher tabindex OR the element with the same
-		 * tabindex after it in the document.
-		 * @return the next element
-		 */
+		// 
+		// Gets all focusable elements.  If the element (this)
+		// doesn't have a tabindex, finds the next element after.
+		// If the element (this) has a tabindex finds the element 
+		// with the next higher tabindex OR the element with the same
+		// tabindex after it in the document.
+		// @return the next element
+		// 
 		'\t' : function(options, scope){
 				// focusable elements
 			var focusEls = getFocusable(this),

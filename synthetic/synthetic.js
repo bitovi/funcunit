@@ -54,8 +54,46 @@ Syn('click!',{},'description')
  *   <li><code>[Syn.prototype.move move]</code> - moves the mouse from one position to another (triggering mouseover / mouseouts).</li>
  *   <li><code>[Syn.prototype.drag drag]</code> - a mousedown, followed by mousemoves, and a mouseup.</li>
  * </ul>
- * All of these actions run asynchronously.   
- * 
+ * All actions run asynchronously.  
+ * Click on the links above for more 
+ * information on how to use the specific action.
+ * <h2>Asynchronous Callbacks</h2>
+ * Actions don't complete immediately. This is almost 
+ * entirely because <code>focus()</code> 
+ * doesn't run immediately in IE.
+ * If you provide a callback function to Syn, it will 
+ * be called after the action is completed.
+ * <br/>The following checks that "Hello World" was entered correctly: 
+@codestart
+Syn('click!',{},'description')
+  .then("type","Hello World", function(){
+  
+  ok("Hello World" == document.getElementById('description').value)  
+})
+@codeend
+<h2>Asynchronous Chaining</h2>
+<p>You might have noticed the [Syn.prototype.then then] method.  It provides chaining 
+so you can do a sequence of events with a single (final) callback.  
+</p><p>
+If an element isn't provided to then, it uses the previous Syn's element.
+</p>
+The following does a lot of stuff before checking the result:
+@codestart
+Syn('type','ice water','title')
+  .then('type','ice and water','description')
+  .then('click!',{},'create')
+  .then('drag',{to: 'favorites'},'newRecipe',
+    function(){
+      ok($('#newRecipe').parents('#favorites').length);
+    })
+@codeend
+
+<h2>jQuery Helper</h2>
+If jQuery is present, Syn adds a triggerSyn helper you can use like:
+@codestart
+$("#description").triggerSyn("type","Hello World");
+@codeend
+
  * Simulate user actions (self contained)
  * - clicking, or typing something.
  * - drag motions
@@ -566,14 +604,23 @@ extend(Syn.init.prototype,{
 		})
 	},
 	/**
-	 * Types a single key
-	 * @param {Object} options
-	 * @param {Object} element
-	 * @param {Object} callback
+	 * Types a single key.  The key should be
+	 * a string that matches a 
+	 * [Syn.keycodes].
+	 * 
+	 * The following sends a carridge return
+	 * to the 'name' element.
+	 * @codestart
+	 * Syn('key','\r','name')
+	 * @codeend
+	 * For each character, a keydown, keypress, and keyup is triggered if
+	 * appropriate.
+	 * @param {String} options
+	 * @param {HTMLElement} element
+	 * @param {Function} callback
+	 * @return {HTMLElement} the element currently focused.
 	 */
 	key : function(options, element, callback){
-		
-		
 		var key = convert[options] || options,
 			// should we run default events
 			runDefaults = Syn.trigger('keydown',key, element ),
@@ -624,10 +671,25 @@ extend(Syn.init.prototype,{
 		
 	},
 	/**
-	 * Types multiple characters
-	 * @param {Object} options
-	 * @param {Object} element
-	 * @param {Object} callback
+	 * Types sequence of key events.  Each
+	 * character is typed, one at a type.
+	 * Multi-character keys like 'left' should be
+	 * enclosed in square brackents.
+	 * 
+	 * The types 'JavaScript MVC' then deletes the space.
+	 * @codestart
+	 * Syn('type','JavaScript MVC[left][left][left]\b','name')
+	 * @codeend
+	 * 
+	 * Type is able to handle (and move with) tabs (\t).  
+	 * The following simulates tabing and entering values in a form and 
+	 * eventually submitting the form.
+	 * @codestart
+	 * Syn('type',"Justin\tMeyer\t27\tjustinbmeyer@gmail.com\r")
+	 * @codeend
+	 * @param {String} options
+	 * @param {HTMLElement} element
+	 * @param {Function} callback
 	 */
 	type : function(options, element, callback){
 		//break it up into parts ...
