@@ -12,7 +12,7 @@ if (typeof plugin != "string") {
 	exclude = plugin.exclude || [];
 	plugin = plugin.plugin;
 }
-fileName = plugin+".js";
+fileName = "syn.js";
 fileDest = "funcunit/dist/"+fileName
 cmd = "js steal/scripts/pluginify.js funcunit/"+plugin+" -destination "+fileDest+" -noJQuery";
 runCommand(	"cmd", "/C", cmd)
