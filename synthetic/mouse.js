@@ -1,5 +1,5 @@
 //handles mosue events
-steal(function(){
+steal.then(function(){
 
 var h = Syn.helpers;
 

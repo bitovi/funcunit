@@ -1,4 +1,4 @@
-steal(function(){
+steal.then(function(){
 	Syn.key.browsers = {
 		webkit : {
 			'prevent':

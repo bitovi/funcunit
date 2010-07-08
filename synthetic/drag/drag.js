@@ -1,4 +1,4 @@
-steal(function(){
+steal.then(function(){
 	// document body has to exists for this test
 
 	(function(){
