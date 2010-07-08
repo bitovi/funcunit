@@ -591,18 +591,42 @@ FuncUnit._opened = function(){};
 })();
 
 FuncUnit.existsFuncs = [
+	/**
+	 * @function exists
+	 * Continues the test once a given element exists in the page
+	 * @param {Function} cb a callback that is run once the condition is satisfied
+	 * @param {Number} timeout the timeout value (in ms) before this test should fail
+	 */
 	{
 		name: "exists", 
 		func: function(){ return FuncUnit.$(this.selector, this.context, "size"); }
 	},
+	/**
+	 * @function missing
+	 * Continues the test once a given element does NOT exist in the page
+	 * @param {Function} cb a callback that is run once the condition is satisfied
+	 * @param {Number} timeout the timeout value (in ms) before this test should fail
+	 */
 	{
 		name: "missing", 
 		func: function(){ return !FuncUnit.$(this.selector, this.context, "size"); }
 	},
+	/**
+	 * @function visible
+	 * Continues the test once a given element is visible in the page
+	 * @param {Function} cb a callback that is run once the condition is satisfied
+	 * @param {Number} timeout the timeout value (in ms) before this test should fail
+	 */
 	{
 		name: "visible", 
 		func: function(){ return FuncUnit.$(this.selector+":visible", this.context, "size"); }
 	},
+	/**
+	 * @function invisible
+	 * Continues the test once a given element is invisible in the page
+	 * @param {Function} cb a callback that is run once the condition is satisfied
+	 * @param {Number} timeout the timeout value (in ms) before this test should fail
+	 */
 	{
 		name: "invisible", 
 		func: function(){ return !FuncUnit.$(this.selector+":visible", this.context, "size"); }
@@ -638,6 +662,11 @@ FuncUnit.init.prototype = {
 			FuncUnit.$(selector, context, "triggerSyn", "type", text, success)
 		}, callback, "Could not type " + text + " into " + this.selector)
 	},
+	/**
+	 * Drags an object into another object, or coordinates
+	 * @param {Object} to
+	 * @param {Object} options
+	 */
 	dragTo: function(to, options, callback){
 		options = options || {duration: 1000};
 		options.from = this.selector;
@@ -649,6 +678,11 @@ FuncUnit.init.prototype = {
 		}, callback, "Could not drag " + this.selector)
 		return this;
 	},
+	/**
+	 * Move a mouse cursor from one page element to another, or uses coordinates
+	 * @param {Object} to
+	 * @param {Object} options
+	 */
 	moveTo: function(to, options, callback){
 		options = options || {duration: 1000};
 		options.from = this.selector;
@@ -657,7 +691,7 @@ FuncUnit.init.prototype = {
 		FuncUnit.add(function(success, error){
 			steal.dev.log("moving "+selector)
 			FuncUnit.$(selector, context, "triggerSyn", "move", options, success)
-		}, callback, "Could not drag " + this.selector)
+		}, callback, "Could not move " + this.selector)
 		return this;
 	},
 	/**
