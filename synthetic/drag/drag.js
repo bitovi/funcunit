@@ -215,7 +215,7 @@ Syn.helpers.extend(Syn.init.prototype,{
 			fro = convertOption(options.from || from, win), 
 			to = convertOption(options.to || options, win);
 		
-		startMove(fro, to, options.duration, from, callback);
+		startMove(fro, to, options.duration || 500, from, callback);
 	},
 	/**
 	 * Creates a mousedown and drags from one point to another.
@@ -229,7 +229,7 @@ Syn.helpers.extend(Syn.init.prototype,{
 			fro = convertOption(options.from || from, win), 
 			to = convertOption(options.to || options, win);
 		
-		startDrag(fro, to, options.duration, from, callback);
+		startDrag(fro, to, options.duration || 500, from, callback);
 	}
 })
 

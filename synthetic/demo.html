@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>Demo Page</title>
+		<link type="text/css" href="../../phui/smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+		<link type="text/css" href="../../phui/resizable/resizable.css" rel="stylesheet" />
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			
+			#first {
+				border: solid 1px;
+				height: 200px;width: 200px;
+			}
+        </style>
+	</head>
+	<body>
+		<div class='tabarea'>
+		    <ul id="uitabs">
+		        <li><a href="javascript://"><span>One</span></a></li>
+		        <li><a href="javascript://"><span>Two</span></a></li>
+		        <li><a href="javascript://"><span>Three</span></a></li>
+		    </ul>
+			
+		    <div>
+		        <p>First tab is active by default:</p>
+		        <pre><code>$('#example').tabs();</code></pre>
+		    </div>
+		    <div>
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		    </div>
+		    <div>
+		        <div>
+                    <ul id='uitabs2'>
+    		            <li><a href="javascript://">Alpha</a></li>
+                        <li><a href="javascript://">Beta</a></li>
+                        <li><a href="javascript://">Gamma</a></li>
+    		        </ul>
+                    <div>Content Alpha</div>
+                    <div>Content Beta</div>
+                    <div>Content Gamma</div>
+                </div>
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		    </div>
+		</div>	
+		
+		<div class='wrap' id='first'>Here is some swell content</div>
+		
+		
+		<script type='text/javascript' src='../../steal/steal.js'></script>
+		<script type='text/javascript'>
+			steal.plugins('phui/tabs','phui/resizable').start();
+		</script>
+		
+		<script type='text/javascript'>
+			$("#uitabs, #uitabs2").phui_ui_tabs();
+			$("#first").phui_resizable();
+		</script>
+	</body>
+</html>

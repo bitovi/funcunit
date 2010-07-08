@@ -200,6 +200,8 @@ extend(Syn,{
 				if(typeof (Selenium) != "undefined" && res.callback == Selenium.resume){
 					Selenium.pause();
 				}
+			}else if(arguments[i] && arguments[i].jquery){
+				res.element = arguments[i][0];
 			}else if(arguments[i] && arguments[i].nodeName){
 				res.element = arguments[i];
 			}else if(res.options && typeof arguments[i] == 'string'){ //we can get by id
