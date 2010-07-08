@@ -590,75 +590,42 @@ FuncUnit._opened = function(){};
 	}
 })();
 
+FuncUnit.existsFuncs = [
+	{
+		name: "exists", 
+		func: function(){ return FuncUnit.$(this.selector, this.context, "size"); }
+	},
+	{
+		name: "missing", 
+		func: function(){ return !FuncUnit.$(this.selector, this.context, "size"); }
+	},
+	{
+		name: "visible", 
+		func: function(){ return FuncUnit.$(this.selector+":visible", this.context, "size"); }
+	},
+	{
+		name: "invisible", 
+		func: function(){ return !FuncUnit.$(this.selector+":visible", this.context, "size"); }
+	}
+]
 
-
-
+FuncUnit.makeExistsFunc = function(funcObj){
+	FuncUnit.init[funcObj.name] = function(cb, timeout){
+		var selector = this.selector, context = this.context;
+		var self = this;
+		FuncUnit.add(function(success, error){
+			steal.dev.log("Checking "+funcObj.name+" on "+selector)
+			FuncUnit._repeat(funcObj.func.apply(self), success)
+		}, cb, funcObj.name+" is not true for " + this.selector, timeout);
+		return this;
+	}
+}
 
 FuncUnit.init = function(s, c){
 	this.selector = s;
 	this.context = c == null ? FuncUnit.window.document : c;
 }
 FuncUnit.init.prototype = {
-	/**
-	 * Waits until an element exists
-	 * @param {Object} cb
-	 * @param {Object} timeout
-	 */
-	exists: function(cb, timeout){
-		var selector = this.selector, context = this.context;
-		FuncUnit.add(function(success, error){
-			steal.dev.log("Checking exists on "+selector)
-			FuncUnit._repeat(function(){
-				return FuncUnit.$(selector, context, "size");
-			}, success)
-		}, cb, "Could not find " + this.selector, timeout);
-		return this;
-	},
-	/**
-	 * Waits until an object is missing
-	 * @param {Object} cb
-	 * @param {Object} timeout
-	 */
-	missing: function(cb, timeout){
-		var selector = this.selector, context = this.context;
-		FuncUnit.add(function(success, error){
-			steal.dev.log("Checking missing on "+selector)
-			FuncUnit._repeat(function(){
-				return !FuncUnit.$(selector, context, "size");
-			}, success)
-		}, cb, this.selector+" is not missing", timeout);
-		return this;
-	},
-	/**
-	 * Waits until an object is visible
-	 * @param {Object} cb
-	 * @param {Object} timeout
-	 */
-	visible: function(cb, timeout){
-		var selector = this.selector, context = this.context;
-		FuncUnit.add(function(success, error){
-			steal.dev.log("Checking visible on "+selector)
-			FuncUnit._repeat(function(){
-				return FuncUnit.$(selector+":visible", context, "size");
-			}, success)
-		}, cb, "Could not find " + this.selector+":visible", timeout);
-		return this;
-	},
-	/**
-	 * Waits until an object is invisible
-	 * @param {Object} cb
-	 * @param {Object} timeout
-	 */
-	invisible: function(cb, timeout){
-		var selector = this.selector, context = this.context;
-		FuncUnit.add(function(success, error){
-			steal.dev.log("Checking invisible on "+selector)
-			FuncUnit._repeat(function(){
-				return !FuncUnit.$(selector+":visible", context, "size");
-			}, success)
-		}, cb, this.selector+" is still visible", timeout);
-		return this;
-	},
 	/**
 	 * Types text into the object
 	 * @param {Object} text
@@ -709,13 +676,19 @@ FuncUnit.init.prototype = {
 	}
 };
 
-
 (function(){
 	for (var i = 0; i < FuncUnit.funcs.length; i++) {
 		FuncUnit.makeFunc(FuncUnit.funcs[i])
 		FuncUnit.makeWait(FuncUnit.funcs[i])
 	}
 })();
+
+(function(){
+	for (var i = 0; i < FuncUnit.existsFuncs.length; i++) {
+		FuncUnit.makeExistsFunc(FuncUnit.existsFuncs[i])
+	}
+})();
+
 S = FuncUnit;
 
 
