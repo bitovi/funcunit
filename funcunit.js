@@ -300,23 +300,26 @@ FuncUnit._opened = function(){};
 		var next, 
 			timer;
 			
+		var speed = 0;
+		if(FuncUnit.speed == "slow"){
+			speed = 500;
+		}
+		else if (FuncUnit.speed){
+			speed = FuncUnit.speed;
+		}
 		if (queue.length > 0) {
-			//if (incallback_queue.length > 0){
-			//	next = incallback_queue.shift();
-			//}else{
 			next = queue.shift();
-			//}
 			currentPosition = 0;
 			// set a timer that will error
 			timer = setTimeout(function(){
 					ok(false, next.error);
 					FuncUnit._done();
 				}, 
-				next.timeout || 10000)
+				(next.timeout || 10000) + speed)
 			
 			//call next method
-			next.method(
-				//success
+			setTimeout(function(){
+				next.method(	//success
 				function(){
 					//make sure we don't create an error
 					clearTimeout(timer);
@@ -330,13 +333,13 @@ FuncUnit._opened = function(){};
 					
 					
 					FuncUnit._done();
-				},
-				//error
+				}, //error
 				function(message){
 					clearTimeout(timer);
 					ok(false, message);
 					FuncUnit._done();
-				});
+				})
+			}, speed);
 		}
 		else {
 			start();
@@ -443,7 +446,7 @@ FuncUnit._opened = function(){};
 	//list of jQuery functions we want
 	FuncUnit.funcs = [
 	
-	'triggerSyn', 
+	'trigger', 
 	/**
 	 * @function size
 	 * Calls back with the size
@@ -606,7 +609,6 @@ FuncUnit.init.prototype = {
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Checking exists on "+selector)
 			FuncUnit._repeat(function(){
-				//return jQuery(selector, page.document).length
 				return FuncUnit.$(selector, context, "size");
 			}, success)
 		}, cb, "Could not find " + this.selector, timeout);
@@ -622,7 +624,6 @@ FuncUnit.init.prototype = {
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Checking missing on "+selector)
 			FuncUnit._repeat(function(){
-				//return jQuery(selector, page.document).length
 				return !FuncUnit.$(selector, context, "size");
 			}, success)
 		}, cb, this.selector+" is not missing", timeout);
@@ -638,7 +639,6 @@ FuncUnit.init.prototype = {
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Checking visible on "+selector)
 			FuncUnit._repeat(function(){
-				//return jQuery(selector, page.document).length
 				return FuncUnit.$(selector+":visible", context, "size");
 			}, success)
 		}, cb, "Could not find " + this.selector+":visible", timeout);
@@ -654,7 +654,6 @@ FuncUnit.init.prototype = {
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Checking invisible on "+selector)
 			FuncUnit._repeat(function(){
-				//return jQuery(selector, page.document).length
 				return !FuncUnit.$(selector+":visible", context, "size");
 			}, success)
 		}, cb, this.selector+" is still visible", timeout);
@@ -669,11 +668,7 @@ FuncUnit.init.prototype = {
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Typing "+text+" on "+selector)
-			for (var c = 0; c < text.length; c++) {
-				FuncUnit.$(selector, context, "triggerSyn", "key", text.substr(c, 1))
-			}
-			
-			setTimeout(success, 13)
+			FuncUnit.$(selector, context, "triggerSyn", "type", text, success)
 		}, callback, "Could not type " + text + " into " + this.selector)
 	},
 	dragTo: function(to, options, callback){
@@ -683,7 +678,6 @@ FuncUnit.init.prototype = {
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("dragging "+selector)
-			// new triggerSyn("drag", {duration: 1, to: "#drop"}).send($("#drag")[0]);
 			FuncUnit.$(selector, context, "triggerSyn", "drag", options, success)
 		}, callback, "Could not drag " + this.selector)
 		return this;
@@ -695,17 +689,9 @@ FuncUnit.init.prototype = {
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("moving "+selector)
-			// new triggerSyn("moving", {duration: 1, to: "#drop"}).send($("#drag")[0]);
 			FuncUnit.$(selector, context, "triggerSyn", "move", options, success)
 		}, callback, "Could not drag " + this.selector)
 		return this;
-		/*
-		Syn("move",{
-			from: "#start",
-			to: "#end",
-			duration: 1000
-		},"start")
-		*/
 	},
 	/**
 	 * Clicks an object
