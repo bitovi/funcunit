@@ -40,7 +40,7 @@ test("Click Forms", function(){
 		return false;
 	};
 	st.bind(st.g("outer"),"submit",submitf );
-	Syn("click",{},"submit");
+	Syn.trigger("click",{},st.g("submit"));
 	Syn("submit",{},"outer")
 	
 	
@@ -56,7 +56,7 @@ test("Click Forms", function(){
 	}
 	st.binder("inner","click",clickf );
 	
-	Syn("click",{},"submit");
+	Syn.trigger("click",{},st.g("submit"));
 	
 	equals(submit, 2, "Submit prevented");
 	equals(click, 1, "Clicked");
@@ -73,11 +73,11 @@ test("Click Checkboxes", function(){
 
 	st.g("checkbox").checked = false;
 	
-	Syn("click",{},"checkbox");
+	Syn.trigger("click",{},st.g("checkbox"));
 	
 	ok(st.g("checkbox").checked, "click checks on");
 	
-	Syn("click",{},"checkbox");
+	Syn.trigger("click",{},st.g("checkbox"));
 	
 	ok(!st.g("checkbox").checked, "click checks off");
 })
@@ -96,12 +96,12 @@ test("Click Radio Buttons", function(){
 		radio2++;
 	} );
 	
-	Syn("click",{},"radio1" );
+	Syn.trigger("click",{},st.g("radio1") );
 	
 	equals(radio1, 1, "radio event");
 	ok( st.g("radio1").checked, "radio checked" );
 	
-	Syn("click",{},"radio2" );
+	Syn.trigger("click",{},st.g("radio2") );
 	
 	equals(radio2, 1, "radio event");
 	ok( st.g("radio2").checked, "radio checked" );
@@ -135,7 +135,7 @@ test("Click! Event Order", 4, function(){
 	});
 	
 	stop();
-	Syn("click!",{},"focusme", function(){
+	Syn.click({},"focusme", function(){
 		start();
 	})
 	
@@ -149,14 +149,13 @@ test("Click Anchor Runs HREF JavaScript", function(){
 	}
 
 	
-	Syn("click",{},"jsHref")
+	Syn.trigger("click",{},st.g("jsHref"))
 	
 	ok( didSomething, "link href JS run" );
 	
 	window.doSomething = doSomething;
 })
-test
-("Click! Anchor Focuses", 2, function(){
+test("Click! Anchor Focuses", 2, function(){
 	st.g("qunit-test-area").innerHTML = "<a href='#abc' id='focusme'>I am visible</a>";
 	
 	st.binder("focusme","focus",function(ev){
@@ -173,7 +172,7 @@ test
 	stop();
 	//need to give browsers a second to show element
 	
-	Syn("click!",{},"focusme", function(){
+	Syn.click({},"focusme", function(){
 		start();
 	})
 	
@@ -189,9 +188,9 @@ test("Click away causes Blur", function(){
 	} );
 	
 	stop();
-	Syn("click!",{},"one")
-		.then("key","a")
-		.then("click!",{},"two", function(){
+	Syn.click({},"one")
+		.key("a")
+		.click({},"two", function(){
 			start()
 			equals(change, 1 , "Change called once");
 		})

@@ -33,7 +33,7 @@ test("dragging off the page", function(){
 	
 	stop();
 	
-	Syn("drag", {to: "#drop", duration: 700}, $("#drag")[0], function(){
+	Syn.drag( {to: "#drop", duration: 700}, $("#drag")[0], function(){
 		ok(drops.dropover,"dropover fired correctly")
 		$("#qunit-test-area").innerHTML = "";
 		start();
@@ -80,7 +80,7 @@ test("move", function(){
 	$(document.documentElement).bind('mousemove',move )
 	
 	stop();
-	Syn("move",{
+	Syn.move({
 		from : {clientX: 2, clientY: 50},
 		to :	{clientX: 199, clientY: 50},
 		duration: 1000
@@ -167,7 +167,7 @@ test("dragging an element with duration", function(){
 	
 	stop();
 	
-	Syn("drag", {to: "#midpoint", duration: 700}, $("#drag")[0], function(){
+	Syn.drag( {to: "#midpoint", duration: 700}, $("#drag")[0], function(){
 		
 		ok(drags.draginit, "draginit fired correctly")
 		ok(drags.dragmove, "dragmove fired correctly")
@@ -177,13 +177,13 @@ test("dragging an element with duration", function(){
 		ok(!drops.dropon,	"dropon not fired yet")
 		ok(drops.dropend, 	"dropend fired");
 		
-		Syn("drag", {to: "#drop", duration: 700}, $("#drag")[0], function(){
+		Syn.drag( {to: "#drop", duration: 700}, $("#drag")[0], function(){
 			ok(drops.dropinit, 	"dropinit fired correctly")
 			ok(drops.dropover, 	"dropover fired correctly")
 			ok(drops.dropmove, 	"dropmove fired correctly")
 			ok(drops.dropon, 	"dropon fired correctly")
 			
-			Syn("drag", {to: "#midpoint", duration: 700}, $("#drag")[0], function(){
+			Syn.drag( {to: "#midpoint", duration: 700}, $("#drag")[0], function(){
 				ok(drags.dragout, 	"dragout fired correctly")
 				ok(drops.dropout, 	"dropout fired correctly")
 				$("#qunit-test-area").innerHTML = "";

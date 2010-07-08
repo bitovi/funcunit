@@ -10,15 +10,15 @@ module("funcunit/synthetic/key",{
 })
 test("Key Characters", function(){
 	st.g("key").value = "";
-	Syn("key","a","key");
+	Syn.key("a","key");
 	equals(st.g("key").value, "a", "a written");
 	
 	st.g("key").value = "";
-	Syn("key","A","key");
+	Syn.key("A","key");
 	equals(st.g("key").value, "A", "A written");
 	
 	st.g("key").value = "";
-	Syn("key","1","key");
+	Syn.key("1","key");
 	equals(st.g("key").value, "1", "1 written");
 })
 
@@ -32,7 +32,7 @@ test("Key Event Order", 1, function(){
 	st.binder("key","keypress", recorder );
 	st.binder("key","keyup", recorder );
 	stop();
-	Syn("key","B","key", function(){
+	Syn.key("B","key", function(){
 		same(order,["keydown","keypress","keyup"],"Key order is correct")
 		start();
 	});
@@ -50,7 +50,7 @@ test("Key \\r Submits Forms", 1, function(){
 		return false;
 	});
 	stop()
-	Syn("key","\r","key", function(){
+	Syn.key("\r","key", function(){
 		equals(submit, 1, "submit on keypress");
 		start();
 	})
@@ -67,7 +67,7 @@ test("Key \\r Clicks Links", 1, function(){
 		return false;
 	});
 	stop()
-	Syn("key","\r","focusLink", function(){
+	Syn.key("\r","focusLink", function(){
 		equals(clicked, 1, "clicked");
 		start();
 	})
@@ -76,7 +76,7 @@ test("Key \\r Clicks Links", 1, function(){
 test("Key \\r Adds Newline in Textarea", function(){
 	st.g('synTextArea').value = "";
 	stop()
-	Syn("type","ab\rcd","synTextArea", function(){
+	Syn.type("ab\rcd","synTextArea", function(){
 		equals(  st.g('synTextArea').value.replace("\r","")  , "ab\ncd" ,"typed new line correctly")
 		start();
 	})
@@ -85,9 +85,9 @@ test("Key \\r Adds Newline in Textarea", function(){
 test("Key \\b", function(){
 	st.g("key").value = "";
 	stop();
-	Syn("type","abc","key", function(){
+	Syn.type("abc","key", function(){
 		equals(st.g("key").value, "abc", "abc written");
-		Syn("key","\b","key");
+		Syn.key("\b","key");
 		equals(st.g("key").value, "ab", "ab written (key deleted)");
 		start();
 	});
@@ -111,7 +111,7 @@ test("Key Character Order", function(){
 		downVal = st.g("key").value
 	} );
 	stop();
-	Syn("key","J","key", function(){
+	Syn.key("J","key", function(){
 		equals(upVal, "J" , "Up Typing works")
 		equals(pressVal, "" , "Press Typing works")
 		equals(downVal, "" , "Down Typing works");
@@ -152,7 +152,7 @@ asyncTest("page down, page up, home, end", function(){
 			start();
 			return;
 		}
-		Syn("key", name, "scrolldiv")
+		Syn.key( name, "scrolldiv")
 	};
 	for(var name in keyTest){
 		order.push(name)
@@ -200,7 +200,7 @@ test("range tests", function(){
 	keyEl.value = "012345";
 	selectText(keyEl, 1, 3);
 	
-	Syn("key","delete","key")
+	Syn.key("delete","key")
 	
 	equals(keyEl.value, "0345", "delete range works");
 	
@@ -208,7 +208,7 @@ test("range tests", function(){
 	keyEl.value = "012345";
 	selectText(keyEl, 2);
 
-	Syn("key","delete","key");
+	Syn.key("delete","key");
 	equals(keyEl.value, "01345", "delete works");
 
 
@@ -217,51 +217,51 @@ test("range tests", function(){
 	selectText(keyEl, 1, 3);
 
 	
-	Syn("key","a","key");
+	Syn.key("a","key");
 	equals(keyEl.value, "1a456", "character range works");
 
 	// test character key
 	keyEl.value = "123456";
 	selectText(keyEl, 2);
 	
-	Syn("key","a","key");
+	Syn.key("a","key");
 	equals(keyEl.value, "12a3456", "character insertion works");
 
 	// test backspace range
 	keyEl.value = "123456";
 	selectText(keyEl, 1, 3);
-	Syn("key","\b","key");
+	Syn.key("\b","key");
 	equals(keyEl.value, "1456", "backspace range works");
 	
 	// test backspace key
 	keyEl.value = "123456";
 	selectText(keyEl, 2);
-	Syn("key","\b","key");
+	Syn.key("\b","key");
 	equals(keyEl.value, "13456", "backspace works");
 	
 	// test textarea ranges
 	textAreaEl.value = "123456";
 	selectText(textAreaEl, 1, 3);
 	
-	Syn("key","delete",textAreaEl);
+	Syn.key("delete",textAreaEl);
 	equals(textAreaEl.value, "1456", "delete range works in a textarea");
 
 	// test textarea ranges
 	textAreaEl.value = "123456";
 	selectText(textAreaEl, 1, 3);
-	Syn("key","a",textAreaEl);
+	Syn.key("a",textAreaEl);
 	equals(textAreaEl.value, "1a456", "character range works in a textarea");
 	
 	// test textarea ranges
 	textAreaEl.value = "123456";
 	selectText(textAreaEl, 1, 3);
-	Syn("key","\b",textAreaEl);
+	Syn.key("\b",textAreaEl);
 	equals(textAreaEl.value, "1456", "backspace range works in a textarea");
 	
 	// test textarea ranges
 	textAreaEl.value = "123456";
 	selectText(textAreaEl, 1, 3);
-	Syn("key","\r",textAreaEl);
+	Syn.key("\r",textAreaEl);
 	
 	equals(textAreaEl.value.replace("\r",""), "1\n456", "return range works in a textarea");
 	
@@ -284,7 +284,7 @@ test("Type with tabs", function(){
 	stop();
 	//give ie a second to focus
 	setTimeout(function(){
-		Syn('type','\r\tSecond\tThird\tFourth', 'first', function(){
+		Syn.type('\r\tSecond\tThird\tFourth', 'first', function(){
 			equals(clicked,1,"clickd first");
 			equals(st.g('second').value,"Second","moved to second");
 			equals(st.g('third').value,"Third","moved to Third");
@@ -296,11 +296,11 @@ test("Type with tabs", function(){
 
 test("Type left and right", function(){
 	stop()
-	Syn('type',"012345678[left][left][left]\b",'key', function(){
+	Syn.type("012345678[left][left][left]\b",'key', function(){
 		equals( st.g('key').value, "01234678", "left works" );
 		
 		
-			Syn('type',"[right][right]a",'key', function(){
+			Syn.type("[right][right]a",'key', function(){
 				equals( st.g('key').value, "0123467a8", "right works" );
 				start();
 			})
@@ -317,7 +317,7 @@ test("Typing Shift", function(){
 	st.binder('key','keypress', function(ev){
 		shift = ev.shiftKey
 	})
-	Syn('type',"[shift]A[shift-up]",'key',function(){
+	Syn.type("[shift]A[shift-up]",'key',function(){
 		ok(shift,"Shift key on")
 		start();
 	})
@@ -329,9 +329,9 @@ test("Typing Shift then clicking", function(){
 	st.binder('inner','click', function(ev){
 		shift = ev.shiftKey
 	})
-	Syn('type',"[shift]A",'key')
-		.then('click!',{},'inner')
-		.then('type',"[shift-up]",'key', function(){
+	Syn.type("[shift]A",'key')
+		.click({},'inner')
+		.type("[shift-up]",'key', function(){
 			ok(shift,"Shift key on click")
 			start();
 		})
@@ -341,13 +341,13 @@ test("Typing Shift then clicking", function(){
 test("Typing Shift Left and Right", function(){
 	stop()
 
-	Syn('type',"012345678[shift][left][left][left][shift-up]\b[left]\b",'key', function(){
+	Syn.type("012345678[shift][left][left][left][shift-up]\b[left]\b",'key', function(){
 		equals( st.g('key').value, "01235", "shift left works" );
 
 		
 		
 
-		Syn('type',"[left][left][shift][right][right]\b[shift-up]",'key', function(){
+		Syn.type("[left][left][shift][right][right]\b[shift-up]",'key', function(){
 			
 			equals( st.g('key').value, "015", "shift right works" );
 			start();

@@ -520,6 +520,7 @@ var convert = {
 h.extend(Syn.init.prototype,
 {
 	/**
+	 * @function key
 	 * Types a single key.  The key should be
 	 * a string that matches a 
 	 * [Syn.keycodes].
@@ -536,7 +537,7 @@ h.extend(Syn.init.prototype,
 	 * @param {Function} callback
 	 * @return {HTMLElement} the element currently focused.
 	 */
-	key : function(options, element, callback){
+	_key : function(options, element, callback){
 		//first check if it is a special up
 		if(/-up$/.test(options) 
 			&& h.inArray(options.replace("-up",""),Syn.key.kinds.special )!= -1){
@@ -602,6 +603,7 @@ h.extend(Syn.init.prototype,
 		
 	},
 	/**
+	 * @function type
 	 * Types sequence of key events.  Each
 	 * character is typed, one at a type.
 	 * Multi-character keys like 'left' should be
@@ -622,7 +624,7 @@ h.extend(Syn.init.prototype,
 	 * @param {HTMLElement} element
 	 * @param {Function} callback
 	 */
-	type : function(options, element, callback){
+	_type : function(options, element, callback){
 		//break it up into parts ...
 		//go through each type and run
 		var parts = options.match(/(\[[^\]]+\])|([^\[])/g),
@@ -637,7 +639,7 @@ h.extend(Syn.init.prototype,
 				if(part.length > 1){
 					part = part.substr(1,part.length - 2)
 				}
-				self.key(part, el, runNextPart)
+				self._key(part, el, runNextPart)
 			}
 		
 		runNextPart();

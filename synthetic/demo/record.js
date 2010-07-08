@@ -22,7 +22,7 @@ $(function(){
 		
 		var code = {
 			click : function(ev){
-				addCode("click!","{}",this)
+				addCode("click","{}",this)
 			},
 			mousedown : function(ev){
 				mousedown = this;
@@ -33,7 +33,7 @@ $(function(){
 			},
 			mouseup : function(ev){
 				if(mousemove){
-					addCode("drag","{clientX:"+ev.clientX+",clientY:"+ev.clientY+"}",mousedown)
+					addCode("drag","'"+ev.clientX+"X"+ev.clientY+"'",mousedown)
 				}
 				
 				mousedown = null;
@@ -73,9 +73,11 @@ $(function(){
 				return;
 			}
 			var current = $("#code").text();
-			var add = current ? "  .then('" : "Syn('";
-			add += type+"',"+options+",$('"+selector(target)+"'))\n"
-			
+			var add = current ? " ." : "Syn.";
+			add += type+"(\n    "+options+",\n    $('"+selector(target)+"'))\n"
+			//if(type == 'click!'){
+			//	add += " .delay()\n"
+			//}
 			$("#code").text(current+add)
 		}
 		if(REPLAY){
@@ -96,6 +98,7 @@ $(function(){
 	
 	
 });
+Syn.autoDelay = true;
 REPLAY = false;
 ADD = true;
 	

@@ -107,11 +107,20 @@ steal.then(function(){
 		})
 	}, 
 	convertOption = function(option, win){
-		var reg = /(\d+)x(\d+)/
-		if (typeof option == 'string' && reg.test(option)) {
+		var page = /(\d+)x(\d+)/,
+			client = /(\d+)X(\d+)/
+		if (typeof option == 'string' && page.test(option)) {
+			var parts = option.match(page)
 			option = {
-				pageX: parseInt(option.match(reg)[0]),
-				pageY: parseInt(option.match(reg)[1])
+				pageX: parseInt(parts[1]),
+				pageY: parseInt(parts[2])
+			}
+		}
+		if (typeof option == 'string' && client.test(option)) {
+			var parts = option.match(client)
+			option = {
+				clientX: parseInt(parts[1]),
+				clientY: parseInt(parts[2])
 			}
 		}
 		if (typeof option == 'string') {
@@ -132,7 +141,6 @@ steal.then(function(){
 				clientY: option.pageY - off.top
 			}
 		}
-		
 		return option;
 	}
 /**
@@ -140,6 +148,7 @@ steal.then(function(){
  */	
 Syn.helpers.extend(Syn.init.prototype,{
 	/**
+	 * @function move
 	 * Moves the cursor from one point to another.  
 	 * <h3>Quick Example</h3>
 	 * The following moves the cursor from (0,0) in
@@ -209,7 +218,7 @@ Syn.helpers.extend(Syn.init.prototype,{
 	 * @param {HTMLElement} from
 	 * @param {Function} callback
 	 */
-	move : function(options, from, callback){
+	_move : function(options, from, callback){
 		//need to convert if elements
 		var win = Syn.helpers.getWindow(from), 
 			fro = convertOption(options.from || from, win), 
@@ -218,12 +227,13 @@ Syn.helpers.extend(Syn.init.prototype,{
 		startMove(fro, to, options.duration || 500, from, callback);
 	},
 	/**
+	 * @function drag
 	 * Creates a mousedown and drags from one point to another.
 	 * @param {Object} options
 	 * @param {Object} from
 	 * @param {Object} callback
 	 */
-	drag : function(options, from, callback){
+	_drag : function(options, from, callback){
 		//need to convert if elements
 		var win = Syn.helpers.getWindow(from), 
 			fro = convertOption(options.from || from, win), 

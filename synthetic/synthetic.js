@@ -213,6 +213,9 @@ extend(Syn,{
 		}
 		return res;
 	},
+	click : function( options, element, callback){
+		Syn('click!',options,element, callback);
+	},
 	/**
 	 * @attribute defaults
 	 * Default actions for events.  Each default function is called with this as its 
@@ -558,6 +561,9 @@ extend(Syn.init.prototype,{
 	 * @param {Function} [callback] A function to callback after the action has run, but before any future chained actions are run.
 	 */
 	then : function(type, options, element, callback){
+		if(Syn.autoDelay){
+			this.delay();
+		}
 		var args = Syn.args(options,element, callback),
 			self = this;
 
@@ -581,6 +587,21 @@ extend(Syn.init.prototype,{
 		})
 		return this;
 	},
+	delay : function(timeout, callback){
+		if(typeof timeout == 'function'){
+			callback = timeout;
+			timeout = null;
+		}
+		timeout = timeout || 500
+		var self = this;
+		this.queue.unshift(function(){
+			setTimeout(function(){
+				callback && callback.apply(self,[])
+				self.done.apply(self, arguments)
+			},timeout)
+		})
+		return this;
+	},
 	done : function( defaults, el){
 		el && (this.element = el);;
 		if(this.queue.length){
@@ -594,7 +615,7 @@ extend(Syn.init.prototype,{
 	 * and a click event.
 	 * <h3>Example</h3>
 	 * @codestart
-	 * Syn("click!",{},'create',function(){
+	 * Syn.click({},'create',function(){
 	 *   //check something
 	 * })
 	 * @codeend
@@ -602,7 +623,7 @@ extend(Syn.init.prototype,{
 	 * If jQuery is present, it will set clientX and clientY
 	 * for you.  Here's how to set it yourself:
 	 * @codestart
-	 * Syn("click!",
+	 * Syn.click(
 	 *     {clientX: 20, clientY: 100},
 	 *     'create',
 	 *     function(){
@@ -614,7 +635,7 @@ extend(Syn.init.prototype,{
 	 * @param {HTMLElement} element
 	 * @param {Function} callback
 	 */
-	"click!" : function(options, element, callback){
+	"_click" : function(options, element, callback){
 		Syn.helpers.addOffset(options, element);
 		Syn.trigger("mousedown", options, element);
 		
@@ -631,7 +652,7 @@ extend(Syn.init.prototype,{
 		},1)
 	},
 	/**
-	 * Dblclicks an element.  This runs two [Syn.prototype.click! click!] events followed by
+	 * Dblclicks an element.  This runs two [Syn.prototype.click click] events followed by
 	 * a dblclick on the element.
 	 * <h3>Example</h3>
 	 * @codestart
@@ -641,7 +662,7 @@ extend(Syn.init.prototype,{
 	 * @param {HTMLElement} element
 	 * @param {Function} callback
 	 */
-	"dblclick!" : function(options, element, callback){
+	"_dblclick" : function(options, element, callback){
 		Syn.helpers.addOffset(options);
 		var self = this;
 		this["click!"](options, element, function(){
@@ -652,7 +673,19 @@ extend(Syn.init.prototype,{
 		})
 	}
 })
-	
+
+var actions = ["click","dblclick","move","drag","key","type"],
+	makeAction = function(name){
+		Syn[name] = function(options, element, callback){
+			return Syn("_"+name, options, element, callback)
+		}
+		Syn.init.prototype[name] = function(options, element, callback){
+			return this.then("_"+name, options, element, callback)
+		}
+	}
+for(var i=0; i < actions.length; i++){
+	makeAction(actions[i]);
+}
 /**
  * Used for creating and dispatching synthetic events.
  * @codestart

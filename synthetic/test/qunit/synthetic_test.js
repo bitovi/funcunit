@@ -42,7 +42,7 @@ test("Selecting a select element", function(){
 	st.bind(st.g("outer").select,"change",changef );
 	
 	stop()
-	Syn("click!", st.g("two"), function(){
+	Syn.click( st.g("two"), function(){
 		equals(change, 1 , "change called once")
 		equals(st.g("outer").select.selectedIndex, 1, "Change Selected Index");
 		//st.g("qunit-test-area").innerHTML = ""
