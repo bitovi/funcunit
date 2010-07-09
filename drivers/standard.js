@@ -1,4 +1,4 @@
-steal(function() {
+steal.then(function() {
 	var readystate = document.readyState;
 	$(window).load(function(){
 		if(document.readyState != readystate)
