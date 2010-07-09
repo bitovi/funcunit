@@ -228,7 +228,7 @@ S.open("//app/app.html")
 open = function(path, callback, timeout){
 	var fullPath = FuncUnit.getAbsolutePath(path)
 	FuncUnit.add(function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
-		//page = window.open(path);
+		
 		steal.dev.log("Opening "+path)
 		FuncUnit._open(fullPath, error);
 		FuncUnit._onload(function(){
@@ -239,6 +239,9 @@ open = function(path, callback, timeout){
 };
 
 FuncUnit.getAbsolutePath = function(path){
+	if(typeof(steal) == "undefined"){
+		return path;
+	}
 	var fullPath, 
 		root = FuncUnit.jmvcRoot || steal.root.path;
 	
@@ -659,7 +662,7 @@ FuncUnit.init.prototype = {
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Typing "+text+" on "+selector)
-			FuncUnit.$(selector, context, "triggerSyn", "type", text, success)
+			FuncUnit.$(selector, context, "triggerSyn", "_type", text, success)
 		}, callback, "Could not type " + text + " into " + this.selector)
 	},
 	/**
@@ -674,7 +677,7 @@ FuncUnit.init.prototype = {
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("dragging "+selector)
-			FuncUnit.$(selector, context, "triggerSyn", "drag", options, success)
+			FuncUnit.$(selector, context, "triggerSyn", "_drag", options, success)
 		}, callback, "Could not drag " + this.selector)
 		return this;
 	},
@@ -690,7 +693,7 @@ FuncUnit.init.prototype = {
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("moving "+selector)
-			FuncUnit.$(selector, context, "triggerSyn", "move", options, success)
+			FuncUnit.$(selector, context, "triggerSyn", "_move", options, success)
 		}, callback, "Could not move " + this.selector)
 		return this;
 	},
@@ -704,7 +707,7 @@ FuncUnit.init.prototype = {
 		var selector = this.selector, context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Clicking "+selector)
-			FuncUnit.$(selector, context, "triggerSyn", "click!", options, success)
+			FuncUnit.$(selector, context, "triggerSyn", "_click", options, success)
 		}, callback, "Could not click " + this.selector)
 		return this;
 	}
