@@ -1,4 +1,4 @@
-steal(function(){
+steal.then(function(){
 	if (navigator.userAgent.match(/Rhino/) && !window.build_in_progress) {
 		QUnit.testStart = function(name){
 			print("--" + name + "--")

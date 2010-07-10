@@ -8,7 +8,6 @@ test("Copy Test", function(){
 		S("#seewhatyoutyped").text(function(val){
 			equals(val, "typed javascriptmvc","typing");
 		})
-		S.wait(1000)
 		S("#copy").click();
 		S("#seewhatyoutyped").text(function(val){
 			equals(val, "copied javascriptmvc","copy");
