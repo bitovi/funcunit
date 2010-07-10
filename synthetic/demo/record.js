@@ -2,7 +2,23 @@ $(function(){
 	Syn.autoDelay = true;
 	REPLAY = false;
 	ADD = true;
-
+	Recorder ={
+		cb: function(i){
+			return function(){
+				$("#code div:nth("+(i)+")").css("color","black").css("font-weight","")
+				$("#code div:nth("+(i+1)+")").css("color","orange").css("font-weight","bold")
+				if(i == commands.length - 1){
+					Recorder.done();
+				}
+			}
+			
+		},
+		done : function(){
+			console.log('done')
+			ADD = true;
+			$("#code div").css("color","black")
+		}
+	}
 	var commands =[],
 		downKeys = [],
 		keytarget = null,
@@ -11,19 +27,22 @@ $(function(){
 		mousemove,
 		mouseup,
 		h ={
-			commandsText : function(){
+			commandsText : function(func){
 				var text = [],
 					command;
 				for(var i=0; i < commands.length; i++){
 					command = commands[i];
-					text.push(
+					text.push(func ? "":"<div>",
 					  i > 0 ? "   ." : "Syn.",
 					  command.type,
 					  "(",
 					  command.options,
 					  ",$('",
 					  command.selector,
-					  "'))\n"
+					  "')",
+					  func ? ", Recorder.cb("+i+")" : "",
+					  ")\n",
+					  func ? "":"</div>"
 					)
 				}
 				return text.join("")
@@ -51,7 +70,7 @@ $(function(){
 					})
 				}
 
-				$("#code").text(h.commandsText())
+				$("#code").html(h.commandsText())
 			},
 			getKey : function(code){
 				for(var key in Syn.keycodes){
@@ -177,9 +196,9 @@ $(function(){
 		if(REPLAY){
 			REPLAY = false;
 			setTimeout(function(){
-				var text = $("#code").text()
-				text = text.substr(0,text.length-2) + ", function(){ ADD = true })"
+				var text = h.commandsText(true)
 				ADD = false;
+				$("#code div:first").css("color","red")
 				eval("with(frameWindow){"+ text +"}" );
 			},500)
 			
@@ -195,6 +214,7 @@ $(function(){
 	$("#run").click(function(){
 		REPLAY = true;
 		$('iframe')[0].contentWindow.location.reload(true);
+		$("#code div").css("color","gray")
 		
 	})
 	
