@@ -11,9 +11,12 @@
 				border-left: none;
 				border-right: none;
 				border-top: none;
-				border-bottom: none;
+				border-bottom: solid 2px black;
 				overflow: hidden;
-				height: 100%;
+				top: 0px;
+				bottom: 200px;
+				position: fixed;
+				width: 100%;
 			}
 			#left {
 				width: 75%;
@@ -32,7 +35,7 @@
 			#code {
 				
 				padding: 0px;
-				margin: 0px;
+				margin: 0 0 0 210px;
 				border: none;
 				
 			}
@@ -53,17 +56,33 @@
 			a {
 				outline: none
 			}
+			#bottom {
+				position: fixed;
+				width: 100%;
+				bottom: 0px;
+				height: 196px;
+				border: solid 2px #E7ECEE;
+			}
+			#run {
+				float: left;
+				padding-top: 80px;
+				height: 118px;
+				width: 198px;
+				display: block;
+				text-align: center;
+				vertical-align: center;
+				font-size: 1.4em;
+				font-weight: bolder;
+				border-right: solid 2px #E7ECEE;
+			}
         </style>
     </head>
     <body>
-    	<table id='fill'>
-    		<tr>
-    			<td id='left'><div id='app'></div></td>
-				<td><pre id='code'></pre>
-					<a href="javascript://" id='run'>run</a>
-				</td>
-    		</tr>
-    	</table>
+    	<div id='app'></div>
+		<div id='bottom'>
+			<a href="javascript://" id='run'>Run</a><pre id='code'></pre>
+			
+		</div>
 <script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript'>
 	steal.plugins('funcunit/synthetic','phui/filler').start();

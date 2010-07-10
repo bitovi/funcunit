@@ -24,26 +24,27 @@
 			.ui-tabs .ui-tabs-panel {
 				padding: 0.5em
 			}
+			#uitabs a:focus {
+				outline: dashed;
+			}
         </style>
 	</head>
 	<body>
 		<div class='tabarea'>
 		    <ul id="uitabs">
-		        <li><a href="javascript://"><span>One</span></a></li>
-		        <li><a href="javascript://"><span>Two</span></a></li>
-		        <li><a href="javascript://"><span>Three</span></a></li>
+		        <li><a href="javascript://"><span>Instructions</span></a></li>
+		        <li><a href="javascript://"><span>Drag Drop</span></a></li>
+		        <li><a href="javascript://"><span>Typing</span></a></li>
 		    </ul>
 			
 		    <div>
-		        <p>First tab is active by default:</p>
-		        <pre><code>$('#example').tabs();</code></pre>
-		    </div>
-		    <div>
-		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-		    </div>
-		    <div>
-		        <div>
+		        <p>Welcome to the Syn demo!</p>
+				<p>Click, drag, and type in this page.
+				   Your actions will be recorded as a syn-script.  
+				   You can playback this script by pressing "Run" on the right.
+				</p>
+				<p>Try clicking and tabbing between tab-buttons.</p>
+				<div>
                     <ul id='uitabs2'>
     		            <li><a href="javascript://">Alpha</a></li>
                         <li><a href="javascript://">Beta</a></li>
@@ -53,23 +54,33 @@
                     <div>Content Beta</div>
                     <div>Content Gamma</div>
                 </div>
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-		        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+		    </div>
+		    <div>
+		    	<p>Drag the gray dot.</p>
+		       <div class='wrap' id='first'>Here is some swell content</div>
+		    </div>
+		    <div>
+		    	<p>Test the numeric field.</p>
+                <p><input type='text' id='numeric' /></p>
 		    </div>
 		</div>	
 		
-		<div class='wrap' id='first'>Here is some swell content</div>
+		
 		
 		
 		<script type='text/javascript' src='../../steal/steal.js'></script>
 		<script type='text/javascript'>
-			steal.plugins('phui/tabs','phui/resizable').start();
+			steal.plugins('phui/tabs','phui/resizable','phui/key_validator').start();
 		</script>
 		
 		<script type='text/javascript'>
-			$("#uitabs, #uitabs2").phui_ui_tabs();
 			$("#first").phui_resizable();
+			$("#uitabs, #uitabs2").phui_ui_tabs();
+			
+			
+			$(window).bind('load', function(){
+				$("#numeric").phui_key_validator({test: /^[-+]?[0-9]*\.?[0-9]*$/}).val("")
+			})
 		</script>
 	</body>
 </html>

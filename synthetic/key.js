@@ -17,27 +17,47 @@ getSelection = function(el){
 		return  {start: el.selectionStart, end: el.selectionEnd}
 	}else{
 		//check if we aren't focused
-		if(document.activeElement && document.activeElement != el){
+		//if(document.activeElement && document.activeElement != el){
 			
+			
+		//}
+		try {
+			//try 2 different methods that work differently (IE breaks depending on type)
+			if (el.nodeName.toLowerCase() == 'input') {
+				var real = h.getWindow(el).document.selection.createRange(), r = el.createTextRange();
+				r.setEndPoint("EndToStart", real);
+				
+				var start = r.text.length
+				return {
+					start: start,
+					end: start + real.text.length
+				}
+			}
+			else {
+				var real = h.getWindow(el).document.selection.createRange(), r = real.duplicate(), r2 = real.duplicate(), r3 = real.duplicate();
+				r2.collapse();
+				r3.collapse(false);
+				r2.moveStart('character', -1)
+				r3.moveStart('character', -1)
+				//select all of our element
+				r.moveToElementText(el)
+				//now move our endpoint to the end of our real range
+				r.setEndPoint('EndToEnd', real);
+				var start = r.text.length - real.text.length, end = r.text.length;
+				if (start != 0 && r2.text == "") {
+					start += 2;
+				}
+				if (end != 0 && r3.text == "") {
+					end += 2;
+				}
+				//if we aren't at the start, but previous is empty, we are at start of newline
+				return {
+					start: start,
+					end: end
+				}
+			}
+		}catch(e){
 			return {start: el.value.length, end: el.value.length};
-		}
-		//try 2 different methods that work differently (IE breaks depending on type)
-		if(el.nodeName.toLowerCase() == 'input'){
-			var real = h.getWindow(el).document.selection.createRange(),
-				r = el.createTextRange();
-			r.setEndPoint("EndToStart", real);
-	
-			var start = r.text.length
-			return {start: start, end: start+real.text.length}
-		}else{
-			var real = h.getWindow(el).document.selection.createRange(),
-			r = real.duplicate();
-			//select all of our element
-			r.moveToElementText(el)
-			//now move our endpoint to the end of our real range
-			r.setEndPoint('EndToEnd',real);
-			var start = r.text.length - real.text.length
-			return {start: start, end: r.text.length}
 		}
 	} 
 },
@@ -132,7 +152,7 @@ h.extend(Syn,{
 		'a':'65','b':'66','c':'67','d':'68','e':'69','f':'70','g':'71','h':'72','i':'73','j':'74','k':'75','l':'76','m':'77',
 		'n':'78','o':'79','p':'80','q':'81','r':'82','s':'83','t':'84','u':'85','v':'86','w':'87','x':'88','y':'89','z':'90',
 		//normal-characters, numpad
-		'0':'96','1':'97','2':'98','3':'99','4':'100','5':'101','6':'102','7':'103','8':'104','9':'105',
+		'num0':'96','num1':'97','num2':'98','num3':'99','num4':'100','num5':'101','num6':'102','num7':'103','num8':'104','num9':'105',
 		'*':'106','+':'107','-':'109','.':'110',
 		//normal-characters, others
 		'/':'111',
@@ -178,7 +198,26 @@ h.extend(Syn,{
 			
 			r.select();
 		} 
-	}
+	},
+	getText: function(el){
+		//first check if the el has anything selected ..
+		if(Syn.typeable.test(el.nodeName)){
+			var sel = getSelection(el);
+			return el.value.substring(sel.start, sel.end)
+		}
+		//otherwise get from page
+		var win = Syn.helpers.getWindow(el);
+		if (win.getSelection) {
+			return win.getSelection().toString();
+		}
+		else  if (win.document.getSelection) {
+			return win.document.getSelection().toString()
+		}
+		else {
+			return win.document.selection.createRange().text;
+		}
+	},
+	getSelection : getSelection
 });
 
 h.extend(Syn.key,{
@@ -195,6 +234,7 @@ h.extend(Syn.key,{
 		}
 		return S.key.browser.character
 	},
+	
 	//returns the special key if special
 	isSpecial : function(keyCode){
 		var specials = S.key.kinds.special;
@@ -224,6 +264,8 @@ h.extend(Syn.key,{
 			
 		if(keyCode == 'key'){
 			result.keyCode = Syn.keycodes[key]
+		} else if (keyCode == 'char'){
+			result.keyCode = key.charCodeAt(0)
 		}else{
 			result.keyCode = keyCode;
 		}
@@ -233,6 +275,8 @@ h.extend(Syn.key,{
 		}else if(charCode !== null){
 			result.charCode = charCode;
 		}
+		
+		
 		return result
 	},
 	//types of event keys
@@ -257,17 +301,40 @@ h.extend(Syn.key,{
 	},
 	// default behavior when typing
 	defaults : 	{
-		'character' : function(options, scope, key){
-			if(!S.support.keyCharacters && Syn.typeable.test(this.nodeName)){
+		'character' : function(options, scope, key, force){
+			if(force || (!S.support.keyCharacters && Syn.typeable.test(this.nodeName))){
 				var current = this.value,
 					sel = getSelection(this),
 					before = current.substr(0,sel.start),
 					after = current.substr(sel.end),
 					character = key;
-					
+				
 				this.value = before+character+after;
-
+				//handle IE inserting \r\n
+				var charLength = character == "\n" && S.support.textareaCarriage ? 2 : character.length;
+				Syn.selectText(this, before.length + charLength)
 			}		
+		},
+		'c' : function(options, scope, key){
+			if(Syn.key.ctrlKey){
+				Syn.key.clipboard = Syn.getText(this)
+			}else{
+				Syn.key.defaults.character.call(this, options,scope, key);
+			}
+		},
+		'v' : function(options, scope, key){
+			if(Syn.key.ctrlKey){
+				Syn.key.defaults.character.call(this, options,scope, Syn.key.clipboard, true);
+			}else{
+				Syn.key.defaults.character.call(this, options,scope, key);
+			}
+		},
+		'a' : function(options, scope, key){
+			if(Syn.key.ctrlKey){
+				Syn.selectText(this, 0, this.value.length)
+			}else{
+				Syn.key.defaults.character.call(this, options,scope, key);
+			}
 		},
 		'home' : function(){
 			Syn.onParents(this, function(el){
@@ -661,7 +728,8 @@ h.extend(Syn.init.prototype,
 		form, 
 		input, 
 		submitted = false,
-		anchor;
+		anchor,
+		textarea;
 		
 	div.innerHTML = "<form id='outer'>"+
 		"<input name='checkbox' type='checkbox'/>"+
@@ -671,13 +739,15 @@ h.extend(Syn.init.prototype,
 		"<input name='one'>"+
 		"<input name='two'/>"+
 		"<a href='#abc'></a>"+
+		"<textarea>1\n2</textarea>"
 		"</form>";
 		
 	document.documentElement.appendChild(div);
 	form = div.firstChild;
 	checkbox = form.childNodes[0];
 	submit = form.childNodes[2];
-	anchor = form.getElementsByTagName("a")[0]
+	anchor = form.getElementsByTagName("a")[0];
+	textarea = form.getElementsByTagName("textarea")[0]
 	form.onsubmit = function(ev){
 		if (ev.preventDefault) 
 			ev.preventDefault();
@@ -715,6 +785,7 @@ h.extend(Syn.init.prototype,
 	})
 	Syn.trigger("keypress", "\r", anchor);
 	
+	S.support.textareaCarriage = textarea.value.length == 4
 	document.documentElement.removeChild(div);
 	
 	S.support.ready = true;
