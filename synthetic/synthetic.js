@@ -197,9 +197,6 @@ extend(Syn,{
 		for(var i=0; i < arguments.length; i++){
 			if(typeof arguments[i] == 'function'){
 				res.callback = arguments[i]
-				if(typeof (Selenium) != "undefined" && res.callback == Selenium.resume){
-					Selenium.pause();
-				}
 			}else if(arguments[i] && arguments[i].jquery){
 				res.element = arguments[i][0];
 			}else if(arguments[i] && arguments[i].nodeName){
