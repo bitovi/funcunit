@@ -56,6 +56,7 @@ $(function(){
 				if(!ADD){
 					return;
 				}
+
 				var selector = h.selector(target),
 					last = commands[commands.length - 1] || {};
 				
@@ -167,8 +168,8 @@ $(function(){
 		},
 		mouseupH = function(ev){
 			if(/option/i.test(ev.target.nodeName)){
-				
-			}else if(lastX == ev.pageX && lastY == ev.pageY){
+
+			}else if(!mousemove || (lastX == ev.pageX && lastY == ev.pageY)){
 				h.addCode("click",undefined,ev.target)
 			}else if(mousemove && mousedown){
 				h.addCode("drag","'"+ev.clientX+"X"+ev.clientY+"'",mousedown)
@@ -186,6 +187,7 @@ $(function(){
 		changeH = function(ev){
 			//if we changed without a previous keypress
 			if(!justKey && ev.target.nodeName.toLowerCase() == "select"){
+
 				var el = $("option:eq("+ev.target.selectedIndex+")", ev.target);
 				h.addCode("click",undefined, el[0])
 			}
@@ -213,9 +215,9 @@ $(function(){
 			.mousedown(mousedownH).mousemove(mousemoveH).mouseup(mouseupH)
 			.change(changeH)
 			.click(function(ev){
-				if(ev.target.nodeName.toLowerCase() == 'option'){
-					h.addCode("click",undefined,ev.target)
-				}
+				//if(ev.target.nodeName.toLowerCase() == 'option'){
+				//	h.addCode("click",undefined,ev.target)
+				//}
 			})
 		
 		

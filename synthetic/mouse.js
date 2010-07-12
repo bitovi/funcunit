@@ -90,24 +90,9 @@ h.extend(Syn.defaults,{
 			}
 		}
 		// change options
-		if(nodeName == "option"){
-			//check if we should change
-			//find which selectedIndex this is
-			var child = element.parentNode.firstChild,
-				i = -1;
-			while(child){
-				if(child.nodeType ==1){
-					i++;
-					if(child == element) break;
-				}
-				child = child.nextSibling;
-			}
-			if(i !== element.parentNode.selectedIndex){
-				//shouldn't this wait on triggering
-				//change?
-				element.parentNode.selectedIndex = i;
-				Syn.trigger("change",{}, element.parentNode)
-			}
+		if(nodeName == "option" && Syn.data(element,"createChange")){
+			Syn.trigger("change",{}, element.parentNode);//does not bubble
+			Syn.data(element,"createChange",false)
 		}
 	}
 })
@@ -170,6 +155,26 @@ h.extend(Syn.create,{
 				//remove b/c safari/opera will open a new tab instead of changing the page
 				element.setAttribute('href','javascript://')
 			}
+			//if select or option, save old value and mark to change
+			
+			
+			if(/option/i.test(element.nodeName)){
+				var child = element.parentNode.firstChild,
+				i = -1;
+				while(child){
+					if(child.nodeType ==1){
+						i++;
+						if(child == element) break;
+					}
+					child = child.nextSibling;
+				}
+				if(i !== element.parentNode.selectedIndex){
+					//shouldn't this wait on triggering
+					//change?
+					element.parentNode.selectedIndex = i;
+					Syn.data(element,"createChange",true)
+				}
+			}
 		}
 	},
 	mousedown : {
@@ -197,7 +202,7 @@ h.extend(Syn.create,{
 		submit, 
 		form, 
 		input, 
-		submitted = false;
+		select;
 		
 	div.innerHTML = "<form id='outer'>"+
 		"<input name='checkbox' type='checkbox'/>"+
@@ -207,12 +212,13 @@ h.extend(Syn.create,{
 		"<input name='one'>"+
 		"<input name='two'/>"+
 		"<a href='javascript:__synthTest()' id='synlink'></a>"+
+		"<select><option></option></select>"+
 		"</form>";
 	document.documentElement.appendChild(div);
 	form = div.firstChild
 	checkbox = form.childNodes[0];
 	submit = form.childNodes[2];
-	
+	select = form.getElementsByTagName('select')[0]
 	
 	checkbox.checked = false;
 	checkbox.onchange = function(){
@@ -230,13 +236,11 @@ h.extend(Syn.create,{
 	form.onsubmit = function(ev){
 		if (ev.preventDefault) 
 			ev.preventDefault();
-		submitted = true;
+		Syn.support.clickSubmits = true;
 		return false;
 	}
 	Syn.trigger("click", {}, submit)
-	if (submitted) {
-		Syn.support.clickSubmits = true;
-	}
+
 		
 	
 	form.childNodes[1].onchange = function(){
@@ -244,7 +248,17 @@ h.extend(Syn.create,{
 	}
 	Syn.trigger("click", {}, form.childNodes[1])
 	
-	//test if mousedown followed by mouseup causes click (opera)
+	
+	Syn.bind(div, 'click', function(){
+		Syn.support.optionClickBubbles = true;
+		Syn.unbind(div,'click', arguments.callee)
+	})
+	Syn.trigger("click",{},select.firstChild)
+	
+	
+	Syn.support.changeBubbles = Syn.eventSupported('change');
+	
+	//test if mousedown followed by mouseup causes click (opera), make sure there are no clicks after this
 	div.onclick = function(){
 		Syn.support.mouseDownUpClicks = true;
 	}

@@ -126,6 +126,8 @@
 			
 			
 			$(window).bind('load', function(){
+				$("select")[0].selectedIndex = 0;
+
 				$("#numeric").phui_key_validator({test: /^[-+]?[0-9]*\.?[0-9]*$/}).val("")
 			})
 			$("#submitform").submit(function(ev){

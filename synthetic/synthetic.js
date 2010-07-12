@@ -489,7 +489,8 @@ extend(Syn,{
 		backspaceWorks : false,
 		mouseDownUpClicks : false,
 		tabKeyTabs : false,
-		keypressOnAnchorClicks : false
+		keypressOnAnchorClicks : false,
+		optionClickBubbles : false
 	},
 	/**
 	 * Creates a synthetic event and dispatches it on the element.  
@@ -513,10 +514,11 @@ extend(Syn,{
 				createKind = create[kind],
 				event,
 				ret,
-				autoPrevent = options._autoPrevent;
+				autoPrevent = options._autoPrevent,
+				dispatchEl = element;
 		
 		//any setup code?
-		setup && setup(type, options, element);
+		Syn.support.ready && setup && setup(type, options, element);
 		
 		
 		//get kind
@@ -529,11 +531,15 @@ extend(Syn,{
 			//convert options
 			options = createKind.options ? createKind.options(type,options,element) : options;
 			
+			if(!Syn.support.changeBubbles && /option/i.test(element.nodeName)){
+				dispatchEl = element.parentNode; //jQuery expects clicks on select
+			}
+			
 			//create the event
-			event = createKind.event(type,options,element)
+			event = createKind.event(type,options,dispatchEl)
 			
 			//send the event
-			ret = Syn.dispatch(event, element, type, autoPrevent)
+			ret = Syn.dispatch(event, dispatchEl, type, autoPrevent)
 		}
 		
 		//run default behavior
@@ -541,6 +547,19 @@ extend(Syn,{
 			&& Syn.defaults[type] 
 			&& Syn.defaults[type].call(element, options, autoPrevent);
 		return ret;
+	},
+	eventSupported: function( eventName ) { 
+		var el = document.createElement("div"); 
+		eventName = "on" + eventName; 
+
+		var isSupported = (eventName in el); 
+		if ( !isSupported ) { 
+			el.setAttribute(eventName, "return;"); 
+			isSupported = typeof el[eventName] === "function"; 
+		} 
+		el = null; 
+
+		return isSupported; 
 	}
 	
 });
