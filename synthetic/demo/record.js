@@ -1,3 +1,5 @@
+//Safari doesn't send mouse/click on option
+
 $(function(){
 	Syn.autoDelay = true;
 	REPLAY = false;
@@ -14,7 +16,6 @@ $(function(){
 			
 		},
 		done : function(){
-			console.log('done')
 			ADD = true;
 			$("#code div").css("color","black")
 		}
@@ -29,21 +30,25 @@ $(function(){
 		h ={
 			commandsText : function(func){
 				var text = [],
-					command;
+					command,
+					prev,
+					args;
 				for(var i=0; i < commands.length; i++){
 					command = commands[i];
+					args = [];
+					command.options && args.push(command.options);
+					(!prev || prev.selector !== command.selector) && args.push("$('"+command.selector+"')");
+					func && args.push("Recorder.cb("+i+")");
+					
 					text.push(func ? "":"<div>",
 					  i > 0 ? "   ." : "Syn.",
 					  command.type,
 					  "(",
-					  command.options,
-					  ",$('",
-					  command.selector,
-					  "')",
-					  func ? ", Recorder.cb("+i+")" : "",
+					  args.join(", "),
 					  ")\n",
 					  func ? "":"</div>"
 					)
+					prev = command;
 				}
 				return text.join("")
 			},
@@ -79,9 +84,6 @@ $(function(){
 					}
 				}
 			},
-			addTyping : function(chars, target){
-				console.log("typed", chars, "into",target)
-			},
 			addKey : function(key){
 				
 			},
@@ -98,7 +100,6 @@ $(function(){
 				}
 				current.push(character);
 				
-				//console.log('adding',chars);
 				h.addCode("type",'"'+current.join("")+'"', target)
 			},
 			keydown : function(ev){
@@ -121,12 +122,16 @@ $(function(){
 				
 				var location = $.inArray(key, downKeys);
 				downKeys.splice(location,1);
+				justKey = true;
+				setTimeout(function(){
+					justKey = false;
+				},20)
 			},
 			// returns a selector
 			selector : function(target){
 				var selector = target.nodeName.toLowerCase();
 				if(target.id){
-					selector+= "#"+target.id
+					return "#"+target.id
 				}else{
 					var parent = target.parentNode;
 					while(parent){
@@ -150,27 +155,42 @@ $(function(){
 				
 				
 			}
-		};
-	var code = {
-			click : function(ev){
-				h.addCode("click","{}",this)
-			},
-			mousedown : function(ev){
-				mousedown = this;
-				mousemove = false
-			},
-			mousemove : function(ev){
-				mousemove = true;
-			},
-			mouseup : function(ev){
-				if(mousemove){
-					h.addCode("drag","'"+ev.clientX+"X"+ev.clientY+"'",mousedown)
-				}
+		},
+		lastX, 
+		lastY,
+		justKey = false,
+		mousedownH = function(ev){
+			mousedown = ev.target;
+			mousemove = false
+			lastX = ev.pageX
+			lastY = ev.pageY;
+		},
+		mouseupH = function(ev){
+			if(/option/i.test(ev.target.nodeName)){
 				
-				mousedown = null;
-				mousemove = false
+			}else if(lastX == ev.pageX && lastY == ev.pageY){
+				h.addCode("click",undefined,ev.target)
+			}else if(mousemove && mousedown){
+				h.addCode("drag","'"+ev.clientX+"X"+ev.clientY+"'",mousedown)
 			}
-		}
+			
+			mousedown = null;
+			mousemove = false;
+			lastY = lastX = null;
+			
+		},
+		mousemoveH = function(ev){
+			mousemove = true;
+			
+		},
+		changeH = function(ev){
+			//if we changed without a previous keypress
+			if(!justKey && ev.target.nodeName.toLowerCase() == "select"){
+				var el = $("option:eq("+ev.target.selectedIndex+")", ev.target);
+				h.addCode("click",undefined, el[0])
+			}
+		};
+
 	$("<iframe src='demo.html'></iframe>").load(function(){
 		//cant uses handled b/c it doesn't bubble
 		var iframe = $('iframe');
@@ -182,14 +202,21 @@ $(function(){
 		frameWindow.jQuery.event.handle = function(ev){
 			if(! ev[ frameWindow.jQuery.expando ]){
 				//add
-				if(code[ev.type]){
-					code[ev.type].call(ev.target||ev.srcElement, ev)
-				}
+				//if(code[ev.type]){
+				//	code[ev.type].call(ev.target||ev.srcElement, ev)
+				//}
 			}
 			oldHandle.apply(this,arguments);
 		}
 		keytarget = null;
 		$(frameWindow.document).keydown(h.keydown).keyup(h.keyup)
+			.mousedown(mousedownH).mousemove(mousemoveH).mouseup(mouseupH)
+			.change(changeH)
+			.click(function(ev){
+				if(ev.target.nodeName.toLowerCase() == 'option'){
+					h.addCode("click",undefined,ev.target)
+				}
+			})
 		
 		
 
@@ -207,9 +234,9 @@ $(function(){
 	}).appendTo($("#app"))
 	
 	$(function(){
-		$("#code").val("")
+		$("#code, #clearme").val("");
 	})
-	$('#fill').phui_filler();
+	$('#app').phui_filler({parent: document.body});
 
 	$("#run").click(function(){
 		REPLAY = true;

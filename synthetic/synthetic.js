@@ -226,10 +226,11 @@ extend(Syn,{
 	defaults : {
 		focus : function(){
 			if(!Syn.support.focusChanges){
-				var element = this;
+				var element = this,
+					nodeName = element.nodeName.toLowerCase();
 				Syn.data(element,"syntheticvalue", element.value)
 				
-				if(element.nodeName.toLowerCase() == "input"){
+				if(nodeName == "input"){
 					
 					bind(element, "blur", function(){
 						
@@ -243,6 +244,16 @@ extend(Syn,{
 				}
 			}
 		}
+	},
+	changeOnBlur : function(element, prop, value){
+		
+		bind(element, "blur", function(){		
+			if( value !=  element[prop]){
+				Syn.trigger("change", {}, element);
+			}
+			unbind(element,"blur", arguments.callee)
+		})
+		
 	},
 	/**
 	 * Returns the closest element of a particular type.
@@ -592,7 +603,7 @@ extend(Syn.init.prototype,{
 			callback = timeout;
 			timeout = null;
 		}
-		timeout = timeout || 500
+		timeout = timeout || 600
 		var self = this;
 		this.queue.unshift(function(){
 			setTimeout(function(){

@@ -302,6 +302,10 @@ h.extend(Syn.key,{
 	// default behavior when typing
 	defaults : 	{
 		'character' : function(options, scope, key, force){
+			if(/num\d+/.test(key)){
+				key = key.match(/\d+/)[0]
+			}
+			
 			if(force || (!S.support.keyCharacters && Syn.typeable.test(this.nodeName))){
 				var current = this.value,
 					sel = getSelection(this),
@@ -490,7 +494,7 @@ h.extend(Syn.key,{
 				}else{
 					Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1)
 				}
-			}	
+			}
 		},
 		'right' : function(){
 			if( Syn.typeable.test(this.nodeName) ){
@@ -502,6 +506,20 @@ h.extend(Syn.key,{
 					Syn.selectText(this, sel.end+1 > this.value.length ? this.value.length  : sel.end+1)
 				}
 			}	
+		},
+		'up' : function(){
+			if(/select/i.test(this.nodeName)){
+				
+				this.selectedIndex = this.selectedIndex ? this.selectedIndex-1 : 0;
+				//set this to change on blur?
+			}
+		},
+		'down' : function(){
+			if(/select/i.test(this.nodeName)){
+				Syn.changeOnBlur(this, "selectedIndex", this.selectedIndex)
+				this.selectedIndex = this.selectedIndex+1;
+				//set this to change on blur?
+			}
 		},
 		'shift' : function(){
 			return null;
@@ -637,8 +655,8 @@ h.extend(Syn.init.prototype,
 				defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
 			}else{
 				//do keypress
-				result = Syn.trigger('keypress',keypressOptions, element )
-				if(result){
+				runDefaults = Syn.trigger('keypress',keypressOptions, element )
+				if(runDefaults){
 					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
 				}
 			}
@@ -655,10 +673,10 @@ h.extend(Syn.init.prototype,
 		if(defaultResult !== null){
 			setTimeout(function(){
 				Syn.trigger('keyup',Syn.key.options(key, 'keyup'), element )
-				callback(result, element)
+				callback(runDefaults, element)
 			},1)
 		}else{
-			callback(result, element)
+			callback(runDefaults, element)
 		}
 		
 		

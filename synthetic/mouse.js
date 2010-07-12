@@ -93,11 +93,18 @@ h.extend(Syn.defaults,{
 		if(nodeName == "option"){
 			//check if we should change
 			//find which selectedIndex this is
-			var children = element.parentNode.childNodes;
-			for(var i =0; i< children.length; i++){
-				if(children[i] == element) break;
+			var child = element.parentNode.firstChild,
+				i = -1;
+			while(child){
+				if(child.nodeType ==1){
+					i++;
+					if(child == element) break;
+				}
+				child = child.nextSibling;
 			}
 			if(i !== element.parentNode.selectedIndex){
+				//shouldn't this wait on triggering
+				//change?
 				element.parentNode.selectedIndex = i;
 				Syn.trigger("change",{}, element.parentNode)
 			}
