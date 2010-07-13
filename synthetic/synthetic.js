@@ -130,7 +130,7 @@ Syn.key.browsers["Envjs\ Resig/20070309 PilotFish/1.2.0.10\1.6"] = {
  * </ul>
  * <h2>Roll Your Own Functional Test Framework</h2>
  * <p>Syn is really the foundation of JavaScriptMVC's functional testing framework - [FuncUnit].
- *   But, we've purposefully made Syn work without any dependencies in the hopes that other frameworks or 
+ *   But, we've purposely made Syn work without any dependencies in the hopes that other frameworks or 
  *   testing solutions can use it as well.
  * </p>
  * @init 
@@ -577,8 +577,8 @@ extend(Syn.init.prototype,{
 	 * <p>The following clicks and types into the <code>id='age'</code> element and then checks that only numeric characters can be entered.</p>
 	 * <h3>Example</h3>
 	 * @codestart
-	 * Syn('_click',{},'age')
-	 *   .then('_type','I am 12',function(){
+	 * Syn('click',{},'age')
+	 *   .then('type','I am 12',function(){
 	 *   equals($('#age').val(),"12")  
 	 * })
 	 * @codeend
