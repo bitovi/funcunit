@@ -608,18 +608,18 @@ h.extend(Syn.init.prototype,
 	 * @function key
 	 * Types a single key.  The key should be
 	 * a string that matches a 
-	 * [Syn.keycodes].
+	 * [Syn.static.keycodes].
 	 * 
 	 * The following sends a carridge return
 	 * to the 'name' element.
 	 * @codestart
-	 * Syn('key','\r','name')
+	 * Syn.key('\r','name')
 	 * @codeend
 	 * For each character, a keydown, keypress, and keyup is triggered if
 	 * appropriate.
 	 * @param {String} options
-	 * @param {HTMLElement} element
-	 * @param {Function} callback
+	 * @param {HTMLElement} [element]
+	 * @param {Function} [callback]
 	 * @return {HTMLElement} the element currently focused.
 	 */
 	_key : function(options, element, callback){
@@ -689,25 +689,25 @@ h.extend(Syn.init.prototype,
 	},
 	/**
 	 * @function type
-	 * Types sequence of key events.  Each
+	 * Types sequence of [Syn.prototype.key key actions].  Each
 	 * character is typed, one at a type.
 	 * Multi-character keys like 'left' should be
 	 * enclosed in square brackents.
 	 * 
-	 * The types 'JavaScript MVC' then deletes the space.
+	 * The following types 'JavaScript MVC' then deletes the space.
 	 * @codestart
-	 * Syn('type','JavaScript MVC[left][left][left]\b','name')
+	 * Syn.type('JavaScript MVC[left][left][left]\b','name')
 	 * @codeend
 	 * 
 	 * Type is able to handle (and move with) tabs (\t).  
 	 * The following simulates tabing and entering values in a form and 
 	 * eventually submitting the form.
 	 * @codestart
-	 * Syn('type',"Justin\tMeyer\t27\tjustinbmeyer@gmail.com\r")
+	 * Syn.type("Justin\tMeyer\t27\tjustinbmeyer@gmail.com\r")
 	 * @codeend
-	 * @param {String} options
-	 * @param {HTMLElement} element
-	 * @param {Function} callback
+	 * @param {String} options the text to type
+	 * @param {HTMLElement} [element] an element or an id of an element
+	 * @param {Function} [callback] a function to callback
 	 */
 	_type : function(options, element, callback){
 		//break it up into parts ...

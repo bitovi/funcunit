@@ -36,8 +36,8 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
  * and then types <code>'Hello World'</code>.
  * 
 @codestart
-Syn('click!',{},'description')
-  .then("type","Hello World")
+Syn.click({},'description')
+  .type("Hello World")
 @codeend
  * <h2>User Actions and Events</h2>
  * <p>Syn is typically used to simulate user actions as opposed to triggering events. Typing characters
@@ -49,8 +49,8 @@ Syn('click!',{},'description')
  *   following actions are supported by Syn:
  * </p>
  * <ul>
- *   <li><code>[Syn.prototype.click! click!]</code> - a mousedown, focus, mouseup, and click.</li>
- *   <li><code>[Syn.prototype.dblclick! dblclick!]</code> - two <code>click!</code> events followed by a <code>dblclick</code>.</li>
+ *   <li><code>[Syn.prototype.click click]</code> - a mousedown, focus, mouseup, and click.</li>
+ *   <li><code>[Syn.prototype.dblclick dblclick]</code> - two <code>click!</code> events followed by a <code>dblclick</code>.</li>
  *   <li><code>[Syn.prototype.key key]</code> - types a single character (keydown, keypress, keyup).</li>
  *   <li><code>[Syn.prototype.type type]</code> - types multiple characters into an element.</li>
  *   <li><code>[Syn.prototype.move move]</code> - moves the mouse from one position to another (triggering mouseover / mouseouts).</li>
@@ -67,8 +67,8 @@ Syn('click!',{},'description')
  * be called after the action is completed.
  * <br/>The following checks that "Hello World" was entered correctly: 
 @codestart
-Syn('click!',{},'description')
-  .then("type","Hello World", function(){
+Syn.click({},'description')
+  .type("Hello World", function(){
   
   ok("Hello World" == document.getElementById('description').value)  
 })
@@ -81,10 +81,10 @@ If an element isn't provided to then, it uses the previous Syn's element.
 </p>
 The following does a lot of stuff before checking the result:
 @codestart
-Syn('type','ice water','title')
-  .then('type','ice and water','description')
-  .then('click!',{},'create')
-  .then('drag',{to: 'favorites'},'newRecipe',
+Syn.type('ice water','title')
+  .type('ice and water','description')
+  .click({},'create')
+  .drag({to: 'favorites'},'newRecipe',
     function(){
       ok($('#newRecipe').parents('#favorites').length);
     })
@@ -116,7 +116,9 @@ Syn.key.browsers["Envjs\ Resig/20070309 PilotFish/1.2.0.10\1.6"] = {
  * <h2>Limitations</h2>
  * Syn fully supports IE 6+, FF 3+, Chrome, Safari, Opera 10+.
  * With FF 1+, drag / move events are only partially supported. They will
- * not trigger mouseover / mouseout events.
+ * not trigger mouseover / mouseout events.<br/>
+ * Safari crashes when a mousedown is triggered on a select.  Syn will not 
+ * create this event.
  * <h2>Contributing to Synthetic</h2>
  * Have we missed something? We happily accept patches.  The following are 
  * important objects and properties of Syn:
@@ -575,14 +577,14 @@ extend(Syn.init.prototype,{
 	 * <p>The following clicks and types into the <code>id='age'</code> element and then checks that only numeric characters can be entered.</p>
 	 * <h3>Example</h3>
 	 * @codestart
-	 * Syn('click!',{},'age')
-	 *   .then('type','I am 12',function(){
+	 * Syn('_click',{},'age')
+	 *   .then('_type','I am 12',function(){
 	 *   equals($('#age').val(),"12")  
 	 * })
 	 * @codeend
 	 * If the element argument is undefined, then the last element is used.
 	 * 
-	 * @param {String} type The type of event or action to create: "click!", "dblclick!", "drag", "type".
+	 * @param {String} type The type of event or action to create: "_click", "_dblclick", "_drag", "_type".
 	 * @param {Object} options Optiosn to pass to the event.
 	 * @param {String|HTMLElement} [element] A element's id or an element.  If undefined, defaults to the previous element.
 	 * @param {Function} [callback] A function to callback after the action has run, but before any future chained actions are run.
@@ -614,6 +616,11 @@ extend(Syn.init.prototype,{
 		})
 		return this;
 	},
+	/**
+	 * Delays the next command a set timeout.
+	 * @param {Number} [timeout]
+	 * @param {Function} [callback]
+	 */
 	delay : function(timeout, callback){
 		if(typeof timeout == 'function'){
 			callback = timeout;
@@ -637,6 +644,7 @@ extend(Syn.init.prototype,{
 		
 	},
 	/**
+	 * @function click
 	 * Clicks an element by triggering a mousedown, 
 	 * mouseup, 
 	 * and a click event.
@@ -679,11 +687,12 @@ extend(Syn.init.prototype,{
 		},1)
 	},
 	/**
+	 * @function dblclick
 	 * Dblclicks an element.  This runs two [Syn.prototype.click click] events followed by
 	 * a dblclick on the element.
 	 * <h3>Example</h3>
 	 * @codestart
-	 * Syn("dblclick!",{},'open')
+	 * Syn.dblclick({},'open')
 	 * @codeend
 	 * @param {Object} options
 	 * @param {HTMLElement} element
