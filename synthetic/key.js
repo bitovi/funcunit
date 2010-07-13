@@ -608,7 +608,7 @@ h.extend(Syn.init.prototype,
 	 * @function key
 	 * Types a single key.  The key should be
 	 * a string that matches a 
-	 * [Syn.keycodes].
+	 * [Syn.static.keycodes].
 	 * 
 	 * The following sends a carridge return
 	 * to the 'name' element.

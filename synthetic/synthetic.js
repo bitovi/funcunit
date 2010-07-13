@@ -128,7 +128,7 @@ Syn.key.browsers["Envjs\ Resig/20070309 PilotFish/1.2.0.10\1.6"] = {
  * </ul>
  * <h2>Roll Your Own Functional Test Framework</h2>
  * <p>Syn is really the foundation of JavaScriptMVC's functional testing framework - [FuncUnit].
- *   But, we've purposefully made Syn work without any dependencies in the hopes that other frameworks or 
+ *   But, we've purposely made Syn work without any dependencies in the hopes that other frameworks or 
  *   testing solutions can use it as well.
  * </p>
  * @init 
@@ -575,14 +575,14 @@ extend(Syn.init.prototype,{
 	 * <p>The following clicks and types into the <code>id='age'</code> element and then checks that only numeric characters can be entered.</p>
 	 * <h3>Example</h3>
 	 * @codestart
-	 * Syn('click!',{},'age')
+	 * Syn('click',{},'age')
 	 *   .then('type','I am 12',function(){
 	 *   equals($('#age').val(),"12")  
 	 * })
 	 * @codeend
 	 * If the element argument is undefined, then the last element is used.
 	 * 
-	 * @param {String} type The type of event or action to create: "click!", "dblclick!", "drag", "type".
+	 * @param {String} type The type of event or action to create: "click", "dblclick", "drag", "type".
 	 * @param {Object} options Optiosn to pass to the event.
 	 * @param {String|HTMLElement} [element] A element's id or an element.  If undefined, defaults to the previous element.
 	 * @param {Function} [callback] A function to callback after the action has run, but before any future chained actions are run.
@@ -683,7 +683,7 @@ extend(Syn.init.prototype,{
 	 * a dblclick on the element.
 	 * <h3>Example</h3>
 	 * @codestart
-	 * Syn("dblclick!",{},'open')
+	 * Syn("dblclick",{},'open')
 	 * @codeend
 	 * @param {Object} options
 	 * @param {HTMLElement} element
