@@ -162,7 +162,7 @@ $(function(){
 		justKey = false,
 		mousedownH = function(ev){
 			mousedown = ev.target;
-			mousemove = false
+			mousemove = 0
 			lastX = ev.pageX
 			lastY = ev.pageY;
 		},
@@ -171,17 +171,17 @@ $(function(){
 
 			}else if(!mousemove || (lastX == ev.pageX && lastY == ev.pageY)){
 				h.addCode("click",undefined,ev.target)
-			}else if(mousemove && mousedown){
+			}else if(mousemove > 2 && mousedown){
 				h.addCode("drag","'"+ev.clientX+"X"+ev.clientY+"'",mousedown)
 			}
 			
 			mousedown = null;
-			mousemove = false;
+			mousemove = 0;
 			lastY = lastX = null;
 			
 		},
 		mousemoveH = function(ev){
-			mousemove = true;
+			mousemove++;
 			
 		},
 		changeH = function(ev){
