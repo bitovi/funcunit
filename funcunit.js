@@ -1,4 +1,4 @@
-//what we need from jQuery
+//what we need from javascriptmvc or other places
 steal.plugins('funcunit/qunit',
 	'funcunit/qunit/rhino',
 	'jquery',
@@ -8,8 +8,10 @@ steal.plugins('funcunit/qunit',
 //Now describe FuncUnit
 .then(function(){
 	
-	
+//this gets the global object, even in rhino
 var window = (function(){return this }).call(null),
+
+//if there is an old FuncUnit, use that for settings
 	oldFunc = window.FuncUnit;
 
 /**
@@ -145,6 +147,7 @@ FuncUnit = function(s, c){
  * @Static
  */
 $.extend(FuncUnit,oldFunc)
+$.extend(FuncUnit,{
 /**
  * @attribute href
  * The location of the page running the tests on the server and where relative paths passed in to [FuncUnit.static.open] will be 
@@ -171,7 +174,7 @@ FuncUnit = {jmvcRoot: "http://localhost/script/" }
 @codeend
  */
 // jmvcRoot comes from settings
-FuncUnit.
+
 /**
  * Opens a page.  It will error if the page can't be opened before timeout. 
  * <h3>Example</h3>
@@ -225,7 +228,7 @@ S.open("//app/app.html")
  * @param {Function} callback
  * @param {Number} timeout
  */
-open = function(path, callback, timeout){
+open : function(path, callback, timeout){
 	var fullPath = FuncUnit.getAbsolutePath(path)
 	FuncUnit.add(function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
 		
@@ -236,9 +239,13 @@ open = function(path, callback, timeout){
 			success()
 		}, error);
 	}, callback, "Page " + path + " not loaded in time!", timeout || 30000);
-};
-
-FuncUnit.getAbsolutePath = function(path){
+},
+/**
+ * @hide
+ * Gets a path, will use steal if present
+ * @param {String} path
+ */
+getAbsolutePath : function(path){
 	if(typeof(steal) == "undefined"){
 		return path;
 	}
@@ -255,27 +262,53 @@ FuncUnit.getAbsolutePath = function(path){
 	if(/^http/.test(path))
 		fullPath = path;
 	return fullPath;
-}
-
-// for feature detection
-FuncUnit.support = {};
+},
 /**
  * @attribute browsers
  * Used to configure the browsers selenium uses to run FuncUnit tests.
  * If you need to learn how to configure selenium, and we haven't filled in this page,
  * post a note on the forum and we will fill this out right away.
  */
-FuncUnit.window = {
+// for feature detection
+support : {},
+/**
+ * @attribute window
+ * Use this to refer to the window of the application page.  You can also 
+ * reference window.document.
+ * @codestart
+ * S(S.window).width(function(w){
+ *   ok(w > 1000, "window is more than 1000 px wide")
+ * })
+ * @codeend
+ */
+window : {
 	document: {}
-};
-FuncUnit._opened = function(){};
+},
+_opened : function(){}
+});
+
+
 (function(){
+	//the queue of commands waiting to be run
 	var queue = [], 
+		//are we in a callback function (something we pass to a FuncUnit plugin)
 		incallback = false,
 		//where we should add things in a callback
 		currentPosition = 0;
-	FuncUnit.add = function(f, callback, error, timeout){
 		
+	
+	FuncUnit.
+	/**
+	 * @hide
+	 * Adds a function to be called in the queue.
+	 * @param {Function} f The function to be called.  It will be provided a success and error function.
+	 * @param {Function} callback a callback to be called after the function is done
+	 * @param {Object} error an error statement if the command fails
+	 * @param {Object} timeout the length of time until success should be called.
+	 */
+	add = function(f, callback, error, timeout){
+		
+		//if we are in a callback, add to the current position
 		if (incallback) {
 			queue.splice(currentPosition,0,{
 				method: f,
@@ -286,6 +319,7 @@ FuncUnit._opened = function(){};
 			currentPosition++;
 		}
 		else {
+			//add to the end
 			queue.push({
 				method: f,
 				callback: callback,
@@ -293,12 +327,15 @@ FuncUnit._opened = function(){};
 				timeout: timeout
 			});
 		}
-		
+		//if our queue has just started, stop qunit
+		//call done to call the next command
         if (queue.length == 1 && ! incallback) {
 			stop();
             setTimeout(FuncUnit._done, 13)
         }
 	}
+	//this is called after every command
+	// it gets the next function from the queue
 	FuncUnit._done = function(){
 		var next, 
 			timer;
@@ -362,7 +399,7 @@ FuncUnit._opened = function(){};
 		}, cb, "Couldn't wait!", time + 1000);
 		return this;
 	}
-	
+	//calls something many times until it is true
 	FuncUnit._repeat = function(script, callback, data){
 		var f = script;
 		if (typeof script == "string") {
@@ -417,6 +454,7 @@ FuncUnit._opened = function(){};
 	}
 	FuncUnit.
 	/**
+	 * @hide
 	 * Converts a string into a Native JS type.
 	 * @param {Object} str
 	 */
@@ -532,6 +570,7 @@ FuncUnit._opened = function(){};
 	 * @function outerWidth
 	 */
 	'outerWidth']
+	//makes a command.
 	FuncUnit.makeFunc = function(fname){
 		FuncUnit.init.prototype[fname] = function(){
 			//assume last arg is callback
