@@ -363,7 +363,7 @@ FuncUnit._opened = function(){};
 		return this;
 	}
 	
-	FuncUnit._repeat = function(script, callback){
+	FuncUnit._repeat = function(script, callback, data){
 		var f = script;
 		if (typeof script == "string") {
 			script = script.replace(/\n/g, "\\n")
@@ -384,7 +384,7 @@ FuncUnit._opened = function(){};
 				else {
 					var result = null;
 					try {
-						result = f()
+						result = f(data)
 					} 
 					catch (e) {
 					}
@@ -591,59 +591,55 @@ FuncUnit._opened = function(){};
 			return this;
 		}
 	}
+	
+	
+	
 })();
 
-FuncUnit.existsFuncs = [
+
+var specials = {
 	/**
 	 * @function exists
 	 * Continues the test once a given element exists in the page
 	 * @param {Function} cb a callback that is run once the condition is satisfied
 	 * @param {Number} timeout the timeout value (in ms) before this test should fail
 	 */
-	{
-		name: "exists", 
-		func: function(){ return FuncUnit.$(this.selector, this.context, "size"); }
-	},
+	exists : function(data){ return FuncUnit.$(data.selector, data.context, "size"); },
 	/**
 	 * @function missing
 	 * Continues the test once a given element does NOT exist in the page
 	 * @param {Function} cb a callback that is run once the condition is satisfied
 	 * @param {Number} timeout the timeout value (in ms) before this test should fail
 	 */
-	{
-		name: "missing", 
-		func: function(){ return !FuncUnit.$(this.selector, this.context, "size"); }
-	},
+	missing : function(data){ return !FuncUnit.$(data.selector, data.context, "size"); },
+
 	/**
 	 * @function visible
 	 * Continues the test once a given element is visible in the page
 	 * @param {Function} cb a callback that is run once the condition is satisfied
 	 * @param {Number} timeout the timeout value (in ms) before this test should fail
 	 */
-	{
-		name: "visible", 
-		func: function(){ return FuncUnit.$(this.selector+":visible", this.context, "size"); }
-	},
+
+	visible: function(data){ return FuncUnit.$(data.selector+":visible", data.context, "size"); },
+
 	/**
 	 * @function invisible
 	 * Continues the test once a given element is invisible in the page
 	 * @param {Function} cb a callback that is run once the condition is satisfied
 	 * @param {Number} timeout the timeout value (in ms) before this test should fail
 	 */
-	{
-		name: "invisible", 
-		func: function(){ return !FuncUnit.$(this.selector+":visible", this.context, "size"); }
-	}
-]
+	invisible: function(data){ return !FuncUnit.$(data.selector+":visible", data.context, "size"); }
 
-FuncUnit.makeExistsFunc = function(funcObj){
-	FuncUnit.init[funcObj.name] = function(cb, timeout){
-		var selector = this.selector, context = this.context;
-		var self = this;
+},
+makeSpecial = function(name, func){
+	FuncUnit.init.prototype[name] = function(cb, timeout){
+		var selector = this.selector, 
+			context = this.context,
+			self = this;
 		FuncUnit.add(function(success, error){
-			steal.dev.log("Checking "+funcObj.name+" on "+selector)
-			FuncUnit._repeat(funcObj.func.apply(self), success)
-		}, cb, funcObj.name+" is not true for " + this.selector, timeout);
+			steal.dev.log("Checking "+name+" on "+selector)
+			FuncUnit._repeat(func, success, self)
+		}, cb, name+" is not true for " + this.selector, timeout);
 		return this;
 	}
 }
@@ -713,18 +709,16 @@ FuncUnit.init.prototype = {
 	}
 };
 
-(function(){
-	for (var i = 0; i < FuncUnit.funcs.length; i++) {
-		FuncUnit.makeFunc(FuncUnit.funcs[i])
-		FuncUnit.makeWait(FuncUnit.funcs[i])
-	}
-})();
 
-(function(){
-	for (var i = 0; i < FuncUnit.existsFuncs.length; i++) {
-		FuncUnit.makeExistsFunc(FuncUnit.existsFuncs[i])
-	}
-})();
+for (var i = 0; i < FuncUnit.funcs.length; i++) {
+	FuncUnit.makeFunc(FuncUnit.funcs[i])
+	FuncUnit.makeWait(FuncUnit.funcs[i])
+}
+for (var name in specials) {
+	makeSpecial(name, specials[name])
+}
+
+
 
 S = FuncUnit;
 

@@ -119,7 +119,7 @@ Syn.key.browsers["Envjs\ Resig/20070309 PilotFish/1.2.0.10\1.6"] = {
  * not trigger mouseover / mouseout events.<br/>
  * Safari crashes when a mousedown is triggered on a select.  Syn will not 
  * create this event.
- * <h2>Contributing to Synthetic</h2>
+ * <h2>Contributing to Syn</h2>
  * Have we missed something? We happily accept patches.  The following are 
  * important objects and properties of Syn:
  * <ul>

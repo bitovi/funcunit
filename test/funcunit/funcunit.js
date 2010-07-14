@@ -1,3 +1,3 @@
 steal
  .plugins("funcunit")
- .then("funcunit_test")
+ .then("open_test","syn_test","funcunit_test")

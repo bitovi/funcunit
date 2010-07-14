@@ -27,17 +27,38 @@
 		<script src="jquery.event.drop.js" type='text/javascript'></script>
 		<script type='text/javascript'>
 			$(function(){
+				// on key up, write the value
 				$("#typehere").keyup(function(){
 					$("#seewhatyoutyped").html("typed "+this.value)
 				})
+				
+				//when copy is clicked, change the text
 				$("#copy").click(function(){
+					//run slowwwww
+					var sum = 0, date = new Date();
+					for(var i =0; i< 10; i++){
+						$("*").each(function(){
+							$(this).width()
+							$(this).height()
+						})
+					}
+					console.log(new Date() - date)
 					$("#seewhatyoutyped").html("copied "+$("#typehere").val())
 				})
+				
 				$('#clickToChange').click(function(){
 					setTimeout(function(){
 						$('#clickToChange').html("changed")
 					},300)
 				})
+				
+				//exists
+				$("#exists").click(function(){
+					setTimeout(function(){
+						$("#exists").append("<p>I exist</p>")
+					},200)
+				})
+				
 			})
 			changeText = function(){
                 $('#changelink').text('Changed')
@@ -53,7 +74,9 @@
 			$('#drop').live("dropout", function(){ 
 				$(this).css('background-color', 'green').addClass("dropout")
 			})
-
+			
+			
+			
 		</script>
 	</head>
 	<body>
@@ -65,5 +88,10 @@
         <a href="javascript:changeText()" id='changelink'>Change</a>
 		<div id='drag'></div>
 		<div id='drop'></div>
+		
+		<h3>Exists</h3>
+		<div id='exists'>Click Me</div>
+		
+		
 	</body>
 </html>

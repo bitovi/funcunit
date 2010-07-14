@@ -44,7 +44,7 @@ steal.then(function() {
 					ls();
 				}
 			}, 0);
-			Synthetic.removeEventListener(FuncUnit._window, "load", onload);
+			Syn.unbind(FuncUnit._window, "load", onload);
 		},
 		onunload = function(){
 			removeListeners();
@@ -52,17 +52,17 @@ steal.then(function() {
 			
 		},
 		removeListeners = function(){
-			Synthetic.removeEventListener(FuncUnit._window, "unload", onunload);
-			Synthetic.removeEventListener(FuncUnit._window, "load", onload);
+			Syn.unbind(FuncUnit._window, "unload", onunload);
+			Syn.unbind(FuncUnit._window, "load", onload);
 		}
 	unloadLoader = function(){
 		if(!firstLoad) // dont remove the first run, fixes issue in FF 3.6
 			removeListeners();
 		
-		Synthetic.addEventListener(FuncUnit._window, "load", onload);
+		Syn.bind(FuncUnit._window, "load", onload);
 		
 		//listen for unload to re-attach
-		Synthetic.addEventListener(FuncUnit._window, "unload", onunload)
+		Syn.bind(FuncUnit._window, "unload", onunload)
 	}
 	
 	//check for window location change, documentChange, then readyState complete -> fire load if you have one
