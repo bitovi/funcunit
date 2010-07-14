@@ -105,10 +105,28 @@ steal.then(function(){
 			createEventAtPoint("mouseup", end, element);
 			callback();
 		})
-	}, 
-	convertOption = function(option, win){
+	},
+	center = function(el){
+		var j = jQuery(el),
+		o = j.offset();
+		return{
+			pageX: o.left + (j.width() / 2),
+			pageY: o.top + (j.height() / 2)
+		}
+	},
+	convertOption = function(option, win, from){
 		var page = /(\d+)x(\d+)/,
-			client = /(\d+)X(\d+)/
+			client = /(\d+)X(\d+)/,
+			relative = /([+-]\d+)[xX]([+-]\d+)/
+		//check relative "+22x-44"
+		if (typeof option == 'string' && relative.test(option) && from) {
+			var cent = center(from),
+				parts = option.match(relative);
+			option = {
+				pageX: cent.pageX + parseInt(parts[1]),
+				pageY: cent.pageY +parseInt(parts[2])
+			}
+		}
 		if (typeof option == 'string' && page.test(option)) {
 			var parts = option.match(page)
 			option = {
@@ -127,12 +145,7 @@ steal.then(function(){
 			option = jQuery(option, win.document)[0];
 		}
 		if (option.nodeName) {
-			var j = jQuery(option)
-			o = j.offset();
-			option = {
-				pageX: o.left + (j.width() / 2),
-				pageY: o.top + (j.height() / 2)
-			}
+			option = center(option)
 		}
 		if (option.pageX) {
 			var off = Syn.helpers.scrollOffset(win);
@@ -238,8 +251,8 @@ Syn.helpers.extend(Syn.init.prototype,{
 	_drag : function(options, from, callback){
 		//need to convert if elements
 		var win = Syn.helpers.getWindow(from), 
-			fro = convertOption(options.from || from, win), 
-			to = convertOption(options.to || options, win);
+			fro = convertOption(options.from || from, win, from), 
+			to = convertOption(options.to || options, win, from);
 		
 		startDrag(fro, to, options.duration || 500, from, callback);
 	}

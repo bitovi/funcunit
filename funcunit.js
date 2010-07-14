@@ -649,6 +649,12 @@ FuncUnit.init = function(s, c){
 	this.context = c == null ? FuncUnit.window.document : c;
 }
 FuncUnit.init.prototype = {
+	then : function(callback){
+		FuncUnit.add(function(success, error){
+			success();
+		}, callback, "Could not call back your func ");
+		return this;
+	},
 	/**
 	 * Types text into the object
 	 * @param {Object} text
@@ -659,7 +665,8 @@ FuncUnit.init.prototype = {
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Typing "+text+" on "+selector)
 			FuncUnit.$(selector, context, "triggerSyn", "_type", text, success)
-		}, callback, "Could not type " + text + " into " + this.selector)
+		}, callback, "Could not type " + text + " into " + this.selector);
+		return this;
 	},
 	/**
 	 * Drags an object into another object, or coordinates
