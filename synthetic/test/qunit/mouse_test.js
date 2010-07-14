@@ -160,7 +160,8 @@ test("Click! Anchor Focuses", 2, function(){
 	
 	st.binder("focusme","focus",function(ev){
 		ok(true,"focused");
-	} );
+	});
+	
 	st.binder("focusme","click",function(ev){
 		ok(true,"clicked");
 		st.g("qunit-test-area").innerHTML ="";
@@ -196,4 +197,20 @@ test("Click away causes Blur", function(){
 		})
 	
 })
-
+test("Right Click", function(){
+	st.g("qunit-test-area").innerHTML = "<div id='one'>right click me</div>";
+	stop()
+	var context = 0;
+	st.binder("one","contextmenu",function(){
+		context++;
+	});
+	
+	Syn.rightClick({},"one", function(){
+		if(Syn.mouse.browser.contextmenu){
+			equals(1, context, "context was called")
+		}else{
+			ok(true,"context shouldn't be called in this browser")
+		}
+		start();
+	})
+})

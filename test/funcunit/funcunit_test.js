@@ -64,6 +64,15 @@ test("Exists", function(){
 	});
 	
 })
-
+test("Accessing the window", function(){
+	S(S.window).width(function(w){
+		ok(w> 20, "I can get the window's width")
+	});
+})
+test("Accessing the document", function(){
+	S(S.window.document).width(function(w){
+		ok(w> 20, "I can get the docs width")
+	});
+})
 
 

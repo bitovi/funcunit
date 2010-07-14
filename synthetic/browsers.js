@@ -108,6 +108,13 @@ steal.then(function(){
 		}
 	};
 	
+	Syn.mouse.browsers = {
+		webkit : {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
+		opera: {},
+		msie: {"mouseup":{"button":2},"contextmenu":{"button":0}},
+		chrome : {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
+		gecko: {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}}
+	}
 	
 	//set browser
 	Syn.key.browser = 
@@ -121,6 +128,19 @@ steal.then(function(){
 			}
 		}
 		return Syn.key.browsers.gecko;
+	})();
+	
+	Syn.mouse.browser = 
+	(function(){
+		if(Syn.mouse.browsers[window.navigator.userAgent]){
+			return Syn.mouse.browsers[window.navigator.userAgent];
+		}
+		for(var browser in Syn.browser){
+			if(Syn.browser[browser] && Syn.mouse.browsers[browser]){
+				return Syn.mouse.browsers[browser]
+			}
+		}
+		return Syn.mouse.browsers.gecko;
 	})();
 	
 })

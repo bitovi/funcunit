@@ -135,12 +135,14 @@ steal.then(function() {
 		} else if (typeof context == "number" || typeof context == "string") {
 			context = FuncUnit._window.frames[context].document;
 		}
-		
-		if (FuncUnit._window.jQuery && parseFloat(FuncUnit._window.jQuery().jquery) >= 1.3) {
-			q = jQuery(FuncUnit._window.jQuery(selector, context).get());
-		} else {
-			q = jQuery(selector, context);
-		}
+	
+		//the following 	
+		//if the page has jQuery, use its jQuery b/c it is faster.
+		//if (FuncUnit._window.jQuery && parseFloat(FuncUnit._window.jQuery().jquery) >= 1.3) {
+		//	q = jQuery(FuncUnit._window.jQuery(selector, context).get());
+		//} else {
+		q = jQuery(selector, context);
+		//}
 		
 		return q[method].apply(q, args);
 	}

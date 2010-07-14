@@ -687,6 +687,29 @@ extend(Syn.init.prototype,{
 		},1)
 	},
 	/**
+	 * Right clicks in browsers that support it (everyone but opera).
+	 * @param {Object} options
+	 * @param {Object} element
+	 * @param {Object} callback
+	 */
+	"_rightClick" : function(options, element, callback){
+		Syn.helpers.addOffset(options, element);
+		var mouseopts =  extend( extend({},Syn.mouse.browser.mouseup ), options)
+		
+		Syn.trigger("mousedown", mouseopts, element);
+		
+		//timeout is b/c IE is stupid and won't call focus handlers
+		setTimeout(function(){
+			Syn.trigger("mouseup", mouseopts, element)
+			if (Syn.mouse.browser.contextmenu) {
+				Syn.trigger("contextmenu", 
+					extend( extend({},Syn.mouse.browser.contextmenu ), options), 
+					element)
+			}
+			callback(true)
+		},1)
+	},
+	/**
 	 * @function dblclick
 	 * Dblclicks an element.  This runs two [Syn.prototype.click click] events followed by
 	 * a dblclick on the element.
@@ -710,7 +733,7 @@ extend(Syn.init.prototype,{
 	}
 })
 
-var actions = ["click","dblclick","move","drag","key","type"],
+var actions = ["click","dblclick","move","drag","key","type",'rightClick'],
 	makeAction = function(name){
 		Syn[name] = function(options, element, callback){
 			return Syn("_"+name, options, element, callback)

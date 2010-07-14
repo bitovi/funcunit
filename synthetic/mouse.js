@@ -3,7 +3,7 @@ steal.then(function(){
 
 var h = Syn.helpers;
 
-
+Syn.mouse = {};
 h.extend(Syn.defaults,{
 	mousedown : function(options){
 		Syn.trigger("focus", {}, this)

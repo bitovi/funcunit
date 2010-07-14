@@ -74,8 +74,13 @@
 	Type [f8]
 	<input id='t_f8' /> - function
 </div>
-
+<div id='rightClick'>
+	Right Click Me
+</div>
+<h3>Key Data</h3>
 <pre id='out'></pre>
+<h3>Click Data</h3>
+<pre id='clickdata'></pre>
 <script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript'>
 	steal.plugins('funcunit/synthetic','jquery','jquery/lang/json').start();
@@ -228,11 +233,35 @@
 	bind('keyPressPrevent','keyup', function(ev){
 		keyPress_keyUp = true;
 	})
-
-
-
-
-
+	
+	var button = {}
+	bind('rightClick','mousedown',function(ev){
+		button.mousedown = {
+			button: ev.button,
+			which: ev.which
+		}
+	})
+	bind('rightClick','mouseup',function(ev){
+		button.mouseup = {
+			button: ev.button,
+			which: ev.which
+		}
+		setTimeout(function(){
+			$('#clickdata').html($.toJSON(button))
+		},100)
+	})
+	bind('rightClick','click',function(ev){
+		button.click = {
+			button: ev.button,
+			which: ev.which
+		}
+	})
+	bind('rightClick','contextmenu',function(ev){
+		button.contextmenu = {
+			button: ev.button,
+			which: ev.which
+		}
+	})
 
 	update = function(){
 		var str = [];
