@@ -214,3 +214,20 @@ test("Right Click", function(){
 		start();
 	})
 })
+
+test("Double Click", function(){
+	st.g("qunit-test-area").innerHTML = "<div id='dblclickme'>double click me</div>";
+	stop()
+	var eventSequence = [];
+	st.binder("dblclickme","dblclick",function(){
+		eventSequence.push('dblclick');
+	});
+	st.binder("dblclickme","click",function(){
+		eventSequence.push('click');
+	});
+
+	Syn.dblclick({},"dblclickme", function(){
+		equals(eventSequence.join(', '), 'click, click, dblclick', 'expected event sequence for doubleclick');
+		start();
+	})
+})

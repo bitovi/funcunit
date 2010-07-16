@@ -722,10 +722,10 @@ extend(Syn.init.prototype,{
 	 * @param {Function} callback
 	 */
 	"_dblclick" : function(options, element, callback){
-		Syn.helpers.addOffset(options);
+		Syn.helpers.addOffset(options, element);
 		var self = this;
-		this["click!"](options, element, function(){
-			self["click!"](options, element, function(){
+		this._click(options, element, function(){
+			self._click(options, element, function(){
 				Syn.trigger("dblclick", options, element)
 				callback(true)
 			})
