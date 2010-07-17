@@ -452,29 +452,41 @@ h.extend(Syn.key,{
 				el, 
 				//the tabindex of the tabable element we are looking at
 				elIndex,
-				firstNotIndexed;
-				
+				firstNotIndexed,
+				prev;
+			
+			var sort = function(el1, el2){
+				var tab1 = Syn.tabIndex(el1) || 0,
+					tab2 = Syn.tabIndex(el2) || 0;
+				if(tab1 == tab2){
+					return 0
+				}else{
+					if(tab1 == 0){
+						return 1;
+					}else if(tab2 == 0){
+						return -1;
+					}
+					
+					return tab1-tab2;
+				}
+			}
+			focusEls.sort(sort);
+			//now find current
 			for(; i< focusEls.length; i++){
 				el = focusEls[i];
-				elIndex = Syn.tabIndex(el) || 0;
-				if(!firstNotIndexed && elIndex === 0){
-					firstNotIndexed = el;
-				}
-				
-				if(tabIndex 
-					&& (found ? elIndex >= tabIndex : elIndex > tabIndex )  
-					&& elIndex < currentIndex){
-						currentIndex = elIndex;
-						current = el;
-				}
-				
-				if(!tabIndex && found && !elIndex){
-					current = el;
-					break;
-				}
-				
-				if(this === el){
-					found= true;
+				if(this== el ){
+					if(!Syn.key.shiftKey){
+						current = focusEls[i+1];
+						if(!current){
+							current = focusEls[0]
+						}
+					}else{
+						current = focusEls[i-1];
+						if(!current){
+							current = focusEls[focusEls.length-1]
+						}
+					}
+					
 				}
 			}
 			
