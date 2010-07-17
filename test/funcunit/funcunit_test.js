@@ -1,37 +1,39 @@
 module("funcunit - jQuery API",{
 	setup : function(){
-		S.open("test/myapp.html", null, 10000)
+		var self = this;
+		S.open("test/myapp.html", function(){
+			self.pageIsLoaded = true;
+		}, 10000)
 	}
 })
 
 
 
-
+test("qUnit module setup works async", function(){
+	ok(this.pageIsLoaded, "page is loaded set before")
+})
 
 test("Iframe access", function(){
 	
-	S("h2",0).text(function(text){
-		equals(text, "Goodbye World", "text of iframe")
-	})
+	
+	equals(S("h2",0).text(), "Goodbye World", "text of iframe")
+	
 })
 
-test("waitHtml with function", function(){
+test("html with function", 1, function(){
 	S("#clickToChange").click()
-	
-		.waitHtml(function(html){
-			return html == "changed"
-		})
 		.html(function(html){
-			equals(html,"changed","wait actually waits")
+			return html == "changed"
+		}, function(){
+			equals(S("#clickToChange").html(),"changed","wait actually waits")
 		})
 	
 })
-test("waitHtml with value", function(){
+test("Html with value", 1, function(){
 	S("#clickToChange").click()
 	
-		.waitHtml("changed")
-		.html(function(html){
-			equals(html,"changed","wait actually waits")
+		.html("changed", function(){
+			equals(S("#clickToChange").html(),"changed","wait actually waits")
 		})
 	
 })
@@ -65,14 +67,10 @@ test("Exists", function(){
 	
 })
 test("Accessing the window", function(){
-	S(S.window).width(function(w){
-		ok(w> 20, "I can get the window's width")
-	});
+	ok(S(S.window).width()> 20, "I can get the window's width")
 })
 test("Accessing the document", function(){
-	S(S.window.document).width(function(w){
-		ok(w> 20, "I can get the docs width")
-	});
+	ok(S(S.window.document).width()> 20, "I can get the window's width")
 })
 
 

@@ -115,9 +115,9 @@ steal.then(function(){
 		}
 	},
 	convertOption = function(option, win, from){
-		var page = /(\d+)x(\d+)/,
+		var page = /(\d+)[x ](\d+)/,
 			client = /(\d+)X(\d+)/,
-			relative = /([+-]\d+)[xX]([+-]\d+)/
+			relative = /([+-]\d+)[xX ]([+-]\d+)/
 		//check relative "+22x-44"
 		if (typeof option == 'string' && relative.test(option) && from) {
 			var cent = center(from),

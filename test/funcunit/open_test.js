@@ -22,7 +22,7 @@ test("Back to back opens", function(){
 	
 	S.open("test/myapp.html", null, 10000);
 
-	S("#changelink").click().text(function(t){
-		equals(t, "Changed","href javascript run")
+	S("#changelink").click(function(){
+		equals(S("#changelink").text(), "Changed","href javascript run")
 	})
 })

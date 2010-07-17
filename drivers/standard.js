@@ -127,13 +127,23 @@ steal.then(function() {
 			args[i] = args[i] === FuncUnit.window ? FuncUnit._window : args[i]
 		}
 		
-		var selector = args.shift(), context = args.shift(), method = args.shift(), q;
+		var selector = args.shift(), 
+			context = args.shift(), 
+			method = args.shift(), 
+			q;
 		
 		//convert context	
 		if (context == FuncUnit.window.document) {
 			context = FuncUnit._window.document
-		} else if (typeof context == "number" || typeof context == "string") {
+		}else if(context === FuncUnit.window){
+			context = FuncUnit._window;
+		}else if (typeof context == "number" || typeof context == "string") {
 			context = FuncUnit._window.frames[context].document;
+		}
+		if (selector == FuncUnit.window.document) {
+			selector = FuncUnit._window.document
+		}else if(selector === FuncUnit.window){
+			selector = FuncUnit._window;
 		}
 	
 		//the following 	

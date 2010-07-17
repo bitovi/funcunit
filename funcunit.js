@@ -141,6 +141,10 @@ S('#myArea').height(function(height){
  * @param {Object} c
  */
 FuncUnit = function(s, c){
+	if(typeof s == "function"){
+		return FuncUnit.wait(0, s)
+	}
+	
 	return new FuncUnit.init(s, c)
 }
 /**
@@ -338,9 +342,9 @@ _opened : function(){}
 	// it gets the next function from the queue
 	FuncUnit._done = function(){
 		var next, 
-			timer;
+			timer,
+			speed = 0;
 			
-		var speed = 0;
 		if(FuncUnit.speed == "slow"){
 			speed = 500;
 		}
@@ -351,35 +355,40 @@ _opened : function(){}
 			next = queue.shift();
 			currentPosition = 0;
 			// set a timer that will error
-			timer = setTimeout(function(){
-					ok(false, next.error);
-					FuncUnit._done();
-				}, 
-				(next.timeout || 10000) + speed)
+			
 			
 			//call next method
 			setTimeout(function(){
+				timer = setTimeout(function(){
+						ok(false, next.error);
+						FuncUnit._done();
+					}, 
+					(next.timeout || 10000) + speed)
+				
 				next.method(	//success
-				function(){
-					//make sure we don't create an error
-					clearTimeout(timer);
-					
-					//mark in callback so the next set of add get added to the front
-					
-					incallback = true;
-					if (next.callback) 
-						next.callback.apply(null, arguments);
-					incallback = false;
-					
-					
-					FuncUnit._done();
-				}, //error
-				function(message){
-					clearTimeout(timer);
-					ok(false, message);
-					FuncUnit._done();
-				})
+					function(){
+						//make sure we don't create an error
+						clearTimeout(timer);
+						
+						//mark in callback so the next set of add get added to the front
+						
+						incallback = true;
+						if (next.callback) 
+							next.callback.apply(null, arguments);
+						incallback = false;
+						
+						
+						FuncUnit._done();
+					}, //error
+					function(message){
+						clearTimeout(timer);
+						ok(false, message);
+						FuncUnit._done();
+					})
+				
+				
 			}, speed);
+			
 		}
 		else {
 			start();
@@ -392,7 +401,11 @@ _opened : function(){}
 	 * @param {Object} cb
 	 */
 	wait = function(time, cb){
-		time = time || 10000
+		if(typeof time == 'function'){
+			cb = time;
+			time = undefined;
+		}
+		time = time != null ? time : 10000
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Waiting "+time)
 			setTimeout(success, time)
@@ -484,154 +497,173 @@ _opened : function(){}
 	/**
 	 * @prototype
 	 */
-	//list of jQuery functions we want
-	FuncUnit.funcs = [
-	
-	'trigger', 
+	//list of jQuery functions we want, number is argument index
+	//for wait instead of getting value
+	FuncUnit.funcs = {
 	/**
 	 * @function size
-	 * Calls back with the size
+	 * Calls back or waits until the size is right
+	 * @codestart
+	 * S(".recipe").size(2) //waits until there are 2 recipes
+	 * S(".recipe").size() //gets the number of recipes
+	 * @codeend
 	 */
-	'size', 
-	'data', 
+	'size' : 0,
+	/**
+	 * @attr data
+	 * @codestart
+	 * S("#something").data("abc") //gets the abc data
+	 * S("#something").data("abc","some") //waits until it
+	 * //is some value
+	 * @codeend
+	 */
+	'data': 1, 
 	/**
 	 * @function attr
+	 * 
 	 */
-	'attr', 
-	'removeAttr', 
-	'addClass', 
+	'attr' : 1, 
 	/**
 	 * @function hasClass
+	 * @codestart
+	 * S("#something").hasClass("abc") //returns true
+	 * S("#something").waitHasClass("abc")
+	 * @codeend
 	 */
-	'hasClass', 
-	'removeClass', 
-	'toggleClass', 
+	'hasClass' : -2, //makes wait
 	/**
 	 * @function html
 	 */
-	'html', 
+	'html' : 0, 
 	/**
 	 * @function text
 	 */
-	'text', 
+	'text' : 0, 
 	/**
 	 * @function val
 	 */
-	'val', 
+	'val' : 0, 
 	/**
 	 * @function empty
+	 * @codestart
+	 * S(".recipe").empty() //returns if empty
+	 * S(".recipe").empty(true) //returns true false if it is empty
+	 * @codeend
 	 */
-	'empty', 
+	'empty' : 0, 
 	/**
 	 * @function css
+	 * @codestart
+	 * S("#foo").css("color") //gets the color
+	 * S("#foo").css("color","red") //waits until the color is red
 	 */
-	'css', 
+	'css': 1, 
 	/**
 	 * @function offset
 	 */
-	'offset',
+	'offset' : 0,
 	/**
 	 * @function offsetParent
 	 */ 
-	'offsetParent', 
+	'offsetParent' : 0, 
 	/**
 	 * @function position
 	 */ 
-	'position',
+	'position' : 0,
 	/**
 	 * @function scrollTop
 	 */ 
-	'scrollTop', 
+	'scrollTop' : 0, 
 	/**
 	 * @function scrollLeft
 	 */
-	'scrollLeft', 
+	'scrollLeft' : 0, 
 	/**
 	 * @function height
 	 */
-	'height', 
+	'height' : 0, 
 	/**
 	 * @function width
 	 */
-	'width', 
+	'width' : 0, 
 	/**
 	 * @function innerHeight
 	 */
-	'innerHeight', 
+	'innerHeight' : 0, 
 	/**
 	 * @function innerWidth
 	 */
-	'innerWidth', 
+	'innerWidth' : 0, 
 	/**
 	 * @function outerHeight
 	 */
-	'outerHeight', 
+	'outerHeight' : 0, 
 	/**
 	 * @function outerWidth
 	 */
-	'outerWidth']
+	'outerWidth' : 0}
+	
+	
 	//makes a command.
-	FuncUnit.makeFunc = function(fname){
-		FuncUnit.init.prototype[fname] = function(){
-			//assume last arg is callback
-			var args = FuncUnit.makeArray(arguments), callback;
-			if (typeof args[args.length - 1] == "function") {
-				callback = args.pop();
+	FuncUnit.makeFunc = function(fname, argIndex){
+		if(argIndex < 0){
+			argIndex = (0 - argIndex) - 1
+			var caps = fname.substr(0,1).toUpperCase()+fname.substr(1);
+			
+			
+			FuncUnit.init.prototype["wait"+caps] = function(){
+				throw "broke"
+				
 			}
 			
-			var selector = this.selector, context = this.context;
-			args.unshift(fname)
-			args.unshift(this.context)
-			args.unshift(this.selector)
-			
-			FuncUnit.add(function(success, error){
-				steal.dev.log("Running "+fname+" on "+selector)
-				var ret = FuncUnit.$.apply(FuncUnit.$, args);//  (selector,fname)
-				success(ret)
-			}, callback, "Can't get text of " + this.selector)
-			return this;
 		}
-	}
-	FuncUnit.makeWait = function(fname){
-		var caps = fname.substr(0,1).toUpperCase()+fname.substr(1);
-		FuncUnit.init.prototype["wait"+caps] = function(){
+		
+		//makes a read / wait function
+		FuncUnit.init.prototype[fname] = function(){
 			//assume last arg is callback
 			var args = FuncUnit.makeArray(arguments), 
 				callback,
-				tester,
-				errorMessage = "wait"+caps +" on " + this.selector,
-				check;
-			if (typeof args[args.length - 1] == "function") {
-				tester = args.pop();
-			}
-			if (typeof args[args.length - 1] == "function") {
-				callback = tester;
-				tester = args.pop();
-			}
-			// supply tester if it doesn't exists
-			if(!tester){
-				check = args.pop();
-				errorMessage += " != "+args[0]
-				tester = function(val){
-					return val == check
-				}
-			}
+				isWait = args.length > argIndex,
+				selector = this.selector, 
+				context = this.context,
+				callback;
 			
 			args.unshift(fname)
-			args.unshift(this.context)
-			args.unshift(this.selector)
-			
-			FuncUnit.add(function(success, error){
-				FuncUnit._repeat(function(){
-					var ret = FuncUnit.$.apply(FuncUnit.$, args);
-					return tester(ret)
-				}, success)
-			}, callback,errorMessage )
-			return this;
+			args.unshift(context)
+			args.unshift(selector)
+
+			if(isWait){
+				//we are a wait
+				
+				//get the args greater and equal to argIndex
+				var tester = args[argIndex+3],
+					callback = args[argIndex+4],
+					testVal = tester,
+					errorMessage = "waiting for "+fname +" on " + selector;
+				
+				args.splice(argIndex+3, args.length- argIndex - 3);
+				
+				if(typeof tester != 'function'){
+					errorMessage += " !== "+testVal
+					tester = function(val){
+						return val == testVal
+					}
+				}
+				
+				FuncUnit.add(function(success, error){
+					FuncUnit._repeat(function(){
+						var ret = FuncUnit.$.apply(FuncUnit.$, args);
+						return tester(ret)
+					}, success)
+				}, callback,errorMessage )
+				return this;
+			}else{
+				//get the value
+				steal.dev.log("Getting "+fname+" on "+selector)
+				return FuncUnit.$.apply(FuncUnit.$, args);
+			}
 		}
 	}
-	
-	
 	
 })();
 
@@ -709,14 +741,16 @@ FuncUnit.init.prototype = {
 	},
 	/**
 	 * Drags an object into another object, or coordinates
-	 * @param {Object} to
 	 * @param {Object} options
 	 */
-	dragTo: function(to, options, callback){
-		options = options || {duration: 1000};
+	drag: function( options, callback){
+		if(typeof options == 'string'){
+			options = {to: options}
+		}
 		options.from = this.selector;
-		options.to = to;
-		var selector = this.selector, context = this.context;
+
+		var selector = this.selector, 
+			context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("dragging "+selector)
 			FuncUnit.$(selector, context, "triggerSyn", "_drag", options, success)
@@ -728,11 +762,14 @@ FuncUnit.init.prototype = {
 	 * @param {Object} to
 	 * @param {Object} options
 	 */
-	moveTo: function(to, options, callback){
-		options = options || {duration: 1000};
+	move: function(options, callback){
+		if(typeof options == 'string'){
+			options = {to: options}
+		}
 		options.from = this.selector;
-		options.to = to;
-		var selector = this.selector, context = this.context;
+
+		var selector = this.selector, 
+			context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("moving "+selector)
 			FuncUnit.$(selector, context, "triggerSyn", "_move", options, success)
@@ -745,20 +782,37 @@ FuncUnit.init.prototype = {
 	 * @param {Object} callback
 	 */
 	click: function(options, callback){
-		options = options || {};
-		var selector = this.selector, context = this.context;
+		if(typeof options == 'function'){
+			callback = options;
+			options = {};
+		}
+		var selector = this.selector, 
+			context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Clicking "+selector)
 			FuncUnit.$(selector, context, "triggerSyn", "_click", options, success)
 		}, callback, "Could not click " + this.selector)
 		return this;
+	},
+	leftScroll : function(amount, callback){
+		var selector = this.selector, 
+			context = this.context;
+		FuncUnit.add(function(success, error){
+			steal.dev.log("setting "+selector+ " scrollLeft "+amount+" pixels")
+			FuncUnit.$(selector, context, "scrollLeft", amount)
+			success();
+		}, callback, "Could not scroll " + this.selector)
+		return this;
+	},
+	delay : function(timeout, callback){
+		FuncUnit.wait(timeout, callback)
 	}
 };
 
 
-for (var i = 0; i < FuncUnit.funcs.length; i++) {
-	FuncUnit.makeFunc(FuncUnit.funcs[i])
-	FuncUnit.makeWait(FuncUnit.funcs[i])
+for (var prop in FuncUnit.funcs) {
+	FuncUnit.makeFunc(prop, FuncUnit.funcs[prop])
+	//FuncUnit.makeWait(FuncUnit.funcs[i])
 }
 for (var name in specials) {
 	makeSpecial(name, specials[name])
