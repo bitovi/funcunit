@@ -15,7 +15,6 @@ test("qUnit module setup works async", function(){
 
 test("Iframe access", function(){
 	
-	
 	equals(S("h2",0).text(), "Goodbye World", "text of iframe")
 	
 })
@@ -52,6 +51,18 @@ test("Wait", function(){
 		ok(!after, 'before 1000ms')
 		
 	})
+})
+
+test("hasClass", function(){
+	var fast
+	
+	S("#hasClass").click();
+	setTimeout(function(){
+		fast = true
+	},50)
+	S("#hasClass").hasClass("someClass",true, function(){
+		ok(fast,"waited until it has a class exists")
+	});
 })
 
 test("Exists", function(){

@@ -233,9 +233,13 @@ S.open("//app/app.html")
  * @param {Number} timeout
  */
 open : function(path, callback, timeout){
-	var fullPath = FuncUnit.getAbsolutePath(path)
+	var fullPath = FuncUnit.getAbsolutePath(path), 
+	temp;
+	if(typeof callback != 'function'){
+		timeout = callback;
+		callback = undefined;
+	}
 	FuncUnit.add(function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
-		
 		steal.dev.log("Opening "+path)
 		FuncUnit._open(fullPath, error);
 		FuncUnit._onload(function(){
@@ -396,20 +400,28 @@ _opened : function(){}
 	}
 	FuncUnit.
 	/**
-	 * waits a timeout
-	 * @param {Object} time
-	 * @param {Object} cb
+	 * Waits a timeout before running the next command.  Wait is an action and gets 
+	 * added to the queue.
+	 * @codestart
+	 * S.wait(100, function(){
+	 *   equals( S('#foo').width(), 100, "width is 100");
+	 * })
+	 * @codeend
+	 * @param {Number} [time] The timeout in milliseconds.  Defaults to 5000.
+	 * @param {Function} [callback] A callback that will run 
+	 * 		after the wait has completed, 
+	 * 		but before any more queued actions.
 	 */
-	wait = function(time, cb){
+	wait = function(time, callback){
 		if(typeof time == 'function'){
-			cb = time;
+			callback = time;
 			time = undefined;
 		}
-		time = time != null ? time : 10000
+		time = time != null ? time : 5000
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Waiting "+time)
 			setTimeout(success, time)
-		}, cb, "Couldn't wait!", time + 1000);
+		}, callback, "Couldn't wait!", time + 1000);
 		return this;
 	}
 	//calls something many times until it is true
@@ -502,35 +514,78 @@ _opened : function(){}
 	FuncUnit.funcs = {
 	/**
 	 * @function size
-	 * Calls back or waits until the size is right
+	 * Gets the number of elements matched by the selector or
+	 * waits until the the selector is size.  You can also 
+	 * provide a function that continues to the next action when
+	 * it returns true.
 	 * @codestart
-	 * S(".recipe").size(2) //waits until there are 2 recipes
 	 * S(".recipe").size() //gets the number of recipes
+	 * 
+	 * S(".recipe").size(2) //waits until there are 2 recipes
+	 * 
+	 * //waits until size is count
+	 * S(".recipe").size(function(size){
+	 *   return size == count;
+	 * })
 	 * @codeend
+	 * @param {Number|Function} [size] number or a checking function.
+	 * @param {Function} a callback that will run after this action completes.
+	 * @return {Number} if the size parameter is not provided, size returns the number
+	 * of elements matched.
 	 */
 	'size' : 0,
 	/**
 	 * @attr data
+	 * Gets data from jQuery.data or waits until data
+	 * equals some value.  
 	 * @codestart
 	 * S("#something").data("abc") //gets the abc data
-	 * S("#something").data("abc","some") //waits until it
-	 * //is some value
+	 * 
+	 * S("#something").data("abc","some") //waits until the data == some
 	 * @codeend
+	 * @param {String} data The data to get, or wait for.
+	 * @param {Object|Function} [value] If provided uses this as a check before continuing to the next action.
+	 * @param {Function} a callback that will run after this action completes.
+	 * @return {Object} if the size parameter is not provided, returns
+	 * the object.
 	 */
 	'data': 1, 
 	/**
 	 * @function attr
+	 * Gets the value of an attribute from an element or waits until the attribute
+	 * equals the attr param.
+	 * @codestart
+	 *  //gets the abc attribute
+	 * S("#something").attr("abc")
 	 * 
+	 * //waits until the abc attribute == some
+	 * S("#something").attr("abc","some") 
+	 * @codeend
+	 * @param {String} data The attribute to get, or wait for.
+	 * @param {String|Function} [value] If provided uses this as a check before continuing to the next action.
+	 * @param {Function} a callback that will run after this action completes.
+	 * @return {Object} if the attr parameter is not provided, returns
+	 * the attribute.
 	 */
 	'attr' : 1, 
 	/**
 	 * @function hasClass
 	 * @codestart
-	 * S("#something").hasClass("abc") //returns true
-	 * S("#something").waitHasClass("abc")
-	 * @codeend
+	 * //returns if the element has the class in its className
+	 * S("#something").hasClass("selected");
+	 * 
+	 * //waits until #something has selected in its className
+	 * S("#something").hasClass("selected",true);
+	 * 
+	 * //waits until #something does not have selected in its className
+	 * S("#something").hasClass("selected",false);
+	 * @param {String} className The part of the className to search for.
+	 * @param {Boolean|Function} [value] If provided uses this as a check before continuing to the next action.
+	 * @param {Function} a callback that will run after this action completes.
+	 * @return {Boolean} if the value parameter is not provided, returns
+	 * if the className is found in the element's className.
 	 */
-	'hasClass' : -2, //makes wait
+	'hasClass' : 1, //makes wait
 	/**
 	 * @function html
 	 */
@@ -606,17 +661,6 @@ _opened : function(){}
 	
 	//makes a command.
 	FuncUnit.makeFunc = function(fname, argIndex){
-		if(argIndex < 0){
-			argIndex = (0 - argIndex) - 1
-			var caps = fname.substr(0,1).toUpperCase()+fname.substr(1);
-			
-			
-			FuncUnit.init.prototype["wait"+caps] = function(){
-				throw "broke"
-				
-			}
-			
-		}
 		
 		//makes a read / wait function
 		FuncUnit.init.prototype[fname] = function(){
@@ -624,29 +668,25 @@ _opened : function(){}
 			var args = FuncUnit.makeArray(arguments), 
 				callback,
 				isWait = args.length > argIndex,
-				selector = this.selector, 
-				context = this.context,
 				callback;
 			
-			args.unshift(fname)
-			args.unshift(context)
-			args.unshift(selector)
+			args.unshift(this.selector,this.context,fname)
 
 			if(isWait){
-				//we are a wait
-				
 				//get the args greater and equal to argIndex
 				var tester = args[argIndex+3],
 					callback = args[argIndex+4],
 					testVal = tester,
-					errorMessage = "waiting for "+fname +" on " + selector;
+					errorMessage = "waiting for "+fname +" on " + this.selector;
 				
 				args.splice(argIndex+3, args.length- argIndex - 3);
 				
 				if(typeof tester != 'function'){
 					errorMessage += " !== "+testVal
 					tester = function(val){
-						return val == testVal
+						
+						return QUnit.equiv(val, testVal) || 
+							(testVal instanceof RegExp && testVal.test(val) );
 					}
 				}
 				
@@ -659,7 +699,7 @@ _opened : function(){}
 				return this;
 			}else{
 				//get the value
-				steal.dev.log("Getting "+fname+" on "+selector)
+				steal.dev.log("Getting "+fname+" on "+this.selector)
 				return FuncUnit.$.apply(FuncUnit.$, args);
 			}
 		}
@@ -705,7 +745,6 @@ var specials = {
 makeSpecial = function(name, func){
 	FuncUnit.init.prototype[name] = function(cb, timeout){
 		var selector = this.selector, 
-			context = this.context,
 			self = this;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Checking "+name+" on "+selector)
@@ -720,12 +759,6 @@ FuncUnit.init = function(s, c){
 	this.context = c == null ? FuncUnit.window.document : c;
 }
 FuncUnit.init.prototype = {
-	then : function(callback){
-		FuncUnit.add(function(success, error){
-			success();
-		}, callback, "Could not call back your func ");
-		return this;
-	},
 	/**
 	 * Types text into the object
 	 * @param {Object} text
@@ -804,7 +837,13 @@ FuncUnit.init.prototype = {
 		}, callback, "Could not scroll " + this.selector)
 		return this;
 	},
-	delay : function(timeout, callback){
+	/**
+	 * Waits a timeout before calling the next action.  This is the same as
+	 * [FuncUnit.wait].
+	 * @param {Number} [timeout]
+	 * @param {Object} callback
+	 */
+	wait : function(timeout, callback){
 		FuncUnit.wait(timeout, callback)
 	}
 };

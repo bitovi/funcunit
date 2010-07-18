@@ -50,6 +50,12 @@
 						$('#clickToChange').html("changed")
 					},300)
 				})
+				//has class
+				$("#hasClass").click(function(){
+					setTimeout(function(){
+						$("#hasClass").addClass('someClass')
+					},200)
+				})
 				
 				//exists
 				$("#exists").click(function(){
@@ -87,7 +93,8 @@
         <a href="javascript:changeText()" id='changelink'>Change</a>
 		<div id='drag'></div>
 		<div id='drop'></div>
-		
+		<h3>hasClass</h3>
+		<div id='hasClass'>Click Me</div>
 		<h3>Exists</h3>
 		<div id='exists'>Click Me</div>
 		
