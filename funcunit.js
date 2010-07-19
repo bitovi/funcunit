@@ -610,7 +610,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the selector is invisible, but before the next action.
 	 * @return [funcUnit] returns the funcUnit selector for chaining.
 	 */
-	inivisible : function(callback){
+	invisible : function(callback){
 		var self = this,
 			sel = this.selector;
 		this.selector += ":visible"
