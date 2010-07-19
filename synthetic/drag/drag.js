@@ -107,7 +107,7 @@ steal.then(function(){
 		})
 	},
 	center = function(el){
-		var j = jQuery(el),
+		var j = Syn.jquery()(el),
 		o = j.offset();
 		return{
 			pageX: o.left + (j.width() / 2),
@@ -142,7 +142,7 @@ steal.then(function(){
 			}
 		}
 		if (typeof option == 'string') {
-			option = jQuery(option, win.document)[0];
+			option = Syn.jquery()(option, win.document)[0];
 		}
 		if (option.nodeName) {
 			option = center(option)

@@ -189,6 +189,16 @@ extend(Syn,{
 			args.callback && args.callback.call(this, args.element, this.result);
 		}
 	},
+	jquery : function(el, fast){
+		if(window.FuncUnit && window.FuncUnit.jquery){
+			return window.FuncUnit.jquery
+		} if (el){
+			return Syn.helpers.getWindow(el).jQuery || window.jQuery	
+		}
+		else{
+			return window.jQuery
+		}
+	},
 	/**
 	 * Returns an object with the args for a Syn.
 	 * @hide
@@ -373,12 +383,13 @@ extend(Syn,{
 				
 		},
 		addOffset : function(options, el){
+			var jq = Syn.jquery(el)
 			if(typeof options == 'object' &&
 			   options.clientX === undefined &&
 			   options.clientY === undefined &&
 			   options.pageX   === undefined &&
-			   options.pageY   === undefined && window.jQuery){
-				var el = window.jQuery(el)
+			   options.pageY   === undefined && jq){
+				var el = jq(el)
 					off = el.offset();
 				options.pageX = off.left + el.width() /2 ;
 				options.pageY = off.top + el.height() /2 ;
@@ -755,8 +766,8 @@ for(var i=0; i < actions.length; i++){
  * @param {optional:Object} options
  */
 
-if (window.jQuery) {
-	jQuery.fn.triggerSyn = function(type, options, callback){
+if (window.jQuery || (window.FuncUnit && window.FuncUnit.jquery)) {
+	(window.jQuery || window.FuncUnit.jquery).fn.triggerSyn = function(type, options, callback){
 		Syn(type, options, this[0], callback)
 		return this;
 	};

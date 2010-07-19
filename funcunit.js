@@ -1,10 +1,8 @@
 //what we need from javascriptmvc or other places
 steal.plugins('funcunit/qunit',
-	'funcunit/qunit/rhino',
-	'jquery',
-	'jquery/lang/json',
-	'funcunit/synthetic'
-	)
+	'funcunit/qunit/rhino')
+	.then('resources/jquery','resources/json')
+	.plugins('funcunit/synthetic')
 //Now describe FuncUnit
 .then(function(){
 
@@ -154,6 +152,8 @@ FuncUnit = function(s, c){
  */
 $.extend(FuncUnit,oldFunc)
 $.extend(FuncUnit,{
+	//move jquery and clear it out
+	jquery : jQuery.noConflict(true),
 /**
  * @attribute href
  * The location of the page running the tests on the server and where relative paths passed in to [FuncUnit.static.open] will be 

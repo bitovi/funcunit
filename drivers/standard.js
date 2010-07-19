@@ -1,6 +1,6 @@
 steal.then(function() {
 	var readystate = document.readyState;
-	$(window).load(function(){
+	FuncUnit.jquery(window).load(function(){
 		if(document.readyState != readystate)
 			FuncUnit.support.readystate = true;
 	})
@@ -151,13 +151,13 @@ steal.then(function() {
 		//if (FuncUnit._window.jQuery && parseFloat(FuncUnit._window.jQuery().jquery) >= 1.3) {
 		//	q = jQuery(FuncUnit._window.jQuery(selector, context).get());
 		//} else {
-		q = jQuery(selector, context);
+		q = FuncUnit.jquery(selector, context);
 		//}
 		
 		return q[method].apply(q, args);
 	}
 	
-	$(window).unload(function(){
+	FuncUnit.jquery(window).unload(function(){
 		if (FuncUnit._window) 
 			FuncUnit._window.close();
 	})
