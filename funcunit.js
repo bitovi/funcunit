@@ -7,7 +7,9 @@ steal.plugins('funcunit/qunit',
 	)
 //Now describe FuncUnit
 .then(function(){
-	
+
+
+
 //this gets the global object, even in rhino
 var window = (function(){return this }).call(null),
 
@@ -284,7 +286,7 @@ support : {},
  * Use this to refer to the window of the application page.  You can also 
  * reference window.document.
  * @codestart
- * S(S.window).width(function(w){
+ * S(S.window).innerWidth(function(w){
  *   ok(w > 1000, "window is more than 1000 px wide")
  * })
  * @codeend
@@ -314,7 +316,7 @@ _opened : function(){}
 	 * @param {Object} error an error statement if the command fails
 	 * @param {Object} timeout the length of time until success should be called.
 	 */
-	add = function(f, callback, error, timeout){
+	add = function(f, callback, error, timeout, stopper){
 		
 		//if we are in a callback, add to the current position
 		if (incallback) {
@@ -322,7 +324,8 @@ _opened : function(){}
 				method: f,
 				callback: callback,
 				error: error,
-				timeout: timeout
+				timeout: timeout,
+				stop : stopper
 			})
 			currentPosition++;
 		}
@@ -364,6 +367,7 @@ _opened : function(){}
 			//call next method
 			setTimeout(function(){
 				timer = setTimeout(function(){
+						next.stop && next.stop();
 						ok(false, next.error);
 						FuncUnit._done();
 					}, 
@@ -404,7 +408,7 @@ _opened : function(){}
 	 * added to the queue.
 	 * @codestart
 	 * S.wait(100, function(){
-	 *   equals( S('#foo').width(), 100, "width is 100");
+	 *   equals( S('#foo').innerWidth(), 100, "innerWidth is 100");
 	 * })
 	 * @codeend
 	 * @param {Number} [time] The timeout in milliseconds.  Defaults to 5000.
@@ -424,50 +428,42 @@ _opened : function(){}
 		}, callback, "Couldn't wait!", time + 1000);
 		return this;
 	}
-	//calls something many times until it is true
-	FuncUnit._repeat = function(script, callback, data){
-		var f = script;
-		if (typeof script == "string") {
-			script = script.replace(/\n/g, "\\n")
-			f = function(){
-				with (opener) {
-					var result = eval("(" + script + ")")
+	/**
+	 * @hide
+	 * @function repeat
+	 * Takes a function that will be called over and over until it is successful.
+	 */
+	FuncUnit.repeat = function(checker, callback, error, timeout){
+		var interval,
+			stopped = false	,
+			stop = function(){
+				clearTimeout(interval)
+				stopped = true;
+			};
+
+		FuncUnit.add(function(success, error){
+			interval = setTimeout(function(){
+				
+				var result = null;
+				try {
+					result = checker()
+				} 
+				catch (e) {
+					//should we throw this too error?
 				}
-				return result;
-			}
-		}
-		if (callback) {
-			var interval = null;
-			var time = new Date();
-			setTimeout(function(){
-				if (callback.failed) {
-					//clearInterval(interval);
+				
+				if (result) {
+					success();
+				}else if(!stopped){
+					interval = setTimeout(arguments.callee, 10)
 				}
-				else {
-					var result = null;
-					try {
-						result = f(data)
-					} 
-					catch (e) {
-					}
-					
-					if (result) {
-						//clearInterval(interval);
-						callback();
-					}else{
-						setTimeout(arguments.callee, 10)
-					}
-				}
+				
 			}, 10);
 			
-		}
-		else {
-			var result = f();
-			return result;//this.convert( result);
-		}
+			
+		}, callback, error, timeout, stop)
 	}
 	
-
 	
 	
 	FuncUnit.makeArray = function(arr){
@@ -550,7 +546,8 @@ FuncUnit.init.prototype = {
 	 * @return {FuncUnit} returns the funcUnit for chaining.
 	 */
 	type: function(text, callback){
-		var selector = this.selector, context = this.context;
+		var selector = this.selector, 
+			context = this.context;
 		FuncUnit.add(function(success, error){
 			steal.dev.log("Typing "+text+" on "+selector)
 			FuncUnit.$(selector, context, "triggerSyn", "_type", text, success)
@@ -670,10 +667,40 @@ FuncUnit.init.prototype = {
 		}, callback, "Could not drag " + this.selector)
 		return this;
 	},
-	/**
-	 * Move a mouse cursor from one page element to another, or uses coordinates
-	 * @param {Object} to
-	 * @param {Object} options
+		/**
+	 * Moves an element into another element or coordinates.  This will trigger mouseover
+	 * mouseouts accordingly.
+	 * This takes the same paramameters as [Syn.prototype.move move].
+	 * @param {String|Object} options A selector or coordinates describing the motion of the move.
+	 * <h5>Options as a Selector</h5>
+	 * Passing a string selector to move the mouse.  The move runs to the center of the element
+	 * matched by the selector.  The following moves from the center of #foo to the center of #bar.
+	 * @codestart
+	 * S('#foo').move('#bar') 
+	 * @codeend
+	 * <h5>Options as Coordinates</h5>
+	 * You can pass in coordinates as clientX and clientY:
+	 * @codestart
+	 * S('#foo').move('100x200') 
+	 * @codeend
+	 * Or as pageX and pageY
+	 * @codestart
+	 * S('#foo').move('100X200') 
+	 * @codeend
+	 * Or relative to the start position
+	 * S('#foo').move('+10 +20')
+	 * <h5>Options as an Object</h5>
+	 * You can configure the duration, start, and end point of a move by passing in a json object.
+	 * @codestart
+	 * //drags from 0x0 to 100x100 in 2 seconds
+	 * S('#foo').move({
+	 *   from: "0x0",
+	 *   to: "100x100",
+	 *   duration: 2000
+	 * }) 
+	 * @codeend
+	 * @param {Function} [callback] a callback that runs after the drag, but before the next action.
+	 * @return {funcUnit} returns the funcunit selector for chaining.
 	 */
 	move: function(options, callback){
 		if(typeof options == 'string'){
@@ -687,24 +714,6 @@ FuncUnit.init.prototype = {
 			steal.dev.log("moving "+selector)
 			FuncUnit.$(selector, context, "triggerSyn", "_move", options, success)
 		}, callback, "Could not move " + this.selector)
-		return this;
-	},
-	/**
-	 * Clicks an object
-	 * @param {Object} options
-	 * @param {Object} callback
-	 */
-	click: function(options, callback){
-		if(typeof options == 'function'){
-			callback = options;
-			options = {};
-		}
-		var selector = this.selector, 
-			context = this.context;
-		FuncUnit.add(function(success, error){
-			steal.dev.log("Clicking "+selector)
-			FuncUnit.$(selector, context, "triggerSyn", "_click", options, success)
-		}, callback, "Could not click " + this.selector)
 		return this;
 	},
 	leftScroll : function(amount, callback){
@@ -727,7 +736,74 @@ FuncUnit.init.prototype = {
 		FuncUnit.wait(timeout, callback)
 	}
 };
+var clicks = [
+/**
+ * @function click
+ * Clicks an element.  This uses [Syn.prototype.click] to issue a:
+ * <ul>
+ * 	<li><code>mousedown</code></li>
+ *  <li><code>focus</code> - if the element is focusable</li>
+ *  <li><code>mouseup</code></li>
+ *  <li><code>click</code></li>
+ * </ul>
+ * If no clientX/Y or pageX/Y is provided as options, the click happens at the 
+ * center of the element.
+ * <p>For a right click or double click use [FuncUnit.prototype.rightClick] or
+ *   [FuncUnit.prototype.dblclick].</p>
+ * <h3>Example</h3>
+ * @codestart
+ * //clicks the bar element
+ * S("#bar").click()
+ * @codeend
+ * @param {Object} [options] options to pass to the click event.  Typically, this is clientX/Y or pageX/Y like:
+ * @codestart
+ * $('#foo').click({pageX: 200, pageY: 100});
+ * @codeend
+ * You can pass it any of the serializable parameters you'd send to : 
+ * [http://developer.mozilla.org/en/DOM/event.initMouseEvent initMouseEvent], but command keys are 
+ * controlled by [FuncUnit.prototype.type].
+ * @param {Function} [callback] a callback that runs after the click, but before the next action.
+ * @return {funcUnit} returns the funcunit selector for chaining.
+ */
+'click',
+/**
+ * @function dblclick
+ * Double clicks an element by [FuncUnit.prototype.click clicking] it twice and triggering a dblclick event.
+ * @param {Object} options options to add to the mouse events.  This works
+ * the same as [FuncUnit.prototype.click]'s options.
+ * @param {Function} [callback] a callback that runs after the double click, but before the next action.
+ * @return {funcUnit} returns the funcunit selector for chaining.
+ */
+'dblclick',
+/**
+ * @function rightClick
+ * Right clicks an element.  This typically results in a contextmenu event for browsers that
+ * support it.
+ * @param {Object} options options to add to the mouse events.  This works
+ * the same as [FuncUnit.prototype.click]'s options.
+ * @param {Function} [callback] a callback that runs after the click, but before the next action.
+ * @return {funcUnit} returns the funcunit selector for chaining.
+ */
+'rightClick'],
+	makeClick = function(name){
+		FuncUnit.init.prototype[name] = function(options, callback){
+			if(typeof options == 'function'){
+				callback = options;
+				options = {};
+			}
+			var selector = this.selector, 
+				context = this.context;
+			FuncUnit.add(function(success, error){
+				steal.dev.log("Clicking "+selector)
+				FuncUnit.$(selector, context, "triggerSyn", "_"+name, options, success)
+			}, callback, "Could not "+name+" " + this.selector)
+			return this;
+		}
+	}
 
+for(var i=0; i < clicks.length; i++){
+	makeClick(clicks[i])
+}
 
 
 //list of jQuery functions we want, number is argument index
@@ -803,80 +879,278 @@ FuncUnit.funcs = {
  * @codeend
  * @param {String} className The part of the className to search for.
  * @param {Boolean|Function} [value] If provided uses this as a check before continuing to the next action.
- * @param {Function} a callback that will run after this action completes.
+ * @param {Function} [callback] a callback that will run after this action completes.
  * @return {Boolean|funcUnit} if the value parameter is not provided, returns
  * if the className is found in the element's className.  If a value paramters is provided, returns funcUnit for chaining.
  */
 'hasClass' : 1, //makes wait
 /**
  * @function html
+ * Gets the [http://api.jquery.com/html/ html] from an element or waits until the html is a certain value.
+ * @codestart
+ * //checks foo's html has "JupiterJS"
+ * ok( /JupiterJS/.test( S('#foo').html() ) )
+ * 
+ * //waits until bar's html has JupiterJS
+ * S('#foo').html(/JupiterJS/)
+ * 
+ * //waits until bar's html is JupiterJS
+ * S('#foo').html("JupiterJS")
+ * @codeend
+ * 
+ * @param {String|Function} [html] If provided uses this as a check before continuing to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if the html parameter is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the html of the selector.
  */
 'html' : 0, 
 /**
  * @function text
+ * Gets the [http://api.jquery.com/text/ text] from an element or waits until the text is a certain value.
+ * @codestart
+ * //checks foo's text has "JupiterJS"
+ * ok( /JupiterJS/.test( S('#foo').text() ) )
+ * 
+ * //waits until bar's text has JupiterJS
+ * S('#foo').text(/JupiterJS/)
+ * 
+ * //waits until bar's text is JupiterJS
+ * S('#foo').text("JupiterJS")
+ * @codeend
+ * 
+ * @param {String|Function} [text] If provided uses this as a check before continuing to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if the text parameter is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the html of the selector.
  */
 'text' : 0, 
 /**
  * @function val
+ * Gets the [http://api.jquery.com/val/ val] from an element or waits until the val is a certain value.
+ * @codestart
+ * //checks foo's val has "JupiterJS"
+ * ok( /JupiterJS/.test( S('input#foo').val() ) )
+ * 
+ * //waits until bar's val has JupiterJS
+ * S('input#foo').val(/JupiterJS/)
+ * 
+ * //waits until bar's val is JupiterJS
+ * S('input#foo').val("JupiterJS")
+ * @codeend
+ * 
+ * @param {String|Function} [val] If provided uses this as a check before continuing to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if the val parameter is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the html of the selector.
  */
 'val' : 0, 
 /**
- * @function empty
- * @codestart
- * S(".recipe").empty() //returns if empty
- * S(".recipe").empty(true) //returns true false if it is empty
- * @codeend
- */
-'empty' : 0, 
-/**
  * @function css
+ * Gets a [http://api.jquery.com/css/ css] property from an element or waits until the property is 
+ * a specified value.
  * @codestart
- * S("#foo").css("color") //gets the color
- * S("#foo").css("color","red") //waits until the color is red
+ * // gets the color
+ * S("#foo").css("color")
+ * 
+ * // waits until the color is red
+ * S("#foo").css("color","red") 
+ * @codeend
+ * 
+ * @param {String} prop A css property to get or wait until it is a specified value.
+ * @param {String|Function} [val] If provided uses this as a check before continuing to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if the val parameter is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the css of the selector.
  */
 'css': 1, 
 /**
  * @function offset
+ * Gets an element's [http://api.jquery.com/offset/ offset] or waits until 
+ * the offset is a specified value.
+ * @codestart
+ * // gets the offset
+ * S("#foo").offset();
+ * 
+ * // waits until the offset is 100, 200
+ * S("#foo").offset({top: 100, left: 200}) 
+ * @codeend
+ * 
+ * @param {Object|Function} [offset] If provided uses this as a check before continuing to the next action.  Or you can 
+ * provide a function that returns true to continue to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if the offset parameter is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the css of the selector.
  */
 'offset' : 0,
 /**
- * @function offsetParent
- */ 
-'offsetParent' : 0, 
-/**
  * @function position
- */ 
+ * Gets an element's [http://api.jquery.com/position/ position] or waits until 
+ * the position is a specified value.
+ * @codestart
+ * // gets the position
+ * S("#foo").position();
+ * 
+ * // waits until the position is 100, 200
+ * S("#foo").position({top: 100, left: 200}) 
+ * @codeend
+ * 
+ * @param {Object|Function} [position] If provided uses this as a check before continuing to the next action.  Or you can 
+ * provide a function that returns true to continue to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if the position parameter is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the offset of the selector.
+ */
 'position' : 0,
 /**
  * @function scrollTop
+ * Gets an element's [http://api.jquery.com/scrollTop/ scrollTop] or waits until 
+ * it equals a specified value.
+ * @codestart
+ * // gets the scrollTop
+ * S("#foo").scrollTop();
+ * 
+ * // waits until the scrollTop is 100
+ * S("#foo").scrollTop(100) 
+ * @codeend
+ * 
+ * @param {Number|Function} [scrollTop] If provided uses this as a check before continuing to the next action.  Or you can 
+ * provide a function that returns true to continue to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if scrollTop is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the scrollTop of the selector.
  */ 
 'scrollTop' : 0, 
 /**
  * @function scrollLeft
- */
+ * Gets an element's [http://api.jquery.com/scrollLeft/ scrollLeft] or waits until 
+ * it equals a specified value.
+ * @codestart
+ * // gets the scrollLeft
+ * S("#foo").scrollLeft();
+ * 
+ * // waits until the scrollLeft is 100
+ * S("#foo").scrollLeft(100) 
+ * @codeend
+ * 
+ * @param {Number|Function} [scrollLeft] If provided uses this as a check before continuing to the next action.  Or you can 
+ * provide a function that returns true to continue to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if scrollLeft is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the scrollLeft of the selector.
+ */ 
 'scrollLeft' : 0, 
 /**
  * @function height
+ * Gets an element's [http://api.jquery.com/height/ height] or waits until 
+ * it equals a specified value.
+ * @codestart
+ * // gets the height
+ * S("#foo").height();
+ * 
+ * // waits until the height is 100
+ * S("#foo").height(100) 
+ * @codeend
+ * 
+ * @param {Number|Function} [height] If provided uses this as a check before continuing to the next action.  Or you can 
+ * provide a function that returns true to continue to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if height is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the height of the selector.
  */
 'height' : 0, 
 /**
  * @function width
+ * Gets an element's [http://api.jquery.com/width/ width] or waits until 
+ * it equals a specified value.
+ * @codestart
+ * // gets the width
+ * S("#foo").width();
+ * 
+ * // waits until the width is 100
+ * S("#foo").width(100) 
+ * @codeend
+ * 
+ * @param {Number|Function} [width] If provided uses this as a check before continuing to the next action.  Or you can 
+ * provide a function that returns true to continue to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if width is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the width of the selector.
  */
 'width' : 0, 
 /**
  * @function innerHeight
+ * Gets an element's [http://api.jquery.com/innerHeight/ innerHeight] or waits until 
+ * it equals a specified value.
+ * @codestart
+ * // gets the innerHeight
+ * S("#foo").innerHeight();
+ * 
+ * // waits until the innerHeight is 100
+ * S("#foo").innerHeight(100) 
+ * @codeend
+ * 
+ * @param {Number|Function} [innerHeight] If provided uses this as a check before continuing to the next action.  Or you can 
+ * provide a function that returns true to continue to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if innerHeight is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the innerHeight of the selector.
  */
 'innerHeight' : 0, 
 /**
  * @function innerWidth
+ * Gets an element's [http://api.jquery.com/innerWidth/ innerWidth] or waits until 
+ * it equals a specified value.
+ * @codestart
+ * // gets the innerWidth
+ * S("#foo").innerWidth();
+ * 
+ * // waits until the innerWidth is 100
+ * S("#foo").innerWidth(100) 
+ * @codeend
+ * 
+ * @param {Number|Function} [innerWidth] If provided uses this as a check before continuing to the next action.  Or you can 
+ * provide a function that returns true to continue to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if innerWidth is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the innerWidth of the selector.
  */
 'innerWidth' : 0, 
 /**
  * @function outerHeight
+ * Gets an element's [http://api.jquery.com/outerHeight/ outerHeight] or waits until 
+ * it equals a specified value.
+ * @codestart
+ * // gets the outerHeight
+ * S("#foo").outerHeight();
+ * 
+ * // waits until the outerHeight is 100
+ * S("#foo").outerHeight(100) 
+ * @codeend
+ * 
+ * @param {Number|Function} [outerHeight] If provided uses this as a check before continuing to the next action.  Or you can 
+ * provide a function that returns true to continue to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if outerHeight is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the outerHeight of the selector.
  */
 'outerHeight' : 0, 
 /**
  * @function outerWidth
+ * Gets an element's [http://api.jquery.com/outerWidth/ outerWidth] or waits until 
+ * it equals a specified value.
+ * @codestart
+ * // gets the outerWidth
+ * S("#foo").outerWidth();
+ * 
+ * // waits until the outerWidth is 100
+ * S("#foo").outerWidth(100) 
+ * @codeend
+ * 
+ * @param {Number|Function} [outerWidth] If provided uses this as a check before continuing to the next action.  Or you can 
+ * provide a function that returns true to continue to the next action.
+ * @param {Function} [callback] a callback that will run after this action completes.
+ * @return {String|funcUnit} if outerWidth is provided, 
+ * returns the funcUnit selector for chaining, otherwise returns the outerWidth of the selector.
  */
 'outerWidth' : 0}
 
@@ -897,9 +1171,15 @@ FuncUnit.makeFunc = function(fname, argIndex){
 		if(isWait){
 			//get the args greater and equal to argIndex
 			var tester = args[argIndex+3],
-				callback = args[argIndex+4],
+				timeout = args[argIndex+4],
+				callback = args[argIndex+5],
 				testVal = tester,
 				errorMessage = "waiting for "+fname +" on " + this.selector;
+			
+			if(typeof timeout == 'function'){
+				callback = timeout;
+				timeout = undefined;
+			}
 			
 			args.splice(argIndex+3, args.length- argIndex - 3);
 			
@@ -911,13 +1191,11 @@ FuncUnit.makeFunc = function(fname, argIndex){
 						(testVal instanceof RegExp && testVal.test(val) );
 				}
 			}
-			
-			FuncUnit.add(function(success, error){
-				FuncUnit._repeat(function(){
+			FuncUnit.repeat(function(){
 					var ret = FuncUnit.$.apply(FuncUnit.$, args);
-					return tester(ret)
-				}, success)
-			}, callback,errorMessage )
+					return tester(ret);
+				}, callback, errorMessage, timeout)
+
 			return this;
 		}else{
 			//get the value
