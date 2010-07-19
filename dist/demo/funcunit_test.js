@@ -1,18 +1,16 @@
-module("funcunit test")
+module("funcunit - jQuery API",{
+	setup : function(){
+		S.open("demo/myapp.html", null, 10000)
+	}
+})
 
 test("Copy Test", function(){
-        S.open("demo/myapp.html", null, 10000);
-        
-		S("#typehere").type("javascriptmvc")
+		S("#typehere").type("javascriptmvc", function(){
+			equals(S("#seewhatyoutyped").text(), "typed javascriptmvc","typing");
+		})
+		S("#copy").click(function(){
+			equals(S("#seewhatyoutyped").text(), "copied javascriptmvc","copy");
+			ok(S("#typehere").offset().top,"has values")
+		})
 		
-		S("#seewhatyoutyped").text(function(val){
-			equals(val, "typed javascriptmvc","typing");
-		})
-		S("#copy").click();
-		S("#seewhatyoutyped").text(function(val){
-			equals(val, "copied javascriptmvc","copy");
-		})
-		S("#typehere").offset(function(offset){
-			ok(offset.top,"has values")
-		})
 })

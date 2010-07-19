@@ -6,7 +6,7 @@ var i, fileName, cmd;
 var plugin, fileDest, fileName;
 plugin = "funcunit/synthetic";
 fileName = "syn.js";
-fileDest = "funcunit/dist/scripts/"+fileName
+fileDest = "funcunit/dist/"+fileName
 cmd = "js steal/scripts/pluginify.js "+plugin+" -destination "+fileDest+" -noJQuery";
 runCommand(	"cmd", "/C", cmd)
 print("***"+fileName+" pluginified")
@@ -14,7 +14,7 @@ print("***"+fileName+" pluginified")
 // create funcunit.js
 plugin = "funcunit";
 fileName = "funcunit.js";
-fileDest = "funcunit/dist/scripts/"+fileName
+fileDest = "funcunit/dist/"+fileName
 cmd = "js steal/scripts/pluginify.js "+plugin+" -destination "+fileDest;
 runCommand(	"cmd", "/C", cmd)
 print("***"+fileName+" pluginified")
@@ -28,5 +28,8 @@ new steal.File("steal/rhino/js.jar")
 	.copyTo("funcunit/dist/selenium/js.jar", [])
 new steal.File("steal/rhino/env.js")
 	.copyTo("funcunit/dist/selenium/env.js", [])
+	
+new steal.File("funcunit/qunit/qunit.css")
+	.copyTo("funcunit/dist/qunit.css", [])
 
 //new steal.File("../jmvcdownload").zipDir("javascriptmvc-3.0.0.zip", "..\\jmvcdownload\\")
