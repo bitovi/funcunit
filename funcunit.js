@@ -506,263 +506,48 @@ _opened : function(){}
 				return str;
 		}
 	}
-	/**
-	 * @prototype
-	 */
-	//list of jQuery functions we want, number is argument index
-	//for wait instead of getting value
-	FuncUnit.funcs = {
-	/**
-	 * @function size
-	 * Gets the number of elements matched by the selector or
-	 * waits until the the selector is size.  You can also 
-	 * provide a function that continues to the next action when
-	 * it returns true.
-	 * @codestart
-	 * S(".recipe").size() //gets the number of recipes
-	 * 
-	 * S(".recipe").size(2) //waits until there are 2 recipes
-	 * 
-	 * //waits until size is count
-	 * S(".recipe").size(function(size){
-	 *   return size == count;
-	 * })
-	 * @codeend
-	 * @param {Number|Function} [size] number or a checking function.
-	 * @param {Function} a callback that will run after this action completes.
-	 * @return {Number} if the size parameter is not provided, size returns the number
-	 * of elements matched.
-	 */
-	'size' : 0,
-	/**
-	 * @attr data
-	 * Gets data from jQuery.data or waits until data
-	 * equals some value.  
-	 * @codestart
-	 * S("#something").data("abc") //gets the abc data
-	 * 
-	 * S("#something").data("abc","some") //waits until the data == some
-	 * @codeend
-	 * @param {String} data The data to get, or wait for.
-	 * @param {Object|Function} [value] If provided uses this as a check before continuing to the next action.
-	 * @param {Function} a callback that will run after this action completes.
-	 * @return {Object} if the size parameter is not provided, returns
-	 * the object.
-	 */
-	'data': 1, 
-	/**
-	 * @function attr
-	 * Gets the value of an attribute from an element or waits until the attribute
-	 * equals the attr param.
-	 * @codestart
-	 *  //gets the abc attribute
-	 * S("#something").attr("abc")
-	 * 
-	 * //waits until the abc attribute == some
-	 * S("#something").attr("abc","some") 
-	 * @codeend
-	 * @param {String} data The attribute to get, or wait for.
-	 * @param {String|Function} [value] If provided uses this as a check before continuing to the next action.
-	 * @param {Function} a callback that will run after this action completes.
-	 * @return {Object} if the attr parameter is not provided, returns
-	 * the attribute.
-	 */
-	'attr' : 1, 
-	/**
-	 * @function hasClass
-	 * @codestart
-	 * //returns if the element has the class in its className
-	 * S("#something").hasClass("selected");
-	 * 
-	 * //waits until #something has selected in its className
-	 * S("#something").hasClass("selected",true);
-	 * 
-	 * //waits until #something does not have selected in its className
-	 * S("#something").hasClass("selected",false);
-	 * @param {String} className The part of the className to search for.
-	 * @param {Boolean|Function} [value] If provided uses this as a check before continuing to the next action.
-	 * @param {Function} a callback that will run after this action completes.
-	 * @return {Boolean} if the value parameter is not provided, returns
-	 * if the className is found in the element's className.
-	 */
-	'hasClass' : 1, //makes wait
-	/**
-	 * @function html
-	 */
-	'html' : 0, 
-	/**
-	 * @function text
-	 */
-	'text' : 0, 
-	/**
-	 * @function val
-	 */
-	'val' : 0, 
-	/**
-	 * @function empty
-	 * @codestart
-	 * S(".recipe").empty() //returns if empty
-	 * S(".recipe").empty(true) //returns true false if it is empty
-	 * @codeend
-	 */
-	'empty' : 0, 
-	/**
-	 * @function css
-	 * @codestart
-	 * S("#foo").css("color") //gets the color
-	 * S("#foo").css("color","red") //waits until the color is red
-	 */
-	'css': 1, 
-	/**
-	 * @function offset
-	 */
-	'offset' : 0,
-	/**
-	 * @function offsetParent
-	 */ 
-	'offsetParent' : 0, 
-	/**
-	 * @function position
-	 */ 
-	'position' : 0,
-	/**
-	 * @function scrollTop
-	 */ 
-	'scrollTop' : 0, 
-	/**
-	 * @function scrollLeft
-	 */
-	'scrollLeft' : 0, 
-	/**
-	 * @function height
-	 */
-	'height' : 0, 
-	/**
-	 * @function width
-	 */
-	'width' : 0, 
-	/**
-	 * @function innerHeight
-	 */
-	'innerHeight' : 0, 
-	/**
-	 * @function innerWidth
-	 */
-	'innerWidth' : 0, 
-	/**
-	 * @function outerHeight
-	 */
-	'outerHeight' : 0, 
-	/**
-	 * @function outerWidth
-	 */
-	'outerWidth' : 0}
-	
-	
-	//makes a command.
-	FuncUnit.makeFunc = function(fname, argIndex){
-		
-		//makes a read / wait function
-		FuncUnit.init.prototype[fname] = function(){
-			//assume last arg is callback
-			var args = FuncUnit.makeArray(arguments), 
-				callback,
-				isWait = args.length > argIndex,
-				callback;
-			
-			args.unshift(this.selector,this.context,fname)
 
-			if(isWait){
-				//get the args greater and equal to argIndex
-				var tester = args[argIndex+3],
-					callback = args[argIndex+4],
-					testVal = tester,
-					errorMessage = "waiting for "+fname +" on " + this.selector;
-				
-				args.splice(argIndex+3, args.length- argIndex - 3);
-				
-				if(typeof tester != 'function'){
-					errorMessage += " !== "+testVal
-					tester = function(val){
-						
-						return QUnit.equiv(val, testVal) || 
-							(testVal instanceof RegExp && testVal.test(val) );
-					}
-				}
-				
-				FuncUnit.add(function(success, error){
-					FuncUnit._repeat(function(){
-						var ret = FuncUnit.$.apply(FuncUnit.$, args);
-						return tester(ret)
-					}, success)
-				}, callback,errorMessage )
-				return this;
-			}else{
-				//get the value
-				steal.dev.log("Getting "+fname+" on "+this.selector)
-				return FuncUnit.$.apply(FuncUnit.$, args);
-			}
-		}
-	}
-	
 })();
 
 
-var specials = {
-	/**
-	 * @function exists
-	 * Continues the test once a given element exists in the page
-	 * @param {Function} cb a callback that is run once the condition is satisfied
-	 * @param {Number} timeout the timeout value (in ms) before this test should fail
-	 */
-	exists : function(data){ return FuncUnit.$(data.selector, data.context, "size"); },
-	/**
-	 * @function missing
-	 * Continues the test once a given element does NOT exist in the page
-	 * @param {Function} cb a callback that is run once the condition is satisfied
-	 * @param {Number} timeout the timeout value (in ms) before this test should fail
-	 */
-	missing : function(data){ return !FuncUnit.$(data.selector, data.context, "size"); },
-
-	/**
-	 * @function visible
-	 * Continues the test once a given element is visible in the page
-	 * @param {Function} cb a callback that is run once the condition is satisfied
-	 * @param {Number} timeout the timeout value (in ms) before this test should fail
-	 */
-
-	visible: function(data){ return FuncUnit.$(data.selector+":visible", data.context, "size"); },
-
-	/**
-	 * @function invisible
-	 * Continues the test once a given element is invisible in the page
-	 * @param {Function} cb a callback that is run once the condition is satisfied
-	 * @param {Number} timeout the timeout value (in ms) before this test should fail
-	 */
-	invisible: function(data){ return !FuncUnit.$(data.selector+":visible", data.context, "size"); }
-
-},
-makeSpecial = function(name, func){
-	FuncUnit.init.prototype[name] = function(cb, timeout){
-		var selector = this.selector, 
-			self = this;
-		FuncUnit.add(function(success, error){
-			steal.dev.log("Checking "+name+" on "+selector)
-			FuncUnit._repeat(func, success, self)
-		}, cb, name+" is not true for " + this.selector, timeout);
-		return this;
-	}
-}
-
+/**
+ * @prototype
+ */
 FuncUnit.init = function(s, c){
 	this.selector = s;
 	this.context = c == null ? FuncUnit.window.document : c;
 }
 FuncUnit.init.prototype = {
 	/**
-	 * Types text into the object
-	 * @param {Object} text
-	 * @param {Object} callback
+	 * Types text into an element.  This makes use of [Syn.prototype.type] and works in 
+	 * a very similar way.
+	 * <h3>Quick Examples</h3>
+	 * @codestart
+	 * //types hello world
+	 * S('#bar').type('hello world')
+	 * 
+	 * //submits a form by typing \r
+	 * S("input[name=age]").type("27\r")
+	 * 
+	 * //types FuncUnit, then deletes the Unit
+	 * S('#foo').type("FuncUnit\b\b\b\b")
+	 * 
+	 * //types JavaScriptMVC, then removes the MVC
+	 * S('#zar').type("JavaScriptMVC[left][left][left]"+
+	 *                      "[delete][delete][delete]")
+	 *          
+	 * //types JavaScriptMVC, then selects the MVC and
+	 * //deletes it
+	 * S('#zar').type("JavaScriptMVC[shift]"+
+	 *                "[left][left][left]"+
+	 *                "[shift-up][delete]")
+	 * @codeend
+	 * <h2>Characters</h2>
+	 * You can type the characters found in [Syn.static.keycodes].
+	 * 
+	 * @param {String} text the text you want to type
+	 * @param {Function} [callback] a callback that is run after typing, but before the next action.
+	 * @return {FuncUnit} returns the funcUnit for chaining.
 	 */
 	type: function(text, callback){
 		var selector = this.selector, context = this.context;
@@ -773,8 +558,103 @@ FuncUnit.init.prototype = {
 		return this;
 	},
 	/**
-	 * Drags an object into another object, or coordinates
-	 * @param {Object} options
+	 * Waits until an element exists before running the next action.
+	 * @codestart
+	 * //waits until #foo exists before clicking it.
+	 * S("#foo").exists().click()
+	 * @codeend
+	 * @param {Function} [callback] a callback that is run after the selector exists, but before the next action.
+	 * @return {FuncUnit} returns the funcUnit for chaining. 
+	 */
+	exists : function(callback){
+		return this.size(function(size){
+			return size > 0;
+		}, callback)
+	},
+	/**
+	 * Waits until no elements are matched by the selector.  Missing is equivalent to calling
+	 * <code>.size(0, callback);</code>
+	 * @codestart
+	 * //waits until #foo leaves before continuing to the next action.
+	 * S("#foo").missing()
+	 * @codeend
+	 * @param {Function} [callback] a callback that is run after the selector exists, but before the next action
+	 * @return {FuncUnit} returns the funcUnit for chaining. 
+	 */
+	missing : function(callback){
+		return this.size(0, callback)
+	},
+	/**
+	 * Waits until the funcUnit selector is visible.  
+	 * @codestart
+	 * //waits until #foo is visible.
+	 * S("#foo").visible()
+	 * @codeend
+	 * @param {Function} [callback] a callback that runs after the funcUnit is visible, but before the next action.
+	 * @return [funcUnit] returns the funcUnit for chaining.
+	 */
+	visible : function(callback){
+		var self = this,
+			sel = this.selector;
+		this.selector += ":visible"
+		return this.size(function(size){
+			return size > 0;
+		}, function(){
+			self.selector = sel;
+			callback && callback();
+		})
+	},
+	/**
+	 * Waits until the selector is invisible.  
+	 * @codestart
+	 * //waits until #foo is invisible.
+	 * S("#foo").invisible()
+	 * @codeend
+	 * @param {Function} [callback] a callback that runs after the selector is invisible, but before the next action.
+	 * @return [funcUnit] returns the funcUnit selector for chaining.
+	 */
+	inivisible : function(callback){
+		var self = this,
+			sel = this.selector;
+		this.selector += ":visible"
+		return this.size(0, function(){
+			self.selector = sel;
+			callback && callback();
+		})
+	},
+	/**
+	 * Drags an element into another element or coordinates.  
+	 * This takes the same paramameters as [Syn.prototype.move move].
+	 * @param {String|Object} options A selector or coordinates describing the motion of the drag.
+	 * <h5>Options as a Selector</h5>
+	 * Passing a string selector to drag the mouse.  The drag runs to the center of the element
+	 * matched by the selector.  The following drags from the center of #foo to the center of #bar.
+	 * @codestart
+	 * S('#foo').drag('#bar') 
+	 * @codeend
+	 * <h5>Options as Coordinates</h5>
+	 * You can pass in coordinates as clientX and clientY:
+	 * @codestart
+	 * S('#foo').drag('100x200') 
+	 * @codeend
+	 * Or as pageX and pageY
+	 * @codestart
+	 * S('#foo').drag('100X200') 
+	 * @codeend
+	 * Or relative to the start position
+	 * S('#foo').drag('+10 +20')
+	 * <h5>Options as an Object</h5>
+	 * You can configure the duration, start, and end point of a drag by passing in a json object.
+	 * @codestart
+	 * //drags from 0x0 to 100x100 in 2 seconds
+	 * S('#foo').drag({
+	 *   from: "0x0",
+	 *   to: "100x100",
+	 *   duration: 2000
+	 * }) 
+	 * @codeend
+	 * @param {Function} [callback] a callback that runs after the drag, but before the next action.
+	 * @return {funcUnit} returns the funcunit selector for chaining.
 	 */
 	drag: function( options, callback){
 		if(typeof options == 'string'){
@@ -849,14 +729,209 @@ FuncUnit.init.prototype = {
 };
 
 
-for (var prop in FuncUnit.funcs) {
-	FuncUnit.makeFunc(prop, FuncUnit.funcs[prop])
-	//FuncUnit.makeWait(FuncUnit.funcs[i])
-}
-for (var name in specials) {
-	makeSpecial(name, specials[name])
-}
 
+//list of jQuery functions we want, number is argument index
+//for wait instead of getting value
+FuncUnit.funcs = {
+/**
+ * @function size
+ * Gets the number of elements matched by the selector or
+ * waits until the the selector is size.  You can also 
+ * provide a function that continues to the next action when
+ * it returns true.
+ * @codestart
+ * S(".recipe").size() //gets the number of recipes
+ * 
+ * S(".recipe").size(2) //waits until there are 2 recipes
+ * 
+ * //waits until size is count
+ * S(".recipe").size(function(size){
+ *   return size == count;
+ * })
+ * @codeend
+ * @param {Number|Function} [size] number or a checking function.
+ * @param {Function} a callback that will run after this action completes.
+ * @return {Number} if the size parameter is not provided, size returns the number
+ * of elements matched.
+ */
+'size' : 0,
+/**
+ * @attr data
+ * Gets data from jQuery.data or waits until data
+ * equals some value.  
+ * @codestart
+ * S("#something").data("abc") //gets the abc data
+ * 
+ * S("#something").data("abc","some") //waits until the data == some
+ * @codeend
+ * @param {String} data The data to get, or wait for.
+ * @param {Object|Function} [value] If provided uses this as a check before continuing to the next action.
+ * @param {Function} a callback that will run after this action completes.
+ * @return {Object} if the size parameter is not provided, returns
+ * the object.
+ */
+'data': 1, 
+/**
+ * @function attr
+ * Gets the value of an attribute from an element or waits until the attribute
+ * equals the attr param.
+ * @codestart
+ *  //gets the abc attribute
+ * S("#something").attr("abc")
+ * 
+ * //waits until the abc attribute == some
+ * S("#something").attr("abc","some") 
+ * @codeend
+ * @param {String} data The attribute to get, or wait for.
+ * @param {String|Function} [value] If provided uses this as a check before continuing to the next action.
+ * @param {Function} a callback that will run after this action completes.
+ * @return {Object} if the attr parameter is not provided, returns
+ * the attribute.
+ */
+'attr' : 1, 
+/**
+ * @function hasClass
+ * @codestart
+ * //returns if the element has the class in its className
+ * S("#something").hasClass("selected");
+ * 
+ * //waits until #something has selected in its className
+ * S("#something").hasClass("selected",true);
+ * 
+ * //waits until #something does not have selected in its className
+ * S("#something").hasClass("selected",false);
+ * @codeend
+ * @param {String} className The part of the className to search for.
+ * @param {Boolean|Function} [value] If provided uses this as a check before continuing to the next action.
+ * @param {Function} a callback that will run after this action completes.
+ * @return {Boolean|funcUnit} if the value parameter is not provided, returns
+ * if the className is found in the element's className.  If a value paramters is provided, returns funcUnit for chaining.
+ */
+'hasClass' : 1, //makes wait
+/**
+ * @function html
+ */
+'html' : 0, 
+/**
+ * @function text
+ */
+'text' : 0, 
+/**
+ * @function val
+ */
+'val' : 0, 
+/**
+ * @function empty
+ * @codestart
+ * S(".recipe").empty() //returns if empty
+ * S(".recipe").empty(true) //returns true false if it is empty
+ * @codeend
+ */
+'empty' : 0, 
+/**
+ * @function css
+ * @codestart
+ * S("#foo").css("color") //gets the color
+ * S("#foo").css("color","red") //waits until the color is red
+ */
+'css': 1, 
+/**
+ * @function offset
+ */
+'offset' : 0,
+/**
+ * @function offsetParent
+ */ 
+'offsetParent' : 0, 
+/**
+ * @function position
+ */ 
+'position' : 0,
+/**
+ * @function scrollTop
+ */ 
+'scrollTop' : 0, 
+/**
+ * @function scrollLeft
+ */
+'scrollLeft' : 0, 
+/**
+ * @function height
+ */
+'height' : 0, 
+/**
+ * @function width
+ */
+'width' : 0, 
+/**
+ * @function innerHeight
+ */
+'innerHeight' : 0, 
+/**
+ * @function innerWidth
+ */
+'innerWidth' : 0, 
+/**
+ * @function outerHeight
+ */
+'outerHeight' : 0, 
+/**
+ * @function outerWidth
+ */
+'outerWidth' : 0}
+
+
+//makes a jQuery like command.
+FuncUnit.makeFunc = function(fname, argIndex){
+	
+	//makes a read / wait function
+	FuncUnit.init.prototype[fname] = function(){
+		//assume last arg is callback
+		var args = FuncUnit.makeArray(arguments), 
+			callback,
+			isWait = args.length > argIndex,
+			callback;
+		
+		args.unshift(this.selector,this.context,fname)
+
+		if(isWait){
+			//get the args greater and equal to argIndex
+			var tester = args[argIndex+3],
+				callback = args[argIndex+4],
+				testVal = tester,
+				errorMessage = "waiting for "+fname +" on " + this.selector;
+			
+			args.splice(argIndex+3, args.length- argIndex - 3);
+			
+			if(typeof tester != 'function'){
+				errorMessage += " !== "+testVal
+				tester = function(val){
+					
+					return QUnit.equiv(val, testVal) || 
+						(testVal instanceof RegExp && testVal.test(val) );
+				}
+			}
+			
+			FuncUnit.add(function(success, error){
+				FuncUnit._repeat(function(){
+					var ret = FuncUnit.$.apply(FuncUnit.$, args);
+					return tester(ret)
+				}, success)
+			}, callback,errorMessage )
+			return this;
+		}else{
+			//get the value
+			steal.dev.log("Getting "+fname+" on "+this.selector)
+			return FuncUnit.$.apply(FuncUnit.$, args);
+		}
+	}
+}
+	
+
+
+for (var prop in FuncUnit.funcs) {
+	FuncUnit.makeFunc(prop, FuncUnit.funcs[prop]);
+}
 
 
 S = FuncUnit;
