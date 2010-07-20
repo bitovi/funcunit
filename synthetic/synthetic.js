@@ -681,20 +681,26 @@ extend(Syn.init.prototype,{
 	 * @param {HTMLElement} element
 	 * @param {Function} callback
 	 */
-	"_click" : function(options, element, callback){
+	"_click" : function(options, element, callback, force){
 		Syn.helpers.addOffset(options, element);
 		Syn.trigger("mousedown", options, element);
 		
 		//timeout is b/c IE is stupid and won't call focus handlers
 		setTimeout(function(){
 			Syn.trigger("mouseup", options, element)
-			if(!Syn.support.mouseDownUpClicks){
+			if(!Syn.support.mouseDownUpClicks || force){
 				Syn.trigger("click", options, element)
+				callback(true)
 			}else{
 				//we still have to run the default (presumably)
+				Syn.create.click.setup('click',options,element)
 				Syn.defaults.click.call(element)
+				//must give time for callback
+				setTimeout(function(){
+					callback(true)
+				},1)
 			}
-			callback(true)
+			
 		},1)
 	},
 	/**
@@ -736,10 +742,13 @@ extend(Syn.init.prototype,{
 		Syn.helpers.addOffset(options, element);
 		var self = this;
 		this._click(options, element, function(){
-			self._click(options, element, function(){
-				Syn.trigger("dblclick", options, element)
-				callback(true)
-			})
+			setTimeout(function(){
+				self._click(options, element, function(){
+					Syn.trigger("dblclick", options, element)
+					callback(true)
+				},true)
+			},2)
+			
 		})
 	}
 })

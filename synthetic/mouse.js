@@ -162,8 +162,6 @@ h.extend(Syn.create,{
 				element.setAttribute('href','javascript://')
 			}
 			//if select or option, save old value and mark to change
-			
-			
 			if(/option/i.test(element.nodeName)){
 				var child = element.parentNode.firstChild,
 				i = -1;
@@ -265,13 +263,23 @@ h.extend(Syn.create,{
 	Syn.support.changeBubbles = Syn.eventSupported('change');
 	
 	//test if mousedown followed by mouseup causes click (opera), make sure there are no clicks after this
+	var clicksCount = 0
 	div.onclick = function(){
 		Syn.support.mouseDownUpClicks = true;
+		//we should use this to check for opera potentially, but would
+		//be difficult to remove element correctly
+		//Syn.support.mouseDownUpRepeatClicks = (2 == (++clicksCount))
 	}
 	Syn.trigger("mousedown",{},div)
 	Syn.trigger("mouseup",{},div)
 	
-	document.documentElement.removeChild(div);
+	//setTimeout(function(){
+	//	Syn.trigger("mousedown",{},div)
+	//	Syn.trigger("mouseup",{},div)
+	//},1)
+	
+	
+	//document.documentElement.removeChild(div);
 	
 	//check stuff
 	window.__synthTest = oldSynth;

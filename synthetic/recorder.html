@@ -81,7 +81,9 @@
 <div id='rightClick'>
 	Right Click Me
 </div>
-
+<div id='dblClick'>
+	Double Click Me
+</div>
 <h3>Key Data</h3>
 <pre id='out'></pre>
 <h3>Click Data</h3>
@@ -242,7 +244,8 @@
 
 	var clickData = {
 		right : {},
-		left : {}
+		left : {},
+		dblclick :{}
 	}
 	$.each(['right','left'], function(i, name){
 		
@@ -275,8 +278,16 @@
 		})
 		
 	})
-	
-
+	var dblClicks = 0
+	bind('dblClick','click',function(ev){
+		clickData.dblclick.click = (++dblClicks)
+	})
+	bind('dblClick','dblclick',function(ev){
+		clickData.dblclick.dblclick = (1)
+		setTimeout(function(){
+			$('#clickdata').html($.toJSON(clickData))
+		},100)
+	})
 	update = function(){
 		var str = [];
 		$.each(tests, function(i, sub){
