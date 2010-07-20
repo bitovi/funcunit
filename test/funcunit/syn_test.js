@@ -4,8 +4,8 @@ module("funcunit-syn integration")
 test("Type and slow Click", function(){
 	S.open("test/myapp.html", null, 10000);
 	
-	S("#typehere").type("javascriptmvc[left][delete]", function(){
-		equals(S("#seewhatyoutyped").text(), "typed javascriptmv","typing");
+	S("#typehere").type("javascriptmvc", function(){
+		equals(S("#seewhatyoutyped").text(), "typed javascriptmvc","typing");
 	})
 	
 
@@ -13,7 +13,7 @@ test("Type and slow Click", function(){
 	//click is going to run slow, to make sure we don't continue
 	//until after it is done.
 	S("#copy").click(function(){
-		equals(S("#seewhatyoutyped").text(), "copied javascriptmv","copy");
+		equals(S("#seewhatyoutyped").text(), "copied javascriptmvc","copy");
 	});
 	
 
