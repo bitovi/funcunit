@@ -279,7 +279,7 @@ h.extend(Syn.create,{
 	//},1)
 	
 	
-	//document.documentElement.removeChild(div);
+	document.documentElement.removeChild(div);
 	
 	//check stuff
 	window.__synthTest = oldSynth;
