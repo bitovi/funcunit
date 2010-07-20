@@ -17,8 +17,10 @@ var window = (function(){return this }).call(null),
 /**
  * @constructor FuncUnit
  * @tag core
- * FuncUnit provides powerful functional testing as an add on to qUnit.  The same tests can be run 
- * in the browser, or with Selenium.  It also lets you run basic qUnit tests in EnvJS.
+ * FuncUnit provides powerful functional testing as an add on to [http://docs.jquery.com/QUnit QUnit].  
+ * The same tests can be run 
+ * in the browser, or with Selenium.  It also lets you automate basic 
+ * QUnit tests in [http://www.envjs.com/ EnvJS] (a command line browser).
  * 
  * <h2>Example:</h2>
  * Here's how you might tests an Auto Suggest
@@ -40,28 +42,18 @@ test("FuncUnit Results",function(){
  * <h3>Setup with Stand-alone funcunit.js</h3>
  * Steps:
  * <ol>
- * 	<li>Create a JS file (ex: mytest.js) for your tests.  The skeleton should like:
-@codestart
-  module("APPNAME", {
-    setup : function(){
-      $.open("path/to/myPage.html");
-    }
-  })
-  
-  test("page has content", function(){
-    ok( S("body *").size(), "There be elements in that there body")
-  })
-})
-@codeend
-Make sure 
- *  </li>
- *  <li>Create an HTML file (mytest.html).  The skeleton should look like:
-@codestart
+ *  <li>Create a HTML file (mytest.html) that loads funcunit.js,
+ *  qunit.css, and mytest.js.  We'll create mytest.js in step #2.
+@codestart html
 &lt;html>
   &lt;head>
     &lt;link rel="stylesheet" 
              type="text/css" 
-             href="..<b>/path/to/</b>funcunit/qunit/qunit.css" />
+             href="pathto/funcunit/<b>qunit.css</b>" />
+    &lt;script type='text/javascript' 
+             src='pathto/funcunit/<b>funcunit.js</b>'>
+    &lt;script type='text/javascript' 
+             src='script/<b>mytest.js</b>'>
     &lt;title>FuncUnit Test&lt;/title>
   &lt;/head>
   &lt;body>
@@ -70,26 +62,37 @@ Make sure
     &lt;div id="qunit-testrunner-toolbar">&lt;/div>
     &lt;h2 id="qunit-userAgent">&lt;/h2>
     &lt;ol id="qunit-tests">&lt;/ol>
-    &lt;script type='text/javascript' 
-        src='..<b>/path/to/</b>steal/steal.js?<b>path/to</b>/mytest.js'>
-    &lt;/script>
   &lt;/body>
 &lt;/html>
 @codeend
-Make sure you reference qunit and steal correctly.  The path to your test page (mytest.js)
-should be given from the jmvc root folder.
-
+The locations of <code>mytest.js</code>, and <code>mytest.html</code>
+can be anywhere on the same domain.
  * </li>
- *  <li>Open your html page (mytest.html) in a browser.  Did it pass?  If not check the paths.</li>
- *  <li>If you aren't running from the filesystem, you need to change funcunit/settings.js to point to the JMVC
- *  root folder on your server:
+ * 	<li>Create a JS file (ex: mytest.js) for your tests.  The skeleton should like:
 @codestart
-FuncUnit= {jmvcRoot: "http://localhost/scripts/" }
+  module("APPNAME", {
+    setup : function(){
+      // opens the page you want to test
+      $.open("pages/myPage.html");
+    }
+  })
+  
+  test("page has content", function(){
+    ok( S("body *").size(), "There be elements in that there body")
+  })
+})
 @codeend
+If a relative path is used in open, make sure it is
+ relative to the testing page (<code>mytest.html<code>).
  *  </li>
- *  <li>Now run your test.
+ *  <li>Open your html page (mytest.html) in a browser.  Did it pass?  If not check the paths.</li>
+ *  <li>Now run your test.  In windows:
 @codestart text
-envjs path/to/mytest.html
+> envjs ../../mytest.html
+@codeend
+In Linux / Mac:
+@codestart text
+> ./envjs ../../mytest.html
 @codeend
 </li>
  * </ol>
@@ -111,7 +114,7 @@ S('#myInput').type("hello")
 @codeend
   </li>
 
-  <li>Wait for those things to complete
+  <li>Wait for the page to change:
 @codestart
 //Wait until it is visible
 S('#myMenu').visible()
@@ -126,18 +129,19 @@ S.wait(1000);
 
 @codeend
   </li>
-  <li>Check your results
+  <li>Check your results in a callback:
 @codestart
-//Wait until it is visible
-S('#myMenu').offset(function(offset){
-  equals(500,offset.left,"menu is in the right spot");
-})
-
-//wait until something exists
-S('#myArea').height(function(height){
-   equals(500,height,"my area is the right height");
+S('#myMenu').visible(function(){
+  //check that offset is right
+  equals(S('#myMenu').offset().left,
+         500,
+         "menu is in the right spot");
+         
 })
 @codeend
+<h2>Actions and Getters</h2>
+
+
   </li>
 </ol>
  * 
