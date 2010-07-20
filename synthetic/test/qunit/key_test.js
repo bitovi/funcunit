@@ -335,6 +335,14 @@ test("Type left and right", function(){
 
 	
 });
+test("Type left and delete", function(){
+	stop()
+	Syn.type("123[left][delete]",'key', function(){
+		equals( st.g('key').value, "12", "left delete works" );
+		start();
+	})
+	
+});
 test("Typing Shift", function(){
 	stop()
 
