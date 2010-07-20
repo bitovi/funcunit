@@ -24,30 +24,36 @@ var window = (function(){return this }).call(null),
  * Here's how you might tests an Auto Suggest
 @codestart
 test("FuncUnit Results",function(){
-	S('#auto_suggest').click().type("FuncUnit")
+  S('#auto_suggest').click().type("FuncUnit")
 	
-	S('.result').exists().size(function(size){
-	equal(size, 5,"there are 5 results")
-	})
+  S('.result').exists(function(){
+    equal( S('.result').size(), 5, "there are 5 results")
+  })
 });
 @codeend
  * 
- * <h2>Setting up with JavaScriptMVC</h2>
- * <p>When you create a plugin or application with code generators, JavaScriptMVC makes a testing skeleton for you.
- * You just have to add to the test file it creates.
- * But, it's useful to know how to setup a testing page on your own.  Here's how:
- * </p>
- * 
+ * <h2>Setup</h2>
+ * <h3>Setup with JavaScriptMVC</h3>
+ * If you're setting up FuncUnit with JavaScriptMVC, 
+ * use [steal.static.plugins] to get the funcunit plugin.  If you used
+ * JavaScriptMVC's generators, it will setup a testing skeleton for you.
+ * <h3>Setup with Stand-alone funcunit.js</h3>
+ * Steps:
  * <ol>
- * 	<li>Create a JS file (ex: mytest.js) for your tests inside JMVC's root directory.  The skeleton should like:
+ * 	<li>Create a JS file (ex: mytest.js) for your tests.  The skeleton should like:
 @codestart
-steal.plugins('funcunit').then(function(){
-  test("page opens", function(){
-    $.open("//path/to/myPage.html"); //referenced from jmvc root folder
-    ok(true,"page Loaded");
+  module("APPNAME", {
+    setup : function(){
+      $.open("path/to/myPage.html");
+    }
+  })
+  
+  test("page has content", function(){
+    ok( S("body *").size(), "There be elements in that there body")
   })
 })
 @codeend
+Make sure 
  *  </li>
  *  <li>Create an HTML file (mytest.html).  The skeleton should look like:
 @codestart
