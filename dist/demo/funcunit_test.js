@@ -1,6 +1,6 @@
-module("funcunit - jQuery API",{
+module("myapp",{
 	setup : function(){
-		S.open("demo/myapp.html", null, 10000)
+		S.open("demo/myapp.html")
 	}
 })
 
@@ -10,7 +10,10 @@ test("Copy Test", function(){
 		})
 		S("#copy").click(function(){
 			equals(S("#seewhatyoutyped").text(), "copied javascriptmvc","copy");
-			ok(S("#typehere").offset().top,"has values")
 		})
 		
+})
+
+test("Drag Test", function(){
+	
 })
