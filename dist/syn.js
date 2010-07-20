@@ -684,20 +684,26 @@ extend(Syn.init.prototype,{
 	 * @param {HTMLElement} element
 	 * @param {Function} callback
 	 */
-	"_click" : function(options, element, callback){
+	"_click" : function(options, element, callback, force){
 		Syn.helpers.addOffset(options, element);
 		Syn.trigger("mousedown", options, element);
 		
 		//timeout is b/c IE is stupid and won't call focus handlers
 		setTimeout(function(){
 			Syn.trigger("mouseup", options, element)
-			if(!Syn.support.mouseDownUpClicks){
+			if(!Syn.support.mouseDownUpClicks || force){
 				Syn.trigger("click", options, element)
+				callback(true)
 			}else{
 				//we still have to run the default (presumably)
+				Syn.create.click.setup('click',options,element)
 				Syn.defaults.click.call(element)
+				//must give time for callback
+				setTimeout(function(){
+					callback(true)
+				},1)
 			}
-			callback(true)
+			
 		},1)
 	},
 	/**
@@ -708,7 +714,7 @@ extend(Syn.init.prototype,{
 	 */
 	"_rightClick" : function(options, element, callback){
 		Syn.helpers.addOffset(options, element);
-		var mouseopts =  extend( extend({},Syn.mouse.browser.mouseup ), options)
+		var mouseopts =  extend( extend({},Syn.mouse.browser.right.mouseup ), options)
 		
 		Syn.trigger("mousedown", mouseopts, element);
 		
@@ -717,7 +723,7 @@ extend(Syn.init.prototype,{
 			Syn.trigger("mouseup", mouseopts, element)
 			if (Syn.mouse.browser.contextmenu) {
 				Syn.trigger("contextmenu", 
-					extend( extend({},Syn.mouse.browser.contextmenu ), options), 
+					extend( extend({},Syn.mouse.browser.right.contextmenu ), options), 
 					element)
 			}
 			callback(true)
@@ -739,10 +745,13 @@ extend(Syn.init.prototype,{
 		Syn.helpers.addOffset(options, element);
 		var self = this;
 		this._click(options, element, function(){
-			self._click(options, element, function(){
-				Syn.trigger("dblclick", options, element)
-				callback(true)
-			})
+			setTimeout(function(){
+				self._click(options, element, function(){
+					Syn.trigger("dblclick", options, element)
+					callback(true)
+				},true)
+			},2)
+			
 		})
 	}
 })
@@ -888,10 +897,14 @@ h.extend(Syn.create,{
 	mouse : {
 		options : function(type, options, element){
 			var doc = document.documentElement, body = document.body,
-				center = [options.pageX || 0, options.pageY || 0] 
+				center = [options.pageX || 0, options.pageY || 0],
+				//browser might not be loaded yet (doing support code)
+				left = Syn.mouse.browser && Syn.mouse.browser.left[type],
+				right = Syn.mouse.browser && Syn.mouse.browser.right[type];
 			return h.extend({
 				bubbles : true,cancelable : true,
-				view : window,detail : 1,
+				view : window,
+				detail : 1,
 				screenX : 1, screenY : 1,
 				clientX : options.clientX || center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
 				clientY : options.clientY || center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
@@ -899,7 +912,9 @@ h.extend(Syn.create,{
 				altKey : !!Syn.key.altKey, 
 				shiftKey : !!Syn.key.shiftKey, 
 				metaKey : !!Syn.key.metaKey,
-				button : (type == 'contextmenu' ? 2 : 0), 
+				button : left && left.button != null ? 
+					left.button : 
+					right && right.button || (type == 'contextmenu' ? 2 : 0), 
 				relatedTarget : document.documentElement
 			}, options);
 		},
@@ -941,8 +956,6 @@ h.extend(Syn.create,{
 				element.setAttribute('href','javascript://')
 			}
 			//if select or option, save old value and mark to change
-			
-			
 			if(/option/i.test(element.nodeName)){
 				var child = element.parentNode.firstChild,
 				i = -1;
@@ -1044,13 +1057,23 @@ h.extend(Syn.create,{
 	Syn.support.changeBubbles = Syn.eventSupported('change');
 	
 	//test if mousedown followed by mouseup causes click (opera), make sure there are no clicks after this
+	var clicksCount = 0
 	div.onclick = function(){
 		Syn.support.mouseDownUpClicks = true;
+		//we should use this to check for opera potentially, but would
+		//be difficult to remove element correctly
+		//Syn.support.mouseDownUpRepeatClicks = (2 == (++clicksCount))
 	}
 	Syn.trigger("mousedown",{},div)
 	Syn.trigger("mouseup",{},div)
 	
-	document.documentElement.removeChild(div);
+	//setTimeout(function(){
+	//	Syn.trigger("mousedown",{},div)
+	//	Syn.trigger("mouseup",{},div)
+	//},1)
+	
+	
+	//document.documentElement.removeChild(div);
 	
 	//check stuff
 	window.__synthTest = oldSynth;
@@ -1175,11 +1198,16 @@ h.extend(Syn.create,{
 	};
 	
 	Syn.mouse.browsers = {
-		webkit : {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
-		opera: {},
-		msie: {"mouseup":{"button":2},"contextmenu":{"button":0}},
-		chrome : {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
-		gecko: {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}}
+		webkit : {"right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
+		          "left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}}},
+		opera: {"right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3}},
+		        "left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}}},
+		msie: {	"right":{"mousedown":{"button":2},"mouseup":{"button":2},"contextmenu":{"button":0}},
+				"left":{"mousedown":{"button":1},"mouseup":{"button":1},"click":{"button":0}}},
+		chrome : {"right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
+				  "left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}}},
+		gecko: {"left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}},
+		        "right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}}}
 	}
 	
 	//set browser
@@ -1617,13 +1645,13 @@ h.extend(Syn.key,{
 					sel = getSelection(this),
 					before = current.substr(0,sel.start),
 					after = current.substr(sel.end);
-				
-				if(sel.start == sel.end && sel.start < this.value.length - 1){
-					//remove a character
+				if(sel.start == sel.end && sel.start <= this.value.length - 1){
 					this.value = before+after.substring(1)
 				}else{
 					this.value = before+after;
+					
 				}
+				Syn.selectText(this, sel.start)
 			}		
 		},
 		'\r' : function(options, scope){
@@ -1671,36 +1699,41 @@ h.extend(Syn.key,{
 				elIndex,
 				firstNotIndexed,
 				prev;
-			
-			var sort = function(el1, el2){
-				var tab1 = Syn.tabIndex(el1) || 0,
+				orders = [];
+			for(; i< focusEls.length; i++){
+				orders.push([focusEls[i], i]);
+			}
+			var sort = function(order1, order2){
+				var el1 = order1[0],
+					el2 = order2[0],
+					tab1 = Syn.tabIndex(el1) || 0,
 					tab2 = Syn.tabIndex(el2) || 0;
 				if(tab1 == tab2){
-					return 0
+					return order1[1] - order2[1]
 				}else{
 					if(tab1 == 0){
 						return 1;
 					}else if(tab2 == 0){
 						return -1;
+					}else{
+						return tab1-tab2;
 					}
-					
-					return tab1-tab2;
 				}
 			}
-			focusEls.sort(sort);
+			orders.sort(sort);
 			//now find current
-			for(; i< focusEls.length; i++){
-				el = focusEls[i];
+			for(i=0; i< orders.length; i++){
+				el = orders[i][0];
 				if(this== el ){
 					if(!Syn.key.shiftKey){
-						current = focusEls[i+1];
+						current = orders[i+1][0];
 						if(!current){
-							current = focusEls[0]
+							current = orders[0][0]
 						}
 					}else{
-						current = focusEls[i-1];
+						current = orders[i-1][0];
 						if(!current){
-							current = focusEls[focusEls.length-1]
+							current = orders[focusEls.length-1][0]
 						}
 					}
 					
@@ -2101,7 +2134,7 @@ h.extend(Syn.init.prototype,
 	}, // creates a mousemove event, but first triggering mouseout / mouseover if appropriate
 	mouseMove = function(point, element, last){
 		var el = elementFromPoint(point, element)
-		if (last != el && el) {
+		if (last != el && el && last) {
 			var options = Syn.helpers.extend({},point);
 			options.relatedTarget = el;
 			Syn.trigger("mouseout", options, last);
