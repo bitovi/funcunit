@@ -52,7 +52,7 @@ steal.then(function(){
 	}, // creates a mousemove event, but first triggering mouseout / mouseover if appropriate
 	mouseMove = function(point, element, last){
 		var el = elementFromPoint(point, element)
-		if (last != el && el) {
+		if (last != el && el && last) {
 			var options = Syn.helpers.extend({},point);
 			options.relatedTarget = el;
 			Syn.trigger("mouseout", options, last);
