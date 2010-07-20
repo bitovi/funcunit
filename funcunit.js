@@ -156,8 +156,8 @@ FuncUnit = function(s, c){
 /**
  * @Static
  */
-$.extend(FuncUnit,oldFunc)
-$.extend(FuncUnit,{
+window.jQuery.extend(FuncUnit,oldFunc)
+window.jQuery.extend(FuncUnit,{
 	//move jquery and clear it out
 	jquery : jQuery.noConflict(true),
 /**

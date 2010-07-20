@@ -15,7 +15,7 @@ print("***"+fileName+" pluginified")
 plugin = "funcunit";
 fileName = "funcunit.js";
 fileDest = "funcunit/dist/"+fileName
-cmd = "js steal/scripts/pluginify.js "+plugin+" -destination "+fileDest;
+cmd = "js steal/scripts/pluginify.js "+plugin+" -destination "+fileDest+" -packageJQuery -noJQuery";
 runCommand(	"cmd", "/C", cmd)
 print("***"+fileName+" pluginified")
 
@@ -29,7 +29,18 @@ new steal.File("steal/rhino/js.jar")
 new steal.File("steal/rhino/env.js")
 	.copyTo("funcunit/dist/selenium/env.js", [])
 	
+// copy qunit, json, and jquery
 new steal.File("funcunit/qunit/qunit.css")
 	.copyTo("funcunit/dist/qunit.css", [])
+new steal.File("jquery/lang/json/json.js")
+	.copyTo("funcunit/resources/json.js", [])
+	
+// copy files into selenium
+new steal.File("funcunit/resources/json.js")
+	.copyTo("funcunit/java/selenium-server/core/scripts/json.js", [])
+new steal.File("funcunit/dist/syn.js")
+	.copyTo("funcunit/java/selenium-server/core/scripts/syn.js", [])
+new steal.File("funcunit/resources/jquery.js")
+	.copyTo("funcunit/java/selenium-server/core/scripts/jquery.js", [])
 
 //new steal.File("../jmvcdownload").zipDir("javascriptmvc-3.0.0.zip", "..\\jmvcdownload\\")

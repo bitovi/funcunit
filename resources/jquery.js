@@ -13,6 +13,7 @@
  *
  * Date: Mon May 31 23:43:13 2010 -0500
  */
+steal.then(function(){
 (function( window, undefined ) {
 
 // Define a local copy of jQuery
@@ -6358,3 +6359,4 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 
 
 })(window);
+})
