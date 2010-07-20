@@ -5,7 +5,7 @@ module("myapp",{
 })
 
 test("Copy Test", function(){
-	S("#typehere").type("javascriptmvc", function(){
+	S("#typehere").type("javascript1mvc[left][left][left]\b", function(){
 		equals(S("#seewhatyoutyped").text(), "typed javascriptmvc","typing");
 	})
 	S("#copy").click(function(){
@@ -14,4 +14,7 @@ test("Copy Test", function(){
 })
 
 test("Drag Test", function(){
+	S("#drag").drag("#drop", function(){
+		equals(S("#drop").text(), "Drags 1", 'drag worked correctly')
+	})
 })
