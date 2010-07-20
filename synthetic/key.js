@@ -400,13 +400,13 @@ h.extend(Syn.key,{
 					sel = getSelection(this),
 					before = current.substr(0,sel.start),
 					after = current.substr(sel.end);
-				
-				if(sel.start == sel.end && sel.start < this.value.length - 1){
-					//remove a character
+				if(sel.start == sel.end && sel.start <= this.value.length - 1){
 					this.value = before+after.substring(1)
 				}else{
 					this.value = before+after;
+					
 				}
+				Syn.selectText(this, sel.start)
 			}		
 		},
 		'\r' : function(options, scope){
