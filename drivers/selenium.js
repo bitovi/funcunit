@@ -61,7 +61,7 @@ steal.then(function(){
 				}, 1000)
 			};
 			var convertToJson = function(arg){
-				return arg === FuncUnit.window ? "selenium.browserbot.getCurrentWindow()" : jQuery.toJSON(arg)
+				return arg === FuncUnit.window ? "selenium.browserbot.getCurrentWindow()" : FuncUnit.jquery.toJSON(arg)
 				
 			}
 			FuncUnit.prompt = function(answer){
