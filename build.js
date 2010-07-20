@@ -34,8 +34,9 @@ new steal.File("funcunit/qunit/qunit.css")
 	.copyTo("funcunit/dist/qunit.css", [])
 new steal.File("jquery/lang/json/json.js")
 	.copyTo("funcunit/resources/json.js", [])
-	
-// copy files into selenium
+
+/*	
+// copy files into selenium (assumes you have unzipped java/selenium-server.jar into its own folder there)
 new steal.File("funcunit/resources/json.js")
 	.copyTo("funcunit/java/selenium-server/core/scripts/json.js", [])
 new steal.File("funcunit/dist/syn.js")
@@ -43,4 +44,7 @@ new steal.File("funcunit/dist/syn.js")
 new steal.File("funcunit/resources/jquery.js")
 	.copyTo("funcunit/java/selenium-server/core/scripts/jquery.js", [])
 
-//new steal.File("../jmvcdownload").zipDir("javascriptmvc-3.0.0.zip", "..\\jmvcdownload\\")
+// manually create the zip in 7-zip as selenium-server.jar and move it to funcunit/java, the following doesn't work
+
+new steal.File("funcunit/java/selenium-server").zipDir("selenium-server.jar", "funcunit\\java\\selenium-server\\")
+*/
