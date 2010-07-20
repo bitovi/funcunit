@@ -705,7 +705,7 @@ extend(Syn.init.prototype,{
 	 */
 	"_rightClick" : function(options, element, callback){
 		Syn.helpers.addOffset(options, element);
-		var mouseopts =  extend( extend({},Syn.mouse.browser.mouseup ), options)
+		var mouseopts =  extend( extend({},Syn.mouse.browser.right.mouseup ), options)
 		
 		Syn.trigger("mousedown", mouseopts, element);
 		
@@ -714,7 +714,7 @@ extend(Syn.init.prototype,{
 			Syn.trigger("mouseup", mouseopts, element)
 			if (Syn.mouse.browser.contextmenu) {
 				Syn.trigger("contextmenu", 
-					extend( extend({},Syn.mouse.browser.contextmenu ), options), 
+					extend( extend({},Syn.mouse.browser.right.contextmenu ), options), 
 					element)
 			}
 			callback(true)

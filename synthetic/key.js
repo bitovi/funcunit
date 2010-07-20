@@ -454,36 +454,41 @@ h.extend(Syn.key,{
 				elIndex,
 				firstNotIndexed,
 				prev;
-			
-			var sort = function(el1, el2){
-				var tab1 = Syn.tabIndex(el1) || 0,
+				orders = [];
+			for(; i< focusEls.length; i++){
+				orders.push([focusEls[i], i]);
+			}
+			var sort = function(order1, order2){
+				var el1 = order1[0],
+					el2 = order2[0],
+					tab1 = Syn.tabIndex(el1) || 0,
 					tab2 = Syn.tabIndex(el2) || 0;
 				if(tab1 == tab2){
-					return 0
+					return order1[1] - order2[1]
 				}else{
 					if(tab1 == 0){
 						return 1;
 					}else if(tab2 == 0){
 						return -1;
+					}else{
+						return tab1-tab2;
 					}
-					
-					return tab1-tab2;
 				}
 			}
-			focusEls.sort(sort);
+			orders.sort(sort);
 			//now find current
-			for(; i< focusEls.length; i++){
-				el = focusEls[i];
+			for(i=0; i< orders.length; i++){
+				el = orders[i][0];
 				if(this== el ){
 					if(!Syn.key.shiftKey){
-						current = focusEls[i+1];
+						current = orders[i+1][0];
 						if(!current){
-							current = focusEls[0]
+							current = orders[0][0]
 						}
 					}else{
-						current = focusEls[i-1];
+						current = orders[i-1][0];
 						if(!current){
-							current = focusEls[focusEls.length-1]
+							current = orders[focusEls.length-1][0]
 						}
 					}
 					

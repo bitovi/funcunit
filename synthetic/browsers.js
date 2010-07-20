@@ -109,11 +109,16 @@ steal.then(function(){
 	};
 	
 	Syn.mouse.browsers = {
-		webkit : {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
-		opera: {},
-		msie: {"mouseup":{"button":2},"contextmenu":{"button":0}},
-		chrome : {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
-		gecko: {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}}
+		webkit : {"right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
+		          "left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}}},
+		opera: {"right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3}},
+		        "left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}}},
+		msie: {	"right":{"mousedown":{"button":2},"mouseup":{"button":2},"contextmenu":{"button":0}},
+				"left":{"mousedown":{"button":1},"mouseup":{"button":1},"click":{"button":0}}},
+		chrome : {"right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
+				  "left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}}},
+		gecko: {"left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}},
+		        "right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}}}
 	}
 	
 	//set browser

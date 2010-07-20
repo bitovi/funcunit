@@ -14,6 +14,21 @@
  * Date: Mon May 31 23:43:13 2010 -0500
  */
 steal.then(function(){
+/*!
+ * jQuery JavaScript Library v1.4.3pre
+ * http://jquery.com/
+ *
+ * Copyright 2010, John Resig
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * Includes Sizzle.js
+ * http://sizzlejs.com/
+ * Copyright 2010, The Dojo Foundation
+ * Released under the MIT, BSD, and GPL Licenses.
+ *
+ * Date: Mon May 31 23:43:13 2010 -0500
+ */
 (function( window, undefined ) {
 
 // Define a local copy of jQuery
@@ -5096,10 +5111,6 @@ jQuery.extend({
 
 			// Handle JSONP-style loading
 			window[ jsonp ] = window[ jsonp ] || function( tmp ) {
-				data = tmp;
-				jQuery.ajax.handleSuccess( s, xhr, status, data );
-				jQuery.ajax.handleComplete( s, xhr, status, data );
-				// Garbage collect
 				window[ jsonp ] = undefined;
 
 				try {
@@ -5109,6 +5120,12 @@ jQuery.extend({
 				if ( head ) {
 					head.removeChild( script );
 				}
+				
+				data = tmp;
+				jQuery.ajax.handleSuccess( s, xhr, status, data );
+				jQuery.ajax.handleComplete( s, xhr, status, data );
+				// Garbage collect
+				
 			};
 		}
 
@@ -6293,7 +6310,7 @@ jQuery.each( ["Left", "Top"], function( i, name ) {
 });
 
 function getWindow( elem ) {
-	return ("scrollTo" in elem && elem.document) ?
+	return ("scrollTo" in elem && elem.document && elemn.navigator) ?
 		elem :
 		elem.nodeType === 9 ?
 			elem.defaultView || elem.parentWindow :
@@ -6332,7 +6349,7 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 			});
 		}
 
-		return ("scrollTo" in elem && elem.document) ? // does it walk and quack like a window?
+		return ("scrollTo" in elem && elem.document && elem.navigator) ? // does it walk and quack like a window?
 			// Everyone else use document.documentElement or document.body depending on Quirks vs Standards mode
 			elem.document.compatMode === "CSS1Compat" && elem.document.documentElement[ "client" + name ] ||
 			elem.document.body[ "client" + name ] :
@@ -6356,7 +6373,6 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 	};
 
 });
-
-
 })(window);
+
 })

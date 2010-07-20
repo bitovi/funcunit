@@ -103,10 +103,14 @@ h.extend(Syn.create,{
 	mouse : {
 		options : function(type, options, element){
 			var doc = document.documentElement, body = document.body,
-				center = [options.pageX || 0, options.pageY || 0] 
+				center = [options.pageX || 0, options.pageY || 0],
+				//browser might not be loaded yet (doing support code)
+				left = Syn.mouse.browser && Syn.mouse.browser.left[type],
+				right = Syn.mouse.browser && Syn.mouse.browser.right[type];
 			return h.extend({
 				bubbles : true,cancelable : true,
-				view : window,detail : 1,
+				view : window,
+				detail : 1,
 				screenX : 1, screenY : 1,
 				clientX : options.clientX || center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
 				clientY : options.clientY || center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
@@ -114,7 +118,9 @@ h.extend(Syn.create,{
 				altKey : !!Syn.key.altKey, 
 				shiftKey : !!Syn.key.shiftKey, 
 				metaKey : !!Syn.key.metaKey,
-				button : (type == 'contextmenu' ? 2 : 0), 
+				button : left && left.button != null ? 
+					left.button : 
+					right && right.button || (type == 'contextmenu' ? 2 : 0), 
 				relatedTarget : document.documentElement
 			}, options);
 		},
