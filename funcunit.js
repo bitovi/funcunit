@@ -101,12 +101,15 @@ test("page has content", function(){
  *  </li>
  *  <li>Now run your test in Selenium.  In windows:
 @codestart text
-> envjs ../../pages/mytest.html
+> envjs ../../pages/mypage_test.html
 @codeend
 In Linux / Mac:
 @codestart text
-> ./envjs ../../pages/mytest.html
+> ./envjs ../../pages/mypage_test.html
 @codeend
+<div class='whisper'>This will run mytest.html on the filesystem.  To run it served, just
+pass in the url of your test page: <pre>envjs http://localhost/pages/mypage_test.html</pre>.
+</div>
 </li>
  * </ol>
  * <h2>Writing Tests</h2>
