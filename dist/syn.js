@@ -1073,7 +1073,7 @@ h.extend(Syn.create,{
 	//},1)
 	
 	
-	//document.documentElement.removeChild(div);
+	document.documentElement.removeChild(div);
 	
 	//check stuff
 	window.__synthTest = oldSynth;
@@ -1546,14 +1546,13 @@ h.extend(Syn.key,{
 	},
 	// default behavior when typing
 	defaults : 	{
-		'character' : function(options, scope, key, force){
+		'character' : function(options, scope, key, force, sel){
 			if(/num\d+/.test(key)){
 				key = key.match(/\d+/)[0]
 			}
 			
 			if(force || (!S.support.keyCharacters && Syn.typeable.test(this.nodeName))){
 				var current = this.value,
-					sel = getSelection(this),
 					before = current.substr(0,sel.start),
 					after = current.substr(sel.end),
 					character = key;
@@ -1564,25 +1563,25 @@ h.extend(Syn.key,{
 				Syn.selectText(this, before.length + charLength)
 			}		
 		},
-		'c' : function(options, scope, key){
+		'c' : function(options, scope, key, force, sel){
 			if(Syn.key.ctrlKey){
 				Syn.key.clipboard = Syn.getText(this)
 			}else{
-				Syn.key.defaults.character.call(this, options,scope, key);
+				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
-		'v' : function(options, scope, key){
+		'v' : function(options, scope, key, force, sel){
 			if(Syn.key.ctrlKey){
-				Syn.key.defaults.character.call(this, options,scope, Syn.key.clipboard, true);
+				Syn.key.defaults.character.call(this, options,scope, Syn.key.clipboard, true,sel);
 			}else{
-				Syn.key.defaults.character.call(this, options,scope, key);
+				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
-		'a' : function(options, scope, key){
+		'a' : function(options, scope, key, force, sel){
 			if(Syn.key.ctrlKey){
 				Syn.selectText(this, 0, this.value.length)
 			}else{
-				Syn.key.defaults.character.call(this, options,scope, key);
+				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
 		'home' : function(){
@@ -1620,13 +1619,13 @@ h.extend(Syn.key,{
 				}
 			})
 		},
-		'\b' : function(){
+		'\b' : function(options, scope, key, force, sel){
 			//this assumes we are deleting from the end
 			if(!S.support.backspaceWorks && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
-					sel = getSelection(this),
 					before = current.substr(0,sel.start),
 					after = current.substr(sel.end);
+					
 				if(sel.start == sel.end && sel.start > 0){
 					//remove a character
 					this.value = before.substring(0, before.length - 1)+after
@@ -1639,10 +1638,9 @@ h.extend(Syn.key,{
 				//set back the selection
 			}	
 		},
-		'delete' : function(){
+		'delete' : function(options, scope, key, force, sel){
 			if(!S.support.backspaceWorks && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
-					sel = getSelection(this),
 					before = current.substr(0,sel.start),
 					after = current.substr(sel.end);
 				if(sel.start == sel.end && sel.start <= this.value.length - 1){
@@ -1654,7 +1652,7 @@ h.extend(Syn.key,{
 				Syn.selectText(this, sel.start)
 			}		
 		},
-		'\r' : function(options, scope){
+		'\r' : function(options, scope, key, force, sel){
 			
 			var nodeName = this.nodeName.toLowerCase()
 			// submit a form
@@ -1667,7 +1665,7 @@ h.extend(Syn.key,{
 			}
 			//newline in textarea
 			if(!S.support.keyCharacters && nodeName == 'textarea'){
-				Syn.key.defaults.character.call(this, options, scope, "\n")
+				Syn.key.defaults.character.call(this, options, scope, "\n", undefined, sel)
 			}
 			// 'click' hyperlinks
 			if(!S.support.keypressOnAnchorClicks && nodeName == 'a'){
@@ -1747,10 +1745,8 @@ h.extend(Syn.key,{
 			current && current.focus();
 			return current;
 		},
-		'left' : function(){
+		'left' : function(options, scope, key, force, sel){
 			if( Syn.typeable.test(this.nodeName) ){
-				var sel = getSelection(this);
-				
 				if(Syn.key.shiftKey){
 					Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1, sel.end)
 				}else{
@@ -1758,10 +1754,8 @@ h.extend(Syn.key,{
 				}
 			}
 		},
-		'right' : function(){
+		'right' : function(options, scope, key, force, sel){
 			if( Syn.typeable.test(this.nodeName) ){
-				var sel = getSelection(this);
-				
 				if(Syn.key.shiftKey){
 					Syn.selectText(this, sel.start, sel.end+1 > this.value.length ? this.value.length  : sel.end+1)
 				}else{
@@ -1894,7 +1888,8 @@ h.extend(Syn.init.prototype,
 		}
 		
 		
-		var key = convert[options] || options,
+		var caret = Syn.typeable.test(element.nodeName) && getSelection(element),
+			key = convert[options] || options,
 			// should we run default events
 			runDefaults = Syn.trigger('keydown',key, element ),
 			
@@ -1914,12 +1909,12 @@ h.extend(Syn.init.prototype,
 		if(runDefaults){
 			//if the browser doesn't create keypresses for this key, run default
 			if(!keypressOptions){
-				defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
+				defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key, undefined, caret)
 			}else{
 				//do keypress
 				runDefaults = Syn.trigger('keypress',keypressOptions, element )
 				if(runDefaults){
-					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
+					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key, undefined, caret)
 				}
 			}
 		}else{
