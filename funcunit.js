@@ -754,7 +754,7 @@ FuncUnit.init.prototype = {
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
 	exists : function(callback){
-		if(callback){
+		if(true){
 			return this.size(function(size){
 				return size > 0;
 			}, callback)
@@ -788,7 +788,7 @@ FuncUnit.init.prototype = {
 			sel = this.selector,
 			ret;
 		this.selector += ":visible"
-		if(callback){
+		if(true){
 			return this.size(function(size){
 				return size > 0;
 			}, function(){
@@ -815,7 +815,7 @@ FuncUnit.init.prototype = {
 		var self = this,
 			sel = this.selector,
 			ret;
-		if(selector){
+		if(true){
 			this.selector += ":visible"
 			return this.size(0, function(){
 				self.selector = sel;
