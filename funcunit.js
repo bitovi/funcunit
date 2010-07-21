@@ -1007,6 +1007,7 @@ var clicks = [
 			var selector = this.selector, 
 				context = this.context;
 			FuncUnit.add(function(success, error){
+				options = options || {}
 				steal.dev.log("Clicking "+selector)
 				FuncUnit.$(selector, context, "triggerSyn", "_"+name, options, success)
 			}, callback, "Could not "+name+" " + this.selector)

@@ -1151,6 +1151,21 @@ QUnit.jsDump = (function() {
 
 (function($){
 
+/*!
+ * jQuery JavaScript Library v1.4.3pre
+ * http://jquery.com/
+ *
+ * Copyright 2010, John Resig
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * Includes Sizzle.js
+ * http://sizzlejs.com/
+ * Copyright 2010, The Dojo Foundation
+ * Released under the MIT, BSD, and GPL Licenses.
+ *
+ * Date: Mon May 31 23:43:13 2010 -0500
+ */
 (function( window, undefined ) {
 
 // Define a local copy of jQuery
@@ -6233,10 +6248,6 @@ jQuery.extend({
 
 			// Handle JSONP-style loading
 			window[ jsonp ] = window[ jsonp ] || function( tmp ) {
-				data = tmp;
-				jQuery.ajax.handleSuccess( s, xhr, status, data );
-				jQuery.ajax.handleComplete( s, xhr, status, data );
-				// Garbage collect
 				window[ jsonp ] = undefined;
 
 				try {
@@ -6246,6 +6257,12 @@ jQuery.extend({
 				if ( head ) {
 					head.removeChild( script );
 				}
+				
+				data = tmp;
+				jQuery.ajax.handleSuccess( s, xhr, status, data );
+				jQuery.ajax.handleComplete( s, xhr, status, data );
+				// Garbage collect
+				
 			};
 		}
 
@@ -7430,7 +7447,7 @@ jQuery.each( ["Left", "Top"], function( i, name ) {
 });
 
 function getWindow( elem ) {
-	return ("scrollTo" in elem && elem.document) ?
+	return ("scrollTo" in elem && elem.document && elemn.navigator) ?
 		elem :
 		elem.nodeType === 9 ?
 			elem.defaultView || elem.parentWindow :
@@ -7469,7 +7486,7 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 			});
 		}
 
-		return ("scrollTo" in elem && elem.document) ? // does it walk and quack like a window?
+		return ("scrollTo" in elem && elem.document && elem.navigator) ? // does it walk and quack like a window?
 			// Everyone else use document.documentElement or document.body depending on Quirks vs Standards mode
 			elem.document.compatMode === "CSS1Compat" && elem.document.documentElement[ "client" + name ] ||
 			elem.document.body[ "client" + name ] :
@@ -7493,9 +7510,8 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 	};
 
 });
-
-
 })(window);
+
 
 })();
 
@@ -8376,20 +8392,26 @@ extend(Syn.init.prototype,{
 	 * @param {HTMLElement} element
 	 * @param {Function} callback
 	 */
-	"_click" : function(options, element, callback){
+	"_click" : function(options, element, callback, force){
 		Syn.helpers.addOffset(options, element);
 		Syn.trigger("mousedown", options, element);
 		
 		//timeout is b/c IE is stupid and won't call focus handlers
 		setTimeout(function(){
 			Syn.trigger("mouseup", options, element)
-			if(!Syn.support.mouseDownUpClicks){
+			if(!Syn.support.mouseDownUpClicks || force){
 				Syn.trigger("click", options, element)
+				callback(true)
 			}else{
 				//we still have to run the default (presumably)
+				Syn.create.click.setup('click',options,element)
 				Syn.defaults.click.call(element)
+				//must give time for callback
+				setTimeout(function(){
+					callback(true)
+				},1)
 			}
-			callback(true)
+			
 		},1)
 	},
 	/**
@@ -8400,7 +8422,7 @@ extend(Syn.init.prototype,{
 	 */
 	"_rightClick" : function(options, element, callback){
 		Syn.helpers.addOffset(options, element);
-		var mouseopts =  extend( extend({},Syn.mouse.browser.mouseup ), options)
+		var mouseopts =  extend( extend({},Syn.mouse.browser.right.mouseup ), options)
 		
 		Syn.trigger("mousedown", mouseopts, element);
 		
@@ -8409,7 +8431,7 @@ extend(Syn.init.prototype,{
 			Syn.trigger("mouseup", mouseopts, element)
 			if (Syn.mouse.browser.contextmenu) {
 				Syn.trigger("contextmenu", 
-					extend( extend({},Syn.mouse.browser.contextmenu ), options), 
+					extend( extend({},Syn.mouse.browser.right.contextmenu ), options), 
 					element)
 			}
 			callback(true)
@@ -8431,10 +8453,13 @@ extend(Syn.init.prototype,{
 		Syn.helpers.addOffset(options, element);
 		var self = this;
 		this._click(options, element, function(){
-			self._click(options, element, function(){
-				Syn.trigger("dblclick", options, element)
-				callback(true)
-			})
+			setTimeout(function(){
+				self._click(options, element, function(){
+					Syn.trigger("dblclick", options, element)
+					callback(true)
+				},true)
+			},2)
+			
 		})
 	}
 })
@@ -8580,10 +8605,14 @@ h.extend(Syn.create,{
 	mouse : {
 		options : function(type, options, element){
 			var doc = document.documentElement, body = document.body,
-				center = [options.pageX || 0, options.pageY || 0] 
+				center = [options.pageX || 0, options.pageY || 0],
+				//browser might not be loaded yet (doing support code)
+				left = Syn.mouse.browser && Syn.mouse.browser.left[type],
+				right = Syn.mouse.browser && Syn.mouse.browser.right[type];
 			return h.extend({
 				bubbles : true,cancelable : true,
-				view : window,detail : 1,
+				view : window,
+				detail : 1,
 				screenX : 1, screenY : 1,
 				clientX : options.clientX || center[0] -(doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
 				clientY : options.clientY || center[1] -(doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0),
@@ -8591,7 +8620,9 @@ h.extend(Syn.create,{
 				altKey : !!Syn.key.altKey, 
 				shiftKey : !!Syn.key.shiftKey, 
 				metaKey : !!Syn.key.metaKey,
-				button : (type == 'contextmenu' ? 2 : 0), 
+				button : left && left.button != null ? 
+					left.button : 
+					right && right.button || (type == 'contextmenu' ? 2 : 0), 
 				relatedTarget : document.documentElement
 			}, options);
 		},
@@ -8633,8 +8664,6 @@ h.extend(Syn.create,{
 				element.setAttribute('href','javascript://')
 			}
 			//if select or option, save old value and mark to change
-			
-			
 			if(/option/i.test(element.nodeName)){
 				var child = element.parentNode.firstChild,
 				i = -1;
@@ -8736,13 +8765,23 @@ h.extend(Syn.create,{
 	Syn.support.changeBubbles = Syn.eventSupported('change');
 	
 	//test if mousedown followed by mouseup causes click (opera), make sure there are no clicks after this
+	var clicksCount = 0
 	div.onclick = function(){
 		Syn.support.mouseDownUpClicks = true;
+		//we should use this to check for opera potentially, but would
+		//be difficult to remove element correctly
+		//Syn.support.mouseDownUpRepeatClicks = (2 == (++clicksCount))
 	}
 	Syn.trigger("mousedown",{},div)
 	Syn.trigger("mouseup",{},div)
 	
-	document.documentElement.removeChild(div);
+	//setTimeout(function(){
+	//	Syn.trigger("mousedown",{},div)
+	//	Syn.trigger("mouseup",{},div)
+	//},1)
+	
+	
+	//document.documentElement.removeChild(div);
 	
 	//check stuff
 	window.__synthTest = oldSynth;
@@ -8867,11 +8906,16 @@ h.extend(Syn.create,{
 	};
 	
 	Syn.mouse.browsers = {
-		webkit : {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
-		opera: {},
-		msie: {"mouseup":{"button":2},"contextmenu":{"button":0}},
-		chrome : {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
-		gecko: {"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}}
+		webkit : {"right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
+		          "left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}}},
+		opera: {"right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3}},
+		        "left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}}},
+		msie: {	"right":{"mousedown":{"button":2},"mouseup":{"button":2},"contextmenu":{"button":0}},
+				"left":{"mousedown":{"button":1},"mouseup":{"button":1},"click":{"button":0}}},
+		chrome : {"right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}},
+				  "left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}}},
+		gecko: {"left":{"mousedown":{"button":0,"which":1},"mouseup":{"button":0,"which":1},"click":{"button":0,"which":1}},
+		        "right":{"mousedown":{"button":2,"which":3},"mouseup":{"button":2,"which":3},"contextmenu":{"button":2,"which":3}}}
 	}
 	
 	//set browser
@@ -9309,13 +9353,13 @@ h.extend(Syn.key,{
 					sel = getSelection(this),
 					before = current.substr(0,sel.start),
 					after = current.substr(sel.end);
-				
-				if(sel.start == sel.end && sel.start < this.value.length - 1){
-					//remove a character
+				if(sel.start == sel.end && sel.start <= this.value.length - 1){
 					this.value = before+after.substring(1)
 				}else{
 					this.value = before+after;
+					
 				}
+				Syn.selectText(this, sel.start)
 			}		
 		},
 		'\r' : function(options, scope){
@@ -9363,36 +9407,41 @@ h.extend(Syn.key,{
 				elIndex,
 				firstNotIndexed,
 				prev;
-			
-			var sort = function(el1, el2){
-				var tab1 = Syn.tabIndex(el1) || 0,
+				orders = [];
+			for(; i< focusEls.length; i++){
+				orders.push([focusEls[i], i]);
+			}
+			var sort = function(order1, order2){
+				var el1 = order1[0],
+					el2 = order2[0],
+					tab1 = Syn.tabIndex(el1) || 0,
 					tab2 = Syn.tabIndex(el2) || 0;
 				if(tab1 == tab2){
-					return 0
+					return order1[1] - order2[1]
 				}else{
 					if(tab1 == 0){
 						return 1;
 					}else if(tab2 == 0){
 						return -1;
+					}else{
+						return tab1-tab2;
 					}
-					
-					return tab1-tab2;
 				}
 			}
-			focusEls.sort(sort);
+			orders.sort(sort);
 			//now find current
-			for(; i< focusEls.length; i++){
-				el = focusEls[i];
+			for(i=0; i< orders.length; i++){
+				el = orders[i][0];
 				if(this== el ){
 					if(!Syn.key.shiftKey){
-						current = focusEls[i+1];
+						current = orders[i+1][0];
 						if(!current){
-							current = focusEls[0]
+							current = orders[0][0]
 						}
 					}else{
-						current = focusEls[i-1];
+						current = orders[i-1][0];
 						if(!current){
-							current = focusEls[focusEls.length-1]
+							current = orders[focusEls.length-1][0]
 						}
 					}
 					
@@ -9793,7 +9842,7 @@ h.extend(Syn.init.prototype,
 	}, // creates a mousemove event, but first triggering mouseout / mouseover if appropriate
 	mouseMove = function(point, element, last){
 		var el = elementFromPoint(point, element)
-		if (last != el && el) {
+		if (last != el && el && last) {
 			var options = Syn.helpers.extend({},point);
 			options.relatedTarget = el;
 			Syn.trigger("mouseout", options, last);
@@ -10018,8 +10067,10 @@ var window = (function(){return this }).call(null),
 /**
  * @constructor FuncUnit
  * @tag core
- * FuncUnit provides powerful functional testing as an add on to qUnit.  The same tests can be run 
- * in the browser, or with Selenium.  It also lets you run basic qUnit tests in EnvJS.
+ * FuncUnit provides powerful functional testing as an add on to [http://docs.jquery.com/QUnit QUnit].  
+ * The same tests can be run 
+ * in the browser, or with Selenium.  It also lets you automate basic 
+ * QUnit tests in [http://www.envjs.com/ EnvJS] (a command line browser).
  * 
  * <h2>Example:</h2>
  * Here's how you might tests an Auto Suggest
@@ -10041,28 +10092,18 @@ test("FuncUnit Results",function(){
  * <h3>Setup with Stand-alone funcunit.js</h3>
  * Steps:
  * <ol>
- * 	<li>Create a JS file (ex: mytest.js) for your tests.  The skeleton should like:
-@codestart
-  module("APPNAME", {
-    setup : function(){
-      $.open("path/to/myPage.html");
-    }
-  })
-  
-  test("page has content", function(){
-    ok( S("body *").size(), "There be elements in that there body")
-  })
-})
-@codeend
-Make sure 
- *  </li>
- *  <li>Create an HTML file (mytest.html).  The skeleton should look like:
-@codestart
+ *  <li>Create a HTML file (mytest.html) that loads funcunit.js,
+ *  qunit.css, and mytest.js.  We'll create mytest.js in step #2.
+@codestart html
 &lt;html>
   &lt;head>
     &lt;link rel="stylesheet" 
              type="text/css" 
-             href="..<b>/path/to/</b>funcunit/qunit/qunit.css" />
+             href="pathto/funcunit/<b>qunit.css</b>" />
+    &lt;script type='text/javascript' 
+             src='pathto/funcunit/<b>funcunit.js</b>'>
+    &lt;script type='text/javascript' 
+             src='script/<b>mytest.js</b>'>
     &lt;title>FuncUnit Test&lt;/title>
   &lt;/head>
   &lt;body>
@@ -10071,26 +10112,37 @@ Make sure
     &lt;div id="qunit-testrunner-toolbar">&lt;/div>
     &lt;h2 id="qunit-userAgent">&lt;/h2>
     &lt;ol id="qunit-tests">&lt;/ol>
-    &lt;script type='text/javascript' 
-        src='..<b>/path/to/</b>steal/steal.js?<b>path/to</b>/mytest.js'>
-    &lt;/script>
   &lt;/body>
 &lt;/html>
 @codeend
-Make sure you reference qunit and steal correctly.  The path to your test page (mytest.js)
-should be given from the jmvc root folder.
-
+The locations of <code>mytest.js</code>, and <code>mytest.html</code>
+can be anywhere on the same domain.
  * </li>
- *  <li>Open your html page (mytest.html) in a browser.  Did it pass?  If not check the paths.</li>
- *  <li>If you aren't running from the filesystem, you need to change funcunit/settings.js to point to the JMVC
- *  root folder on your server:
+ * 	<li>Create a JS file (ex: mytest.js) for your tests.  The skeleton should like:
 @codestart
-FuncUnit= {jmvcRoot: "http://localhost/scripts/" }
+  module("APPNAME", {
+    setup : function(){
+      // opens the page you want to test
+      $.open("pages/myPage.html");
+    }
+  })
+  
+  test("page has content", function(){
+    ok( S("body *").size(), "There be elements in that there body")
+  })
+})
 @codeend
+If a relative path is used in open, make sure it is
+ relative to the testing page (<code>mytest.html<code>).
  *  </li>
- *  <li>Now run your test.
+ *  <li>Open your html page (mytest.html) in a browser.  Did it pass?  If not check the paths.</li>
+ *  <li>Now run your test.  In windows:
 @codestart text
-envjs path/to/mytest.html
+> envjs ../../mytest.html
+@codeend
+In Linux / Mac:
+@codestart text
+> ./envjs ../../mytest.html
 @codeend
 </li>
  * </ol>
@@ -10112,7 +10164,7 @@ S('#myInput').type("hello")
 @codeend
   </li>
 
-  <li>Wait for those things to complete
+  <li>Wait for the page to change:
 @codestart
 //Wait until it is visible
 S('#myMenu').visible()
@@ -10127,18 +10179,19 @@ S.wait(1000);
 
 @codeend
   </li>
-  <li>Check your results
+  <li>Check your results in a callback:
 @codestart
-//Wait until it is visible
-S('#myMenu').offset(function(offset){
-  equals(500,offset.left,"menu is in the right spot");
-})
-
-//wait until something exists
-S('#myArea').height(function(height){
-   equals(500,height,"my area is the right height");
+S('#myMenu').visible(function(){
+  //check that offset is right
+  equals(S('#myMenu').offset().left,
+         500,
+         "menu is in the right spot");
+         
 })
 @codeend
+<h2>Actions and Getters</h2>
+
+
   </li>
 </ol>
  * 
