@@ -1,7 +1,7 @@
 var fileName = _args[0]
 
 if (!fileName || fileName.indexOf(".html") == -1) {
-	print("Usage: funcunit/envjs myapp/funcunit.html");
+	print("Usage: envjs myapp/funcunit.html");
 	quit();
 }
 
