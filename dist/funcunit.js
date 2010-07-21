@@ -8781,7 +8781,7 @@ h.extend(Syn.create,{
 	//},1)
 	
 	
-	//document.documentElement.removeChild(div);
+	document.documentElement.removeChild(div);
 	
 	//check stuff
 	window.__synthTest = oldSynth;
@@ -9254,14 +9254,13 @@ h.extend(Syn.key,{
 	},
 	// default behavior when typing
 	defaults : 	{
-		'character' : function(options, scope, key, force){
+		'character' : function(options, scope, key, force, sel){
 			if(/num\d+/.test(key)){
 				key = key.match(/\d+/)[0]
 			}
 			
 			if(force || (!S.support.keyCharacters && Syn.typeable.test(this.nodeName))){
 				var current = this.value,
-					sel = getSelection(this),
 					before = current.substr(0,sel.start),
 					after = current.substr(sel.end),
 					character = key;
@@ -9272,25 +9271,25 @@ h.extend(Syn.key,{
 				Syn.selectText(this, before.length + charLength)
 			}		
 		},
-		'c' : function(options, scope, key){
+		'c' : function(options, scope, key, force, sel){
 			if(Syn.key.ctrlKey){
 				Syn.key.clipboard = Syn.getText(this)
 			}else{
-				Syn.key.defaults.character.call(this, options,scope, key);
+				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
-		'v' : function(options, scope, key){
+		'v' : function(options, scope, key, force, sel){
 			if(Syn.key.ctrlKey){
-				Syn.key.defaults.character.call(this, options,scope, Syn.key.clipboard, true);
+				Syn.key.defaults.character.call(this, options,scope, Syn.key.clipboard, true,sel);
 			}else{
-				Syn.key.defaults.character.call(this, options,scope, key);
+				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
-		'a' : function(options, scope, key){
+		'a' : function(options, scope, key, force, sel){
 			if(Syn.key.ctrlKey){
 				Syn.selectText(this, 0, this.value.length)
 			}else{
-				Syn.key.defaults.character.call(this, options,scope, key);
+				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
 		'home' : function(){
@@ -9328,13 +9327,13 @@ h.extend(Syn.key,{
 				}
 			})
 		},
-		'\b' : function(){
+		'\b' : function(options, scope, key, force, sel){
 			//this assumes we are deleting from the end
 			if(!S.support.backspaceWorks && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
-					sel = getSelection(this),
 					before = current.substr(0,sel.start),
 					after = current.substr(sel.end);
+					
 				if(sel.start == sel.end && sel.start > 0){
 					//remove a character
 					this.value = before.substring(0, before.length - 1)+after
@@ -9347,10 +9346,9 @@ h.extend(Syn.key,{
 				//set back the selection
 			}	
 		},
-		'delete' : function(){
+		'delete' : function(options, scope, key, force, sel){
 			if(!S.support.backspaceWorks && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
-					sel = getSelection(this),
 					before = current.substr(0,sel.start),
 					after = current.substr(sel.end);
 				if(sel.start == sel.end && sel.start <= this.value.length - 1){
@@ -9362,7 +9360,7 @@ h.extend(Syn.key,{
 				Syn.selectText(this, sel.start)
 			}		
 		},
-		'\r' : function(options, scope){
+		'\r' : function(options, scope, key, force, sel){
 			
 			var nodeName = this.nodeName.toLowerCase()
 			// submit a form
@@ -9375,7 +9373,7 @@ h.extend(Syn.key,{
 			}
 			//newline in textarea
 			if(!S.support.keyCharacters && nodeName == 'textarea'){
-				Syn.key.defaults.character.call(this, options, scope, "\n")
+				Syn.key.defaults.character.call(this, options, scope, "\n", undefined, sel)
 			}
 			// 'click' hyperlinks
 			if(!S.support.keypressOnAnchorClicks && nodeName == 'a'){
@@ -9455,10 +9453,8 @@ h.extend(Syn.key,{
 			current && current.focus();
 			return current;
 		},
-		'left' : function(){
+		'left' : function(options, scope, key, force, sel){
 			if( Syn.typeable.test(this.nodeName) ){
-				var sel = getSelection(this);
-				
 				if(Syn.key.shiftKey){
 					Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1, sel.end)
 				}else{
@@ -9466,10 +9462,8 @@ h.extend(Syn.key,{
 				}
 			}
 		},
-		'right' : function(){
+		'right' : function(options, scope, key, force, sel){
 			if( Syn.typeable.test(this.nodeName) ){
-				var sel = getSelection(this);
-				
 				if(Syn.key.shiftKey){
 					Syn.selectText(this, sel.start, sel.end+1 > this.value.length ? this.value.length  : sel.end+1)
 				}else{
@@ -9602,7 +9596,8 @@ h.extend(Syn.init.prototype,
 		}
 		
 		
-		var key = convert[options] || options,
+		var caret = Syn.typeable.test(element.nodeName) && getSelection(element),
+			key = convert[options] || options,
 			// should we run default events
 			runDefaults = Syn.trigger('keydown',key, element ),
 			
@@ -9622,12 +9617,12 @@ h.extend(Syn.init.prototype,
 		if(runDefaults){
 			//if the browser doesn't create keypresses for this key, run default
 			if(!keypressOptions){
-				defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
+				defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key, undefined, caret)
 			}else{
 				//do keypress
 				runDefaults = Syn.trigger('keypress',keypressOptions, element )
 				if(runDefaults){
-					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key)
+					defaultResult = getDefault(key).call(element, keypressOptions, h.getWindow(element), key, undefined, caret)
 				}
 			}
 		}else{
@@ -10067,47 +10062,58 @@ var window = (function(){return this }).call(null),
 /**
  * @constructor FuncUnit
  * @tag core
+ * @test test.html
  * FuncUnit provides powerful functional testing as an add on to [http://docs.jquery.com/QUnit QUnit].  
  * The same tests can be run 
  * in the browser, or with Selenium.  It also lets you automate basic 
  * QUnit tests in [http://www.envjs.com/ EnvJS] (a command line browser).
  * 
  * <h2>Example:</h2>
- * Here's how you might tests an Auto Suggest
+ * Here's how you might tests that an AutoSuggest returns 5 results
 @codestart
-test("FuncUnit Results",function(){
-  S('#auto_suggest').click().type("FuncUnit")
-	
+module("autosuggest",{
+  setup : function(){
+    S.open('autosuggest.html')
+  }
+});
+
+test("JavaScript results",function(){
+  S('#auto_suggest').click().type("JavaScript")
+
+  // wait until we have some results
   S('.result').exists(function(){
     equal( S('.result').size(), 5, "there are 5 results")
   })
 });
 @codeend
  * 
- * <h2>Setup</h2>
+ * <h2>Basic Setup</h2>
  * <h3>Setup with JavaScriptMVC</h3>
  * If you're setting up FuncUnit with JavaScriptMVC, 
  * use [steal.static.plugins] to get the funcunit plugin.  If you used
  * JavaScriptMVC's generators, it will setup a testing skeleton for you.
  * <h3>Setup with Stand-alone funcunit.js</h3>
+ * Lets say you want to test <code>pages/mypage.html</code> and 
+ * you've installed funcunit in test/funcunit.</br>
  * Steps:
  * <ol>
- *  <li>Create a HTML file (mytest.html) that loads funcunit.js,
- *  qunit.css, and mytest.js.  We'll create mytest.js in step #2.
+ *  <li>Create a HTML file (pages/mypage_test.html) that loads
+ *  <code><b>qunit.css</b></code>, <code><b>funcunit.js</b></code>, 
+ *  and <code><b>mypage_test.js</b></code>.  We'll create mypage_test.js in step #2.
 @codestart html
 &lt;html>
   &lt;head>
-    &lt;link rel="stylesheet" 
-             type="text/css" 
-             href="pathto/funcunit/<b>qunit.css</b>" />
-    &lt;script type='text/javascript' 
-             src='pathto/funcunit/<b>funcunit.js</b>'>
-    &lt;script type='text/javascript' 
-             src='script/<b>mytest.js</b>'>
-    &lt;title>FuncUnit Test&lt;/title>
+    &lt;link   href='../funcunit/<b>qunit.css</b>'
+            type='text/css'
+            rel='stylesheet' />
+    &lt;script src='../funcunit/<b>funcunit.js</b>'
+            type='text/javascript' ></script>
+    &lt;script src='<b>mypage_test.js</b>'
+            type='text/javascript'></script>
+    &lt;title>MyPage Test Suite&lt;/title>
   &lt;/head>
   &lt;body>
-    &lt;h1 id="qunit-header">FuncUnit Test Suite&lt;/h1>
+    &lt;h1 id="qunit-header">MyPage Test Suite&lt;/h1>
     &lt;h2 id="qunit-banner">&lt;/h2>
     &lt;div id="qunit-testrunner-toolbar">&lt;/div>
     &lt;h2 id="qunit-userAgent">&lt;/h2>
@@ -10115,35 +10121,40 @@ test("FuncUnit Results",function(){
   &lt;/body>
 &lt;/html>
 @codeend
-The locations of <code>mytest.js</code>, and <code>mytest.html</code>
-can be anywhere on the same domain.
  * </li>
- * 	<li>Create a JS file (ex: mytest.js) for your tests.  The skeleton should like:
+ * 	<li>Create a JS file (<code>pages/mypage_test.js</code>) for your tests.  The skeleton should like:
 @codestart
-  module("APPNAME", {
-    setup : function(){
-      // opens the page you want to test
-      $.open("pages/myPage.html");
-    }
-  })
+module("APPNAME", {
+  setup : function(){
+    // opens the page you want to test
+    $.open("myPage.html");
+  }
+})
   
-  test("page has content", function(){
-    ok( S("body *").size(), "There be elements in that there body")
-  })
+test("page has content", function(){
+  ok( S("body *").size(), "There be elements in that there body")
 })
 @codeend
-If a relative path is used in open, make sure it is
- relative to the testing page (<code>mytest.html<code>).
  *  </li>
- *  <li>Open your html page (mytest.html) in a browser.  Did it pass?  If not check the paths.</li>
- *  <li>Now run your test.  In windows:
+ *  <li>Open your html page (<code>mytest.html</code>) in a browser.  Did it pass?  
+ *  If not check the paths.  
+ *  <div class='whisper'>P.S. Your page and test files don't have to be in the same folder; however,
+ *  on the filesystem, Firefox and Chrome don't let you access parent folders.  We wanted the
+ *  demo to work without having to host these files.
+ *  </div>
+ *  
+ *  </li>
+ *  <li>Now run your test in Selenium.  In windows:
 @codestart text
-> envjs ../../mytest.html
+> envjs ../../pages/mypage_test.html
 @codeend
 In Linux / Mac:
 @codestart text
-> ./envjs ../../mytest.html
+> ./envjs ../../pages/mypage_test.html
 @codeend
+<div class='whisper'>This will run mytest.html on the filesystem.  To run it served, just
+pass in the url of your test page: <pre>envjs http://localhost/pages/mypage_test.html</pre>.
+</div>
 </li>
  * </ol>
  * <h2>Writing Tests</h2>
@@ -10174,12 +10185,9 @@ S('#myArea').exists()
 
 //waits a second
 S.wait(1000);
-
-
-
 @codeend
   </li>
-  <li>Check your results in a callback:
+  <li>Check your page in a callback:
 @codestart
 S('#myMenu').visible(function(){
   //check that offset is right
@@ -10189,23 +10197,190 @@ S('#myMenu').visible(function(){
          
 })
 @codeend
-<h2>Actions and Getters</h2>
-
-
   </li>
 </ol>
+<h2>Actions, Waits, and Getters</h2>
+<p>FuncUnit supports three types of commands: asynchronous actions and waits, 
+and synchronous getters.</p>
+<p><b>Actions</b> are used to simulate user behavior such as clicking, typing, moving the mouse.</p>
+<p><b>Waits</b> are used to pause the test script until a condition has been met.</p>
+<p><b>Getters</b> are used to get information about elements in the page</p>
+<p>Typically, a test looks like a series of action and wait commands followed by qUnit test of
+the result of a getter command.  Getter commands are almost always in a action or wait callback.</p>
+<h3>Actions</h3>
+Actions simulate user behavior.  FuncUnit provides the following actions:
+<ul>
+	<li><code>[FuncUnit.static.open open]</code> - Opens a page.</li>
+	
+	<li><code>[FuncUnit.prototype.click click]</code> - clicks an element (mousedown, mouseup, click).</li>
+	<li><code>[FuncUnit.prototype.dblclick dblclick]</code> - two clicks followed by a dblclick.</li>
+	<li><code>[FuncUnit.prototype.rightClick rightClick]</code> - a right mousedown, mouseup, and contextmenu.</li>
+	
+	<li><code>[FuncUnit.prototype.type type]</code> - Types characters into an element.</li>
+	
+	<li><code>[FuncUnit.prototype.move move]</code> - mousemove, mouseover, and mouseouts from one element to another.</li>
+	<li><code>[FuncUnit.prototype.drag drag]</code> - a drag motion from one element to another.</li>
+	
+	<li><code>[FuncUnit.prototype.scroll scroll]</code> - scrolls an element.</li>
+</ul>
+
+<p>Actions run asynchronously, meaning they do not complete all their events immediately.  
+However, each action is queued so that you can write actions (and waits) linearly.</p>
+<p>The following might simulate typing and resizing a "resizable" textarea plugin:</p>
+@codestart
+S.open('resizableTextarea.html');
+
+S('textarea').click().type("Hello World");
+  
+S('.resizer').drag("+20 +20");
+@codeend
+<h3>Getters</h3>
+Getters are used to test the conditions of the page.  Most getter commands correspond to a jQuery
+method of the same name.  The following getters are provided:
+<table style='font-family: monospace'>
+<tr>
+	<th colspan='2'>Dimensions</th> <th>Attributes</th> <th>Position</th> <th>Selector</th> <th>Style</th>
+</tr>
+<tr>
+	<td>[FuncUnit.prototype.width width]</td>
+	<td>[FuncUnit.prototype.height height]</td> 
+	<td>[FuncUnit.prototype.attr attr]</td> 
+	<td>[FuncUnit.prototype.position position]</td> 
+	<td>[FuncUnit.prototype.size size]</td> 
+	<td>[FuncUnit.prototype.css css]</td>
+</tr>
+<tr>
+	<td>[FuncUnit.prototype.innerWidth innerWidth]</td>
+	<td>[FuncUnit.prototype.innerHeight innerHeight]</td>
+	<td>[FuncUnit.prototype.hasClass hasClass]</td>
+	<td>[FuncUnit.prototype.offset offset]</td>
+	<td>[FuncUnit.prototype.exists exists]</td>
+	<td>[FuncUnit.prototype.visible visible]</td>
+</tr>
+<tr>
+	<td>[FuncUnit.prototype.outerWidth outerWidth]</td>
+	<td>[FuncUnit.prototype.outerHeight outerHeight]</td>
+	<td>[FuncUnit.prototype.val val]</td>
+	<td>[FuncUnit.prototype.scrollLeft scrollLeft]</td>
+	<td>[FuncUnit.prototype.missing missing]</td>
+	<td>[FuncUnit.prototype.invisible invisible]</td>
+</tr>
+<tr>
+	<td colspan='2'></td>
+	<td>[FuncUnit.prototype.text text]</td> 
+	<td>[FuncUnit.prototype.scrollTop scrollTop]</td>
+</tr>
+<tr>
+	<td colspan='2'></td>
+	<td>[FuncUnit.prototype.html html]</td>
+</tr>
+</table>
+<p>
+As getters return synchronously, it's important that they happen after the action or wait command completes.
+This is why getters are typically found in an action or wait command's callback:
+</p>
+The following checks that the textarea is 20 pixels taller after the drag.
+@codestart
+    //save textarea reference
+var txtarea = S('textarea'),
+	
+    // save references to width and height
+    startingWidth = txtarea.width(), 
+    startingHeight = txtarea.height();
+
+S.open('resizableTextarea.html');
+
+S('textarea').click().type("Hello World");
+
+S('.resizer').drag("+20 +20", function(){
+  equals(txtarea.width(), 
+         startingWidth, 
+         "width stays the same");
+         
+  equals(txtarea.height(), 
+         startingHeight+20, 
+         "height got bigger");
+});
+@codeend
+<h3>Waits</h3>
+<p>Waits are used to wait for a specific condition to be met before continuing to the next wait or
+action command.  Every getter commands can become a wait command when given a check value or function.  
+For
+example, the following waits until the width of an element is 200 pixels and tests its offset.
+</p>
+@codestart
+var sm = S("#sliderMenu");
+sm.width( 200, function(){
+
+  var offset = sm.offset();
+  equals( offset.left, 200)
+  equals( offset.top, 200)
+})
+@codeend
+<p>You can also provide a test function that when true, continues to the next action or wait command.
+The following is equivalent to the previous example:
+</p>
+@codestart
+var sm = S("#sliderMenu");
+
+sm.width(
+  function( width ) {
+    return width == 200;
+  }, 
+  function(){
+    var offset = sm.offset();
+    equals( offset.left, 200)
+    equals( offset.top, 200)
+  }
+)
+@codeend
+<div class='whisper'>Notice that the test function is provided the width of the element to use to check.</div>
+<p>In addition to all the getter functions, FuncUnit provides:
+</p>
+<ul>
+  <li>[FuncUnit.static.wait S.wait] - waits a timeout before continuing.</li>
+  <li>[FuncUnit.prototype.wait S().wait] - waits a timeout before continuing.</li>
+  <li>[FuncUnit S(function(){})] - code runs between actions (like a wait with timeout = 0).</li>
+</ul>
+<h2>Configuring and Runing Selenium</h2>
+<p>Things to think about ... </p>
+<ul>
+<li>Setting up selenium (setting browsers).</li>
+<li>Running from file, but openning served pages (setting href).</li>
+<li>Running served page.</li>
+<li>'slow mode'</li>
+</ul>
+<h2>Limitations</h2>
+<ul>
+	<li>Selenium doesn't run Chrome/Opera/Safari on the filesystem.</li>
+</ul>
  * 
  * @init
  * selects something in the other page
- * @param {Object} s
- * @param {Object} c
+ * @param {String|Function|Object} selector FuncUnit behaves differently depending if
+ * the selector is a string, a function, or an object.
+ * <h5>String</h5>
+ * The selector is treated as a css selector.  
+ * jQuery/Sizzle is used as the selector so any selector it understands
+ * will work with funcUnit.  FuncUnit does not perform the selection until a
+ * command is called upon this selector.  This makes aliasing the selectors to
+ * JavaScript variables a great technique.
+ * <h5>Function</h5>
+ * If a function is provided, it will add that function to the action queue to be run
+ * after previous actions and waits.
+ * <h5>Object</h5>
+ * If you want to reference the window or document, pass <code>S.window</code> 
+ * or <code>S.window.document</code> to the selector.  
+ * 
+ * @param {Number} [context] If provided, the context is the frame number in the
+ * document.frames array to use as the context of the selector.
  */
-FuncUnit = function(s, c){
-	if(typeof s == "function"){
-		return FuncUnit.wait(0, s)
+FuncUnit = function(selector, context){
+	if(typeof selector == "function"){
+		return FuncUnit.wait(0, selector)
 	}
 	
-	return new FuncUnit.init(s, c)
+	return new FuncUnit.init(selector, context)
 }
 /**
  * @Static
@@ -10624,9 +10799,12 @@ FuncUnit.init.prototype = {
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
 	exists : function(callback){
-		return this.size(function(size){
-			return size > 0;
-		}, callback)
+		if(callback){
+			return this.size(function(size){
+				return size > 0;
+			}, callback)
+		}
+		return this.size() == 0;
 	},
 	/**
 	 * Waits until no elements are matched by the selector.  Missing is equivalent to calling
@@ -10652,14 +10830,22 @@ FuncUnit.init.prototype = {
 	 */
 	visible : function(callback){
 		var self = this,
-			sel = this.selector;
+			sel = this.selector,
+			ret;
 		this.selector += ":visible"
-		return this.size(function(size){
-			return size > 0;
-		}, function(){
-			self.selector = sel;
-			callback && callback();
-		})
+		if(callback){
+			return this.size(function(size){
+				return size > 0;
+			}, function(){
+				self.selector = sel;
+				callback && callback();
+			})
+		}else{
+			ret = this.size() > 0;
+			this.selector = sel;
+			return ret;
+		}
+		
 	},
 	/**
 	 * Waits until the selector is invisible.  
@@ -10672,12 +10858,20 @@ FuncUnit.init.prototype = {
 	 */
 	invisible : function(callback){
 		var self = this,
-			sel = this.selector;
-		this.selector += ":visible"
-		return this.size(0, function(){
-			self.selector = sel;
-			callback && callback();
-		})
+			sel = this.selector,
+			ret;
+		if(selector){
+			this.selector += ":visible"
+			return this.size(0, function(){
+				self.selector = sel;
+				callback && callback();
+			})
+		}else{
+			ret = this.size() == 0;
+			this.selector = sel;
+			return ret;
+		}
+		
 	},
 	/**
 	 * Drags an element into another element or coordinates.  
@@ -10776,19 +10970,26 @@ FuncUnit.init.prototype = {
 		}, callback, "Could not move " + this.selector)
 		return this;
 	},
-	leftScroll : function(amount, callback){
+	/**
+	 * Scrolls an element in a particular direction by setting the scrollTop or srollLeft.
+	 * @param {String} direction "left" or "top"
+	 * @param {Number} amount number of pixels to scroll
+	 * @param {Function} callback
+	 */
+	scroll : function(direction, amount, callback){
 		var selector = this.selector, 
-			context = this.context;
+			context = this.context,
+			direction = /left|right|x/i.test(direction)? "Left" : "Right";
 		FuncUnit.add(function(success, error){
 			
-			FuncUnit.$(selector, context, "scrollLeft", amount)
+			FuncUnit.$(selector, context, "scroll"+direction, amount)
 			success();
 		}, callback, "Could not scroll " + this.selector)
 		return this;
 	},
 	/**
 	 * Waits a timeout before calling the next action.  This is the same as
-	 * [FuncUnit.wait].
+	 * [FuncUnit.prototype.wait].
 	 * @param {Number} [timeout]
 	 * @param {Object} callback
 	 */
@@ -10854,6 +11055,7 @@ var clicks = [
 			var selector = this.selector, 
 				context = this.context;
 			FuncUnit.add(function(success, error){
+				options = options || {}
 				
 				FuncUnit.$(selector, context, "triggerSyn", "_"+name, options, success)
 			}, callback, "Could not "+name+" " + this.selector)

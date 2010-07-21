@@ -97,7 +97,13 @@ steal.then(function(){
 						}
 					}
 					else {
-						if (typeof args[a] == "function") {
+						if (args[a] == FuncUnit.window.document) {
+							args[a] = "_doc()"
+						}
+						else if (args[a] == FuncUnit.window) {
+							args[a] = "_win()"
+						}
+						else if (typeof args[a] == "function") {
 							callbackPresent = true;
 							var callback = args[a];
 							args[a] = "Selenium.resume";
