@@ -24,7 +24,9 @@ var window = (function(){return this }).call(null),
  * QUnit tests in [http://www.envjs.com/ EnvJS] (a command line browser).
  * 
  * <h2>Example:</h2>
- * Here's how you might tests that an AutoSuggest returns 5 results
+ * The following tests that an AutoSuggest returns 5 results.  
+ * <a href='funcunit/autosuggest/funcunit.html'>See it in action!</a> (Make sure
+ * you turn off your popup blocker!).
 @codestart
 module("autosuggest",{
   setup : function(){
@@ -33,11 +35,11 @@ module("autosuggest",{
 });
 
 test("JavaScript results",function(){
-  S('#auto_suggest').click().type("JavaScript")
+  S('input').click().type("JavaScript")
 
   // wait until we have some results
-  S('.result').exists(function(){
-    equal( S('.result').size(), 5, "there are 5 results")
+  S('.autocomplete_item').visible(function(){
+    equal( S('.autocomplete_item').size(), 5, "there are 5 results")
   })
 });
 @codeend
