@@ -10799,7 +10799,7 @@ FuncUnit.init.prototype = {
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
 	exists : function(callback){
-		if(callback){
+		if(true){
 			return this.size(function(size){
 				return size > 0;
 			}, callback)
@@ -10833,7 +10833,7 @@ FuncUnit.init.prototype = {
 			sel = this.selector,
 			ret;
 		this.selector += ":visible"
-		if(callback){
+		if(true){
 			return this.size(function(size){
 				return size > 0;
 			}, function(){
@@ -10860,7 +10860,7 @@ FuncUnit.init.prototype = {
 		var self = this,
 			sel = this.selector,
 			ret;
-		if(selector){
+		if(true){
 			this.selector += ":visible"
 			return this.size(0, function(){
 				self.selector = sel;
@@ -11628,7 +11628,13 @@ FuncUnit.startSelenium = function(){
 						}
 					}
 					else {
-						if (typeof args[a] == "function") {
+						if (args[a] == FuncUnit.window.document) {
+							args[a] = "_doc()"
+						}
+						else if (args[a] == FuncUnit.window) {
+							args[a] = "_win()"
+						}
+						else if (typeof args[a] == "function") {
 							callbackPresent = true;
 							var callback = args[a];
 							args[a] = "Selenium.resume";
