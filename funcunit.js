@@ -300,9 +300,36 @@ sm.width(
   <li>[FuncUnit S(function(){})] - code runs between actions (like a wait with timeout = 0).</li>
 </ul>
 <h2>Configuring and Runing Selenium</h2>
-<p>Things to think about ... </p>
-<ul>
-<li>Setting up selenium (setting browsers).</li>
+<p>FuncUnit loads a settings.js file every time it is runs in Selenium mode.  This file defines 
+configuration that tells Selenium how to run.  You can change which browsers run, their location, 
+the domain to serve from, and the speed of test execution.</p>
+<h3>Settings.js Location</h3>
+<p>FuncUnit looks first in the same directory as the funcunit page you're running tests from for a 
+file called settings.js.  For example if you're running FuncUnit like this:</p>
+@codestart
+funcunit\envjs phui\combobox\funcunit.html 
+@codeend
+<p>It will look first for phui/combobox/settings.js.</p>
+<p>Then it looks in its own root directory, where a default settings.js exists.  
+This is to allow you to create different settings for different projects.</p>
+<h3>Setting Browsers</h3>
+<p>FuncUnit.browsers is an array that defines which browsers Selenium opens and runs your tests in.  
+This is defined in settings.js.  If this null it will default to a standard set of browsers for your OS 
+(FF and IE on Windows, FF on everything else).  You populate it with strings like the following:</p>
+@codestart
+browsers: ["*firefox", "*iexplore", "*safari", "*googlechrome"], 
+@codeend
+<p>To define a custom path to a browser, put this in the string following the browser name like this:</p>
+@codestart
+browsers: ["*custom /path/to/my/browser"], 
+@codeend
+<p>See the 
+[http://release.seleniumhq.org/selenium-remote-control/0.9.0/doc/java/com/thoughtworks/selenium/DefaultSelenium.html#DefaultSelenium Selenium docs] 
+for more information on customizing browsers and other settings.</p>
+<h3>Filesystem for Faster Tests</h3>
+<h3>Running Served Pages</h3>
+<h3>Slow Mode</h3>
+
 <li>Running from file, but openning served pages (setting href).</li>
 <li>Running served page.</li>
 <li>'slow mode'</li>
