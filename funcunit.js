@@ -300,13 +300,25 @@ sm.width(
   <li>[FuncUnit.prototype.wait S().wait] - waits a timeout before continuing.</li>
   <li>[FuncUnit S(function(){})] - code runs between actions (like a wait with timeout = 0).</li>
 </ul>
-<h2>Configuring and Running Selenium</h2>
+<h2>Automated Testing with Selenium</h2>
+<p>FuncUnit has a command line mode, which allows you to run your tests as part of a checkin script or nightly build.  
+The Selenium server is used to automate opening browsers, and FuncUnit commands are sent to the test window via Selenium RC.</p>
+
+<p>The envjs script (written for both Windows and OS X/Linux), is used to load your test page (the 
+same one that runs tests in the browser) in Env.js, a simulated browser running on Rhino.  The 
+test page recognizes its running in the Rhino context and issues commands to Selenium accordingly.</p>
+
+<p>Running these command line tests is simple:</p>
+@codestart
+my\path\to\envjs my\path\to\funcunit.html 
+@codeend
+<p>Configuring settings for the command line mode will be covered next.</p>
+<h3>Configuration</h3>
 <p>FuncUnit loads a settings.js file every time it is runs in Selenium mode.  This file defines 
 configuration that tells Selenium how to run.  You can change which browsers run, their location, 
 the domain to serve from, and the speed of test execution.</p>
-<h3>Settings.js Location</h3>
-<p>FuncUnit looks first in the same directory as the funcunit page you're running tests from for a 
-file called settings.js.  For example if you're running FuncUnit like this:</p>
+<p>FuncUnit looks first in the same directory as the funcunit page you're running tests from for 
+settings.js.  For example if you're running FuncUnit like this:</p>
 @codestart
 funcunit\envjs phui\combobox\funcunit.html 
 @codeend
@@ -328,20 +340,24 @@ browsers: ["*custom /path/to/my/browser"]
 [http://release.seleniumhq.org/selenium-remote-control/0.9.0/doc/java/com/thoughtworks/selenium/DefaultSelenium.html#DefaultSelenium Selenium docs] 
 for more information on customizing browsers and other settings.</p>
 <h3>Filesystem for Faster Tests</h3>
-<p>Often you want to test web applications that have pages that must be loaded from a server, the filesystem 
-won't work.  However, the Selenium command page that issues commands to your test pages can still be loaded 
-from filesystem in most browsers, which is quicker for starting up your tests.</p>
+<p>You might want to use envjs to open local funcunit pages, but test pages on your server.  This is possible, you 
+just have to change FuncUnit.href or FuncUnit.jmvcRoot.  This file can load locally while everything else is 
+using a server because it is a static file and loads static script files.</p>
+
+<p>Set jmvcRoot to point to the location you want your pages to load from, like this:</p>
+@codestart
+jmvcRoot: "localhost:8000"
+@codeend
+
+<p>Then make sure your test paths contain // in them to signify something relative to the jmvcRoot.  
+For example, S.open("//funcunit/test/myapp.html") would open a page at 
+http://localhost:8000/funcunit/test/myapp.html.</p>
+
 <p>To load the command page from filesystem, start your test like you normally do:</p>
 @codestart
 funcunit\envjs path\to\funcunit.html
 @codeend
-<p>Then set jmvcRoot to point to the location you want your pages to load from, like this:</p>
-@codestart
-jmvcRoot: "localhost:8000"
-@codeend
-<p>Then make sure your test paths contain // in them to signify something relative to the jmvcRoot.  
-For example, S.open("//funcunit/test/myapp.html") would open a page at 
-http://localhost:8000/funcunit/test/myapp.html.</p>
+
 <h3>Running Served Pages</h3>
 <p>Certain browsers, like Safari and Chrome, don't run Selenium tests from filesystem because 
 of security resrictions.  To get around this you have to run pages served from a server.  The 
