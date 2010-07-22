@@ -317,23 +317,47 @@ This is to allow you to create different settings for different projects.</p>
 This is defined in settings.js.  If this null it will default to a standard set of browsers for your OS 
 (FF and IE on Windows, FF on everything else).  You populate it with strings like the following:</p>
 @codestart
-browsers: ["*firefox", "*iexplore", "*safari", "*googlechrome"], 
+browsers: ["*firefox", "*iexplore", "*safari", "*googlechrome"]
 @codeend
 <p>To define a custom path to a browser, put this in the string following the browser name like this:</p>
 @codestart
-browsers: ["*custom /path/to/my/browser"], 
+browsers: ["*custom /path/to/my/browser"]
 @codeend
 <p>See the 
 [http://release.seleniumhq.org/selenium-remote-control/0.9.0/doc/java/com/thoughtworks/selenium/DefaultSelenium.html#DefaultSelenium Selenium docs] 
 for more information on customizing browsers and other settings.</p>
 <h3>Filesystem for Faster Tests</h3>
+<p>Often you want to test web applications that have pages that must be loaded from a server, the filesystem 
+won't work.  However, the Selenium command page that issues commands to your test pages can still be loaded 
+from filesystem in most browsers, which is quicker for starting up your tests.</p>
+<p>To load the command page from filesystem, start your test like you normally do:</p>
+@codestart
+funcunit\envjs path\to\funcunit.html
+@codeend
+<p>Then set jmvcRoot to point to the location you want your pages to load from, like this:</p>
+@codestart
+jmvcRoot: "localhost:8000"
+@codeend
+<p>Then make sure your test paths contain // in them to signify something relative to the jmvcRoot.  
+For example, S.open("//funcunit/test/myapp.html") would open a page at 
+http://localhost:8000/funcunit/test/myapp.html.</p>
 <h3>Running Served Pages</h3>
-<h3>Slow Mode</h3>
+<p>Certain browsers, like Safari and Chrome, don't run Selenium tests from filesystem because 
+of security resrictions.  To get around this you have to run pages served from a server.  The 
+downside of this is the test takes longer to start up, compared to loading from filesystem.</p>  
+<p>To do this, provide an absolute path in your envjs path, like this:</p>
+@codestart
+funcunit\envjs http://localhost:8000/path/to/funcunit.html
+@codeend
+<p>and set jmvcRoot and your paths as directed in the previous section.  This will cause the command page 
+and the test pages to load from your server.</p>
 
-<li>Running from file, but openning served pages (setting href).</li>
-<li>Running served page.</li>
-<li>'slow mode'</li>
-</ul>
+<h3>Slow Mode</h3>
+<p>You can slow down the amount of time between tests by setting FuncUnit.speed.  By default, FuncUnit commands 
+in Selenium will run as soon as the previous command is complete.  If you set FuncUnit.speed to "slow" this 
+becomes 500ms between commands.  You may also provide a number of milliseconds.  
+Slow mode is useful while debugging.</p>
+
 <h2>Limitations</h2>
 <ul>
 	<li>Selenium doesn't run Chrome/Opera/Safari on the filesystem.</li>

@@ -6,6 +6,9 @@ steal.then(function(){
 		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
 		if(!FuncUnit.browsers){
 			if(FuncUnit.jmvcRoot)
+				// run all browsers if you supply a jmvcRoot
+				// this is because a jmvcRoot means you're not running from filesystem, 
+				// so safari and chrome will work correctly 
 				FuncUnit.browsers = ["*firefox", "*iexplore", "*safari", "*googlechrome"]
 			else {
 				FuncUnit.browsers = ["*firefox"]
@@ -20,7 +23,7 @@ steal.then(function(){
 			var browser = 0;
 			//convert spaces to %20.
 			var location = /file:/.test(window.location.protocol) ? window.location.href.replace(/ /g,"%20") : window.location.href;
-			
+			print(location)
 			QUnit.done = function(failures, total){
 				FuncUnit.selenium.close();
 				FuncUnit.selenium.stop();
