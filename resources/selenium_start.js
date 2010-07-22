@@ -9,7 +9,6 @@ FuncUnit.startSelenium = function(){
 	} 
 	catch (ex) {
 		spawn(function(){
-			print(FuncUnit.basePath)
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 				runCommand("cmd", "/C", 'start "selenium" java -jar '+
 					FuncUnit.basePath.replace("/", "\\")+
