@@ -1,12 +1,13 @@
-var fileName = _args[0]
+var fileName = _args[0], 
+	basePath = _args[1];
 
 if (!fileName || fileName.indexOf(".html") == -1) {
 	print("Usage: funcunit/envjs myapp/funcunit.html");
 	quit();
 }
 
-load('steal/rhino/env.js');
-load('funcunit/settings.js')
+load(basePath+'/../steal/rhino/env.js');
+load(basePath+'/settings.js')
 
 var dirArr = fileName.split("/"),
 	dir = dirArr.slice(0, dirArr.length-1).join("/"),
@@ -22,6 +23,8 @@ try {
 if(foundSettings){
 	load(settingsPath)
 }
+
+FuncUnit.basePath = basePath;
 
 Envjs(fileName, {
 	scriptTypes: {
