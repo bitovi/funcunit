@@ -1,6 +1,6 @@
 module("myapp",{
 	setup : function(){
-		S.open("demo/myapp.html")
+		S.open("myapp.html")
 	}
 })
 

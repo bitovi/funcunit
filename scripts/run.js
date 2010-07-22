@@ -6,8 +6,8 @@ if (!fileName || fileName.indexOf(".html") == -1) {
 	quit();
 }
 
-load(basePath+'/../steal/rhino/env.js');
-load(basePath+'/settings.js')
+load(basePath+'../steal/rhino/env.js');
+load(basePath+'settings.js')
 
 var dirArr = fileName.split("/"),
 	dir = dirArr.slice(0, dirArr.length-1).join("/"),
