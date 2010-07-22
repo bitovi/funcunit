@@ -1,5 +1,5 @@
 var fileName = _args[0], 
-	basePath = _args[1];
+	basePath = _args[1] || "";
 
 if (!fileName || fileName.indexOf(".html") == -1) {
 	print("Usage: funcunit/envjs myapp/funcunit.html");
