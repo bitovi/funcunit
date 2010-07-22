@@ -2,7 +2,10 @@
 
 SETLOCAL ENABLEDELAYEDEXPANSION
 
-SET CP=selenium/selenium-java-client-driver.jar;selenium/js.jar
+set BASE=%0
+set BASE=%BASE:\envjs=%
+set BASE=%BASE:\=/%
+SET CP=%BASE%/selenium/selenium-java-client-driver.jar;%BASE%/selenium/js.jar
 
 SET ARGS=[
 
@@ -12,8 +15,8 @@ for %%a in (",''=") do ( call set ARGS=%%ARGS:%%~a%% )
 
 for /f "tokens=1*" %%A in ("%ARGS%") do SET ARGS=%%A
 
-SET ARGS=%ARGS%]
+SET ARGS=%ARGS%,'%BASE%']
 
 set ARGS=%ARGS:\=/%
 
-java -Xss1024k -cp %CP% org.mozilla.javascript.tools.shell.Main -opt -1 -e _args=%ARGS% -e load('selenium/run.js')
+java -Xss1024k -cp %CP% org.mozilla.javascript.tools.shell.Main -opt -1 -e _args=%ARGS% -e load('%BASE%/selenium/run.js')

@@ -299,7 +299,7 @@ sm.width(
   <li>[FuncUnit.prototype.wait S().wait] - waits a timeout before continuing.</li>
   <li>[FuncUnit S(function(){})] - code runs between actions (like a wait with timeout = 0).</li>
 </ul>
-<h2>Configuring and Runing Selenium</h2>
+<h2>Configuring and Running Selenium</h2>
 <p>FuncUnit loads a settings.js file every time it is runs in Selenium mode.  This file defines 
 configuration that tells Selenium how to run.  You can change which browsers run, their location, 
 the domain to serve from, and the speed of test execution.</p>

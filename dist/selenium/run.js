@@ -1,12 +1,13 @@
-var fileName = _args[0]
+var fileName = _args[0], 
+	basePath = _args[1];
 
 if (!fileName || fileName.indexOf(".html") == -1) {
 	print("Usage: envjs myapp/funcunit.html");
 	quit();
 }
 
-load('selenium/env.js');
-load('settings.js')
+load(basePath+'/selenium/env.js');
+load(basePath+'/settings.js')
 importClass(Packages.com.thoughtworks.selenium.DefaultSelenium);
 		
 //first lets ping and make sure the server is up
@@ -17,7 +18,9 @@ try {
 catch (ex) {
 	spawn(function(){
 		if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-			runCommand("cmd", "/C", 'start "selenium" java -jar selenium\\selenium-server.jar')
+			runCommand("cmd", "/C", 'start "selenium" java -jar '+
+				basePath.replace("/", "\\")+
+				'\\selenium\\selenium-server.jar')
 		}
 		else {
 			runCommand("sh", "-c", "nohup java -jar selenium/selenium-server.jar > selenium.log  2> selenium.err &")
