@@ -23,7 +23,6 @@ steal.then(function(){
 			var browser = 0;
 			//convert spaces to %20.
 			var location = /file:/.test(window.location.protocol) ? window.location.href.replace(/ /g,"%20") : window.location.href;
-			print(location)
 			QUnit.done = function(failures, total){
 				FuncUnit.selenium.close();
 				FuncUnit.selenium.stop();

@@ -13,7 +13,7 @@ FuncUnit.startSelenium = function(){
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 				runCommand("cmd", "/C", 'start "selenium" java -jar '+
 					FuncUnit.basePath.replace("/", "\\")+
-					'\\java\\selenium-server.jar')
+					'java\\selenium-server.jar')
 			}
 			else {
 				runCommand("sh", "-c", "java -jar funcunit/java/selenium-server.jar > selenium.log 2> selenium.log &")
