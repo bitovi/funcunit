@@ -255,6 +255,14 @@ extend(Syn,{
 					
 				}
 			}
+		},
+		submit : function(){
+			Syn.onParents(this, function(el){
+				if( el.nodeName.toLowerCase() == 'form'){
+					el.submit()
+					return false;
+				}
+			});
 		}
 	},
 	changeOnBlur : function(element, prop, value){
