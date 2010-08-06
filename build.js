@@ -1,24 +1,27 @@
-load('steal/file/file.js')
+load('steal/rhino/steal.js')
+
+steal('//steal/compress/pluginify', function(s){
+	s.pluginify("funcunit/synthetic",{
+		nojquery: true,
+		destination: "funcunit/dist/syn.js"
+	})
+	
+	s.clear();
+	
+	s.pluginify("funcunit",{
+		nojquery: true,
+		destination: "funcunit/dist/funcunit.js",
+		packagejquery: true
+	})
+	
+	//s.clear();
+	
+	
+})
 
 var i, fileName, cmd;
 
-// create syn.js
-var plugin, fileDest, fileName;
-plugin = "funcunit/synthetic";
-fileName = "syn.js";
-fileDest = "funcunit/dist/"+fileName
-cmd = "js steal/scripts/pluginify.js "+plugin+" -destination "+fileDest+" -noJQuery";
-runCommand(	"cmd", "/C", cmd)
-print("***"+fileName+" pluginified")
 
-// create funcunit.js
-plugin = "funcunit";
-fileName = "funcunit.js";
-fileDest = "funcunit/dist/"+fileName
-cmd = "js steal/scripts/pluginify.js "+plugin+" -destination "+fileDest+" -packageJQuery -noJQuery";
-runCommand(	"cmd", "/C", cmd)
-print("***"+fileName+" pluginified")
-	
 // copy qunit, json, and jquery
 new steal.File("funcunit/qunit/qunit.css")
 	.copyTo("funcunit/dist/qunit.css", [])
@@ -49,3 +52,5 @@ new steal.File("steal/rhino/js.jar")
 	.copyTo("funcunit/dist/selenium/js.jar", [])
 new steal.File("steal/rhino/env.js")
 	.copyTo("funcunit/dist/selenium/env.js", [])
+	
+print('done building')
