@@ -1,5 +1,5 @@
 module("funcunit-prototype / scriptaculous drag",{
-	setup : function(){
+	setup: function() {
 		S.open("test/protodrag/myapp.html", null, 10000);
 	}
 })

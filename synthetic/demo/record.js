@@ -5,7 +5,7 @@ $(function(){
 	REPLAY = false;
 	ADD = true;
 	Recorder ={
-		cb: function(i){
+		cb: function( i ) {
 			return function(){
 				$("#code div:nth("+(i)+")").css("color","black").css("font-weight","")
 				$("#code div:nth("+(i+1)+")").css("color","orange").css("font-weight","bold")
@@ -15,7 +15,7 @@ $(function(){
 			}
 			
 		},
-		done : function(){
+		done: function() {
 			ADD = true;
 			$("#code div").css("color","black")
 		}
@@ -28,7 +28,7 @@ $(function(){
 		mousemove,
 		mouseup,
 		h ={
-			commandsText : function(func){
+			commandsText: function( func ) {
 				var text = [],
 					command,
 					prev,
@@ -52,7 +52,7 @@ $(function(){
 				}
 				return text.join("")
 			},
-			addCode : function(type, options, target){
+			addCode: function( type, options, target ) {
 				if(!ADD){
 					return;
 				}
@@ -78,17 +78,17 @@ $(function(){
 
 				$("#code").html(h.commandsText())
 			},
-			getKey : function(code){
+			getKey: function( code ) {
 				for(var key in Syn.keycodes){
 					if(Syn.keycodes[key] == code){
 						return key
 					}
 				}
 			},
-			addKey : function(key){
+			addKey: function( key ) {
 				
 			},
-			showChar : function(character, target){
+			showChar: function( character, target ) {
 				var convert = {
 					"\r" : "\\r",
 					"\t" :"\\t",
@@ -103,7 +103,7 @@ $(function(){
 				
 				h.addCode("type",'"'+current.join("")+'"', target)
 			},
-			keydown : function(ev){
+			keydown: function( ev ) {
 				var key = h.getKey(ev.keyCode);
 			
 				if(keytarget != ev.target){
@@ -115,7 +115,7 @@ $(function(){
 					h.showChar(key, ev.target);
 				}
 			},
-			keyup : function(ev){
+			keyup: function( ev ) {
 				var key = h.getKey(ev.keyCode);
 				if(Syn.key.isSpecial(ev.keyCode)){
 					h.showChar(key+"-up", ev.target);
@@ -129,7 +129,7 @@ $(function(){
 				},20)
 			},
 			// returns a selector
-			selector : function(target){
+			selector: function( target ) {
 				var selector = target.nodeName.toLowerCase();
 				if(target.id){
 					return "#"+target.id

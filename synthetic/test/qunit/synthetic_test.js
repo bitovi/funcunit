@@ -1,17 +1,17 @@
 module("funcunit/synthetic")
 
 st = {
-	g : function(id){
+	g: function( id ) {
 		return document.getElementById(id)
 	},
-	log :function(c){
+	log: function( c ) {
 		if(st.g("mlog"))
 			st.g("mlog").innerHTML = st.g("mlog").innerHTML+c+"<br/>"
 	},
-	binder : function(id, ev, f){
+	binder: function( id, ev, f ) {
 		st.bind(st.g(id), ev, f)
 	},
-	unbinder : function(id, ev, f){
+	unbinder: function( id, ev, f ) {
 		st.unbind(st.g(id), ev, f)
 	},
 	bind : window.addEventListener ? 

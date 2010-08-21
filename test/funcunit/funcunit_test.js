@@ -1,5 +1,5 @@
 module("funcunit - jQuery API",{
-	setup : function(){
+	setup: function() {
 		var self = this;
 		S.open("test/myapp.html", function(){
 			self.pageIsLoaded = true;

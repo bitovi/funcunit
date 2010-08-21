@@ -1,5 +1,5 @@
 module("funcunit/synthetic/key",{
-	setup : function(){
+	setup: function() {
 		st.g("qunit-test-area").innerHTML = "<form id='outer'>"+
 			"<div id='inner'>"+
 				"<input type='input' id='key' value=''/>"+
@@ -130,17 +130,17 @@ asyncTest("page down, page up, home, end", function(){
 	
 	//list of keys to press and what to test after the scroll event
 	var keyTest = {
-		"page-down": function(){
+		"page-down": function() {
 			ok( st.g("scrolldiv").scrollTop > 10 , "Moved down")
 		},
-		"page-up": function(){
+		"page-up": function() {
 			ok( st.g("scrolldiv").scrollTop == 0 , "Moved back up (page-up)")
 		},
-		"end" : function(){
+		"end" : function() {
 			var sd = st.g("scrolldiv")
 			ok( sd.scrollTop == sd.scrollHeight - sd.clientHeight , "Moved to the end")
 		},
-		"home" : function(){
+		"home" : function() {
 			ok( st.g("scrolldiv").scrollTop == 0 , "Moved back up (home)")
 		}
 	},

@@ -1,5 +1,5 @@
 module("autosuggest",{
-  setup : function(){
+  setup: function() {
     S.open('autosuggest.html')
   }
 });

@@ -238,7 +238,7 @@ Syn.helpers.extend(Syn.init.prototype,{
 	 * @param {HTMLElement} from
 	 * @param {Function} callback
 	 */
-	_move : function(options, from, callback){
+	_move: function( options, from, callback ) {
 		//need to convert if elements
 		var win = Syn.helpers.getWindow(from), 
 			fro = convertOption(options.from || from, win), 
@@ -255,7 +255,7 @@ Syn.helpers.extend(Syn.init.prototype,{
 	 * @param {Object} from
 	 * @param {Object} callback
 	 */
-	_drag : function(options, from, callback){
+	_drag: function( options, from, callback ) {
 		//need to convert if elements
 		var win = Syn.helpers.getWindow(from), 
 			fro = convertOption(options.from || from, win, from), 

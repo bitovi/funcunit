@@ -5,10 +5,10 @@ var h = Syn.helpers;
 
 Syn.mouse = {};
 h.extend(Syn.defaults,{
-	mousedown : function(options){
+	mousedown: function( options ) {
 		Syn.trigger("focus", {}, this)
 	},
-	click : function(){
+	click: function() {
 		// prevents the access denied issue in IE if the click causes the element to be destroyed
 		var element = this;
 		try {
@@ -102,7 +102,7 @@ h.extend(Syn.defaults,{
 //add create and setup behavior for mosue events
 h.extend(Syn.create,{
 	mouse : {
-		options : function(type, options, element){
+		options: function( type, options, element ) {
 			var doc = document.documentElement, body = document.body,
 				center = [options.pageX || 0, options.pageY || 0],
 				//browser might not be loaded yet (doing support code)
@@ -147,7 +147,7 @@ h.extend(Syn.create,{
 			h.createEventObject
 	},
 	click : {
-		setup : function(type, options, element){
+		setup: function( type, options, element ) {
 			try{
 				Syn.data(element,"checked", element.checked);
 			}catch(e){}
@@ -183,7 +183,7 @@ h.extend(Syn.create,{
 		}
 	},
 	mousedown : {
-		setup : function(type,options, element){
+		setup: function( type,options, element ) {
 			var nn = element.nodeName.toLowerCase();
 			//we have to auto prevent default to prevent freezing error in safari
 			if(Syn.browser.safari && (nn == "select" || nn == "option" )){

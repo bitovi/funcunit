@@ -1,5 +1,5 @@
 module("myapp",{
-	setup : function(){
+	setup: function(){
 		S.open("demo/myapp.html")
 	}
 })

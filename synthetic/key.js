@@ -180,7 +180,7 @@ h.extend(Syn,{
 	typeable : /input|textarea/i,
 	
 	// selects text on an element
-	selectText: function(el, start, end){
+	selectText: function( el, start, end ) {
 		if(el.setSelectionRange){
 			if(!end){
                 el.focus();
@@ -199,7 +199,7 @@ h.extend(Syn,{
 			r.select();
 		} 
 	},
-	getText: function(el){
+	getText: function( el ) {
 		//first check if the el has anything selected ..
 		if(Syn.typeable.test(el.nodeName)){
 			var sel = getSelection(el);
@@ -222,7 +222,7 @@ h.extend(Syn,{
 
 h.extend(Syn.key,{
 	// retrieves a description of what events for this character should look like
-	data : function(key){
+	data: function( key ) {
 		//check if it is described directly
 		if(S.key.browser[key]){
 			return S.key.browser[key];
@@ -236,7 +236,7 @@ h.extend(Syn.key,{
 	},
 	
 	//returns the special key if special
-	isSpecial : function(keyCode){
+	isSpecial: function( keyCode ) {
 		var specials = S.key.kinds.special;
 		for(var i=0; i < specials.length; i++){
 			if(Syn.keycodes[ specials[i] ] == keyCode){
@@ -250,7 +250,7 @@ h.extend(Syn.key,{
 	 * @param {Object} key
 	 * @param {Object} event
 	 */
-	options : function(key, event){
+	options: function( key, event ) {
 		var keyData = Syn.key.data(key);
 		
 		if(!keyData[event]){
@@ -287,7 +287,7 @@ h.extend(Syn.key,{
 		'function' : ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12']
 	},
 	//returns the default function
-	getDefault : function(key){
+	getDefault: function( key ) {
 		//check if it is described directly
 		if(Syn.key.defaults[key]){
 			return Syn.key.defaults[key];
@@ -301,7 +301,7 @@ h.extend(Syn.key,{
 	},
 	// default behavior when typing
 	defaults : 	{
-		'character' : function(options, scope, key, force, sel){
+		'character' : function( options, scope, key, force, sel ) {
 			if(/num\d+/.test(key)){
 				key = key.match(/\d+/)[0]
 			}
@@ -318,28 +318,28 @@ h.extend(Syn.key,{
 				Syn.selectText(this, before.length + charLength)
 			}		
 		},
-		'c' : function(options, scope, key, force, sel){
+		'c' : function( options, scope, key, force, sel ) {
 			if(Syn.key.ctrlKey){
 				Syn.key.clipboard = Syn.getText(this)
 			}else{
 				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
-		'v' : function(options, scope, key, force, sel){
+		'v' : function( options, scope, key, force, sel ) {
 			if(Syn.key.ctrlKey){
 				Syn.key.defaults.character.call(this, options,scope, Syn.key.clipboard, true,sel);
 			}else{
 				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
-		'a' : function(options, scope, key, force, sel){
+		'a' : function( options, scope, key, force, sel ) {
 			if(Syn.key.ctrlKey){
 				Syn.selectText(this, 0, this.value.length)
 			}else{
 				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
-		'home' : function(){
+		'home' : function() {
 			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
 					el.scrollTop = 0;
@@ -347,7 +347,7 @@ h.extend(Syn.key,{
 				}
 			})
 		},
-		'end' : function(){
+		'end' : function() {
 			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
 					el.scrollTop = el.scrollHeight;
@@ -355,7 +355,7 @@ h.extend(Syn.key,{
 				}
 			})
 		},
-		'page-down' : function(){
+		'page-down' : function() {
 			//find the first parent we can scroll
 			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
@@ -365,7 +365,7 @@ h.extend(Syn.key,{
 				}
 			})
 		},
-		'page-up' : function(){
+		'page-up' : function() {
 			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
 					var ch = el.clientHeight
@@ -374,7 +374,7 @@ h.extend(Syn.key,{
 				}
 			})
 		},
-		'\b' : function(options, scope, key, force, sel){
+		'\b' : function( options, scope, key, force, sel ) {
 			//this assumes we are deleting from the end
 			if(!S.support.backspaceWorks && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
@@ -393,7 +393,7 @@ h.extend(Syn.key,{
 				//set back the selection
 			}	
 		},
-		'delete' : function(options, scope, key, force, sel){
+		'delete' : function( options, scope, key, force, sel ) {
 			if(!S.support.backspaceWorks && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
 					before = current.substr(0,sel.start),
@@ -407,7 +407,7 @@ h.extend(Syn.key,{
 				Syn.selectText(this, sel.start)
 			}		
 		},
-		'\r' : function(options, scope, key, force, sel){
+		'\r' : function( options, scope, key, force, sel ) {
 			
 			var nodeName = this.nodeName.toLowerCase()
 			// submit a form
@@ -435,7 +435,7 @@ h.extend(Syn.key,{
 		// tabindex after it in the document.
 		// @return the next element
 		// 
-		'\t' : function(options, scope){
+		'\t' : function( options, scope ) {
 				// focusable elements
 			var focusEls = getFocusable(this),
 				// the current element's tabindex
@@ -500,7 +500,7 @@ h.extend(Syn.key,{
 			current && current.focus();
 			return current;
 		},
-		'left' : function(options, scope, key, force, sel){
+		'left' : function( options, scope, key, force, sel ) {
 			if( Syn.typeable.test(this.nodeName) ){
 				if(Syn.key.shiftKey){
 					Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1, sel.end)
@@ -509,7 +509,7 @@ h.extend(Syn.key,{
 				}
 			}
 		},
-		'right' : function(options, scope, key, force, sel){
+		'right' : function( options, scope, key, force, sel ) {
 			if( Syn.typeable.test(this.nodeName) ){
 				if(Syn.key.shiftKey){
 					Syn.selectText(this, sel.start, sel.end+1 > this.value.length ? this.value.length  : sel.end+1)
@@ -518,21 +518,21 @@ h.extend(Syn.key,{
 				}
 			}	
 		},
-		'up' : function(){
+		'up' : function() {
 			if(/select/i.test(this.nodeName)){
 				
 				this.selectedIndex = this.selectedIndex ? this.selectedIndex-1 : 0;
 				//set this to change on blur?
 			}
 		},
-		'down' : function(){
+		'down' : function() {
 			if(/select/i.test(this.nodeName)){
 				Syn.changeOnBlur(this, "selectedIndex", this.selectedIndex)
 				this.selectedIndex = this.selectedIndex+1;
 				//set this to change on blur?
 			}
 		},
-		'shift' : function(){
+		'shift' : function() {
 			return null;
 		}
 	}
@@ -541,14 +541,14 @@ h.extend(Syn.key,{
 
 h.extend(Syn.create,{
 	keydown : {
-		setup : function(type, options, element){
+		setup: function( type, options, element ) {
 			if(h.inArray(options,Syn.key.kinds.special ) != -1){
 				Syn.key[options+"Key"] = element;
 			}
 		}
 	},
 	keyup : {
-		setup : function(type, options, element){
+		setup: function( type, options, element ) {
 			if(h.inArray(options,Syn.key.kinds.special )!= -1){
 				Syn.key[options+"Key"] = null;
 			}
@@ -556,7 +556,7 @@ h.extend(Syn.create,{
 		},
 	key : {
 		// return the options for a key event
-		options : function(type, options, element){
+		options: function( type, options, element ) {
 			//check if options is character or has character
 			options = typeof options != "object" ? {character : options} : options;
 			
@@ -633,7 +633,7 @@ h.extend(Syn.init.prototype,
 	 * @param {Function} [callback]
 	 * @return {HTMLElement} the element currently focused.
 	 */
-	_key : function(options, element, callback){
+	_key: function( options, element, callback ) {
 		//first check if it is a special up
 		if(/-up$/.test(options) 
 			&& h.inArray(options.replace("-up",""),Syn.key.kinds.special )!= -1){
@@ -721,7 +721,7 @@ h.extend(Syn.init.prototype,
 	 * @param {HTMLElement} [element] an element or an id of an element
 	 * @param {Function} [callback] a function to callback
 	 */
-	_type : function(options, element, callback){
+	_type: function( options, element, callback ) {
 		//break it up into parts ...
 		//go through each type and run
 		var parts = options.match(/(\[[^\]]+\])|([^\[])/g),

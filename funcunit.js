@@ -30,7 +30,7 @@ var window = (function(){return this }).call(null),
  * you turn off your popup blocker!).
 @codestart
 module("autosuggest",{
-  setup : function(){
+  setup: function() {
     S.open('autosuggest.html')
   }
 });
@@ -83,7 +83,7 @@ test("JavaScript results",function(){
  * 	<li>Create a JS file (<code>pages/mypage_test.js</code>) for your tests.  The skeleton should like:
 @codestart
 module("APPNAME", {
-  setup : function(){
+  setup: function() {
     // opens the page you want to test
     $.open("myPage.html");
   }
@@ -494,7 +494,7 @@ S.open("//app/app.html")
  * @param {Function} callback
  * @param {Number} timeout
  */
-open : function(path, callback, timeout){
+open: function( path, callback, timeout ) {
 	var fullPath = FuncUnit.getAbsolutePath(path), 
 	temp;
 	if(typeof callback != 'function'){
@@ -515,7 +515,7 @@ open : function(path, callback, timeout){
  * Gets a path, will use steal if present
  * @param {String} path
  */
-getAbsolutePath : function(path){
+getAbsolutePath: function( path ) {
 	if(typeof(steal) == "undefined"){
 		return path;
 	}
@@ -554,7 +554,7 @@ support : {},
 window : {
 	document: {}
 },
-_opened : function(){}
+_opened: function() {}
 });
 
 
@@ -805,7 +805,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that is run after typing, but before the next action.
 	 * @return {FuncUnit} returns the funcUnit for chaining.
 	 */
-	type: function(text, callback){
+	type: function( text, callback ) {
 		var selector = this.selector, 
 			context = this.context;
 		FuncUnit.add(function(success, error){
@@ -823,7 +823,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that is run after the selector exists, but before the next action.
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
-	exists : function(callback){
+	exists: function( callback ) {
 		if(true){
 			return this.size(function(size){
 				return size > 0;
@@ -841,7 +841,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that is run after the selector exists, but before the next action
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
-	missing : function(callback){
+	missing: function( callback ) {
 		return this.size(0, callback)
 	},
 	/**
@@ -853,7 +853,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the funcUnit is visible, but before the next action.
 	 * @return [funcUnit] returns the funcUnit for chaining.
 	 */
-	visible : function(callback){
+	visible: function( callback ) {
 		var self = this,
 			sel = this.selector,
 			ret;
@@ -881,7 +881,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the selector is invisible, but before the next action.
 	 * @return [funcUnit] returns the funcUnit selector for chaining.
 	 */
-	invisible : function(callback){
+	invisible: function( callback ) {
 		var self = this,
 			sel = this.selector,
 			ret;
@@ -932,7 +932,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the drag, but before the next action.
 	 * @return {funcUnit} returns the funcunit selector for chaining.
 	 */
-	drag: function( options, callback){
+	drag: function( options, callback ) {
 		if(typeof options == 'string'){
 			options = {to: options}
 		}
@@ -981,7 +981,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the drag, but before the next action.
 	 * @return {funcUnit} returns the funcunit selector for chaining.
 	 */
-	move: function(options, callback){
+	move: function( options, callback ) {
 		if(typeof options == 'string'){
 			options = {to: options}
 		}
@@ -1001,7 +1001,7 @@ FuncUnit.init.prototype = {
 	 * @param {Number} amount number of pixels to scroll
 	 * @param {Function} callback
 	 */
-	scroll : function(direction, amount, callback){
+	scroll: function( direction, amount, callback ) {
 		var selector = this.selector, 
 			context = this.context,
 			direction = /left|right|x/i.test(direction)? "Left" : "Right";
@@ -1018,7 +1018,7 @@ FuncUnit.init.prototype = {
 	 * @param {Number} [timeout]
 	 * @param {Object} callback
 	 */
-	wait : function(timeout, callback){
+	wait: function( timeout, callback ) {
 		FuncUnit.wait(timeout, callback)
 	}
 };
