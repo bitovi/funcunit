@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CP=java/selenium-java-client-driver.jar:../steal/rhino/js.jar
+CP=selenium/selenium-java-client-driver.jar:selenium/js.jar
 ARGS=[
 for arg
 do
@@ -10,4 +10,4 @@ do
   fi
 done
 ARGS=$ARGS]
-java -Xss1024k -cp $CP org.mozilla.javascript.tools.shell.Main -e _args=$ARGS -opt -1 -e 'load('"'"scripts/run.js"'"')'
+java -Xss1024k -cp $CP org.mozilla.javascript.tools.shell.Main -e _args=$ARGS -opt -1 -e 'load('"'"selenium/run.js"'"')'
