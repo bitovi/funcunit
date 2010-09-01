@@ -1,14 +1,12 @@
 load('steal/rhino/steal.js')
 
-steal('//steal/compress/pluginify', function(s){
-	s.pluginify("funcunit/synthetic",{
+steal('//steal/build/pluginify', function(s){
+	steal.pluginify("funcunit/synthetic",{
 		nojquery: true,
 		destination: "funcunit/dist/syn.js"
 	})
 	
-	s.clear();
-	
-	s.pluginify("funcunit",{
+	steal.pluginify("funcunit",{
 		nojquery: true,
 		destination: "funcunit/dist/funcunit.js",
 		packagejquery: true
