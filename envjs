@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CP=selenium/selenium-java-client-driver.jar:selenium/js.jar
+CP=funcunit/java/selenium-java-client-driver.jar:steal/rhino/js.jar
 ARGS=[
 for arg
 do
@@ -9,5 +9,5 @@ do
     ARGS=$ARGS"'$arg'",
   fi
 done
-ARGS=$ARGS]
-java -Xss1024k -cp $CP org.mozilla.javascript.tools.shell.Main -e _args=$ARGS -opt -1 -e 'load('"'"selenium/run.js"'"')'
+ARGS=$ARGS"'funcunit/'"]
+java -Xss1024k -cp $CP org.mozilla.javascript.tools.shell.Main -e _args=$ARGS -opt -1 -e 'load('"'"funcunit/scripts/run.js"'"')'
