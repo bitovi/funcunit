@@ -71,14 +71,18 @@ steal.then(function(){
 			}
 			FuncUnit.confirm = function(answer, callback){
 				var self = this;
-				FuncUnit.add(function(success, error){
-					var confirm = FuncUnit.selenium.getConfirmation();
-					if(answer)
-						FuncUnit.selenium.chooseOkOnNextConfirmation();
-					else
-						FuncUnit.selenium.chooseCancelOnNextConfirmation();
-					setTimeout(success, 13)
-				}, callback, "Could not confirm")
+				FuncUnit.add({
+					method: function(success, error){
+						var confirm = FuncUnit.selenium.getConfirmation();
+						if (answer) 
+							FuncUnit.selenium.chooseOkOnNextConfirmation();
+						else 
+							FuncUnit.selenium.chooseCancelOnNextConfirmation();
+						setTimeout(success, 13)
+					},
+					callback: callback,
+					error: "Could not confirm"
+				});
 			}
 			FuncUnit.$ = function(selector, context, method){
 				var args = FuncUnit.makeArray(arguments);

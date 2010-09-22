@@ -2149,16 +2149,23 @@ h.extend(Syn.init.prototype,
 		return el;
 	}, // start and end are in clientX, clientY
 	startMove = function(start, end, duration, element, callback){
-		var startTime = new Date(), distX = end.clientX - start.clientX, distY = end.clientY - start.clientY, win = Syn.helpers.getWindow(element), current = elementFromPoint(start, element), cursor = win.document.createElement('div')
+		var startTime = new Date(), 
+			distX = end.clientX - start.clientX, 
+			distY = end.clientY - start.clientY, 
+			win = Syn.helpers.getWindow(element), 
+			current = elementFromPoint(start, element), 
+			cursor = win.document.createElement('div'),
+			calls = 0;
 		move = function(){
 			//get what fraction we are at
 			var now = new Date(), 
 				scrollOffset = Syn.helpers.scrollOffset(win), 
-				fraction = (now - startTime) / duration, 
+				fraction = ( calls == 0 ? 0 : now - startTime) / duration, 
 				options = {
 					clientX: distX * fraction + start.clientX,
 					clientY: distY * fraction + start.clientY
 				};
+			calls++;
 			if (fraction < 1) {
 				Syn.helpers.extend(cursor.style, {
 					left: (options.clientX + scrollOffset.left + 2) + "px",
