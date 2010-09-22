@@ -1054,16 +1054,24 @@ FuncUnit.init.prototype = {
 	 */
 	wait: function( timeout, callback ) {
 		FuncUnit.wait(timeout, callback)
+	},
+	/**
+	 * Returns a FuncUnit wrapped selector with 
+	 * selector appended to the current selector.
+	 * @codestart
+	 * S('#foo').find(".bar") //-> S("#foo .bar")
+	 * @codeend
+	 * @param {String} selector
+	 * @return {FuncUnit} the funcunit wrapped selector.
+	 */
+
+	find : function(selector){
+		return FuncUnit(this.selector+" "+selector, this.context);
 	}
 };
 //do traversers
 var traversers = ["closest",
-/**
- * Gets a reference to an element
- * @param {String} selector
- * @return {FuncUnit} the funcunit wrapped selector.
- */
-"find",
+
 
 "next","prev","siblings","last","first"],
 	makeTraverser = function(name){
