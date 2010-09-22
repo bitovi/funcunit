@@ -23,6 +23,8 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 	unbind,
 	key = /keypress|keyup|keydown/,
 	page = /load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll/,
+	//this is maintained so we can click on html and blur the active element
+	activeElement,
 
 /**
  * @constructor Syn
@@ -469,8 +471,16 @@ extend(Syn,{
 			event: function( type, options, element ) {
 				Syn.onParents(element, function(el){
 					if( Syn.isFocusable(el)){
+						
 						if(el.nodeName.toLowerCase() != 'html'){
 							el.focus();
+							activeElement = el;
+						}else if(activeElement){
+							// TODO: The HTML element isn't focasable in IE, but it is
+							// in FF.  We should detect this and do a true focus instead
+							// of just a blur
+							activeElement.blur();
+							activeElement = null;
 						}
 						return false
 					}
