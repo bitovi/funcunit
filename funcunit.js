@@ -516,7 +516,7 @@ open: function( path, callback, timeout ) {
 		},
 		callback: callback,
 		error: "Page " + path + " not loaded in time!",
-		timeout: timeout || 30000,
+		timeout: timeout || 30000
 	});
 },
 /**
@@ -966,7 +966,7 @@ FuncUnit.init.prototype = {
 			},
 			callback: callback,
 			error: "Could not drag " + this.selector,
-			bind: this,
+			bind: this
 		})
 		return this;
 	},
