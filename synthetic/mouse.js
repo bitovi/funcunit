@@ -232,6 +232,7 @@ h.extend(Syn.create,{
 
 	Syn.trigger("click", {}, checkbox)
 	Syn.support.clickChecks = checkbox.checked;
+
 	checkbox.checked = false;
 	
 	Syn.trigger("change", {}, checkbox);
@@ -284,7 +285,7 @@ h.extend(Syn.create,{
 	
 	//check stuff
 	window.__synthTest = oldSynth;
-	//support.ready = true;
+	Syn.support.ready++;
 })();
 
 

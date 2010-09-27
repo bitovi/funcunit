@@ -241,7 +241,9 @@ extend(Syn,{
 					nodeName = element.nodeName.toLowerCase();
 				Syn.data(element,"syntheticvalue", element.value)
 				
-				if(nodeName == "input"){
+				//TODO, this should be textarea too
+				//and this might be for only text style inputs ... hmmmmm ....
+				if(nodeName == "input" && nodeName == "textarea"){ 
 					
 					bind(element, "blur", function(){
 						
@@ -546,7 +548,7 @@ extend(Syn,{
 				dispatchEl = element;
 		
 		//any setup code?
-		Syn.support.ready && setup && setup(type, options, element);
+		Syn.support.ready == 2 && setup && setup(type, options, element);
 		
 		
 		//get kind
@@ -571,7 +573,7 @@ extend(Syn,{
 		}
 		
 		//run default behavior
-		ret && Syn.support.ready 
+		ret && Syn.support.ready == 2
 			&& Syn.defaults[type] 
 			&& Syn.defaults[type].call(element, options, autoPrevent);
 		return ret;
