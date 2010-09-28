@@ -520,7 +520,8 @@ extend(Syn,{
 		mouseDownUpClicks : false,
 		tabKeyTabs : false,
 		keypressOnAnchorClicks : false,
-		optionClickBubbles : false
+		optionClickBubbles : false,
+		ready : 0
 	},
 	/**
 	 * Creates a synthetic event and dispatches it on the element.  
