@@ -2,9 +2,7 @@
 
 SETLOCAL ENABLEDELAYEDEXPANSION
 
-set BASE=%0
-
-set BASE=%BASE:envjs=%
+set BASE=%~dps0
 
 if not "%BASE%" == "" ( set BASE=%BASE:\=/% )
 
