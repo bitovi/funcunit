@@ -27,7 +27,7 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 	activeElement,
 
 /**
- * @constructor Syn
+ * @class Syn
  * @download funcunit/dist/syn.js
  * @test funcunit/synthetic/qunit.html
  * Syn is used to simulate user actions.  It creates synthetic events and
@@ -135,7 +135,7 @@ Syn.key.browsers["Envjs\ Resig/20070309 PilotFish/1.2.0.10\1.6"] = {
  *   But, we've purposely made Syn work without any dependencies in the hopes that other frameworks or 
  *   testing solutions can use it as well.
  * </p>
- * @init 
+ * @constructor 
  * Creates a synthetic event on the element.
  * @param {Object} type
  * @param {Object} options
@@ -788,7 +788,7 @@ for(var i=0; i < actions.length; i++){
  * @codestart
  * new MVC.Syn('click').send(MVC.$E('id'))
  * @codeend
- * @init Sets up a synthetic event.
+ * @constructor Sets up a synthetic event.
  * @param {String} type type of event, ex: 'click'
  * @param {optional:Object} options
  */

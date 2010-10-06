@@ -15,7 +15,7 @@ var window = (function(){return this }).call(null),
 	oldFunc = window.FuncUnit;
 
 /**
- * @constructor FuncUnit
+ * @class FuncUnit
  * @tag core
  * @test test.html
  * @download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-4.zip
@@ -380,7 +380,7 @@ Slow mode is useful while debugging.</p>
 	<li>Selenium doesn't run Chrome/Opera/Safari on the filesystem.</li>
 </ul>
  * 
- * @init
+ * @constructor
  * selects something in the other page
  * @param {String|Function|Object} selector FuncUnit behaves differently depending if
  * the selector is a string, a function, or an object.
