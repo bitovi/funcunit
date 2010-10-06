@@ -818,7 +818,7 @@ h.extend(Syn.init.prototype,
 	S.support.textareaCarriage = textarea.value.length == 4
 	document.documentElement.removeChild(div);
 	
-	S.support.ready = true;
+	S.support.ready++;
 })();
 
 
