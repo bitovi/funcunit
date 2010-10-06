@@ -22,7 +22,7 @@ var window = (function(){return this }).call(null),
  * FuncUnit provides powerful functional testing as an add on to [http://docs.jquery.com/QUnit QUnit].  
  * The same tests can be run 
  * in the browser, or with Selenium.  It also lets you automate basic 
- * QUnit tests in [http://www.envjs.com/ EnvJS] (a command line browser).
+ * QUnit tests in [EnvJS](http://www.envjs.com/) - a command line browser.
  * 
  * <h2>Example:</h2>
  * The following tests that an AutoSuggest returns 5 results.  
