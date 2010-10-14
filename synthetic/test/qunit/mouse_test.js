@@ -180,10 +180,14 @@ test("Click! Anchor Focuses", 2, function(){
 	
 
 })
-test("Click away causes Blur", function(){
+test("Click away causes Blur Change", function(){
 	st.g("qunit-test-area").innerHTML = "<input id='one'/><input id='two'/>";
 	
-	var change = 0;
+	var change = 0, blur = 0;
+	
+	st.binder("one","blur",function(){
+		blur++;
+	} );
 	st.binder("one","change",function(){
 		change++;
 	} );
@@ -194,11 +198,12 @@ test("Click away causes Blur", function(){
 		.click({},"two", function(){
 			start()
 			equals(change, 1 , "Change called once");
+			equals(blur, 1 , "Blur called once");
 		})
 	
 });
 
-test("Click HTML causes blur", function(){
+test("Click HTML causes blur  change", function(){
 	st.g("qunit-test-area").innerHTML = "<input id='one'/><input id='two'/>";
 	
 	var change = 0;

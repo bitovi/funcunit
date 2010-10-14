@@ -35,15 +35,22 @@ steal.then(function(){
 	
 	//gets an element from a point
 	var elementFromPoint = function(point, element){
-		var clientX = point.clientX, clientY = point.clientY, win = Syn.helpers.getWindow(element)
+		var clientX = point.clientX, 
+			clientY = point.clientY, 
+			win = Syn.helpers.getWindow(element),
+			el;
 		
 		if (Syn.support.elementFromPage) {
 			var off = Syn.helpers.scrollOffset(win);
 			clientX = clientX + off.left; //convert to pageX
 			clientY = clientY + off.top; //convert to pageY
 		}
-		
-		return win.document.elementFromPoint ? win.document.elementFromPoint(clientX, clientY) : element;
+		el = win.document.elementFromPoint ? win.document.elementFromPoint(clientX, clientY) : element;
+		if(el === win.document.documentElement && (point.clientY < 0 || point.clientX < 0 ) ){
+			return element;
+		}else{
+			return el;
+		}
 	}, //creates an event at a certain point
 	createEventAtPoint = function(event, point, element){
 		var el = elementFromPoint(point, element)

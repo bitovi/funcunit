@@ -535,13 +535,13 @@ extend(Syn,{
 				createKind = create[kind],
 				event,
 				ret,
-				autoPrevent = options._autoPrevent,
+				autoPrevent ,
 				dispatchEl = element;
 		
 		//any setup code?
 		Syn.support.ready && setup && setup(type, options, element);
 		
-		
+		autoPrevent = options._autoPrevent;
 		//get kind
 		
 		delete options._autoPrevent;
