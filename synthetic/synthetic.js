@@ -481,8 +481,15 @@ extend(Syn,{
 							// TODO: The HTML element isn't focasable in IE, but it is
 							// in FF.  We should detect this and do a true focus instead
 							// of just a blur
-							activeElement.blur();
-							activeElement = null;
+							if(Syn.helpers.getWindow(element).document.activeElement){
+								Syn.helpers.getWindow(element).document.activeElement.blur();
+								activeElement = null;
+							}else{
+								activeElement.blur();
+								activeElement = null;
+							}
+							
+							
 						}
 						return false
 					}

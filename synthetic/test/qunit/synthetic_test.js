@@ -88,4 +88,37 @@ test("focus triggers focus events", function(){
 	
 	},10)
 	
+});
+
+
+test("focus on an element then another in another page", function(){
+	stop(10000);
+	var page1 = steal.root.join("funcunit/synthetic/test/qunit/page1.html"),
+		page2 = steal.root.join("funcunit/synthetic/test/qunit/page2.html"),
+		iframe = document.createElement('iframe'),
+		calls = 0;
+	
+	st.bind(iframe,"load",function(){
+		if(calls == 0){
+			
+			Syn.click( iframe.contentWindow.document.getElementById("first") ,{}, function(){
+				
+				iframe.contentWindow.location = page2;
+			})
+			calls++;
+		}else{
+			
+			Syn.click( iframe.contentWindow.document.documentElement ,{}, function(){
+				start();
+				
+			})
+		}
+			
+			
+	});
+	iframe.src = page1
+		
+	
+	
+	st.g("qunit-test-area").appendChild(iframe);
 })
