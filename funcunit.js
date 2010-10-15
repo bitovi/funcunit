@@ -18,7 +18,7 @@ var window = (function(){return this }).call(null),
  * @class FuncUnit
  * @tag core
  * @test test.html
- * @download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-4.zip
+ * @download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-5.zip
  * FuncUnit provides powerful functional testing as an add on to [http://docs.jquery.com/QUnit QUnit].  
  * The same tests can be run 
  * in the browser, or with Selenium.  It also lets you automate basic 
