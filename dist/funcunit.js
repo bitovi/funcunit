@@ -1116,7 +1116,7 @@ QUnit.jsDump = (function() {
 
 })(this);
 
-})();
+})(true);
 
 // funcunit/qunit/rhino/rhino.js
 
@@ -1145,7 +1145,7 @@ QUnit.jsDump = (function() {
 
 	}
 
-})();
+})(true);
 
 // funcunit/resources/jquery.js
 
@@ -7513,7 +7513,7 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
 })(window);
 
 
-})();
+})(true);
 
 // funcunit/resources/json.js
 
@@ -7704,7 +7704,68 @@ jQuery.each([ "Height", "Width" ], function( i, name ) {
     };
 })(jQuery);
 
-})();
+})(true);
+
+// funcunit/resources/selector.js
+
+(function($){
+
+
+(function($){
+	var getWindow = function( element ) {
+		return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
+	}
+
+/**
+ * Returns a unique selector for the matched element.
+ * @param {Object} target
+ */
+$.fn.prettySelector= function() {
+	var target = this[0];
+	if(!target){
+		return null
+	}
+	var selector = target.nodeName.toLowerCase();
+	//always try to get an id
+	if(target.id){
+		return "#"+target.id;
+	}else{
+		var parent = target.parentNode;
+		while(parent){
+			if(parent.id){
+				selector = "#"+parent.id+" "+selector;
+				break;
+			}else{
+				parent = parent.parentNode
+			}
+		}
+	}
+	if(target.className){
+		selector += "."+target.className.split(" ")[0]
+	}
+	var others = $(selector, getWindow(target).document); //jquery should take care of the #foo if there
+	
+	if(others.length > 1){
+		return selector+":eq("+others.index(target)+")";
+	}else{
+		return selector;
+	}
+};
+$.each(["closest","find","next","prev","siblings","last","first"], function(i, name){
+	$.fn[name+"Selector"] = function(selector){
+		return this[name](selector).prettySelector();
+	}
+});
+
+
+
+
+
+}(window.jQuery  || window.FuncUnit.jQuery));
+
+
+
+})(true);
 
 // funcunit/synthetic/synthetic.js
 
@@ -7734,9 +7795,11 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 	unbind,
 	key = /keypress|keyup|keydown/,
 	page = /load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll/,
+	//this is maintained so we can click on html and blur the active element
+	activeElement,
 
 /**
- * @constructor Syn
+ * @class Syn
  * @download funcunit/dist/syn.js
  * @test funcunit/synthetic/qunit.html
  * Syn is used to simulate user actions.  It creates synthetic events and
@@ -7844,7 +7907,7 @@ Syn.key.browsers["Envjs\ Resig/20070309 PilotFish/1.2.0.10\1.6"] = {
  *   But, we've purposely made Syn work without any dependencies in the hopes that other frameworks or 
  *   testing solutions can use it as well.
  * </p>
- * @init 
+ * @constructor 
  * Creates a synthetic event on the element.
  * @param {Object} type
  * @param {Object} options
@@ -7883,7 +7946,7 @@ extend(Syn,{
 	 * @param {Object} element
 	 * @param {Object} callback
 	 */
-	init : function(type, options, element, callback){
+	init: function( type, options, element, callback ) {
 		var args = Syn.args(options,element, callback),
 			self = this;
 		this.queue = [];
@@ -7900,7 +7963,7 @@ extend(Syn,{
 			args.callback && args.callback.call(this, args.element, this.result);
 		}
 	},
-	jquery : function(el, fast){
+	jquery: function( el, fast ) {
 		if(window.FuncUnit && window.FuncUnit.jquery){
 			return window.FuncUnit.jquery
 		} if (el){
@@ -7915,7 +7978,7 @@ extend(Syn,{
 	 * @hide
 	 * @return {Object}
 	 */
-	args : function(){
+	args: function() {
 		var res = {}
 		for(var i=0; i < arguments.length; i++){
 			if(typeof arguments[i] == 'function'){
@@ -7933,7 +7996,7 @@ extend(Syn,{
 		}
 		return res;
 	},
-	click : function( options, element, callback){
+	click: function( options, element, callback ) {
 		Syn('click!',options,element, callback);
 	},
 	/**
@@ -7944,13 +8007,15 @@ extend(Syn,{
 	 * and the next event will happen on that element.
 	 */
 	defaults : {
-		focus : function(){
+		focus: function() {
 			if(!Syn.support.focusChanges){
 				var element = this,
 					nodeName = element.nodeName.toLowerCase();
 				Syn.data(element,"syntheticvalue", element.value)
 				
-				if(nodeName == "input"){
+				//TODO, this should be textarea too
+				//and this might be for only text style inputs ... hmmmmm ....
+				if(nodeName == "input" || nodeName == "textarea"){ 
 					
 					bind(element, "blur", function(){
 						
@@ -7964,7 +8029,7 @@ extend(Syn,{
 				}
 			}
 		},
-		submit : function(){
+		submit: function() {
 			Syn.onParents(this, function(el){
 				if( el.nodeName.toLowerCase() == 'form'){
 					el.submit()
@@ -7973,7 +8038,7 @@ extend(Syn,{
 			});
 		}
 	},
-	changeOnBlur : function(element, prop, value){
+	changeOnBlur: function( element, prop, value ) {
 		
 		bind(element, "blur", function(){		
 			if( value !=  element[prop]){
@@ -7989,7 +8054,7 @@ extend(Syn,{
 	 * @param {Object} el
 	 * @param {Object} type
 	 */
-	closest : function(el, type){
+	closest: function( el, type ) {
 		while(el && el.nodeName.toLowerCase() != type.toLowerCase()){
 			el = el.parentNode
 		}
@@ -8002,7 +8067,7 @@ extend(Syn,{
 	 * @param {Object} key
 	 * @param {Object} value
 	 */
-	data : function(el, key, value){
+	data: function( el, key, value ) {
 		var d;
 		if(!el[expando]){
 			el[expando] = id++;
@@ -8024,7 +8089,7 @@ extend(Syn,{
 	 * @param {Object} el
 	 * @param {Object} func
 	 */
-	onParents : function(el, func){
+	onParents: function( el, func ) {
 		var res;
 		while(el && res !== false){
 			res = func(el)
@@ -8039,7 +8104,7 @@ extend(Syn,{
 	 * @hide
 	 * @param {Object} elem
 	 */
-	isFocusable : function(elem){
+	isFocusable: function( elem ) {
 		var attributeNode;
 		return ( this.focusable.test(elem.nodeName) || (
 			(attributeNode = elem.getAttributeNode( "tabIndex" )) && attributeNode.specified ) )
@@ -8050,7 +8115,7 @@ extend(Syn,{
 	 * @hide
 	 * @param {Object} elem
 	 */
-	isVisible : function(elem){
+	isVisible: function( elem ) {
 		return (elem.offsetWidth && elem.offsetHeight) || (elem.clientWidth && elem.clientHeight)
 	},
 	/**
@@ -8058,7 +8123,7 @@ extend(Syn,{
 	 * @hide
 	 * @param {Object} elem
 	 */
-	tabIndex : function(elem){
+	tabIndex: function( elem ) {
 		var attributeNode = elem.getAttributeNode( "tabIndex" );
 		return attributeNode && attributeNode.specified && ( parseInt( elem.getAttribute('tabIndex') ) || 0 )
 	},
@@ -8068,7 +8133,7 @@ extend(Syn,{
 	//some generic helpers
 	helpers : {
 		createEventObject : createEventObject,
-		createBasicStandardEvent : function(type, defaults){
+		createBasicStandardEvent: function( type, defaults ) {
 			var event;
 			try {
 				event = document.createEvent("Events");
@@ -8080,7 +8145,7 @@ extend(Syn,{
 			}
 			return event;
 		},
-		inArray : function(item, array){
+		inArray: function( item, array ) {
 			for(var i =0; i < array.length; i++){
 				if(array[i] == item){
 					return i;
@@ -8088,11 +8153,11 @@ extend(Syn,{
 			}
 			return -1;
 		},
-		getWindow : function(element){
+		getWindow: function( element ) {
 			return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
 		},
 		extend:  extend,
-		scrollOffset : function(win){
+		scrollOffset: function( win ) {
 			var doc = win.document.documentElement,
 				body = win.document.body;
 			return {
@@ -8101,7 +8166,7 @@ extend(Syn,{
 			}
 				
 		},
-		addOffset : function(options, el){
+		addOffset: function( options, el ) {
 			var jq = Syn.jquery(el)
 			if(typeof options == 'object' &&
 			   options.clientX === undefined &&
@@ -8177,11 +8242,26 @@ extend(Syn,{
 		},
 		// unique events
 		focus : {
-			event : function(type, options, element){
+			event: function( type, options, element ) {
 				Syn.onParents(element, function(el){
 					if( Syn.isFocusable(el)){
+						
 						if(el.nodeName.toLowerCase() != 'html'){
 							el.focus();
+							activeElement = el;
+						}else if(activeElement){
+							// TODO: The HTML element isn't focasable in IE, but it is
+							// in FF.  We should detect this and do a true focus instead
+							// of just a blur
+							if(Syn.helpers.getWindow(element).document.activeElement){
+								Syn.helpers.getWindow(element).document.activeElement.blur();
+								activeElement = null;
+							}else{
+								activeElement.blur();
+								activeElement = null;
+							}
+							
+							
 						}
 						return false
 					}
@@ -8219,7 +8299,8 @@ extend(Syn,{
 		mouseDownUpClicks : false,
 		tabKeyTabs : false,
 		keypressOnAnchorClicks : false,
-		optionClickBubbles : false
+		optionClickBubbles : false,
+		ready : 0
 	},
 	/**
 	 * Creates a synthetic event and dispatches it on the element.  
@@ -8230,7 +8311,7 @@ extend(Syn,{
 	 * @param {HTMLElement} element
 	 * @return {Boolean} true if default events were run, false if otherwise.
 	 */
-	trigger : function(type, options, element){
+	trigger: function( type, options, element ) {
 		options || (options = {});
 		
 		var create = Syn.create,
@@ -8243,13 +8324,13 @@ extend(Syn,{
 				createKind = create[kind],
 				event,
 				ret,
-				autoPrevent = options._autoPrevent,
+				autoPrevent,
 				dispatchEl = element;
 		
 		//any setup code?
-		Syn.support.ready && setup && setup(type, options, element);
+		Syn.support.ready == 2 && setup && setup(type, options, element);
 		
-		
+		autoPrevent = options._autoPrevent;
 		//get kind
 		
 		delete options._autoPrevent;
@@ -8272,7 +8353,7 @@ extend(Syn,{
 		}
 		
 		//run default behavior
-		ret && Syn.support.ready 
+		ret && Syn.support.ready == 2
 			&& Syn.defaults[type] 
 			&& Syn.defaults[type].call(element, options, autoPrevent);
 		return ret;
@@ -8319,7 +8400,7 @@ extend(Syn.init.prototype,{
 	 * @param {String|HTMLElement} [element] A element's id or an element.  If undefined, defaults to the previous element.
 	 * @param {Function} [callback] A function to callback after the action has run, but before any future chained actions are run.
 	 */
-	then : function(type, options, element, callback){
+	then: function( type, options, element, callback ) {
 		if(Syn.autoDelay){
 			this.delay();
 		}
@@ -8351,7 +8432,7 @@ extend(Syn.init.prototype,{
 	 * @param {Number} [timeout]
 	 * @param {Function} [callback]
 	 */
-	delay : function(timeout, callback){
+	delay: function( timeout, callback ) {
 		if(typeof timeout == 'function'){
 			callback = timeout;
 			timeout = null;
@@ -8366,7 +8447,7 @@ extend(Syn.init.prototype,{
 		})
 		return this;
 	},
-	done : function( defaults, el){
+	done: function( defaults, el ) {
 		el && (this.element = el);;
 		if(this.queue.length){
 			this.queue.pop().call(this, this.element, defaults);
@@ -8400,7 +8481,7 @@ extend(Syn.init.prototype,{
 	 * @param {HTMLElement} element
 	 * @param {Function} callback
 	 */
-	"_click" : function(options, element, callback, force){
+	"_click" : function( options, element, callback, force ) {
 		Syn.helpers.addOffset(options, element);
 		Syn.trigger("mousedown", options, element);
 		
@@ -8428,7 +8509,7 @@ extend(Syn.init.prototype,{
 	 * @param {Object} element
 	 * @param {Object} callback
 	 */
-	"_rightClick" : function(options, element, callback){
+	"_rightClick" : function( options, element, callback ) {
 		Syn.helpers.addOffset(options, element);
 		var mouseopts =  extend( extend({},Syn.mouse.browser.right.mouseup ), options)
 		
@@ -8457,7 +8538,7 @@ extend(Syn.init.prototype,{
 	 * @param {HTMLElement} element
 	 * @param {Function} callback
 	 */
-	"_dblclick" : function(options, element, callback){
+	"_dblclick" : function( options, element, callback ) {
 		Syn.helpers.addOffset(options, element);
 		var self = this;
 		this._click(options, element, function(){
@@ -8489,7 +8570,7 @@ for(var i=0; i < actions.length; i++){
  * @codestart
  * new MVC.Syn('click').send(MVC.$E('id'))
  * @codeend
- * @init Sets up a synthetic event.
+ * @constructor Sets up a synthetic event.
  * @param {String} type type of event, ex: 'click'
  * @param {optional:Object} options
  */
@@ -8504,7 +8585,7 @@ if (window.jQuery || (window.FuncUnit && window.FuncUnit.jquery)) {
 window.Syn = Syn;
 	
 
-})();
+})(true);
 
 // funcunit/synthetic/mouse.js
 
@@ -8515,10 +8596,10 @@ var h = Syn.helpers;
 
 Syn.mouse = {};
 h.extend(Syn.defaults,{
-	mousedown : function(options){
+	mousedown: function( options ) {
 		Syn.trigger("focus", {}, this)
 	},
-	click : function(){
+	click: function() {
 		// prevents the access denied issue in IE if the click causes the element to be destroyed
 		var element = this;
 		try {
@@ -8555,9 +8636,10 @@ h.extend(Syn.defaults,{
 		}
 		
 		//submit a form
-		if(nodeName == "input" 
-			&& element.type == "submit" 
-			&& !(Syn.support.clickSubmits)){
+		if(!(Syn.support.clickSubmits) &&
+			(nodeName == "input" 
+			&& element.type == "submit"  ) ||
+			nodeName  == 'button' ){
 				
 			var form =  Syn.closest(element, "form");
 			if(form){
@@ -8611,7 +8693,7 @@ h.extend(Syn.defaults,{
 //add create and setup behavior for mosue events
 h.extend(Syn.create,{
 	mouse : {
-		options : function(type, options, element){
+		options: function( type, options, element ) {
 			var doc = document.documentElement, body = document.body,
 				center = [options.pageX || 0, options.pageY || 0],
 				//browser might not be loaded yet (doing support code)
@@ -8656,7 +8738,7 @@ h.extend(Syn.create,{
 			h.createEventObject
 	},
 	click : {
-		setup : function(type, options, element){
+		setup: function( type, options, element ) {
 			try{
 				Syn.data(element,"checked", element.checked);
 			}catch(e){}
@@ -8692,7 +8774,7 @@ h.extend(Syn.create,{
 		}
 	},
 	mousedown : {
-		setup : function(type,options, element){
+		setup: function( type,options, element ) {
 			var nn = element.nodeName.toLowerCase();
 			//we have to auto prevent default to prevent freezing error in safari
 			if(Syn.browser.safari && (nn == "select" || nn == "option" )){
@@ -8741,6 +8823,7 @@ h.extend(Syn.create,{
 
 	Syn.trigger("click", {}, checkbox)
 	Syn.support.clickChecks = checkbox.checked;
+
 	checkbox.checked = false;
 	
 	Syn.trigger("change", {}, checkbox);
@@ -8793,12 +8876,12 @@ h.extend(Syn.create,{
 	
 	//check stuff
 	window.__synthTest = oldSynth;
-	//support.ready = true;
+	Syn.support.ready++;
 })();
 
 
 
-})();
+})(true);
 
 // funcunit/synthetic/browsers.js
 
@@ -8954,7 +9037,7 @@ h.extend(Syn.create,{
 	})();
 	
 
-})();
+})(true);
 
 // funcunit/synthetic/key.js
 
@@ -9141,7 +9224,7 @@ h.extend(Syn,{
 	typeable : /input|textarea/i,
 	
 	// selects text on an element
-	selectText: function(el, start, end){
+	selectText: function( el, start, end ) {
 		if(el.setSelectionRange){
 			if(!end){
                 el.focus();
@@ -9160,7 +9243,7 @@ h.extend(Syn,{
 			r.select();
 		} 
 	},
-	getText: function(el){
+	getText: function( el ) {
 		//first check if the el has anything selected ..
 		if(Syn.typeable.test(el.nodeName)){
 			var sel = getSelection(el);
@@ -9183,7 +9266,7 @@ h.extend(Syn,{
 
 h.extend(Syn.key,{
 	// retrieves a description of what events for this character should look like
-	data : function(key){
+	data: function( key ) {
 		//check if it is described directly
 		if(S.key.browser[key]){
 			return S.key.browser[key];
@@ -9197,7 +9280,7 @@ h.extend(Syn.key,{
 	},
 	
 	//returns the special key if special
-	isSpecial : function(keyCode){
+	isSpecial: function( keyCode ) {
 		var specials = S.key.kinds.special;
 		for(var i=0; i < specials.length; i++){
 			if(Syn.keycodes[ specials[i] ] == keyCode){
@@ -9211,7 +9294,7 @@ h.extend(Syn.key,{
 	 * @param {Object} key
 	 * @param {Object} event
 	 */
-	options : function(key, event){
+	options: function( key, event ) {
 		var keyData = Syn.key.data(key);
 		
 		if(!keyData[event]){
@@ -9248,7 +9331,7 @@ h.extend(Syn.key,{
 		'function' : ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12']
 	},
 	//returns the default function
-	getDefault : function(key){
+	getDefault: function( key ) {
 		//check if it is described directly
 		if(Syn.key.defaults[key]){
 			return Syn.key.defaults[key];
@@ -9262,7 +9345,7 @@ h.extend(Syn.key,{
 	},
 	// default behavior when typing
 	defaults : 	{
-		'character' : function(options, scope, key, force, sel){
+		'character' : function( options, scope, key, force, sel ) {
 			if(/num\d+/.test(key)){
 				key = key.match(/\d+/)[0]
 			}
@@ -9279,28 +9362,28 @@ h.extend(Syn.key,{
 				Syn.selectText(this, before.length + charLength)
 			}		
 		},
-		'c' : function(options, scope, key, force, sel){
+		'c' : function( options, scope, key, force, sel ) {
 			if(Syn.key.ctrlKey){
 				Syn.key.clipboard = Syn.getText(this)
 			}else{
 				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
-		'v' : function(options, scope, key, force, sel){
+		'v' : function( options, scope, key, force, sel ) {
 			if(Syn.key.ctrlKey){
 				Syn.key.defaults.character.call(this, options,scope, Syn.key.clipboard, true,sel);
 			}else{
 				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
-		'a' : function(options, scope, key, force, sel){
+		'a' : function( options, scope, key, force, sel ) {
 			if(Syn.key.ctrlKey){
 				Syn.selectText(this, 0, this.value.length)
 			}else{
 				Syn.key.defaults.character.apply(this, arguments);
 			}
 		},
-		'home' : function(){
+		'home' : function() {
 			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
 					el.scrollTop = 0;
@@ -9308,7 +9391,7 @@ h.extend(Syn.key,{
 				}
 			})
 		},
-		'end' : function(){
+		'end' : function() {
 			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
 					el.scrollTop = el.scrollHeight;
@@ -9316,7 +9399,7 @@ h.extend(Syn.key,{
 				}
 			})
 		},
-		'page-down' : function(){
+		'page-down' : function() {
 			//find the first parent we can scroll
 			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
@@ -9326,7 +9409,7 @@ h.extend(Syn.key,{
 				}
 			})
 		},
-		'page-up' : function(){
+		'page-up' : function() {
 			Syn.onParents(this, function(el){
 				if(el.scrollHeight != el.clientHeight){
 					var ch = el.clientHeight
@@ -9335,7 +9418,7 @@ h.extend(Syn.key,{
 				}
 			})
 		},
-		'\b' : function(options, scope, key, force, sel){
+		'\b' : function( options, scope, key, force, sel ) {
 			//this assumes we are deleting from the end
 			if(!S.support.backspaceWorks && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
@@ -9354,7 +9437,7 @@ h.extend(Syn.key,{
 				//set back the selection
 			}	
 		},
-		'delete' : function(options, scope, key, force, sel){
+		'delete' : function( options, scope, key, force, sel ) {
 			if(!S.support.backspaceWorks && Syn.typeable.test(this.nodeName)){
 				var current = this.value,
 					before = current.substr(0,sel.start),
@@ -9368,7 +9451,7 @@ h.extend(Syn.key,{
 				Syn.selectText(this, sel.start)
 			}		
 		},
-		'\r' : function(options, scope, key, force, sel){
+		'\r' : function( options, scope, key, force, sel ) {
 			
 			var nodeName = this.nodeName.toLowerCase()
 			// submit a form
@@ -9396,7 +9479,7 @@ h.extend(Syn.key,{
 		// tabindex after it in the document.
 		// @return the next element
 		// 
-		'\t' : function(options, scope){
+		'\t' : function( options, scope ) {
 				// focusable elements
 			var focusEls = getFocusable(this),
 				// the current element's tabindex
@@ -9461,7 +9544,7 @@ h.extend(Syn.key,{
 			current && current.focus();
 			return current;
 		},
-		'left' : function(options, scope, key, force, sel){
+		'left' : function( options, scope, key, force, sel ) {
 			if( Syn.typeable.test(this.nodeName) ){
 				if(Syn.key.shiftKey){
 					Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1, sel.end)
@@ -9470,7 +9553,7 @@ h.extend(Syn.key,{
 				}
 			}
 		},
-		'right' : function(options, scope, key, force, sel){
+		'right' : function( options, scope, key, force, sel ) {
 			if( Syn.typeable.test(this.nodeName) ){
 				if(Syn.key.shiftKey){
 					Syn.selectText(this, sel.start, sel.end+1 > this.value.length ? this.value.length  : sel.end+1)
@@ -9479,21 +9562,21 @@ h.extend(Syn.key,{
 				}
 			}	
 		},
-		'up' : function(){
+		'up' : function() {
 			if(/select/i.test(this.nodeName)){
 				
 				this.selectedIndex = this.selectedIndex ? this.selectedIndex-1 : 0;
 				//set this to change on blur?
 			}
 		},
-		'down' : function(){
+		'down' : function() {
 			if(/select/i.test(this.nodeName)){
 				Syn.changeOnBlur(this, "selectedIndex", this.selectedIndex)
 				this.selectedIndex = this.selectedIndex+1;
 				//set this to change on blur?
 			}
 		},
-		'shift' : function(){
+		'shift' : function() {
 			return null;
 		}
 	}
@@ -9502,14 +9585,14 @@ h.extend(Syn.key,{
 
 h.extend(Syn.create,{
 	keydown : {
-		setup : function(type, options, element){
+		setup: function( type, options, element ) {
 			if(h.inArray(options,Syn.key.kinds.special ) != -1){
 				Syn.key[options+"Key"] = element;
 			}
 		}
 	},
 	keyup : {
-		setup : function(type, options, element){
+		setup: function( type, options, element ) {
 			if(h.inArray(options,Syn.key.kinds.special )!= -1){
 				Syn.key[options+"Key"] = null;
 			}
@@ -9517,7 +9600,7 @@ h.extend(Syn.create,{
 		},
 	key : {
 		// return the options for a key event
-		options : function(type, options, element){
+		options: function( type, options, element ) {
 			//check if options is character or has character
 			options = typeof options != "object" ? {character : options} : options;
 			
@@ -9594,7 +9677,7 @@ h.extend(Syn.init.prototype,
 	 * @param {Function} [callback]
 	 * @return {HTMLElement} the element currently focused.
 	 */
-	_key : function(options, element, callback){
+	_key: function( options, element, callback ) {
 		//first check if it is a special up
 		if(/-up$/.test(options) 
 			&& h.inArray(options.replace("-up",""),Syn.key.kinds.special )!= -1){
@@ -9682,7 +9765,7 @@ h.extend(Syn.init.prototype,
 	 * @param {HTMLElement} [element] an element or an id of an element
 	 * @param {Function} [callback] a function to callback
 	 */
-	_type : function(options, element, callback){
+	_type: function( options, element, callback ) {
 		//break it up into parts ...
 		//go through each type and run
 		var parts = options.match(/(\[[^\]]+\])|([^\[])/g),
@@ -9779,14 +9862,14 @@ h.extend(Syn.init.prototype,
 	S.support.textareaCarriage = textarea.value.length == 4
 	document.documentElement.removeChild(div);
 	
-	S.support.ready = true;
+	S.support.ready++;
 })();
 
 
 
 	
 
-})();
+})(true);
 
 // funcunit/synthetic/drag/drag.js
 
@@ -9828,15 +9911,22 @@ h.extend(Syn.init.prototype,
 	
 	//gets an element from a point
 	var elementFromPoint = function(point, element){
-		var clientX = point.clientX, clientY = point.clientY, win = Syn.helpers.getWindow(element)
+		var clientX = point.clientX, 
+			clientY = point.clientY, 
+			win = Syn.helpers.getWindow(element),
+			el;
 		
 		if (Syn.support.elementFromPage) {
 			var off = Syn.helpers.scrollOffset(win);
 			clientX = clientX + off.left; //convert to pageX
 			clientY = clientY + off.top; //convert to pageY
 		}
-		
-		return win.document.elementFromPoint ? win.document.elementFromPoint(clientX, clientY) : element;
+		el = win.document.elementFromPoint ? win.document.elementFromPoint(clientX, clientY) : element;
+		if(el === win.document.documentElement && (point.clientY < 0 || point.clientX < 0 ) ){
+			return element;
+		}else{
+			return el;
+		}
 	}, //creates an event at a certain point
 	createEventAtPoint = function(event, point, element){
 		var el = elementFromPoint(point, element)
@@ -9857,16 +9947,23 @@ h.extend(Syn.init.prototype,
 		return el;
 	}, // start and end are in clientX, clientY
 	startMove = function(start, end, duration, element, callback){
-		var startTime = new Date(), distX = end.clientX - start.clientX, distY = end.clientY - start.clientY, win = Syn.helpers.getWindow(element), current = elementFromPoint(start, element), cursor = win.document.createElement('div')
+		var startTime = new Date(), 
+			distX = end.clientX - start.clientX, 
+			distY = end.clientY - start.clientY, 
+			win = Syn.helpers.getWindow(element), 
+			current = elementFromPoint(start, element), 
+			cursor = win.document.createElement('div'),
+			calls = 0;
 		move = function(){
 			//get what fraction we are at
 			var now = new Date(), 
 				scrollOffset = Syn.helpers.scrollOffset(win), 
-				fraction = (now - startTime) / duration, 
+				fraction = ( calls == 0 ? 0 : now - startTime) / duration, 
 				options = {
 					clientX: distX * fraction + start.clientX,
 					clientY: distY * fraction + start.clientY
 				};
+			calls++;
 			if (fraction < 1) {
 				Syn.helpers.extend(cursor.style, {
 					left: (options.clientX + scrollOffset.left + 2) + "px",
@@ -10024,7 +10121,7 @@ Syn.helpers.extend(Syn.init.prototype,{
 	 * @param {HTMLElement} from
 	 * @param {Function} callback
 	 */
-	_move : function(options, from, callback){
+	_move: function( options, from, callback ) {
 		//need to convert if elements
 		var win = Syn.helpers.getWindow(from), 
 			fro = convertOption(options.from || from, win), 
@@ -10041,7 +10138,7 @@ Syn.helpers.extend(Syn.init.prototype,{
 	 * @param {Object} from
 	 * @param {Object} callback
 	 */
-	_drag : function(options, from, callback){
+	_drag: function( options, from, callback ) {
 		//need to convert if elements
 		var win = Syn.helpers.getWindow(from), 
 			fro = convertOption(options.from || from, win, from), 
@@ -10052,7 +10149,7 @@ Syn.helpers.extend(Syn.init.prototype,{
 })
 
 
-})();
+})(true);
 
 // funcunit/funcunit.js
 
@@ -10068,14 +10165,14 @@ var window = (function(){return this }).call(null),
 	oldFunc = window.FuncUnit;
 
 /**
- * @constructor FuncUnit
+ * @class FuncUnit
  * @tag core
  * @test test.html
- * @download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-3.zip
+ * @download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-5.zip
  * FuncUnit provides powerful functional testing as an add on to [http://docs.jquery.com/QUnit QUnit].  
  * The same tests can be run 
  * in the browser, or with Selenium.  It also lets you automate basic 
- * QUnit tests in [http://www.envjs.com/ EnvJS] (a command line browser).
+ * QUnit tests in [EnvJS](http://www.envjs.com/) - a command line browser.
  * 
  * <h2>Example:</h2>
  * The following tests that an AutoSuggest returns 5 results.  
@@ -10083,7 +10180,7 @@ var window = (function(){return this }).call(null),
  * you turn off your popup blocker!).
 @codestart
 module("autosuggest",{
-  setup : function(){
+  setup: function() {
     S.open('autosuggest.html')
   }
 });
@@ -10136,7 +10233,7 @@ test("JavaScript results",function(){
  * 	<li>Create a JS file (<code>pages/mypage_test.js</code>) for your tests.  The skeleton should like:
 @codestart
 module("APPNAME", {
-  setup : function(){
+  setup: function() {
     // opens the page you want to test
     $.open("myPage.html");
   }
@@ -10433,7 +10530,7 @@ Slow mode is useful while debugging.</p>
 	<li>Selenium doesn't run Chrome/Opera/Safari on the filesystem.</li>
 </ul>
  * 
- * @init
+ * @constructor
  * selects something in the other page
  * @param {String|Function|Object} selector FuncUnit behaves differently depending if
  * the selector is a string, a function, or an object.
@@ -10454,6 +10551,10 @@ Slow mode is useful while debugging.</p>
  * document.frames array to use as the context of the selector.
  */
 FuncUnit = function(selector, context){
+	// if someone wraps a funcunit selector
+	if(selector && selector.funcunit === true){
+		return selector;
+	}
 	if(typeof selector == "function"){
 		return FuncUnit.wait(0, selector)
 	}
@@ -10547,28 +10648,33 @@ S.open("//app/app.html")
  * @param {Function} callback
  * @param {Number} timeout
  */
-open : function(path, callback, timeout){
+open: function( path, callback, timeout ) {
 	var fullPath = FuncUnit.getAbsolutePath(path), 
 	temp;
 	if(typeof callback != 'function'){
 		timeout = callback;
 		callback = undefined;
 	}
-	FuncUnit.add(function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
-		
-		FuncUnit._open(fullPath, error);
-		FuncUnit._onload(function(){
-			FuncUnit._opened();
-			success()
-		}, error);
-	}, callback, "Page " + path + " not loaded in time!", timeout || 30000);
+	FuncUnit.add({
+		method: function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
+			
+			FuncUnit._open(fullPath, error);
+			FuncUnit._onload(function(){
+				FuncUnit._opened();
+				success()
+			}, error);
+		},
+		callback: callback,
+		error: "Page " + path + " not loaded in time!",
+		timeout: timeout || 30000
+	});
 },
 /**
  * @hide
  * Gets a path, will use steal if present
  * @param {String} path
  */
-getAbsolutePath : function(path){
+getAbsolutePath: function( path ) {
 	if(typeof(steal) == "undefined"){
 		return path;
 	}
@@ -10607,7 +10713,7 @@ support : {},
 window : {
 	document: {}
 },
-_opened : function(){}
+_opened: function() {}
 });
 
 
@@ -10623,33 +10729,25 @@ _opened : function(){}
 	FuncUnit.
 	/**
 	 * @hide
-	 * Adds a function to be called in the queue.
-	 * @param {Function} f The function to be called.  It will be provided a success and error function.
-	 * @param {Function} callback a callback to be called after the function is done
-	 * @param {Object} error an error statement if the command fails
-	 * @param {Object} timeout the length of time until success should be called.
+	 * Adds a function to the queue.  The function is passed within an object that
+	 * can have several other properties:
+	 * method : the method to be called.  It will be provided a success and error function to call
+	 * callback : an optional callback to be called after the function is done
+	 * error : an error message if the command fails
+	 * timeout : the time until success should be called
+	 * bind : an object that will be 'this' of the success
+	 * stop : 
 	 */
-	add = function(f, callback, error, timeout, stopper){
+	add = function(handler){
 		
 		//if we are in a callback, add to the current position
 		if (incallback) {
-			queue.splice(currentPosition,0,{
-				method: f,
-				callback: callback,
-				error: error,
-				timeout: timeout,
-				stop : stopper
-			})
+			queue.splice(currentPosition,0,handler)
 			currentPosition++;
 		}
 		else {
 			//add to the end
-			queue.push({
-				method: f,
-				callback: callback,
-				error: error,
-				timeout: timeout
-			});
+			queue.push(handler);
 		}
 		//if our queue has just started, stop qunit
 		//call done to call the next command
@@ -10695,7 +10793,7 @@ _opened : function(){}
 						
 						incallback = true;
 						if (next.callback) 
-							next.callback.apply(null, arguments);
+							next.callback.apply(next.bind || null, arguments);
 						incallback = false;
 						
 						
@@ -10735,10 +10833,15 @@ _opened : function(){}
 			time = undefined;
 		}
 		time = time != null ? time : 5000
-		FuncUnit.add(function(success, error){
-			
-			setTimeout(success, time)
-		}, callback, "Couldn't wait!", time + 1000);
+		FuncUnit.add({
+			method : function(success, error){
+				
+				setTimeout(success, time)
+			},
+			callback : callback,
+			error : "Couldn't wait!",
+			timeout : time + 1000
+		});
 		return this;
 	}
 	/**
@@ -10754,27 +10857,34 @@ _opened : function(){}
 				stopped = true;
 			};
 
-		FuncUnit.add(function(success, error){
-			interval = setTimeout(function(){
+		FuncUnit.add({
+			method : function(success, error){
+				interval = setTimeout(function(){
+					
+					var result = null;
+					try {
+						result = checker()
+					} 
+					catch (e) {
+						//should we throw this too error?
+					}
+					
+					if (result) {
+						success();
+					}else if(!stopped){
+						interval = setTimeout(arguments.callee, 10)
+					}
+					
+				}, 10);
 				
-				var result = null;
-				try {
-					result = checker()
-				} 
-				catch (e) {
-					//should we throw this too error?
-				}
 				
-				if (result) {
-					success();
-				}else if(!stopped){
-					interval = setTimeout(arguments.callee, 10)
-				}
-				
-			}, 10);
-			
-			
-		}, callback, error, timeout, stop)
+			},
+			callback : callback,
+			error : error,
+			timeout : timeout,
+			stop : stop
+		});
+		
 	}
 	
 	
@@ -10827,6 +10937,7 @@ FuncUnit.init = function(s, c){
 	this.context = c == null ? FuncUnit.window.document : c;
 }
 FuncUnit.init.prototype = {
+	funcunit : true,
 	/**
 	 * Types text into an element.  This makes use of [Syn.prototype.type] and works in 
 	 * a very similar way.
@@ -10858,13 +10969,18 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that is run after typing, but before the next action.
 	 * @return {FuncUnit} returns the funcUnit for chaining.
 	 */
-	type: function(text, callback){
+	type: function( text, callback ) {
 		var selector = this.selector, 
 			context = this.context;
-		FuncUnit.add(function(success, error){
-			
-			FuncUnit.$(selector, context, "triggerSyn", "_type", text, success)
-		}, callback, "Could not type " + text + " into " + this.selector);
+		FuncUnit.add({
+			method : function(success, error){
+				
+				FuncUnit.$(selector, context, "triggerSyn", "_type", text, success)
+			},
+			callback : callback,
+			error : "Could not type " + text + " into " + this.selector,
+			bind : this
+		});
 		return this;
 	},
 	/**
@@ -10876,7 +10992,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that is run after the selector exists, but before the next action.
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
-	exists : function(callback){
+	exists: function( callback ) {
 		if(true){
 			return this.size(function(size){
 				return size > 0;
@@ -10894,7 +11010,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that is run after the selector exists, but before the next action
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
-	missing : function(callback){
+	missing: function( callback ) {
 		return this.size(0, callback)
 	},
 	/**
@@ -10906,7 +11022,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the funcUnit is visible, but before the next action.
 	 * @return [funcUnit] returns the funcUnit for chaining.
 	 */
-	visible : function(callback){
+	visible: function( callback ) {
 		var self = this,
 			sel = this.selector,
 			ret;
@@ -10934,7 +11050,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the selector is invisible, but before the next action.
 	 * @return [funcUnit] returns the funcUnit selector for chaining.
 	 */
-	invisible : function(callback){
+	invisible: function( callback ) {
 		var self = this,
 			sel = this.selector,
 			ret;
@@ -10985,7 +11101,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the drag, but before the next action.
 	 * @return {funcUnit} returns the funcunit selector for chaining.
 	 */
-	drag: function( options, callback){
+	drag: function( options, callback ) {
 		if(typeof options == 'string'){
 			options = {to: options}
 		}
@@ -10993,10 +11109,15 @@ FuncUnit.init.prototype = {
 
 		var selector = this.selector, 
 			context = this.context;
-		FuncUnit.add(function(success, error){
-			
-			FuncUnit.$(selector, context, "triggerSyn", "_drag", options, success)
-		}, callback, "Could not drag " + this.selector)
+		FuncUnit.add({
+			method: function(success, error){
+				
+				FuncUnit.$(selector, context, "triggerSyn", "_drag", options, success)
+			},
+			callback: callback,
+			error: "Could not drag " + this.selector,
+			bind: this
+		})
 		return this;
 	},
 		/**
@@ -11034,7 +11155,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the drag, but before the next action.
 	 * @return {funcUnit} returns the funcunit selector for chaining.
 	 */
-	move: function(options, callback){
+	move: function( options, callback ) {
 		if(typeof options == 'string'){
 			options = {to: options}
 		}
@@ -11042,10 +11163,15 @@ FuncUnit.init.prototype = {
 
 		var selector = this.selector, 
 			context = this.context;
-		FuncUnit.add(function(success, error){
-			
-			FuncUnit.$(selector, context, "triggerSyn", "_move", options, success)
-		}, callback, "Could not move " + this.selector)
+		FuncUnit.add({
+			method: function(success, error){
+				
+				FuncUnit.$(selector, context, "triggerSyn", "_move", options, success)
+			},
+			callback: callback,
+			error: "Could not move " + this.selector,
+			bind: this
+		});
 		return this;
 	},
 	/**
@@ -11054,15 +11180,20 @@ FuncUnit.init.prototype = {
 	 * @param {Number} amount number of pixels to scroll
 	 * @param {Function} callback
 	 */
-	scroll : function(direction, amount, callback){
+	scroll: function( direction, amount, callback ) {
 		var selector = this.selector, 
 			context = this.context,
 			direction = /left|right|x/i.test(direction)? "Left" : "Right";
-		FuncUnit.add(function(success, error){
-			
-			FuncUnit.$(selector, context, "scroll"+direction, amount)
-			success();
-		}, callback, "Could not scroll " + this.selector)
+		FuncUnit.add({
+			method: function(success, error){
+				
+				FuncUnit.$(selector, context, "scroll" + direction, amount)
+				success();
+			},
+			callback: callback,
+			error: "Could not scroll " + this.selector,
+			bind: this
+		});
 		return this;
 	},
 	/**
@@ -11071,10 +11202,38 @@ FuncUnit.init.prototype = {
 	 * @param {Number} [timeout]
 	 * @param {Object} callback
 	 */
-	wait : function(timeout, callback){
+	wait: function( timeout, callback ) {
 		FuncUnit.wait(timeout, callback)
+	},
+	/**
+	 * Returns a FuncUnit wrapped selector with 
+	 * selector appended to the current selector.
+	 * @codestart
+	 * S('#foo').find(".bar") //-> S("#foo .bar")
+	 * @codeend
+	 * @param {String} selector
+	 * @return {FuncUnit} the funcunit wrapped selector.
+	 */
+
+	find : function(selector){
+		return FuncUnit(this.selector+" "+selector, this.context);
 	}
 };
+//do traversers
+var traversers = ["closest",
+
+
+"next","prev","siblings","last","first"],
+	makeTraverser = function(name){
+		FuncUnit.init.prototype[name] = function(selector){
+			return FuncUnit( FuncUnit.$(this.selector, this.context, name+"Selector", selector) )
+		}
+	};
+for(var i  =0; i < traversers.length; i++){
+	makeTraverser(traversers[i]);
+}
+
+// do clicks
 var clicks = [
 /**
  * @function click
@@ -11132,11 +11291,16 @@ var clicks = [
 			}
 			var selector = this.selector, 
 				context = this.context;
-			FuncUnit.add(function(success, error){
-				options = options || {}
-				
-				FuncUnit.$(selector, context, "triggerSyn", "_"+name, options, success)
-			}, callback, "Could not "+name+" " + this.selector)
+			FuncUnit.add({
+				method: function(success, error){
+					options = options || {}
+					
+					FuncUnit.$(selector, context, "triggerSyn", "_" + name, options, success)
+				},
+				callback: callback,
+				error: "Could not " + name + " " + this.selector,
+				bind: this
+			});
 			return this;
 		}
 	}
@@ -11556,7 +11720,7 @@ S = FuncUnit;
 
 
 
-})();
+})(true);
 
 // funcunit/resources/selenium_start.js
 
@@ -11604,7 +11768,7 @@ FuncUnit.startSelenium = function(){
 	}
 }
 
-})();
+})(true);
 
 // funcunit/drivers/selenium.js
 
@@ -11682,14 +11846,18 @@ FuncUnit.startSelenium = function(){
 			}
 			FuncUnit.confirm = function(answer, callback){
 				var self = this;
-				FuncUnit.add(function(success, error){
-					var confirm = FuncUnit.selenium.getConfirmation();
-					if(answer)
-						FuncUnit.selenium.chooseOkOnNextConfirmation();
-					else
-						FuncUnit.selenium.chooseCancelOnNextConfirmation();
-					setTimeout(success, 13)
-				}, callback, "Could not confirm")
+				FuncUnit.add({
+					method: function(success, error){
+						var confirm = FuncUnit.selenium.getConfirmation();
+						if (answer) 
+							FuncUnit.selenium.chooseOkOnNextConfirmation();
+						else 
+							FuncUnit.selenium.chooseCancelOnNextConfirmation();
+						setTimeout(success, 13)
+					},
+					callback: callback,
+					error: "Could not confirm"
+				});
 			}
 			FuncUnit.$ = function(selector, context, method){
 				var args = FuncUnit.makeArray(arguments);
@@ -11738,7 +11906,7 @@ FuncUnit.startSelenium = function(){
 		})();
 	}
 
-})();
+})(true);
 
 // funcunit/drivers/standard.js
 
@@ -11910,5 +12078,5 @@ FuncUnit.startSelenium = function(){
 
 
 
-})();
+})(true);
 

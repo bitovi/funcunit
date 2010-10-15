@@ -21,7 +21,7 @@ new steal.File("jquery/lang/json/json.js").copyTo("funcunit/resources/json.js")
 
 // unzip the jar
 new steal.File("funcunit/java/selenium-server").mkdirs();
-runCommand("sh", "-c", "cd funcunit/java/selenium-server && jar xf ../selenium-server.jar")
+runCommand("cmd", "/c", "cd funcunit\\java\\selenium-server && jar xf ..\\selenium-server.jar")
 
 // copy files into selenium (assumes you have unzipped java/selenium-server.jar into its own folder there)
 new steal.File("funcunit/resources/json.js").copyTo("funcunit/java/selenium-server/core/scripts/json.js")
@@ -30,7 +30,7 @@ new steal.File("funcunit/resources/wrapped.js").copyTo("funcunit/java/selenium-s
 new steal.File("funcunit/resources/jquery.js").copyTo("funcunit/java/selenium-server/core/scripts/jquery        .js")
 
 // create the jar
-runCommand("sh", "-c", "cd funcunit/java/selenium-server && jar cvfm selenium-server.jar META-INF/MANIFEST.MF *")
+runCommand("cmd", "/c", "cd funcunit\\java\\selenium-server && jar cvfm selenium-server.jar META-INF\\MANIFEST.MF *")
 new steal.File("funcunit/java/selenium-server/selenium-server.jar").copyTo("funcunit/java/selenium-server.jar")
 new steal.File("funcunit/java/selenium-server").remove()
 
