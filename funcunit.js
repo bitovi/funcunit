@@ -563,10 +563,9 @@ support : {},
 window : {
 	document: {}
 },
-basePath: (typeof basePath == "undefined"? "": basePath),
+basePath: (typeof basePath == "undefined"? "funcunit/": basePath),
 _opened: function() {}
 });
-
 
 (function(){
 	//the queue of commands waiting to be run

@@ -42,7 +42,7 @@ steal.then(function(){
 				} else {
 					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium" > NUL')
-						quit()
+						//quit()
 					}
 				}
 			}
