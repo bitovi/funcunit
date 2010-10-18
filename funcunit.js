@@ -563,6 +563,7 @@ support : {},
 window : {
 	document: {}
 },
+basePath: basePath || "",
 _opened: function() {}
 });
 

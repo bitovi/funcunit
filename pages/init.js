@@ -18,6 +18,7 @@
  *  - [http://forum.javascriptmvc.com/#Forum/funcunit Forums] Ask questions, get help.
  *  - [http://github.com/jupiterjs/funcunit Github] Contribute some patches.
  *  - [http://github.com/jupiterjs/funcunit/issues Issue Tracker] Submit a bug.
+ *  - [http://github.com/jupiterjs/srchr Srchr Demo] See it in action.
  *  
  */
 
