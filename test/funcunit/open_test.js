@@ -18,9 +18,9 @@ test("URL Test", function(){
 
 
 test("Back to back opens", function(){
-	S.open("test/myotherapp.html", null, 10000);
+	S.open("//funcunit/test/myotherapp.html", null, 10000);
 	
-	S.open("test/myapp.html", null, 10000);
+	S.open("//funcunit/test/myapp.html", null, 10000);
 
 	S("#changelink").click(function(){
 		equals(S("#changelink").text(), "Changed","href javascript run")

@@ -2,7 +2,7 @@ module("funcunit-syn integration")
 
 
 test("Type and slow Click", function(){
-	S.open("test/myapp.html", null, 10000);
+	S.open("//funcunit/test/myapp.html", null, 10000);
 	
 	S("#typehere").type("javascriptmvc", function(){
 		equals(S("#seewhatyoutyped").text(), "typed javascriptmvc","typing");
@@ -23,7 +23,7 @@ test("Type and slow Click", function(){
 })
 
 test("Move To", function(){
-	S.open("test/drag.html", null, 10000);
+	S.open("//funcunit/test/drag.html", null, 10000);
 	S("#start").move("#end")
 	S("#typer").type("javascriptmvc",function(){
 		equals(S("#typer").val(), "javascriptmvc","move test worked correctly");
@@ -32,7 +32,7 @@ test("Move To", function(){
 })
 
 test("Drag To", function(){
-	S.open("test/drag.html", null, 10000);
+	S.open("//funcunit/test/drag.html", null, 10000);
 	S("#drag").drag("#drop")
 	S("#clicker").click(function(){
 		equals(S(".status").text(), "dragged", 'drag worked correctly')

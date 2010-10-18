@@ -563,7 +563,7 @@ support : {},
 window : {
 	document: {}
 },
-basePath: basePath || "",
+basePath: (typeof basePath == "undefined"? "": basePath),
 _opened: function() {}
 });
 

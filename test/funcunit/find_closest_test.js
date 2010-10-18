@@ -1,7 +1,7 @@
 module("funcunit - find / closest",{
 	setup: function() {
 		var self = this;
-		S.open("test/findclosest.html", function(){
+		S.open("//funcunit/test/findclosest.html", function(){
 			self.pageIsLoaded = true;
 		}, 10000)
 	}
