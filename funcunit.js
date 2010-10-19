@@ -339,6 +339,18 @@ browsers: ["*custom /path/to/my/browser"]
 <p>See the 
 [http://release.seleniumhq.org/selenium-remote-control/0.9.0/doc/java/com/thoughtworks/selenium/DefaultSelenium.html#DefaultSelenium Selenium docs] 
 for more information on customizing browsers and other settings.</p>
+
+### 64-bit Java
+
+Some users will find Selenium has trouble opening while using 64 bit java (on Windows).  You will see an error like  
+Could not start Selenium session: Failed to start new browser session.  This is because Selenium 
+looks in the 64-bit Program Files directory, and there is no Firefox there.  To fix this, change 
+browsers to include the path like this:
+
+@codestart
+FuncUnit.browsers = ["*firefox C:\\PROGRA~2\\MOZILL~1\\firefox.exe", "*iexplore"]
+@codeend
+
 <h3>Filesystem for Faster Tests</h3>
 <p>You might want to use envjs to open local funcunit pages, but test pages on your server.  This is possible, you 
 just have to change FuncUnit.href or FuncUnit.jmvcRoot.  This file can load locally while everything else is 
