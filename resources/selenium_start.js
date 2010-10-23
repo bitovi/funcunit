@@ -1,4 +1,5 @@
 steal.then(function(){
+
 FuncUnit.startSelenium = function(){
 	importClass(Packages.com.thoughtworks.selenium.DefaultSelenium);
 	
@@ -16,7 +17,10 @@ FuncUnit.startSelenium = function(){
 				runCommand("cmd", "/C", command)
 			}
 			else {
-				runCommand("sh", "-c", "java -jar funcunit/java/selenium-server.jar > selenium.log 2> selenium.log &")
+				var command = "java -jar "+
+					FuncUnit.basePath+
+					"java/selenium-server.jar > selenium.log 2> selenium.log &";
+				runCommand("sh", "-c", command)
 			}
 		})
 		var timeouts = 0, 
