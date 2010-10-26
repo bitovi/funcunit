@@ -370,16 +370,21 @@ http://localhost:8000/funcunit/test/myapp.html.</p>
 funcunit\envjs path\to\funcunit.html
 @codeend
 
-<h3>Running Served Pages</h3>
+<h3>Running From Safari and Chrome</h3>
 <p>Certain browsers, like Safari and Chrome, don't run Selenium tests from filesystem because 
 of security resrictions.  To get around this you have to run pages served from a server.  The 
 downside of this is the test takes longer to start up, compared to loading from filesystem.</p>  
-<p>To do this, provide an absolute path in your envjs path, like this:</p>
+<p>To run served pages, you must 1) provide an absolute path in your envjs path and 2) provide an absolute path 
+in jmvcRoot.</p>
+<p>For example, to run cookbook FuncUnit tests from Google Chrome, I'd set the browsers and jmvcRoot like this:</p>
 @codestart
-funcunit\envjs http://localhost:8000/path/to/funcunit.html
+	browsers: ["*googlechrome"],
+	jmvcRoot: "http://localhost:8000/framework/",
 @codeend
-<p>and set jmvcRoot and your paths as directed in the previous section.  This will cause the command page 
-and the test pages to load from your server.</p>
+<p>then I'd start up Selenium like this:</p>
+@codestart
+funcunit\envjs http://localhost:8000/framework/cookbook/funcunit.html
+@codeend
 
 <h3>Slow Mode</h3>
 <p>You can slow down the amount of time between tests by setting FuncUnit.speed.  By default, FuncUnit commands 
