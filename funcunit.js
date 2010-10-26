@@ -385,6 +385,10 @@ in jmvcRoot.</p>
 @codestart
 funcunit\envjs http://localhost:8000/framework/cookbook/funcunit.html
 @codeend
+<p>To run using Safari 5, you should use the safariproxy browser string like this:</p>
+@codestart
+	browsers: ["*safariproxy"],
+@codeend
 
 <h3>Slow Mode</h3>
 <p>You can slow down the amount of time between tests by setting FuncUnit.speed.  By default, FuncUnit commands 
