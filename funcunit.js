@@ -332,15 +332,16 @@ This is defined in settings.js.  If this null it will default to a standard set 
 @codestart
 browsers: ["*firefox", "*iexplore", "*safari", "*googlechrome"]
 @codeend
-<p>To define a custom path to a browser, put this in the string following the browser name like this:</p>
+
+To define a custom path to a browser, put this in the string following the browser name like this:</p>
+
 @codestart
 browsers: ["*custom /path/to/my/browser"]
 @codeend
-<p>See the 
-[http://release.seleniumhq.org/selenium-remote-control/0.9.0/doc/java/com/thoughtworks/selenium/DefaultSelenium.html#DefaultSelenium Selenium docs] 
-for more information on customizing browsers and other settings.</p>
 
-### 64-bit Java
+See the [http://release.seleniumhq.org/selenium-remote-control/0.9.0/doc/java/com/thoughtworks/selenium/DefaultSelenium.html#DefaultSelenium Selenium docs] for more information on customizing browsers and other settings.</p>
+
+## 64-bit Java
 
 Some users will find Selenium has trouble opening while using 64 bit java (on Windows).  You will see an error like  
 Could not start Selenium session: Failed to start new browser session.  This is because Selenium 
@@ -385,10 +386,12 @@ in jmvcRoot.</p>
 @codestart
 funcunit\envjs http://localhost:8000/framework/cookbook/funcunit.html
 @codeend
-<p>To run using Safari 5, you should use the safariproxy browser string like this:</p>
+<p>To run Safari 5 in Windows, you should use the safariproxy browser string like this:</p>
 @codestart
 	browsers: ["*safariproxy"],
 @codeend
+
+Mac Safari is just "*safari".
 
 <h3>Slow Mode</h3>
 <p>You can slow down the amount of time between tests by setting FuncUnit.speed.  By default, FuncUnit commands 
