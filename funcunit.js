@@ -320,9 +320,9 @@ the domain to serve from, and the speed of test execution.</p>
 <p>FuncUnit looks first in the same directory as the funcunit page you're running tests from for 
 settings.js.  For example if you're running FuncUnit like this:</p>
 @codestart
-funcunit\envjs phui\combobox\funcunit.html 
+funcunit\envjs mxui\combobox\funcunit.html 
 @codeend
-<p>It will look first for phui/combobox/settings.js.</p>
+<p>It will look first for mxui/combobox/settings.js.</p>
 <p>Then it looks in its own root directory, where a default settings.js exists.  
 This is to allow you to create different settings for different projects.</p>
 <h3>Setting Browsers</h3>

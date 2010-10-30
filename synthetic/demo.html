@@ -3,8 +3,8 @@
 <html lang="en">
 	<head>
 		<title>Demo Page</title>
-		<link type="text/css" href="../../phui/smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
-		<link type="text/css" href="../../phui/resizable/resizable.css" rel="stylesheet" />
+		<link type="text/css" href="../../mxui/smoothness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+		<link type="text/css" href="../../mxui/resizable/resizable.css" rel="stylesheet" />
         <style type='text/css'>
             body {font-family: verdana}
             .error {border: solid 1px red;}
@@ -117,18 +117,18 @@
 		
 		<script type='text/javascript' src='../../steal/steal.js'></script>
 		<script type='text/javascript'>
-			steal.plugins('phui/tabs','phui/resizable','phui/key_validator').start();
+			steal.plugins('mxui/tabs','mxui/resizable','mxui/key_validator').start();
 		</script>
 		
 		<script type='text/javascript'>
-			$("#first").phui_resizable();
-			$("#uitabs, #uitabs2").phui_ui_tabs();
+			$("#first").mxui_resizable();
+			$("#uitabs, #uitabs2").mxui_ui_tabs();
 			
 			
 			$(window).bind('load', function(){
 				$("select")[0].selectedIndex = 0;
 
-				$("#numeric").phui_key_validator({test: /^[-+]?[0-9]*\.?[0-9]*$/}).val("")
+				$("#numeric").mxui_key_validator({test: /^[-+]?[0-9]*\.?[0-9]*$/}).val("")
 			})
 			$("#submitform").submit(function(ev){
 				ev.preventDefault();

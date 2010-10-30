@@ -196,7 +196,7 @@ $(function(){
 	$("<iframe src='demo.html'></iframe>").load(function(){
 		//cant uses handled b/c it doesn't bubble
 		var iframe = $('iframe');
-		//iframe.phui_filler({parent: $("#fill")});
+		//iframe.mxui_filler({parent: $("#fill")});
 		var frameWindow = iframe[0].contentWindow;
 	
 		var oldHandle = frameWindow.jQuery.event.handle;
@@ -238,7 +238,7 @@ $(function(){
 	$(function(){
 		$("#code, #clearme").val("");
 	})
-	$('#app').phui_filler({parent: document.body});
+	$('#app').mxui_filler({parent: document.body});
 
 	$("#run").click(function(){
 		REPLAY = true;
