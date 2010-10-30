@@ -6,7 +6,7 @@ Relevant links:
 
 
 Building a new FuncUnit
-1. Clone the repository at http://github.com/jupiterjs/framework
+1. Clone the repository at http://github.com/jupiterjs/javascriptmvc
 2. Use git submodule init and git submodule update to get the submodules.  The only ones we'll need are steal and funcunit
 3. Unzip funcunit/java/selenium-server.jar into a folder at funcunit/java/selenium-server/
 4. Make whatever changes you want to syn, funcunit, drivers, or selenium. 
