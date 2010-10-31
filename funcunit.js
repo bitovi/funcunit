@@ -403,6 +403,17 @@ Slow mode is useful while debugging.</p>
 <ul>
 	<li>Selenium doesn't run Chrome/Opera/Safari on the filesystem.</li>
 </ul>
+
+<h2>Troubleshooting</h2>
+
+<p>If you have trouble getting Selenium tests to run in IE, there are some settings that you can to change.  First, disable the security settings for pages that run from the filesystem.  To do this, open the Internet Options in IE and select the "Advanced" tab, and enable the option to "Allow active content to run in files on My Computer."  This is what it looks like:</p>
+
+@image jmvc/images/iesecurity.png
+
+<p>You may also get an error that the popup blocker is enabled, which prevents the tests from running.  It's actually not the popup blocker that causes this, but the fix is just as easy.  Simply disable "Protected Mode" in IE, which is also in the Internet Options:</p>
+
+@image jmvc/images/iepopups.png
+
  * 
  * @constructor
  * selects something in the other page
