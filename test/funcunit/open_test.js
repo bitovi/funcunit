@@ -11,8 +11,10 @@ test("URL Test", function(){
 	equals(path, "http://localhost/myapp/mypage.html", "paths match");
 	
 	FuncUnit.jmvcRoot = null
+	
 	path = FuncUnit.getAbsolutePath("//myapp/mypage.html")
-	equals(path, "../myapp/mypage.html", "paths match");
+	
+	equals(path, steal.root.join("myapp/mypage.html"), "paths match");
 })
 
 

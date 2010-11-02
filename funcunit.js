@@ -1603,7 +1603,10 @@ for (var prop in FuncUnit.funcs) {
 
 S = FuncUnit;
 
-
+// handle case where syn was loaded before FuncUnit
+if(!FuncUnit.jquery.fn.triggerSyn){
+	FuncUnit.jquery.fn.triggerSyn = jQuery.fn.triggerSyn;
+}
 })
 //now add drivers
 .then('resources/selenium_start',
