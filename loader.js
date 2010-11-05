@@ -46,8 +46,7 @@ steal.then(function(){
 			},
 			fireLoad: true,
 			logLevel: 2,
-			dontPrintUserAgent: true,
-			killTimersAfterLoad: true
+			dontPrintUserAgent: true
 		});
 	}
 })
