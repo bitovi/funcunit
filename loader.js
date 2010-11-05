@@ -41,10 +41,12 @@ steal.then(function(){
 		Envjs(page, {
 			scriptTypes: {
 				"text/javascript": true,
-				"text/envjs": true
+				"text/envjs": true,
+				"": true
 			},
 			fireLoad: true,
-			logLevel: 2
+			logLevel: 2,
+			dontPrintUserAgent: true
 		});
 	}
 })
