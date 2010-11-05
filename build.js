@@ -27,7 +27,8 @@ var userFiles =
 		"funcunit/resources/jquery.js", 
 		"funcunit/java/extensions/wrapped.js", 
 		"funcunit/resources/json.js", 
-		"funcunit/dist/syn.js"],
+		"funcunit/dist/syn.js",
+		"funcunit/resources/selector.js"],
 	fileText, 
 	userExtensionsText = "";
 for(var i=0; i<userFiles.length; i++){
