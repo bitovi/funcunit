@@ -7,7 +7,7 @@ jQuery.wrapped = function(){
 	    selector = args.shift(),
 	    context =  args.shift(),
 		method = args.shift(), 
-		q, a;
+		q, a, res;
 		
 	for(var i=0; i < arguments.length; i++){
 		if (typeof arguments[i] == 'function' && arguments[i] == Selenium.resume) {
@@ -15,12 +15,12 @@ jQuery.wrapped = function(){
 		}
 	}
 	if (_win().jQuery && method == 'trigger') {
-		q = _win().jQuery(selector, context);
+		res = _win().jQuery(selector, context).trigger(args[0], args[1]);
 	} else {
     	q = jQuery(selector, context);
+		res = q[method].apply(q, args);
 	}
 	
-	var res = q[method].apply(q, args);
     //need to convert to json
     return jQuery.toJSON(res.jquery ? true : res)
 };

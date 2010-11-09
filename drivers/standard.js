@@ -148,12 +148,13 @@ steal.then(function() {
 	
 		// for trigger, we have to use the page's jquery because it uses jQuery's event system, which uses .data() in the page
 		if (FuncUnit._window.jQuery && method == 'trigger') {
-			q = FuncUnit._window.jQuery(selector, context);
+			return FuncUnit._window.jQuery(selector, context).trigger(args[0], args[1]);
 		} else {
 			q = FuncUnit.jquery(selector, context);
+			return q[method].apply(q, args);
 		}
 		
-		return q[method].apply(q, args);
+		
 	}
 	
 	FuncUnit.jquery(window).unload(function(){
