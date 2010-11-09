@@ -63,6 +63,9 @@
 						$("#exists").append("<p>I exist</p>")
 					},200)
 				})
+				$('#trigger').mouseup(function(){
+					$("#trigger").append("<p>I was triggered</p>")
+				})
 				
 			})
 			changeText = function(){
@@ -97,6 +100,8 @@
 		<div id='hasClass'>Click Me</div>
 		<h3>Exists</h3>
 		<div id='exists'>Click Me</div>
+		<h3>Trigger</h3>
+		<div id='trigger'>Trigger Me</div>
 		
 		
 	</body>

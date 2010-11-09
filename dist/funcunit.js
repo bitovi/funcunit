@@ -8574,9 +8574,8 @@ for(var i=0; i < actions.length; i++){
  * @param {String} type type of event, ex: 'click'
  * @param {optional:Object} options
  */
-
 if (window.jQuery || (window.FuncUnit && window.FuncUnit.jquery)) {
-	(window.jQuery || window.FuncUnit.jquery).fn.triggerSyn = function(type, options, callback){
+	((window.FuncUnit && window.FuncUnit.jquery) || window.jQuery  ).fn.triggerSyn = function(type, options, callback){
 		Syn(type, options, this[0], callback)
 		return this;
 	};
@@ -10482,15 +10481,16 @@ This is defined in settings.js.  If this null it will default to a standard set 
 @codestart
 browsers: ["*firefox", "*iexplore", "*safari", "*googlechrome"]
 @codeend
-<p>To define a custom path to a browser, put this in the string following the browser name like this:</p>
+
+To define a custom path to a browser, put this in the string following the browser name like this:</p>
+
 @codestart
 browsers: ["*custom /path/to/my/browser"]
 @codeend
-<p>See the 
-[http://release.seleniumhq.org/selenium-remote-control/0.9.0/doc/java/com/thoughtworks/selenium/DefaultSelenium.html#DefaultSelenium Selenium docs] 
-for more information on customizing browsers and other settings.</p>
 
-### 64-bit Java
+See the [http://release.seleniumhq.org/selenium-remote-control/0.9.0/doc/java/com/thoughtworks/selenium/DefaultSelenium.html#DefaultSelenium Selenium docs] for more information on customizing browsers and other settings.</p>
+
+## 64-bit Java
 
 Some users will find Selenium has trouble opening while using 64 bit java (on Windows).  You will see an error like  
 Could not start Selenium session: Failed to start new browser session.  This is because Selenium 
@@ -10520,16 +10520,27 @@ http://localhost:8000/funcunit/test/myapp.html.</p>
 funcunit\envjs path\to\funcunit.html
 @codeend
 
-<h3>Running Served Pages</h3>
+<h3>Running From Safari and Chrome</h3>
 <p>Certain browsers, like Safari and Chrome, don't run Selenium tests from filesystem because 
 of security resrictions.  To get around this you have to run pages served from a server.  The 
 downside of this is the test takes longer to start up, compared to loading from filesystem.</p>  
-<p>To do this, provide an absolute path in your envjs path, like this:</p>
+<p>To run served pages, you must 1) provide an absolute path in your envjs path and 2) provide an absolute path 
+in jmvcRoot.</p>
+<p>For example, to run cookbook FuncUnit tests from Google Chrome, I'd set the browsers and jmvcRoot like this:</p>
 @codestart
-funcunit\envjs http://localhost:8000/path/to/funcunit.html
+	browsers: ["*googlechrome"],
+	jmvcRoot: "http://localhost:8000/framework/",
 @codeend
-<p>and set jmvcRoot and your paths as directed in the previous section.  This will cause the command page 
-and the test pages to load from your server.</p>
+<p>then I'd start up Selenium like this:</p>
+@codestart
+funcunit\envjs http://localhost:8000/framework/cookbook/funcunit.html
+@codeend
+<p>To run Safari 5 in Windows, you should use the safariproxy browser string like this:</p>
+@codestart
+	browsers: ["*safariproxy"],
+@codeend
+
+Mac Safari is just "*safari".
 
 <h3>Slow Mode</h3>
 <p>You can slow down the amount of time between tests by setting FuncUnit.speed.  By default, FuncUnit commands 
@@ -10541,6 +10552,17 @@ Slow mode is useful while debugging.</p>
 <ul>
 	<li>Selenium doesn't run Chrome/Opera/Safari on the filesystem.</li>
 </ul>
+
+<h2>Troubleshooting</h2>
+
+<p>If you have trouble getting Selenium tests to run in IE, there are some settings that you can to change.  First, disable the security settings for pages that run from the filesystem.  To do this, open the Internet Options in IE and select the "Advanced" tab, and enable the option to "Allow active content to run in files on My Computer."  This is what it looks like:</p>
+
+@image jmvc/images/iesecurity.png
+
+<p>You may also get an error that the popup blocker is enabled, which prevents the tests from running.  It's actually not the popup blocker that causes this, but the fix is just as easy.  Simply disable "Protected Mode" in IE, which is also in the Internet Options:</p>
+
+@image jmvc/images/iepopups.png
+
  * 
  * @constructor
  * selects something in the other page
@@ -11066,18 +11088,11 @@ FuncUnit.init.prototype = {
 		var self = this,
 			sel = this.selector,
 			ret;
-		if(true){
-			this.selector += ":visible"
-			return this.size(0, function(){
-				self.selector = sel;
-				callback && callback();
-			})
-		}else{
-			ret = this.size() == 0;
-			this.selector = sel;
-			return ret;
-		}
-		
+		this.selector += ":visible"
+		return this.size(0, function(){
+			self.selector = sel;
+			callback && callback();
+		})
 	},
 	/**
 	 * Drags an element into another element or coordinates.  
@@ -11229,6 +11244,30 @@ FuncUnit.init.prototype = {
 
 	find : function(selector){
 		return FuncUnit(this.selector+" "+selector, this.context);
+	},
+	/**
+	 * Triggers an event on a set of elements in the page.
+	 * Only works if the page you are testing has jQuery in it.
+	 * @codestart
+	 * S('#foo').trigger("mouseup")
+	 * @codeend
+	 * @param {String} eventType A string containing a JavaScript event type, such as click or submit.
+	 */
+
+	trigger : function( eventType, callback ){
+		var selector = this.selector, 
+			context = this.context;
+		FuncUnit.add({
+			method: function(success, error){
+				
+				FuncUnit.$(selector, context, "trigger", eventType)
+				success();
+			},
+			callback: callback,
+			error: "Could not trigger " + eventType,
+			bind: this
+		});
+		return this;
 	}
 };
 //do traversers
@@ -11730,7 +11769,10 @@ for (var prop in FuncUnit.funcs) {
 
 S = FuncUnit;
 
-
+// handle case where syn was loaded before FuncUnit
+if(!FuncUnit.jquery.fn.triggerSyn){
+	FuncUnit.jquery.fn.triggerSyn = jQuery.fn.triggerSyn;
+}
 
 })(true);
 
@@ -11755,7 +11797,6 @@ FuncUnit.startSelenium = function(){
 					'java\\selenium-server-standalone-2.0a5.jar -userExtensions '+
 					FuncUnit.basePath.replace("/", "\\")+
 					'java\\user-extensions.js';
-					print(command)
 				runCommand("cmd", "/C", command)
 			}
 			else {
@@ -11840,7 +11881,7 @@ FuncUnit.startSelenium = function(){
 				} else {
 					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium" > NUL')
-						quit()
+						//quit()
 					}
 				}
 			}
@@ -12082,13 +12123,12 @@ FuncUnit.startSelenium = function(){
 			selector = FuncUnit._window;
 		}
 	
-		//the following 	
-		//if the page has jQuery, use its jQuery b/c it is faster.
-		//if (FuncUnit._window.jQuery && parseFloat(FuncUnit._window.jQuery().jquery) >= 1.3) {
-		//	q = jQuery(FuncUnit._window.jQuery(selector, context).get());
-		//} else {
-		q = FuncUnit.jquery(selector, context);
-		//}
+		// for trigger, we have to use the page's jquery because it uses jQuery's event system, which uses .data() in the page
+		if (FuncUnit._window.jQuery && method == 'trigger') {
+			q = FuncUnit._window.jQuery(selector, context);
+		} else {
+			q = FuncUnit.jquery(selector, context);
+		}
 		
 		return q[method].apply(q, args);
 	}
@@ -12097,9 +12137,7 @@ FuncUnit.startSelenium = function(){
 		if (FuncUnit._window) 
 			FuncUnit._window.close();
 	})
-		
-
-
+	
 
 })(true);
 

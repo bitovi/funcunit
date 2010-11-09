@@ -14,8 +14,11 @@ jQuery.wrapped = function(){
 			Selenium.pause();
 		}
 	}
-	
-    q = jQuery(selector, context);
+	if (_win().jQuery && method == 'trigger') {
+		q = _win().jQuery(selector, context);
+	} else {
+    	q = jQuery(selector, context);
+	}
 	
 	var res = q[method].apply(q, args);
     //need to convert to json

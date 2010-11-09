@@ -146,13 +146,12 @@ steal.then(function() {
 			selector = FuncUnit._window;
 		}
 	
-		//the following 	
-		//if the page has jQuery, use its jQuery b/c it is faster.
-		//if (FuncUnit._window.jQuery && parseFloat(FuncUnit._window.jQuery().jquery) >= 1.3) {
-		//	q = jQuery(FuncUnit._window.jQuery(selector, context).get());
-		//} else {
-		q = FuncUnit.jquery(selector, context);
-		//}
+		// for trigger, we have to use the page's jquery because it uses jQuery's event system, which uses .data() in the page
+		if (FuncUnit._window.jQuery && method == 'trigger') {
+			q = FuncUnit._window.jQuery(selector, context);
+		} else {
+			q = FuncUnit.jquery(selector, context);
+		}
 		
 		return q[method].apply(q, args);
 	}
@@ -161,9 +160,5 @@ steal.then(function() {
 		if (FuncUnit._window) 
 			FuncUnit._window.close();
 	})
-		
-
-
+	
 });
-
-

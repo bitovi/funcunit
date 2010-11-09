@@ -939,18 +939,11 @@ FuncUnit.init.prototype = {
 		var self = this,
 			sel = this.selector,
 			ret;
-		if(true){
-			this.selector += ":visible"
-			return this.size(0, function(){
-				self.selector = sel;
-				callback && callback();
-			})
-		}else{
-			ret = this.size() == 0;
-			this.selector = sel;
-			return ret;
-		}
-		
+		this.selector += ":visible"
+		return this.size(0, function(){
+			self.selector = sel;
+			callback && callback();
+		})
 	},
 	/**
 	 * Drags an element into another element or coordinates.  
@@ -1102,6 +1095,30 @@ FuncUnit.init.prototype = {
 
 	find : function(selector){
 		return FuncUnit(this.selector+" "+selector, this.context);
+	},
+	/**
+	 * Triggers an event on a set of elements in the page.
+	 * Only works if the page you are testing has jQuery in it.
+	 * @codestart
+	 * S('#foo').trigger("mouseup")
+	 * @codeend
+	 * @param {String} eventType A string containing a JavaScript event type, such as click or submit.
+	 */
+
+	trigger : function( eventType, callback ){
+		var selector = this.selector, 
+			context = this.context;
+		FuncUnit.add({
+			method: function(success, error){
+				steal.dev.log("triggering " + eventType + " on " + selector)
+				FuncUnit.$(selector, context, "trigger", eventType)
+				success();
+			},
+			callback: callback,
+			error: "Could not trigger " + eventType,
+			bind: this
+		});
+		return this;
 	}
 };
 //do traversers

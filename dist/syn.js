@@ -805,9 +805,8 @@ for(var i=0; i < actions.length; i++){
  * @param {String} type type of event, ex: 'click'
  * @param {optional:Object} options
  */
-
 if (window.jQuery || (window.FuncUnit && window.FuncUnit.jquery)) {
-	(window.jQuery || window.FuncUnit.jquery).fn.triggerSyn = function(type, options, callback){
+	((window.FuncUnit && window.FuncUnit.jquery) || window.jQuery  ).fn.triggerSyn = function(type, options, callback){
 		Syn(type, options, this[0], callback)
 		return this;
 	};
