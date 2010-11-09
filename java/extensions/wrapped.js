@@ -15,7 +15,8 @@ jQuery.wrapped = function(){
 		}
 	}
 	if (_win().jQuery && method == 'trigger') {
-		res = _win().jQuery(selector, context).trigger(args[0], args[1]);
+		q = _win().jQuery(selector, context)
+		res = q.trigger(args[0], args[1]);
 	} else {
     	q = jQuery(selector, context);
 		res = q[method].apply(q, args);
