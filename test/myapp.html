@@ -63,7 +63,7 @@
 						$("#exists").append("<p>I exist</p>")
 					},200)
 				})
-				$('#trigger').mouseup(function(){
+				$('#trigger').bind('myCustomEvent', function(){
 					$("#trigger").append("<p>I was triggered</p>")
 				})
 				
@@ -100,7 +100,7 @@
 		<div id='hasClass'>Click Me</div>
 		<h3>Exists</h3>
 		<div id='exists'>Click Me</div>
-		<h3>Trigger</h3>
+		<h3>Trigger Custom Event</h3>
 		<div id='trigger'>Trigger Me</div>
 		
 		

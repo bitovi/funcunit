@@ -77,7 +77,7 @@ test("Exists", function(){
 })
 
 test("Trigger", function(){
-	S("#trigger").trigger('mouseup');
+	S("#trigger").trigger('myCustomEvent');
 	S("#trigger p").text("I was triggered");
 })
 test("Accessing the window", function(){

@@ -1095,30 +1095,6 @@ FuncUnit.init.prototype = {
 
 	find : function(selector){
 		return FuncUnit(this.selector+" "+selector, this.context);
-	},
-	/**
-	 * Triggers an event on a set of elements in the page.
-	 * Only works if the page you are testing has jQuery in it.
-	 * @codestart
-	 * S('#foo').trigger("mouseup")
-	 * @codeend
-	 * @param {String} eventType A string containing a JavaScript event type, such as click or submit.
-	 */
-
-	trigger : function( eventType, callback ){
-		var selector = this.selector, 
-			context = this.context;
-		FuncUnit.add({
-			method: function(success, error){
-				steal.dev.log("triggering " + eventType + " on " + selector)
-				FuncUnit.$(selector, context, "trigger", eventType)
-				success();
-			},
-			callback: callback,
-			error: "Could not trigger " + eventType,
-			bind: this
-		});
-		return this;
 	}
 };
 //do traversers
@@ -1237,6 +1213,18 @@ FuncUnit.funcs = {
  * of elements matched.
  */
 'size' : 0,
+/**
+ * @function trigger
+ * Triggers an event on a set of elements in the page.  Use it to trigger
+ * custom user events that a user can't easily simulate.  Do NOT use
+ * it to simulate 'click' and 'keypress' events, that is what .click() and .type() 
+ * are for.  This only works if the page you are testing has jQuery in it.
+ * @codestart
+ * S('#foo').trigger("myCustomEvent")
+ * @codeend
+ * @param {String} eventType A string containing a JavaScript event type, such as click or submit.
+ */
+'trigger' : 100,
 /**
  * @attr data
  * Gets data from jQuery.data or waits until data
