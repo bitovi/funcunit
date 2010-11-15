@@ -1,26 +1,16 @@
 @echo off
+:: this file is a batch script that invokes loader.bat
+:: ex: documentjs/document cookbook/cookbook.html
 
-SETLOCAL ENABLEDELAYEDEXPANSION
-
+:: relative path to this script
 set BASE=%~dps0
+set CMD=%0
 
-if not "%BASE%" == "" ( set BASE=%BASE:\=/% )
-
-:: trim spaces
-for /f "tokens=1*" %%A in ("%BASE%") do SET BASE=%%A
-
+:: classpath
 SET CP=%BASE%java/selenium-java-client-driver.jar;%BASE%../steal/rhino/js.jar
 
-SET ARGS=[
+:: load the run.js file
+SET LOADPATH=%BASE%scripts/run.js
 
-for /f "tokens=1,2,3,4,5,6 delims= " %%a in ("%*") do SET ARGS=!ARGS!'%%a','%%b','%%c','%%d','%%e','%%f'
-
-for %%a in (",''=") do ( call set ARGS=%%ARGS:%%~a%% )
-
-for /f "tokens=1*" %%A in ("%ARGS%") do SET ARGS=%%A
-
-SET ARGS=%ARGS%,'%BASE%']
-
-set ARGS=%ARGS:\=/%
-
-java -Xss1024k -cp %CP% org.mozilla.javascript.tools.shell.Main -opt -1 -e _args=%ARGS% -e load('%BASE%scripts/run.js')
+:: call js.bat
+CALL %BASE%../steal/rhino/loader.bat %1 %2 %3 %4 %5 %6

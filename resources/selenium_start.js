@@ -13,17 +13,17 @@ FuncUnit.startSelenium = function(){
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 				var command = 'start "selenium" java -jar '+
 					FuncUnit.basePath.replace("/", "\\")+
-					'java\\selenium-server-standalone-2.0a5.jar -userExtensions '+
+					'funcunit\\java\\selenium-server-standalone-2.0a5.jar -userExtensions '+
 					FuncUnit.basePath.replace("/", "\\")+
-					'java\\user-extensions.js';
+					'funcunit\\java\\user-extensions.js';
 				runCommand("cmd", "/C", command)
 			}
 			else {
 				var command = "java -jar "+
 					FuncUnit.basePath+
-					"java/selenium-server-standalone-2.0a5.jar -userExtensions "+
+					"funcunit/java/selenium-server-standalone-2.0a5.jar -userExtensions "+
 					FuncUnit.basePath+
-					'java/user-extensions.js '+
+					'funcunit/java/user-extensions.js '+
 					"> selenium.log 2> selenium.log &";
 				runCommand("sh", "-c", command)
 			}
