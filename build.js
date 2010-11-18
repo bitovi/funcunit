@@ -1,14 +1,16 @@
 load('steal/rhino/steal.js')
 
-steal('//steal/build/pluginify', function(s){
-	steal.pluginify("funcunit/synthetic",{
+/**
+ * Build syn, funcunit, user-extensions
+ */
+steal('//steal/build/pluginify/pluginify', function(s){
+	steal.build.pluginify("funcunit/synthetic",{
 		nojquery: true,
-		destination: "funcunit/dist/syn.js"
+		destination: "funcunit/synthetic/dist/syn.js"
 	})
 	
-	steal.pluginify("funcunit",{
-		nojquery: true,
-		destination: "funcunit/dist/funcunit.js",
+	steal.build.pluginify("funcunit",{
+		destination: "funcunit/dist/funcunit/funcunit.js",
 		packagejquery: true
 	})
 })
@@ -16,18 +18,15 @@ steal('//steal/build/pluginify', function(s){
 var i, fileName, cmd;
 
 // copy qunit, json, and jquery
-steal.File("funcunit/qunit/qunit.css").copyTo("funcunit/dist/qunit.css")
 steal.File("jquery/lang/json/json.js").copyTo("funcunit/resources/json.js")
-
-// make user-extensions.js
 
 // read: wrapped, jQuery, json, syn
 var userFiles = 
 		["funcunit/java/extensions/fakesteal.js", 
-		"funcunit/resources/jquery.js", 
+		"jquery/jquery.js", 
 		"funcunit/java/extensions/wrapped.js", 
 		"funcunit/resources/json.js", 
-		"funcunit/dist/syn.js",
+		"funcunit/synthetic/dist/syn.js",
 		"funcunit/resources/selector.js"],
 	fileText, 
 	userExtensionsText = "";
@@ -39,10 +38,33 @@ for(var i=0; i<userFiles.length; i++){
 steal.File("funcunit/java/user-extensions.js").save(userExtensionsText);
 print("saved user-extensions.js")
 
-// copy jars and env
-steal.File("funcunit/java/selenium-server-standalone-2.0a5.jar").copyTo("funcunit/dist/selenium/selenium-server-standalone-2.0a5.jar")
-steal.File("funcunit/java/selenium-java-client-driver.jar").copyTo("funcunit/dist/selenium/selenium-java-client-driver.jar")
-steal.File("steal/rhino/js.jar").copyTo("funcunit/dist/selenium/js.jar")
-steal.File("steal/rhino/env.js").copyTo("funcunit/dist/selenium/env.js")
-	
+/**
+ * Build the standalone funcunit
+ */
+var copyToDist = function(path){
+	steal.File(path).copyTo("funcunit/dist/"+path)
+}
+var filesToCopy = [
+	"funcunit/qunit/qunit.css",
+	"funcunit/java/selenium-server-standalone-2.0a5.jar",
+	"funcunit/java/selenium-java-client-driver.jar",
+	"funcunit/java/user-extensions.js",
+	"funcunit/scripts/run.js",
+	"steal/rhino/js.jar",
+	"steal/rhino/env.js",
+	"steal/rhino/loader.bat",
+	"steal/rhino/loader",
+	"funcunit/envjs",
+	"funcunit/envjs.bat",
+	"funcunit/settings.js",
+	"funcunit/loader.js",
+	"steal/rhino/steal.js",
+	"steal/rhino/utils.js",
+	"steal/rhino/file.js"
+]
+
+for(var i = 0; i < filesToCopy.length; i++) {
+	copyToDist(filesToCopy[i])
+}
+
 print('FuncUnit is built')

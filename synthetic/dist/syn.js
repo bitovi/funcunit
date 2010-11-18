@@ -1,7 +1,4 @@
-// funcunit/synthetic/synthetic.js
-
-(function($){
-
+(function(){
 	
 	
 var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
@@ -814,13 +811,8 @@ if (window.jQuery || (window.FuncUnit && window.FuncUnit.jquery)) {
 
 window.Syn = Syn;
 	
-
-})(true);
-
-// funcunit/synthetic/mouse.js
-
-(function($){
-
+})(jQuery);
+(function(){
 
 var h = Syn.helpers;
 
@@ -1110,13 +1102,8 @@ h.extend(Syn.create,{
 })();
 
 
-
-})(true);
-
-// funcunit/synthetic/browsers.js
-
-(function($){
-
+})(jQuery);
+(function(){
 	Syn.key.browsers = {
 		webkit : {
 			'prevent':
@@ -1266,13 +1253,8 @@ h.extend(Syn.create,{
 		return Syn.mouse.browsers.gecko;
 	})();
 	
-
-})(true);
-
-// funcunit/synthetic/key.js
-
-(function($){
-
+})(jQuery);
+(function(){
 
 var h = Syn.helpers,
 	S = Syn,
@@ -2098,13 +2080,8 @@ h.extend(Syn.init.prototype,
 
 
 	
-
-})(true);
-
-// funcunit/synthetic/drag/drag.js
-
-(function($){
-
+})(jQuery);
+(function(){
 	// document body has to exists for this test
 
 	(function(){
@@ -2378,6 +2355,4 @@ Syn.helpers.extend(Syn.init.prototype,{
 	}
 })
 
-
-})(true);
-
+})(jQuery)

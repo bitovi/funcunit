@@ -13,10 +13,10 @@ FuncUnit.startSelenium = function(){
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 				var command = 'start "selenium" java -jar '+
 					FuncUnit.basePath.replace("/", "\\")+
-					'funcunit\\java\\selenium-server-standalone-2.0a5.jar -userExtensions '+
+					'java\\selenium-server-standalone-2.0a5.jar -userExtensions '+
 					FuncUnit.basePath.replace("/", "\\")+
-					'funcunit\\java\\user-extensions.js';
-				runCommand("cmd", "/C", command)
+					'java\\user-extensions.js';
+				runCommand(command)
 			}
 			else {
 				var command = "java -jar "+
@@ -25,7 +25,7 @@ FuncUnit.startSelenium = function(){
 					FuncUnit.basePath+
 					'funcunit/java/user-extensions.js '+
 					"> selenium.log 2> selenium.log &";
-				runCommand("sh", "-c", command)
+				runCommand(command)
 			}
 		})
 		var timeouts = 0, 
