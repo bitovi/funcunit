@@ -1,7 +1,4 @@
-// funcunit/qunit/qunit.js
-
-(function($){
-
+(function(){
 (function(window) {
 
 /*
@@ -1115,13 +1112,8 @@ QUnit.jsDump = (function() {
 
 
 })(this);
-
-})(true);
-
-// funcunit/qunit/rhino/rhino.js
-
-(function($){
-
+})(jQuery);
+(function(){
 	if (navigator.userAgent.match(/Rhino/) && !window.build_in_progress) {
 		QUnit.testStart = function(name){
 			print("--" + name + "--")
@@ -1144,13 +1136,8 @@ QUnit.jsDump = (function() {
 		}
 
 	}
-
-})(true);
-
-// funcunit/resources/json.js
-
-(function($){
-
+})(jQuery);
+(function(){
 (function($) {
     /** jQuery.toJSON( json-serializble )
         Converts the given argument into a JSON respresentation.
@@ -1335,13 +1322,8 @@ QUnit.jsDump = (function() {
         '\\': '\\\\'
     };
 })(jQuery);
-
-})(true);
-
-// funcunit/resources/selector.js
-
-(function($){
-
+})(jQuery);
+(function(){
 
 (function($){
 	var getWindow = function( element ) {
@@ -1396,13 +1378,8 @@ $.each(["closest","find","next","prev","siblings","last","first"], function(i, n
 }(window.jQuery  || window.FuncUnit.jQuery));
 
 
-
-})(true);
-
-// funcunit/synthetic/synthetic.js
-
-(function($){
-
+})(jQuery);
+(function(){
 	
 	
 var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
@@ -2215,13 +2192,8 @@ if (window.jQuery || (window.FuncUnit && window.FuncUnit.jquery)) {
 
 window.Syn = Syn;
 	
-
-})(true);
-
-// funcunit/synthetic/mouse.js
-
-(function($){
-
+})(jQuery);
+(function(){
 
 var h = Syn.helpers;
 
@@ -2511,13 +2483,8 @@ h.extend(Syn.create,{
 })();
 
 
-
-})(true);
-
-// funcunit/synthetic/browsers.js
-
-(function($){
-
+})(jQuery);
+(function(){
 	Syn.key.browsers = {
 		webkit : {
 			'prevent':
@@ -2667,13 +2634,8 @@ h.extend(Syn.create,{
 		return Syn.mouse.browsers.gecko;
 	})();
 	
-
-})(true);
-
-// funcunit/synthetic/key.js
-
-(function($){
-
+})(jQuery);
+(function(){
 
 var h = Syn.helpers,
 	S = Syn,
@@ -3499,13 +3461,8 @@ h.extend(Syn.init.prototype,
 
 
 	
-
-})(true);
-
-// funcunit/synthetic/drag/drag.js
-
-(function($){
-
+})(jQuery);
+(function(){
 	// document body has to exists for this test
 
 	(function(){
@@ -3779,13 +3736,8 @@ Syn.helpers.extend(Syn.init.prototype,{
 	}
 })
 
-
-})(true);
-
-// funcunit/funcunit.js
-
-(function($){
-
+})(jQuery);
+(function(){
 
 
 
@@ -4323,7 +4275,7 @@ open: function( path, callback, timeout ) {
 	}
 	FuncUnit.add({
 		method: function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
-			
+			steal.dev.log("Opening " + path)
 			FuncUnit._open(fullPath, error);
 			FuncUnit._onload(function(){
 				FuncUnit._opened();
@@ -4501,7 +4453,7 @@ _opened: function() {}
 		time = time != null ? time : 5000
 		FuncUnit.add({
 			method : function(success, error){
-				
+				steal.dev.log("Waiting "+time)
 				setTimeout(success, time)
 			},
 			callback : callback,
@@ -4640,7 +4592,7 @@ FuncUnit.init.prototype = {
 			context = this.context;
 		FuncUnit.add({
 			method : function(success, error){
-				
+				steal.dev.log("Typing "+text+" on "+selector)
 				FuncUnit.$(selector, context, "triggerSyn", "_type", text, success)
 			},
 			callback : callback,
@@ -4770,7 +4722,7 @@ FuncUnit.init.prototype = {
 			context = this.context;
 		FuncUnit.add({
 			method: function(success, error){
-				
+				steal.dev.log("dragging " + selector)
 				FuncUnit.$(selector, context, "triggerSyn", "_drag", options, success)
 			},
 			callback: callback,
@@ -4824,7 +4776,7 @@ FuncUnit.init.prototype = {
 			context = this.context;
 		FuncUnit.add({
 			method: function(success, error){
-				
+				steal.dev.log("moving " + selector)
 				FuncUnit.$(selector, context, "triggerSyn", "_move", options, success)
 			},
 			callback: callback,
@@ -4845,7 +4797,7 @@ FuncUnit.init.prototype = {
 			direction = /left|right|x/i.test(direction)? "Left" : "Right";
 		FuncUnit.add({
 			method: function(success, error){
-				
+				steal.dev.log("setting " + selector + " scroll" + direction + " " + amount + " pixels")
 				FuncUnit.$(selector, context, "scroll" + direction, amount)
 				success();
 			},
@@ -4953,7 +4905,7 @@ var clicks = [
 			FuncUnit.add({
 				method: function(success, error){
 					options = options || {}
-					
+					steal.dev.log("Clicking " + selector)
 					FuncUnit.$(selector, context, "triggerSyn", "_" + name, options, success)
 				},
 				callback: callback,
@@ -5374,7 +5326,7 @@ FuncUnit.makeFunc = function(fname, argIndex){
 			return this;
 		}else{
 			//get the value
-			
+			steal.dev.log("Getting "+fname+" on "+this.selector)
 			return FuncUnit.$.apply(FuncUnit.$, args);
 		}
 	}
@@ -5393,13 +5345,8 @@ S = FuncUnit;
 if(!FuncUnit.jquery.fn.triggerSyn){
 	FuncUnit.jquery.fn.triggerSyn = jQuery.fn.triggerSyn;
 }
-
-})(true);
-
-// funcunit/resources/selenium_start.js
-
-(function($){
-
+})(jQuery);
+(function(){
 
 FuncUnit.startSelenium = function(){
 	importClass(Packages.com.thoughtworks.selenium.DefaultSelenium);
@@ -5414,17 +5361,17 @@ FuncUnit.startSelenium = function(){
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 				var command = 'start "selenium" java -jar '+
 					FuncUnit.basePath.replace("/", "\\")+
-					'java\\selenium-server-standalone-2.0a5.jar -userExtensions '+
+					'funcunit\\java\\selenium-server-standalone-2.0a5.jar -userExtensions '+
 					FuncUnit.basePath.replace("/", "\\")+
-					'java\\user-extensions.js';
+					'funcunit\\java\\user-extensions.js';
 				runCommand("cmd", "/C", command)
 			}
 			else {
 				var command = "java -jar "+
 					FuncUnit.basePath+
-					"java/selenium-server-standalone-2.0a5.jar -userExtensions "+
+					"funcunit/java/selenium-server-standalone-2.0a5.jar -userExtensions "+
 					FuncUnit.basePath+
-					'java/user-extensions.js '+
+					'funcunit/java/user-extensions.js '+
 					"> selenium.log 2> selenium.log &";
 				runCommand("sh", "-c", command)
 			}
@@ -5451,13 +5398,8 @@ FuncUnit.startSelenium = function(){
 		}
 	}
 }
-
-})(true);
-
-// funcunit/drivers/selenium.js
-
-(function($){
-
+})(jQuery);
+(function(){
 	if (navigator.userAgent.match(/Rhino/) && FuncUnit.browsers !== undefined) {
 
 		// configuration defaults
@@ -5589,13 +5531,8 @@ FuncUnit.startSelenium = function(){
 			
 		})();
 	}
-
-})(true);
-
-// funcunit/drivers/standard.js
-
-(function($){
-
+})(jQuery);
+(function() {
 	var readystate = document.readyState;
 	FuncUnit.jquery(window).load(function(){
 		if(document.readyState != readystate)
@@ -5763,6 +5700,4 @@ FuncUnit.startSelenium = function(){
 			FuncUnit._window.close();
 	})
 	
-
-})(true);
-
+})(jQuery)

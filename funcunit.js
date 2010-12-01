@@ -1,7 +1,7 @@
 //what we need from javascriptmvc or other places
-steal.plugins('funcunit/qunit',
+steal.plugins('jquery','funcunit/qunit',
 	'funcunit/qunit/rhino')
-	.then('resources/jquery','resources/json','resources/selector')
+	.then('resources/json','resources/selector')
 	.plugins('funcunit/synthetic')
 //Now describe FuncUnit
 .then(function(){
@@ -563,7 +563,7 @@ open: function( path, callback, timeout ) {
  * @param {String} path
  */
 getAbsolutePath: function( path ) {
-	if(typeof(steal) == "undefined"){
+	if(typeof(steal) == "undefined" || steal.root == null){
 		return path;
 	}
 	var fullPath, 

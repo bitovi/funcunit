@@ -16,16 +16,16 @@ FuncUnit.startSelenium = function(){
 					'java\\selenium-server-standalone-2.0a5.jar -userExtensions '+
 					FuncUnit.basePath.replace("/", "\\")+
 					'java\\user-extensions.js';
-				runCommand("cmd", "/C", command)
+				runCommand(command)
 			}
 			else {
 				var command = "java -jar "+
 					FuncUnit.basePath+
-					"java/selenium-server-standalone-2.0a5.jar -userExtensions "+
+					"funcunit/java/selenium-server-standalone-2.0a5.jar -userExtensions "+
 					FuncUnit.basePath+
-					'java/user-extensions.js '+
+					'funcunit/java/user-extensions.js '+
 					"> selenium.log 2> selenium.log &";
-				runCommand("sh", "-c", command)
+				runCommand(command)
 			}
 		})
 		var timeouts = 0, 
