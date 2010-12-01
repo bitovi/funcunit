@@ -5,6 +5,7 @@ load('steal/rhino/steal.js')
  */
 steal('//steal/build/pluginify/pluginify', function(s){
 	steal.build.pluginify("funcunit/synthetic",{
+		global: "true",
 		nojquery: true,
 		destination: "funcunit/synthetic/dist/syn.js"
 	})

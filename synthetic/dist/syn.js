@@ -811,7 +811,7 @@ if (window.jQuery || (window.FuncUnit && window.FuncUnit.jquery)) {
 
 window.Syn = Syn;
 	
-})(jQuery);
+})(true);
 (function(){
 
 var h = Syn.helpers;
@@ -1102,7 +1102,7 @@ h.extend(Syn.create,{
 })();
 
 
-})(jQuery);
+})(true);
 (function(){
 	Syn.key.browsers = {
 		webkit : {
@@ -1253,7 +1253,7 @@ h.extend(Syn.create,{
 		return Syn.mouse.browsers.gecko;
 	})();
 	
-})(jQuery);
+})(true);
 (function(){
 
 var h = Syn.helpers,
@@ -2080,7 +2080,7 @@ h.extend(Syn.init.prototype,
 
 
 	
-})(jQuery);
+})(true);
 (function(){
 	// document body has to exists for this test
 
@@ -2355,4 +2355,4 @@ Syn.helpers.extend(Syn.init.prototype,{
 	}
 })
 
-})(jQuery)
+})(true)
