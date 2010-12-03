@@ -11281,12 +11281,16 @@ _opened: function() {}
 			currentPosition = 0;
 			// set a timer that will error
 			
-			
 			//call next method
 			setTimeout(function(){
 				timer = setTimeout(function(){
 						next.stop && next.stop();
-						ok(false, next.error);
+						//failExpected only used for testing FuncUnit itself
+						if(next.failExpected){
+							ok(true, next.error);
+						}else{
+							ok(false, next.error);
+						}
 						FuncUnit._done();
 					}, 
 					(next.timeout || 10000) + speed)
@@ -11356,9 +11360,10 @@ _opened: function() {}
 	 * @function repeat
 	 * Takes a function that will be called over and over until it is successful.
 	 */
-	FuncUnit.repeat = function(checker, callback, error, timeout){
+	FuncUnit.repeat = function(checker, callback, error, timeout, failExpected){
 		var interval,
-			stopped = false	,
+			stopped = false,
+			errorMessage = error,
 			stop = function(){
 				clearTimeout(interval)
 				stopped = true;
@@ -11377,7 +11382,11 @@ _opened: function() {}
 					}
 					
 					if (result) {
-						success();
+						if(!failExpected){
+							success();
+						}else{
+							error(errorMessage);
+						}
 					}else if(!stopped){
 						interval = setTimeout(arguments.callee, 10)
 					}
@@ -11389,7 +11398,8 @@ _opened: function() {}
 			callback : callback,
 			error : error,
 			timeout : timeout,
-			stop : stop
+			stop : stop,
+			failExpected: failExpected
 		});
 		
 	}
@@ -11499,11 +11509,11 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that is run after the selector exists, but before the next action.
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
-	exists: function( callback ) {
+	exists: function( callback, timeout, failExpected ) {
 		if(true){
 			return this.size(function(size){
 				return size > 0;
-			}, callback)
+			}, callback, timeout, failExpected);
 		}
 		return this.size() == 0;
 	},
@@ -11517,8 +11527,8 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that is run after the selector exists, but before the next action
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
-	missing: function( callback ) {
-		return this.size(0, callback)
+	missing: function( callback, timeout, failExpected ) {
+		return this.size(0, callback, timeout, failExpected);
 	},
 	/**
 	 * Waits until the funcUnit selector is visible.  
@@ -11529,7 +11539,8 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the funcUnit is visible, but before the next action.
 	 * @return [funcUnit] returns the funcUnit for chaining.
 	 */
-	visible: function( callback ) {
+	visible: function( callback, timeout, failExpected ) {
+		
 		var self = this,
 			sel = this.selector,
 			ret;
@@ -11540,7 +11551,7 @@ FuncUnit.init.prototype = {
 			}, function(){
 				self.selector = sel;
 				callback && callback();
-			})
+			}, timeout, failExpected);
 		}else{
 			ret = this.size() > 0;
 			this.selector = sel;
@@ -11557,7 +11568,7 @@ FuncUnit.init.prototype = {
 	 * @param {Function} [callback] a callback that runs after the selector is invisible, but before the next action.
 	 * @return [funcUnit] returns the funcUnit selector for chaining.
 	 */
-	invisible: function( callback ) {
+	invisible: function( callback, timeout, failExpected ) {
 		var self = this,
 			sel = this.selector,
 			ret;
@@ -11565,7 +11576,7 @@ FuncUnit.init.prototype = {
 		return this.size(0, function(){
 			self.selector = sel;
 			callback && callback();
-		})
+		}, timeout, failExpected);
 	},
 	/**
 	 * Drags an element into another element or coordinates.  
@@ -12176,11 +12187,9 @@ FuncUnit.makeFunc = function(fname, argIndex){
 	
 	//makes a read / wait function
 	FuncUnit.init.prototype[fname] = function(){
-		//assume last arg is callback
-		var args = FuncUnit.makeArray(arguments), 
-			callback,
-			isWait = args.length > argIndex,
-			callback;
+		
+		var args = FuncUnit.makeArray(arguments),
+			isWait = args.length > argIndex;
 		
 		args.unshift(this.selector,this.context,fname)
 
@@ -12189,14 +12198,22 @@ FuncUnit.makeFunc = function(fname, argIndex){
 			var tester = args[argIndex+3],
 				timeout = args[argIndex+4],
 				callback = args[argIndex+5],
+				failExpected = args[argIndex+6],
 				testVal = tester,
 				errorMessage = "waiting for "+fname +" on " + this.selector;
 			
 			if(typeof timeout == 'function'){
-				callback = timeout;
-				timeout = undefined;
+				//if custom timeout has been set
+                if (callback){
+                    var tmpTimeout = callback;
+                    callback = timeout;
+                    timeout = tmpTimeout;
+                }else{
+                    callback = timeout;
+                    timeout = undefined;
+                }
+
 			}
-			
 			args.splice(argIndex+3, args.length- argIndex - 3);
 			
 			if(typeof tester != 'function'){
@@ -12210,7 +12227,7 @@ FuncUnit.makeFunc = function(fname, argIndex){
 			FuncUnit.repeat(function(){
 					var ret = FuncUnit.$.apply(FuncUnit.$, args);
 					return tester(ret);
-				}, callback, errorMessage, timeout)
+				}, callback, errorMessage, timeout, failExpected);
 
 			return this;
 		}else{

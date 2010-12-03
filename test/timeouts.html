@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Testing Timeouts</title>
+<style>
+	#visible{
+		display: none;
+	}
+</style
+</head>
+<body>
+	<span id="attr" title="off">Attribute<span>
+	<a id="makeVisible" href="#">make visible</a>
+	
+	<span id="visible">Visible?</span>
+	<a id="create" href="#">Create</a>
+	
+	<span id="soonToBeMissing">Missing?</span>
+	<a id="kill" href="#">Kill</a>
+	
+	<span id="invisible">Visible?</span>
+	<a id="hide" href="#">Hide</a>
+		
+	<script src='../../steal/steal.js'></script>
+	<script>
+		steal.plugins('jquery').then( function(){
+			var attrNode = $('#attr'),
+				visibleNode = $('#visible'),
+				makeVisible = $('#makeVisible'),
+				create = $('#create'),
+				exist = $('#exist'),
+				soonToBeMissing = $('#soonToBeMissing'),
+				kill = $('#kill'),
+				hide = $('#hide'),
+				invisible = $('#invisible');
+				
+			attrNode.click(function(ev){
+				ev.preventDefault();
+				setTimeout(function(){
+					attrNode.attr('title', 'on');
+				},300);
+			});
+
+			makeVisible.click(function(){
+				setTimeout(function(){
+					visibleNode.show();
+				},300);
+			});
+			
+			create.click(function(ev){
+				ev.preventDefault();
+				setTimeout(function(){
+					$('body').append('<span id="exist">I Exist!</span>');
+				},300);
+			});
+			
+			kill.click(function(ev){
+				ev.preventDefault();
+				setTimeout(function(){
+					soonToBeMissing.remove();
+				},300);
+			});
+			
+			hide.click(function(ev){
+				ev.preventDefault();
+				setTimeout(function(){
+					invisible.hide();
+				},300);
+			});
+			
+		}).start();
+	</script>
+</body>
+</html>
