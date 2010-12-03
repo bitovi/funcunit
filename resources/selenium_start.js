@@ -10,22 +10,17 @@ FuncUnit.startSelenium = function(){
 	} 
 	catch (ex) {
 		spawn(function(){
+			var jarCommand = 'java -jar '+
+				'funcunit/java/selenium-server-standalone-2.0a5.jar'+
+				' -userExtensions '+
+				'funcunit/java/user-extensions.js';
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-				var command = 'start "selenium" java -jar '+
-					FuncUnit.basePath.replace("/", "\\")+
-					'java\\selenium-server-standalone-2.0a5.jar -userExtensions '+
-					FuncUnit.basePath.replace("/", "\\")+
-					'java\\user-extensions.js';
-				runCommand(command)
+				var command = 'start "selenium" ' + jarCommand
+				runCommand(command, true)
 			}
 			else {
-				var command = "java -jar "+
-					FuncUnit.basePath+
-					"funcunit/java/selenium-server-standalone-2.0a5.jar -userExtensions "+
-					FuncUnit.basePath+
-					'funcunit/java/user-extensions.js '+
-					"> selenium.log 2> selenium.log &";
-				runCommand(command)
+				var command = jarCommand + " > selenium.log 2> selenium.log &";
+				runCommand(command, true)
 			}
 		})
 		var timeouts = 0, 

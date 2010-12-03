@@ -601,7 +601,6 @@ support : {},
 window : {
 	document: {}
 },
-basePath: (typeof basePath == "undefined"? "funcunit/": basePath),
 _opened: function() {}
 });
 
