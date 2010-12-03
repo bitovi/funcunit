@@ -1,7 +1,7 @@
 //what we need from javascriptmvc or other places
-steal.plugins('jquery','funcunit/qunit',
+steal.plugins('funcunit/qunit',
 	'funcunit/qunit/rhino')
-	.then('resources/json','resources/selector')
+	.then('resources/jquery','resources/json','resources/selector')
 	.plugins('funcunit/synthetic')
 //Now describe FuncUnit
 .then(function(){

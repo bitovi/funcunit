@@ -11,6 +11,7 @@ steal('//steal/build/pluginify/pluginify', function(s){
 	})
 	
 	steal.build.pluginify("funcunit",{
+		global: "true",
 		destination: "funcunit/dist/funcunit/funcunit.js",
 		packagejquery: true
 	})
@@ -24,7 +25,7 @@ steal.File("jquery/lang/json/json.js").copyTo("funcunit/resources/json.js")
 // read: wrapped, jQuery, json, syn
 var userFiles = 
 		["funcunit/java/extensions/fakesteal.js", 
-		"jquery/jquery.js", 
+		"funcunit/resources/jquery.js", 
 		"funcunit/java/extensions/wrapped.js", 
 		"funcunit/resources/json.js", 
 		"funcunit/synthetic/dist/syn.js",
