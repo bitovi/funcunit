@@ -15,12 +15,12 @@ FuncUnit.startSelenium = function(){
 				' -userExtensions '+
 				'funcunit/java/user-extensions.js';
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-				var command = 'start "selenium" ' + jarCommand
-				runCommand(command, true)
+				var command = 'start "selenium" ' + jarCommand;
+				runCommand("cmd", "/C", command.replace(/\//g, "\\"))
 			}
 			else {
 				var command = jarCommand + " > selenium.log 2> selenium.log &";
-				runCommand(command, true)
+				runCommand("sh", "-c", command);
 			}
 		})
 		var timeouts = 0, 
