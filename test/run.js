@@ -2,6 +2,7 @@
 
 print("==========================  funcunit ============================")
 
+load("steal/rhino/utils.js")
 load('steal/rhino/steal.js');
 load('funcunit/loader.js');
 FuncUnit.load('funcunit/funcunit.html');
