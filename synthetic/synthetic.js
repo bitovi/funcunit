@@ -17,7 +17,7 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 		return extend(event, options);
 	},
 	data = {}, 
-	id = 0, 
+	id = 1, 
 	expando = "_synthetic"+(new Date() - 0),
 	bind,
 	unbind,
