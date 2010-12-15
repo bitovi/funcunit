@@ -82,6 +82,18 @@ test("Click Checkboxes", function(){
 	ok(!st.g("checkbox").checked, "click checks off");
 })
 
+test("Checkbox is checked on click", function(){
+	var checkbox =0;
+
+	st.g("checkbox").checked = false;
+	
+	st.binder("checkbox","click",function(ev){
+		ok(st.g("checkbox").checked, "check is on during click");
+	})
+	
+	Syn.trigger("click",{},st.g("checkbox"));
+})
+
 test("Click Radio Buttons", function(){
 
 	var radio1=0,
