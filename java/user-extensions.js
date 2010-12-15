@@ -7475,7 +7475,7 @@ var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 		return extend(event, options);
 	},
 	data = {}, 
-	id = 0, 
+	id = 1, 
 	expando = "_synthetic"+(new Date() - 0),
 	bind,
 	unbind,
@@ -8291,7 +8291,7 @@ h.extend(Syn.defaults,{
 		}
 		//get old values
 		var href,
-			checked = Syn.data(element,"checked"),
+			radioChanged = Syn.data(element,"radioChanged"),
 			scope = Syn.helpers.getWindow(element),
 			nodeName = element.nodeName.toLowerCase();
 		
@@ -8342,9 +8342,9 @@ h.extend(Syn.defaults,{
 		if(nodeName == "input" 
 			&& element.type == "checkbox"){
 			
-			if(!Syn.support.clickChecks && !Syn.support.changeChecks){
-				element.checked = !element.checked;
-			}
+			//if(!Syn.support.clickChecks && !Syn.support.changeChecks){
+			//	element.checked = !element.checked;
+			//}
 			if(!Syn.support.clickChanges){
 				Syn.trigger("change",{},  element );
 			}
@@ -8353,13 +8353,13 @@ h.extend(Syn.defaults,{
 		//change a radio button
 		if(nodeName == "input" && element.type == "radio"){  // need to uncheck others if not checked
 			
-			if(!Syn.support.clickChecks && !Syn.support.changeChecks){
+			/*if(!Syn.support.clickChecks && !Syn.support.changeChecks){
 				//do the checks manually 
 				if(!element.checked){ //do nothing, no change
 					element.checked = true;
 				}
-			}
-			if(checked != element.checked && !Syn.support.radioClickChanges){
+			}*/
+			if(radioChanged && !Syn.support.radioClickChanges){
 				Syn.trigger("change",{},  element );
 			}
 		}
@@ -8421,11 +8421,30 @@ h.extend(Syn.create,{
 	},
 	click : {
 		setup: function( type, options, element ) {
-			try{
-				Syn.data(element,"checked", element.checked);
-			}catch(e){}
+			var nodeName = element.nodeName.toLowerCase(),
+				type; 
+				
+			//we need to manually 'check' in browser that can't check
+			//so checked has the right value
+			if(!Syn.support.clickChecks && !Syn.support.changeChecks && nodeName === "input"){
+				type = element.type.toLowerCase();//pretty sure lowercase isn't needed
+				if(type === 'checkbox'){
+					element.checked = !element.checked;
+				}
+				if(type === "radio"){
+					//do the checks manually 
+					
+					if(!element.checked){ //do nothing, no change
+						try{
+							Syn.data(element,"radioChanged", true);
+						}catch(e){}
+						element.checked = true;
+					}
+				}
+			}
+
 			if( 
-				element.nodeName.toLowerCase() == "a" 
+				nodeName == "a" 
 				&& element.href  
 				&& !/^\s*javascript:/.test(element.href)){
 				
@@ -8434,6 +8453,9 @@ h.extend(Syn.create,{
 				
 				//remove b/c safari/opera will open a new tab instead of changing the page
 				element.setAttribute('href','javascript://')
+				//however this breaks scripts using the href
+				//we need to listen to this and prevent the default behavior
+				//and run the default behavior ourselves. Boo!
 			}
 			//if select or option, save old value and mark to change
 			if(/option/i.test(element.nodeName)){
@@ -8453,6 +8475,7 @@ h.extend(Syn.create,{
 					Syn.data(element,"createChange",true)
 				}
 			}
+			
 		}
 	},
 	mousedown : {
