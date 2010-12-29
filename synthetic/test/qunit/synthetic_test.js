@@ -93,8 +93,18 @@ test("focus triggers focus events", function(){
 
 test("focus on an element then another in another page", function(){
 	stop(10000);
-	var page1 = steal.root.join("funcunit/synthetic/test/qunit/page1.html"),
-		page2 = steal.root.join("funcunit/synthetic/test/qunit/page2.html"),
+	var rootJoin;
+	if(typeof steal == "undefined"){ 
+		// hardcoding this path so the standalone synthetic tests will pass
+		rootJoin = function(path){
+			return "../../"+path;
+		};
+	} else {
+		rootJoin = $.proxy(steal.root.join, steal.root);
+	}
+	
+	var page1 = rootJoin("funcunit/synthetic/test/qunit/page1.html"),
+		page2 = rootJoin("funcunit/synthetic/test/qunit/page2.html"),
 		iframe = document.createElement('iframe'),
 		calls = 0;
 	

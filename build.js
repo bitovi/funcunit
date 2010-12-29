@@ -1,15 +1,18 @@
 load('steal/rhino/steal.js')
 
+load('funcunit/synthetic/build.js')
+
+steal.File('funcunit/dist').mkdir()
+steal.File('funcunit/dist/funcunit').mkdir()
+steal.File('funcunit/dist/funcunit/java').mkdir()
+steal.File('funcunit/dist/funcunit/qunit').mkdir()
+steal.File('funcunit/dist/funcunit/scripts').mkdir()
+steal.File('funcunit/dist/steal').mkdir()
+steal.File('funcunit/dist/steal/rhino').mkdir()
 /**
- * Build syn, funcunit, user-extensions
+ * Build funcunit, user-extensions
  */
 steal('//steal/build/pluginify/pluginify', function(s){
-	steal.build.pluginify("funcunit/synthetic",{
-		global: "true",
-		nojquery: true,
-		destination: "funcunit/synthetic/dist/syn.js"
-	})
-	
 	steal.build.pluginify("funcunit",{
 		global: "true",
 		destination: "funcunit/dist/funcunit/funcunit.js",
