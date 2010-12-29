@@ -1,0 +1,4 @@
+[submodule "synthetic"]
+	path = synthetic
+	url = git://github.com/jupiterjs/syn.git
+	update = merge
