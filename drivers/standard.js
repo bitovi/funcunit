@@ -25,7 +25,12 @@ steal.then(function() {
 	FuncUnit._open = function(url){
 		changing = url;
 		if (newPage) {
-			FuncUnit._window = window.open(url, "funcunit");
+			if(FuncUnit.frame){
+				FuncUnit._window = FuncUnit.frame.contentWindow;
+				FuncUnit._window.location = url;
+			}else{
+				FuncUnit._window = window.open(url, "funcunit");
+			}
 		}
 		else {
 			FuncUnit._window.location = url;
