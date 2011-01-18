@@ -626,7 +626,16 @@ _opened: function() {}
 	 * stop : 
 	 */
 	add = function(handler){
-		
+		if(window.__s){
+			//make handler call s again with same 
+			//args
+			var old = handler.method,
+				cur = __s.cur;
+			handler.method = function(){
+				__s(cur);
+				old.apply(this,arguments);
+			}
+		}
 		//if we are in a callback, add to the current position
 		if (incallback) {
 			queue.splice(currentPosition,0,handler)
