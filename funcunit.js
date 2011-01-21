@@ -1,8 +1,8 @@
 //what we need from javascriptmvc or other places
-steal.plugins('jquery','funcunit/qunit',
+steal.plugins('funcunit/qunit',
 	'funcunit/qunit/rhino')
-	.then('resources/json','resources/selector')
-	.plugins('funcunit/synthetic')
+	.then('resources/jquery','resources/json','resources/selector')
+	.plugins('funcunit/syn')
 //Now describe FuncUnit
 .then(function(){
 
@@ -433,7 +433,10 @@ Slow mode is useful while debugging.</p>
  * or <code>S.window.document</code> to the selector.  
  * 
  * @param {Number} [context] If provided, the context is the frame number in the
- * document.frames array to use as the context of the selector.
+ * document.frames array to use as the context of the selector.  For example, if you
+ * want to select something in the first iframe of the page:
+ * 
+ *     S("a.mylink",0)
  */
 FuncUnit = function(selector, context){
 	// if someone wraps a funcunit selector
@@ -441,7 +444,7 @@ FuncUnit = function(selector, context){
 		return selector;
 	}
 	if(typeof selector == "function"){
-		return FuncUnit.wait(0, selector)
+		return FuncUnit.wait(0, selector);
 	}
 	
 	return new FuncUnit.init(selector, context)
@@ -598,7 +601,6 @@ support : {},
 window : {
 	document: {}
 },
-basePath: (typeof basePath == "undefined"? "funcunit/": basePath),
 _opened: function() {}
 });
 
@@ -1106,6 +1108,18 @@ FuncUnit.init.prototype = {
 
 	find : function(selector){
 		return FuncUnit(this.selector+" "+selector, this.context);
+	},
+	/**
+	 * Calls the callback function after all previous asynchronous actions have completed.  Then
+	 * is called with the funcunit object.
+	 * @param {Object} callback
+	 */
+	then : function(callback){
+		var self = this;
+		FuncUnit.wait(0, function(){
+			callback.call(self, self);
+		});
+		return this;
 	}
 };
 //do traversers
@@ -1115,7 +1129,7 @@ var traversers = ["closest",
 "next","prev","siblings","last","first"],
 	makeTraverser = function(name){
 		FuncUnit.init.prototype[name] = function(selector){
-			return FuncUnit( FuncUnit.$(this.selector, this.context, name+"Selector", selector) )
+			return FuncUnit( FuncUnit.$(this.selector, this.context, name+"Selector", selector), this.context )
 		}
 	};
 for(var i  =0; i < traversers.length; i++){

@@ -41,7 +41,7 @@ steal.then(function(){
 					QUnit.restart();
 				} else {
 					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-						runCommand('taskkill /fi "Windowtitle eq selenium" > NUL')
+						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium" > NUL')
 						//quit()
 					}
 				}
