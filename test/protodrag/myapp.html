@@ -25,9 +25,9 @@
 		</style>
 		<script type='text/javascript'>
 			document.observe("dom:loaded", function() {
-	  			$("typehere").observe("keyup",function(){
-					$("seewhatyoutyped").innerHTML = ("typed "+this.value)
-				})
+					$("typehere").observe("keyup", function() {
+						$("seewhatyoutyped").innerHTML = ("typed " + this.value)
+					});
 				$("typehere").value = "";
 				$("copy").observe("click",function(){
 					$("seewhatyoutyped").innerHTML = ("copied "+$("typehere").value)
@@ -46,7 +46,7 @@
 				$("outer").innerHTML = $("outer").innerHTML + text + "<br/>"
 			}
 		</script>
-		
+
 	</head>
 	<body>
 		<h2>FuncUnit Demo</h2>

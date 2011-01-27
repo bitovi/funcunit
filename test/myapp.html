@@ -12,8 +12,8 @@
 			#drag {
 				border:1px solid green;
 				background-color:green;
-				left:0px;
-				top:0px;
+				left:0;
+				top:0;
 			}
 			#drop {
 				border:1px solid yellow;
@@ -26,65 +26,66 @@
 		<script src="jquery.event.drag.js" type='text/javascript'></script>
 		<script src="jquery.event.drop.js" type='text/javascript'></script>
 		<script type='text/javascript'>
-			$(function(){
+			$(function() {
 				// on key up, write the value
-				$("#typehere").keyup(function(){
-					$("#seewhatyoutyped").html("typed "+this.value)
-				})
-				
+				$("#typehere").keyup(function() {
+					$("#seewhatyoutyped").html("typed " + this.value)
+				});
+
 				//when copy is clicked, change the text
-				$("#copy").click(function(){
+				$("#copy").click(function() {
 					//run slowwwww
 					var sum = 0, date = new Date();
-					for(var i =0; i< 10; i++){
-						$("*").each(function(){
-							$(this).width()
+					for (var i = 0; i < 10; i++) {
+						$("*").each(function() {
+							$(this).width();
 							$(this).height()
 						})
 					}
-					$("#seewhatyoutyped").html("copied "+$("#typehere").val())
-				})
-				
-				$('#clickToChange').click(function(){
-					setTimeout(function(){
+					$("#seewhatyoutyped").html("copied " + $("#typehere").val())
+				});
+
+				$('#clickToChange').click(function() {
+					setTimeout(function() {
 						$('#clickToChange').html("changed")
-					},300)
-				})
+					}, 300)
+				});
 				//has class
-				$("#hasClass").click(function(){
-					setTimeout(function(){
+				$("#hasClass").click(function() {
+					setTimeout(function() {
 						$("#hasClass").addClass('someClass')
-					},200)
-				})
-				
+					}, 200)
+				});
+
 				//exists
-				$("#exists").click(function(){
-					setTimeout(function(){
+				$("#exists").click(function() {
+					setTimeout(function() {
 						$("#exists").append("<p>I exist</p>")
-					},200)
-				})
-				$('#trigger').bind('myCustomEvent', function(){
+					}, 200)
+				});
+				$('#trigger').bind('myCustomEvent', function() {
 					$("#trigger").append("<p>I was triggered</p>")
 				})
-				
+
+			});
+			changeText = function() {
+				$('#changelink').text('Changed')
+			};
+
+			$('#drag').live("draginit", function() {
 			})
-			changeText = function(){
-                $('#changelink').text('Changed')
-            }
-			
-			$('#drag').live("draginit", function(){})
-				.live("dragover", function(){
-					$(this).css('background-color', 'black').addClass("dragover")
-				})
-			$('#drop').live("dropover", function(){ 
+					.live("dragover", function() {
+				$(this).css('background-color', 'black').addClass("dragover")
+			});
+			$('#drop').live("dropover", function() {
 				$(this).css('background-color', 'blue').addClass("dropover")
-			})
-			$('#drop').live("dropout", function(){ 
+			});
+			$('#drop').live("dropout", function(){
 				$(this).css('background-color', 'green').addClass("dropout")
 			})
-			
-			
-			
+
+
+
 		</script>
 	</head>
 	<body>
@@ -93,7 +94,7 @@
 		<p id='seewhatyoutyped'></p>
 		<iframe src='myotherapp.html'></iframe>
 		<div id='clickToChange'>Change Thist Text</div>
-        <a href="javascript:changeText()" id='changelink'>Change</a>
+				<a href="javascript:changeText()" id='changelink'>Change</a>
 		<div id='drag'></div>
 		<div id='drop'></div>
 		<h3>hasClass</h3>
@@ -102,7 +103,5 @@
 		<div id='exists'>Click Me</div>
 		<h3>Trigger Custom Event</h3>
 		<div id='trigger'>Trigger Me</div>
-		
-		
 	</body>
 </html>

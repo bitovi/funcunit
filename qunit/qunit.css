@@ -1,6 +1,6 @@
 
 ol#qunit-tests {
-	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
 	margin:0;
 	padding:0;
 	list-style-position:inside;
@@ -14,9 +14,9 @@ ol#qunit-tests li{
 	list-style-position:inside;
 }
 ol#qunit-tests li ol{
-	box-shadow: inset 0px 2px 13px #999;
-	-moz-box-shadow: inset 0px 2px 13px #999;
-	-webkit-box-shadow: inset 0px 2px 13px #999;
+	box-shadow: inset 0 2px 13px #999;
+	-moz-box-shadow: inset 0 2px 13px #999;
+	-webkit-box-shadow: inset 0 2px 13px #999;
 	margin-top:0.5em;
 	margin-left:0;
 	padding:0.5em;
@@ -59,7 +59,7 @@ h1#qunit-header{
 	margin:0;
 	padding:0.5em 0 0.5em 1em;
 	color:#fff;
-	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
 	border-top-right-radius:15px;
 	border-top-left-radius:15px;
 	-moz-border-radius-topright:15px;
@@ -69,7 +69,7 @@ h1#qunit-header{
 	text-shadow: rgba(0, 0, 0, 0.5) 4px 4px 1px;
 }
 h2#qunit-banner{
-	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
 	height:5px;
 	margin:0;
 	padding:0;
@@ -81,14 +81,14 @@ h2#qunit-banner.qunit-fail, #qunit-testrunner-toolbar {
 	background-color:#EE5757;
 }
 #qunit-testrunner-toolbar {
-	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
 	padding:0;
 	/*width:80%;*/
-	padding:0em 0 0.5em 2em;
+	padding:0 0 0.5em 2em;
 	font-size: small;
 }
 h2#qunit-userAgent {
-	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
 	background-color:#2b81af;
 	margin:0;
 	padding:0;
@@ -98,7 +98,7 @@ h2#qunit-userAgent {
 	text-shadow: rgba(0, 0, 0, 0.5) 2px 2px 1px;
 }
 p#qunit-testresult{
-	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+	font-family:"Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
 	margin:0;
 	font-size: small;
 	color:#2b81af;

@@ -1,9 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-            "http://www.w3.org/TR/html4/strict.dtd">
+						"http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
-    <head>
-        <title>Synthetic Typing Test</title>
-        <style type='text/css'>
+		<head>
+				<title>Synthetic Typing Test</title>
+				<style type='text/css'>
 			#key th:nth-child(even) {background: #CCf}
 			#who th:nth-child(even) {background: #fCb}
 			.hover {background-color: blue}
@@ -13,7 +13,7 @@
 				border:1px solid black;
 			}
 			#drag {
-				top: 0px;
+				top: 0;
 				background-color: green;
 			}
 			#drop {
@@ -23,9 +23,9 @@
 			.clicked {
 				border:1px solid red;
 			}
-        </style>
-    </head>
-    <body>
+				</style>
+		</head>
+		<body>
 	<p id='start'>start</p>
 	<div class='over'>Move over me</div>
 	<p id='end'>end</p>
@@ -40,24 +40,25 @@
 </script>
 <script type='text/javascript' id="demo-source">
 	var hoveredOnce = false;
-	$(".over").bind('mouseover',function(){
+	$(".over").bind('mouseover', function() {
 		if (!hoveredOnce) {
-			$(this).addClass('hover')
-			$(document.body).append("<input type='text' id='typer' />")
+			$(this).addClass('hover');
+			$(document.body).append("<input type='text' id='typer' />");
 			hoveredOnce = true;
 		}
-	})
-	
+	});
+
 	$('#drag')
-		.live("draginit", function(){})
-		
+			.live("draginit", function() {
+	});
+
 	$('#drop')
 		.live("dropover", function(){
-			$(document.body).append("<a href='#' id='clicker'>click</a>")
+			$(document.body).append("<a href='#' id='clicker'>click</a>");
 			$("#clicker").click(function(){
 				$(".status").html("dragged")
 			})
 		})
 </script>
-    </body>
+		</body>
 </html>

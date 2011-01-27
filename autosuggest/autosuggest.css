@@ -1,5 +1,5 @@
 .autocomplete {
-    font-family: Tahoma;
+    font-family: Tahoma, sans-serif;
     font-size: 8pt;
     background-color: white;
     border: 1px solid black;
@@ -10,9 +10,8 @@
 }
 
 .autocomplete_item {
-    padding: 1px;
-    padding-left: 5px;
-    color: black;
+	padding: 1px 1px 1px 5px;
+	color: black;
     width: 100%;
 }
 

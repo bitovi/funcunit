@@ -1,6 +1,5 @@
 //integration point for JavaScriptMVC testing
-
-print("==========================  funcunit ============================")
+print("==========================  funcunit ============================");
 
 load('steal/rhino/steal.js');
 load('funcunit/loader.js');

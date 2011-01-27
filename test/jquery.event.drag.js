@@ -1,206 +1,203 @@
 // jquery/lang/vector/vector.js
+(function ($) {
 
-(function($){
-
-	var getSetZero = function(v){ return v !== undefined ? (this.array[0] = v) : this.array[0] },
-		getSetOne = function(v){ return v !== undefined ? (this.array[1] = v) : this.array[1] }
-/**
- * @constructor
- * A vector class
- * @init creates a new vector instance from the arguments.  Example:
- * @codestart
- * new jQuery.Vector(1,2)
- * @codeend
- * 
- */
-jQuery.Vector = function(){
-	this.update( jQuery.makeArray(arguments) );
-};
-jQuery.Vector.prototype = 
-/* @Prototype*/
-{
-	/**
-	 * Applys the function to every item in the vector.  Returns the new vector.
-	 * @param {Function} f
-	 * @return {jQuery.Vector} new vector class.
-	 */
-	app: function(f){
-		  var newArr = [];
-		  
-		  for(var i=0; i < this.array.length; i++)
-			  newArr.push( f(  this.array[i] ) );
-		  var vec = new jQuery.Vector();
-		  return vec.update(newArr);
+	var getSetZero = function (v) {
+		return v !== undefined ? (this.array[0] = v) : this.array[0]
 	},
+		getSetOne = function (v) {
+			return v !== undefined ? (this.array[1] = v) : this.array[1]
+		};
 	/**
-	 * Adds two vectors together.  Example:
+	 * @constructor
+	 * A vector class
+	 * @init creates a new vector instance from the arguments.  Example:
 	 * @codestart
-	 * new Vector(1,2).plus(2,3) //-> &lt;3,5>
-	 * new Vector(3,5).plus(new Vector(4,5)) //-> &lt;7,10>
+	 * new jQuery.Vector(1,2)
 	 * @codeend
-	 * @return {jQuery.Vector}
+	 * 
 	 */
-	plus: function(){
-		var args = arguments[0] instanceof jQuery.Vector ? 
-				 arguments[0].array : 
-				 jQuery.makeArray(arguments), 
-			arr=this.array.slice(0), 
-			vec = new jQuery.Vector();
-		for(var i=0; i < args.length; i++)
+	jQuery.Vector = function () {
+		this.update(jQuery.makeArray(arguments));
+	};
+	jQuery.Vector.prototype =
+	/* @Prototype*/
+	{
+		/**
+		 * Applys the function to every item in the vector.  Returns the new vector.
+		 * @param {Function} f
+		 * @return {jQuery.Vector} new vector class.
+		 */
+		app: function (f) {
+			var newArr = [];
+
+			for (var i = 0; i < this.array.length; i++)
+			newArr.push(f(this.array[i]));
+			var vec = new jQuery.Vector();
+			return vec.update(newArr);
+		},
+		/**
+		 * Adds two vectors together.  Example:
+		 * @codestart
+		 * new Vector(1,2).plus(2,3) //-> &lt;3,5>
+		 * new Vector(3,5).plus(new Vector(4,5)) //-> &lt;7,10>
+		 * @codeend
+		 * @return {jQuery.Vector}
+		 */
+		plus: function () {
+			var args = arguments[0] instanceof jQuery.Vector ? arguments[0].array : jQuery.makeArray(arguments),
+				arr = this.array.slice(0),
+				vec = new jQuery.Vector();
+			for (var i = 0; i < args.length; i++)
 			arr[i] = (arr[i] ? arr[i] : 0) + args[i];
-		return vec.update(arr);
-	},
-	/**
-	 * Like plus but subtracts 2 vectors
-	 * @return {jQuery.Vector}
-	 */
-	minus: function(){
-		 var args = arguments[0] instanceof jQuery.Vector ? 
-				 arguments[0].array : 
-				 jQuery.makeArray(arguments), 
-			 arr=this.array.slice(0), vec = new jQuery.Vector();
-		 for(var i=0; i < args.length; i++)
+			return vec.update(arr);
+		},
+		/**
+		 * Like plus but subtracts 2 vectors
+		 * @return {jQuery.Vector}
+		 */
+		minus: function () {
+			var args = arguments[0] instanceof jQuery.Vector ? arguments[0].array : jQuery.makeArray(arguments),
+				arr = this.array.slice(0),
+				vec = new jQuery.Vector();
+			for (var i = 0; i < args.length; i++)
 			arr[i] = (arr[i] ? arr[i] : 0) - args[i];
-		 return vec.update(arr);
-	},
-	/**
-	 * Returns the current vector if it is equal to the vector passed in.  
-	 * False if otherwise.
-	 * @return {jQuery.Vector}
-	 */
-	equals : function(){
-		var args = arguments[0] instanceof jQuery.Vector ? 
-				 arguments[0].array : 
-				 jQuery.makeArray(arguments), 
-			 arr=this.array.slice(0), vec = new jQuery.Vector();
-		 for(var i=0; i < args.length; i++)
-			if(arr[i] != args[i]) return null;
-		 return vec.update(arr);
-	},
-	/*
+			return vec.update(arr);
+		},
+		/**
+		 * Returns the current vector if it is equal to the vector passed in.  
+		 * False if otherwise.
+		 * @return {jQuery.Vector}
+		 */
+		equals: function () {
+			var args = arguments[0] instanceof jQuery.Vector ? arguments[0].array : jQuery.makeArray(arguments),
+				arr = this.array.slice(0),
+				vec = new jQuery.Vector();
+			for (var i = 0; i < args.length; i++)
+			if (arr[i] != args[i]) return null;
+			return vec.update(arr);
+		},
+/*
 	 * Returns the 2nd value of the vector
 	 * @return {Number}
 	 */
-	x : getSetZero,
-	width : getSetZero,
-	/**
-	 * Returns the first value of the vector
-	 * @return {Number}
-	 */
-	y : getSetOne,
-	height : getSetOne,
-	/**
-	 * Same as x()
-	 * @return {Number}
-	 */
-	top : getSetOne,
-	/**
-	 * same as y()
-	 * @return {Number}
-	 */
-	left : getSetZero,
-	/**
-	 * returns (x,y)
-	 * @return {String}
-	 */
-	toString: function(){
-		return "("+this.array[0]+","+this.array[1]+")";
-	},
-	/**
-	 * Replaces the vectors contents
-	 * @param {Object} array
-	 */
-	update: function(array){
-		if(this.array){
-			for(var i =0; i < this.array.length; i++) delete this.array[i];
-		}
-		this.array = array;
-		for(var i =0; i < array.length; i++) this[i]= this.array[i];
-		return this;
-	}
-};
-
-jQuery.Event.prototype.vector = function(){
-	if(this.originalEvent.synthetic){
-		var doc = document.documentElement, body = document.body;
-		return  new jQuery.Vector(this.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), 
-								  this.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0));
-	}else{
-		return new jQuery.Vector(this.pageX, this.pageY);
-	}
-}
-
-jQuery.fn.offsetv = function() {
-	if(this[0] == window){
-		return new jQuery.Vector(window.pageXOffset ? window.pageXOffset : document.documentElement.scrollLeft,
-							  window.pageYOffset ? window.pageYOffset : document.documentElement.scrollTop)
-	}else{
-		var offset = this.offset();
- 		 return new jQuery.Vector(offset.left, offset.top);
-	}
-};
-
-jQuery.fn.dimensionsv = function(){
-	if(this[0] == window)
-		return new jQuery.Vector(this.width(), this.height());
-	else
-		return new jQuery.Vector(this.outerWidth(), this.outerHeight());
-}
-jQuery.fn.centerv = function(){
-	return this.offsetv().plus( this.dimensionsv().app(function(u){return u /2;})  )
-}
-
-jQuery.fn.makePositioned = function() {
-	return this.each(function(){
-		var that = jQuery(this);
-		var pos = that.css('position');
-
-		if (!pos || pos == 'static') {
-			var style = { position: 'relative' };
-
-			if (window.opera) {
-				style.top = '0px';
-				style.left = '0px';
+		x: getSetZero,
+		width: getSetZero,
+		/**
+		 * Returns the first value of the vector
+		 * @return {Number}
+		 */
+		y: getSetOne,
+		height: getSetOne,
+		/**
+		 * Same as x()
+		 * @return {Number}
+		 */
+		top: getSetOne,
+		/**
+		 * same as y()
+		 * @return {Number}
+		 */
+		left: getSetZero,
+		/**
+		 * returns (x,y)
+		 * @return {String}
+		 */
+		toString: function () {
+			return "(" + this.array[0] + "," + this.array[1] + ")";
+		},
+		/**
+		 * Replaces the vectors contents
+		 * @param {Object} array
+		 */
+		update: function (array) {
+			if (this.array) {
+				for (var i = 0; i < this.array.length; i++) delete this.array[i];
 			}
-			that.css(style);
+			this.array = array;
+			for (var i = 0; i < array.length; i++) this[i] = this.array[i];
+			return this;
 		}
-	});
-};
-	
+	};
+
+	jQuery.Event.prototype.vector = function () {
+		if (this.originalEvent.synthetic) {
+			var doc = document.documentElement,
+				body = document.body;
+			return new jQuery.Vector(this.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0), this.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0));
+		} else {
+			return new jQuery.Vector(this.pageX, this.pageY);
+		}
+	};
+
+	jQuery.fn.offsetv = function () {
+		if (this[0] == window) {
+			return new jQuery.Vector(window.pageXOffset ? window.pageXOffset : document.documentElement.scrollLeft, window.pageYOffset ? window.pageYOffset : document.documentElement.scrollTop)
+		} else {
+			var offset = this.offset();
+			return new jQuery.Vector(offset.left, offset.top);
+		}
+	};
+
+	jQuery.fn.dimensionsv = function () {
+		if (this[0] == window) return new jQuery.Vector(this.width(), this.height());
+		else return new jQuery.Vector(this.outerWidth(), this.outerHeight());
+	};
+	jQuery.fn.centerv = function () {
+		return this.offsetv().plus(this.dimensionsv().app(function (u) {
+			return u / 2;
+		}))
+	};
+
+	jQuery.fn.makePositioned = function () {
+		return this.each(function () {
+			var that = jQuery(this);
+			var pos = that.css('position');
+
+			if (!pos || pos == 'static') {
+				var style = {
+					position: 'relative'
+				};
+
+				if (window.opera) {
+					style.top = '0px';
+					style.left = '0px';
+				}
+				that.css(style);
+			}
+		});
+	};
+
 
 })(jQuery);
 
 // jquery/event/livehack/livehack.js
-
-(function($){
+(function ($) {
 
 
 	var event = jQuery.event,
-		
+
 		//helper that finds handlers by type and calls back a function, this is basically handle
-		findHelper = function(events, types, callback){
-			for( var t =0; t< types.length; t++ ) {
-				var type = types[t], 
-					typeHandlers,
-					all = type.indexOf(".") < 0,
-					namespaces,
-					namespace; 
-				if ( !all ) {
+		findHelper = function (events, types, callback) {
+			for (var t = 0; t < types.length; t++) {
+				var type = types[t],
+					typeHandlers, all = type.indexOf(".") < 0,
+					namespaces, namespace;
+				if (!all) {
 					namespaces = type.split(".");
 					type = namespaces.shift();
 					namespace = new RegExp("(^|\\.)" + namespaces.slice(0).sort().join("\\.(?:.*\\.)?") + "(\\.|$)");
 				}
-				typeHandlers = ( events[type] || [] ).slice(0);
-				
-				for( var h = 0; h <typeHandlers.length; h++ ) {
+				typeHandlers = (events[type] || []).slice(0);
+
+				for (var h = 0; h < typeHandlers.length; h++) {
 					var handle = typeHandlers[h];
-					if( !handle.selector && (all || namespace.test( handle.namespace ))  ){
+					if (!handle.selector && (all || namespace.test(handle.namespace))) {
 						callback(type, handle.origHandler || handle.handler);
 					}
 				}
 			}
-		}
-	
+		};
+
 	/**
 	 * Finds event handlers of a given type on an element.
 	 * @param {HTMLElement} el
@@ -208,97 +205,96 @@ jQuery.fn.makePositioned = function() {
 	 * @param {String} [selector] optional selector
 	 * @return {Array} an array of event handlers
 	 */
-	event.find  = function(el, types, selector){
-		var events = $.data(el, "events"), 
+	event.find = function (el, types, selector) {
+		var events = $.data(el, "events"),
 			handlers = [];
 
-		if( !events ) {
+		if (!events) {
 			return handlers;
 		}
-		
-		if( selector ) {
-			if (!events.live) { 
+
+		if (selector) {
+			if (!events.live) {
 				return [];
 			}
 			var live = events.live;
 
-			for ( var t = 0; t < live.length; t++ ) {
+			for (var t = 0; t < live.length; t++) {
 				var liver = live[t];
-				if(  liver.selector === selector &&  $.inArray(liver.origType, types  ) !== -1 ) {
+				if (liver.selector === selector && $.inArray(liver.origType, types) !== -1) {
 					handlers.push(liver.origHandler || liver.handler);
 				}
 			}
-		}else{
+		} else {
 			// basically re-create handler's logic
-			findHelper(events, types, function(type, handler){
+			findHelper(events, types, function (type, handler) {
 				handlers.push(handler);
 			})
 		}
 		return handlers;
-	}
+	};
 	/**
 	 * Finds 
 	 * @param {HTMLElement} el
 	 * @param {Array} types
 	 */
-	event.findBySelector = function(el, types){
-		var events = $.data(el, "events"), 
-			selectors = {}, 
+	event.findBySelector = function (el, types) {
+		var events = $.data(el, "events"),
+			selectors = {},
 			//adds a handler for a given selector and event
-			add = function(selector, event, handler){
-				var select = selectors[selector] ||  (selectors[selector] = {}),
+			add = function (selector, event, handler) {
+				var select = selectors[selector] || (selectors[selector] = {}),
 					events = select[event] || (select[event] = []);
 				events.push(handler);
 			};
 
-		if ( !events ) {
+		if (!events) {
 			return selectors;
 		}
 		//first check live:
-		$.each( events.live||[] , function(i, live) {
-			if( $.inArray(live.origType, types  ) !== -1 ) {
-				add( live.selector, live.origType, live.origHandler || live.handler );
+		$.each(events.live || [], function (i, live) {
+			if ($.inArray(live.origType, types) !== -1) {
+				add(live.selector, live.origType, live.origHandler || live.handler);
 			}
-		})
+		});
 		//then check straight binds
-		
-		findHelper(events, types, function(type, handler){
+		findHelper(events, types, function (type, handler) {
 			add("", type, handler);
-		})
-		
+		});
+
 		return selectors;
-	}
-	$.fn.respondsTo = function(events){
-		if(!this.length){
+	};
+	$.fn.respondsTo = function (events) {
+		if (!this.length) {
 			return false;
-		}else{
+		} else {
 			//add default ?
 			return event.find(this[0], $.isArray(events) ? events : [events]).length > 0;
 		}
-	}
-	$.fn.triggerHandled = function(event, data){
-		event = ( typeof event == "string" ? $.Event(event) : event);
+	};
+	$.fn.triggerHandled = function (event, data) {
+		event = (typeof event == "string" ? $.Event(event) : event);
 		this.trigger(event, data);
 		return event.handled;
-	}
+	};
 	/**
 	 * Only attaches one event handler for all types ...
 	 * @param {Array} types llist of types that will delegate here
 	 * @param {Object} startingEvent the first event to start listening to
 	 * @param {Object} onFirst a function to call 
 	 */
-	event.setupHelper = function(types, startingEvent, onFirst){
-		if(!onFirst) {
+	event.setupHelper = function (types, startingEvent, onFirst) {
+		if (!onFirst) {
 			onFirst = startingEvent;
 			startingEvent = null;
 		}
-		var add = function(handleObj){
-			
+		var add = function (handleObj) {
+
 			var selector = handleObj.selector || "";
 			if (selector) {
 				var bySelector = event.find(this, types, selector);
 				if (!bySelector.length) {
-					$(this).delegate(selector,startingEvent, onFirst );
+					$(this).delegate(selector, startingEvent, onFirst);
 				}
 			}
 			else {
@@ -308,14 +304,14 @@ jQuery.fn.makePositioned = function() {
 					delegate: this
 				});
 			}
-			
-		}
-		var remove = function(handleObj){
+
+		};
+		var remove = function (handleObj) {
 			var selector = handleObj.selector || "";
 			if (selector) {
 				var bySelector = event.find(this, types, selector);
 				if (!bySelector.length) {
-					$(this).undelegate(selector,startingEvent, onFirst );
+					$(this).undelegate(selector, startingEvent, onFirst);
 				}
 			}
 			else {
@@ -324,12 +320,12 @@ jQuery.fn.makePositioned = function() {
 					delegate: this
 				});
 			}
-		}
-		$.each(types, function(){
+		};
+		$.each(types, function () {
 			event.special[this] = {
-				add:  add,
+				add: add,
 				remove: remove,
-				setup : function(){}
+				setup: function () {}
 			};
 		});
 	}
@@ -337,23 +333,20 @@ jQuery.fn.makePositioned = function() {
 })(jQuery);
 
 // jquery/event/drag/drag.js
-
-(function($){
+(function ($) {
 
 	//modify live
 	//steal the live handler ....
-	
-	
-	
-	var bind = function(object, method){  
-			var args = Array.prototype.slice.call(arguments, 2);  
-			return function() {  
-				var args2 = [this].concat(args, $.makeArray( arguments ));  
-				return method.apply(object, args2);  
-			};  
-		},
-		event = $.event, handle  = event.handle;
-		
+	var bind = function (object, method) {
+		var args = Array.prototype.slice.call(arguments, 2);
+		return function () {
+			var args2 = [this].concat(args, $.makeArray(arguments));
+			return method.apply(object, args2);
+		};
+	},
+		event = $.event,
+		handle = event.handle;
+
 	/**
 	 * @constructor jQuery.Drag
 	 * @parent specialevents
@@ -417,30 +410,28 @@ jQuery.fn.makePositioned = function() {
 	 * @init
 	 * The constructor is never called directly.
 	 */
-	$.Drag = function(){}
-	
+	$.Drag = function () {};
+
 	/**
 	 * @Static
 	 */
-	$.extend($.Drag,
-	{
+	$.extend($.Drag, {
 		lowerName: "drag",
-		current : null,
+		current: null,
 		/**
 		 * Called when someone mouses down on a draggable object.
 		 * Gathers all callback functions and creates a new Draggable.
 		 * @hide
 		 */
-		mousedown : function(ev, element){
+		mousedown: function (ev, element) {
 			var isLeftButton = ev.button == 0 || ev.button == 1;
-			if( !isLeftButton || this.current) return; //only allows 1 drag at a time, but in future could allow more
-			
+			if (!isLeftButton || this.current) return; //only allows 1 drag at a time, but in future could allow more
 			ev.preventDefault();
 			//create Drag
-			var drag = new $.Drag(), 
-			delegate = ev.liveFired || element,
-			selector = ev.handleObj.selector,
-			self = this;
+			var drag = new $.Drag(),
+				delegate = ev.liveFired || element,
+				selector = ev.handleObj.selector,
+				self = this;
 			this.current = drag;
 			drag.setup({
 				element: element,
@@ -455,235 +446,220 @@ jQuery.fn.makePositioned = function() {
 					dragout: event.find(delegate, ["dragout"], selector)[0],
 					dragend: event.find(delegate, ["dragend"], selector)[0]
 				},
-				destroyed : function(){
+				destroyed: function () {
 					self.current = null;
 				}
 			}, ev)
-		   		   
+
 		}
-	})
-	
-	
-	
-	
-	
+	});
+
+
+
+
+
 	/**
 	 * @Prototype
 	 */
-	$.extend($.Drag.prototype , {
-		setup : function(options, ev){
+	$.extend($.Drag.prototype, {
+		setup: function (options, ev) {
 			this.noSelection();
-			$.extend(this,options);
+			$.extend(this, options);
 			this.element = $(this.element);
 			this.event = ev;
 			this.moved = false;
 			this.allowOtherDrags = false;
 			var mousemove = bind(this, this.mousemove);
-			var mouseup =   bind(this, this.mouseup);
+			var mouseup = bind(this, this.mouseup);
 			this._mousemove = mousemove;
 			this._mouseup = mouseup;
-			$(document).bind('mousemove' ,mousemove);
-			$(document).bind('mouseup',mouseup);
+			$(document).bind('mousemove', mousemove);
+			$(document).bind('mouseup', mouseup);
 			this.callDown(this.element, ev)
 		},
 		/**
 		 * Unbinds listeners and allows other drags ...
 		 * @hide
 		 */
-		destroy  : function(){
+		destroy: function () {
 			$(document).unbind('mousemove', this._mousemove);
 			$(document).unbind('mouseup', this._mouseup);
-			if(!this.moved){
+			if (!this.moved) {
 				this.event = this.element = null;
 			}
 			this.selection();
 			this.destroyed();
 		},
-		mousemove : function(docEl, ev){
-			if(!this.moved){
-				this.init(this.element, ev)
-				this.moved= true;
+		mousemove: function (docEl, ev) {
+			if (!this.moved) {
+				this.init(this.element, ev);
+				this.moved = true;
 			}
-			
+
 			var pointer = ev.vector();
 			if (this._start_position && this._start_position.equals(pointer)) {
 				return;
 			}
 			//e.preventDefault();
-			
 			this.draw(pointer, ev);
 		},
-		mouseup : function(docEl,event){
+		mouseup: function (docEl, event) {
 			//if there is a current, we should call its dragstop
-			if(this.moved){
+			if (this.moved) {
 				this.end(event);
 			}
 			this.destroy();
 		},
-		noSelection : function(){
-			document.documentElement.onselectstart = function() { return false; }; 
-			document.documentElement.unselectable = "on"; 
-			$(document.documentElement).css('-moz-user-select', 'none'); 
+		noSelection: function () {
+			document.documentElement.onselectstart = function () {
+				return false;
+			};
+			document.documentElement.unselectable = "on";
+			$(document.documentElement).css('-moz-user-select', 'none');
 		},
-		selection : function(){
-			document.documentElement.onselectstart = function() { }; 
-			document.documentElement.unselectable = "off"; 
-			$(document.documentElement).css('-moz-user-select', ''); 
+		selection: function () {
+			document.documentElement.onselectstart = function () {};
+			document.documentElement.unselectable = "off";
+			$(document.documentElement).css('-moz-user-select', '');
 		},
-		init :  function( element, event){
+		init: function (element, event) {
 			element = $(element);
-			var startElement = (this.movingElement = (this.element = $(element)));         //the element that has been clicked on
-													//if a mousemove has come after the click
-			this._cancelled = false;                //if the drag has been cancelled
+			var startElement = (this.movingElement = (this.element = $(element))); //the element that has been clicked on
+			//if a mousemove has come after the click
+			this._cancelled = false; //if the drag has been cancelled
 			this.event = event;
 			this.mouseStartPosition = event.vector(); //where the mouse is located
 			/**
 			 * @attribute mouseElementPosition
 			 * The position of start of the cursor on the element
 			 */
-			this.mouseElementPosition = this.mouseStartPosition.minus( this.element.offsetv() ); //where the mouse is on the Element
-	
+			this.mouseElementPosition = this.mouseStartPosition.minus(this.element.offsetv()); //where the mouse is on the Element
 			this.callStart(element, event);
-	
+
 			//Check what they have set and respond accordingly
 			//  if they canceled
-			if(this._cancelled == true) return;
+			if (this._cancelled) return;
 			//if they set something else as the element
-			
 			this.startPosition = startElement != this.movingElement ? this.movingElement.offsetv() : this.currentDelta();
-	
+
 			this.movingElement.makePositioned();
-			this.movingElement.css('zIndex',1000);
-			if(!this._only && this.constructor.responder)
-				this.constructor.responder.compile(event, this);
+			this.movingElement.css('zIndex', 1000);
+			if (!this._only && this.constructor.responder) this.constructor.responder.compile(event, this);
 		},
-		callDown : function(element, event){
-			if(this.callbacks[this.constructor.lowerName+"down"]) 
-				this.callbacks[this.constructor.lowerName+"down"].call(element, event, this  );
+		callDown: function (element, event) {
+			if (this.callbacks[this.constructor.lowerName + "down"]) this.callbacks[this.constructor.lowerName + "down"].call(element, event, this);
 		},
-		callStart : function(element, event){
-			if(this.callbacks[this.constructor.lowerName+"init"]) 
-				this.callbacks[this.constructor.lowerName+"init"].call(element, event, this  );
+		callStart: function (element, event) {
+			if (this.callbacks[this.constructor.lowerName + "init"]) this.callbacks[this.constructor.lowerName + "init"].call(element, event, this);
 		},
 		/**
 		 * Returns the position of the movingElement by taking its top and left.
 		 * @hide
 		 * @return {Vector}
 		 */
-		currentDelta: function() {
-			return new $.Vector( parseInt( this.movingElement.css('left') ) || 0 , 
-								parseInt( this.movingElement.css('top') )  || 0 )  ;
+		currentDelta: function () {
+			return new $.Vector(parseInt(this.movingElement.css('left')) || 0, parseInt(this.movingElement.css('top')) || 0);
 		},
 		//draws the position of the dragmove object
-		draw: function(pointer, event){
+		draw: function (pointer, event) {
 			// only drag if we haven't been cancelled;
-			if(this._cancelled) return;
+			if (this._cancelled) return;
 			/**
 			 * @attribute location
 			 * The location of where the element should be in the page.  This 
 			 * takes into account the start position of the cursor on the element.
 			 */
-			this.location =  pointer.minus(this.mouseElementPosition);                              // the offset between the mouse pointer and the representative that the user asked for
+			this.location = pointer.minus(this.mouseElementPosition); // the offset between the mouse pointer and the representative that the user asked for
 			// position = mouse - (dragOffset - dragTopLeft) - mousePosition
-			this.move( event );
-			if(this._cancelled) return;
-			if(!event.isDefaultPrevented())
-				this.position(this.location);
+			this.move(event);
+			if (this._cancelled) return;
+			if (!event.isDefaultPrevented()) this.position(this.location);
 
 			//fill in
-			if(!this._only && this.constructor.responder)
-				this.constructor.responder.show(pointer, this, event);  
+			if (!this._only && this.constructor.responder) this.constructor.responder.show(pointer, this, event);
 		},
 		/**
 		 * @hide
 		 * Set the drag to only allow horizontal dragging
 		 */
-		position : function(offsetPositionv){  //should draw it on the page
-			var dragged_element_page_offset = this.movingElement.offsetv();          // the drag element's current page location
-			
-			var dragged_element_css_offset = this.currentDelta();                   //  the drag element's current left + top css attributes
-			
-			var dragged_element_position_vector =                                   // the vector between the movingElement's page and css positions
-				dragged_element_page_offset.minus(dragged_element_css_offset);      // this can be thought of as the original offset
-			
-			this.required_css_position = offsetPositionv.minus(dragged_element_position_vector)
-			
-			
+		position: function (offsetPositionv) { //should draw it on the page
+			var dragged_element_page_offset = this.movingElement.offsetv(); // the drag element's current page location
+			var dragged_element_css_offset = this.currentDelta(); //  the drag element's current left + top css attributes
+			var dragged_element_position_vector = // the vector between the movingElement's page and css positions
+			dragged_element_page_offset.minus(dragged_element_css_offset); // this can be thought of as the original offset
+			this.required_css_position = offsetPositionv.minus(dragged_element_position_vector);
+
+
 
 			var style = this.movingElement[0].style;
-			if(!this._cancelled && !this._horizontal) {
-				style.top =  this.required_css_position.top() + "px"
+			if (!this._cancelled && !this._horizontal) {
+				style.top = this.required_css_position.top() + "px"
 			}
-			if(!this._cancelled && !this._vertical){
+			if (!this._cancelled && !this._vertical) {
 				style.left = this.required_css_position.left() + "px"
 			}
 		},
-		move : function(event){
-			if(this.callbacks[this.constructor.lowerName+"move"]) this.callbacks[this.constructor.lowerName+"move"].call(this.element, event, this  );
+		move: function (event) {
+			if (this.callbacks[this.constructor.lowerName + "move"]) this.callbacks[this.constructor.lowerName + "move"].call(this.element, event, this);
 		},
 		/**
 		 * Called on drag up
 		 * @hide
 		 * @param {Event} event a mouseup event signalling drag/drop has completed
 		 */
-		end : function(event){
-			if(this._cancelled) return;
-			if(!this._only && this.constructor.responder)
-				this.constructor.responder.end(event, this);
-	
-			if(this.callbacks[this.constructor.lowerName+"end"])
-				this.callbacks[this.constructor.lowerName+"end"].call(this.element, event, this  );
-	
-			if(this._revert){
-				var self= this;
-				this.movingElement.animate(
-					{
-						top: this.startPosition.top()+"px",
-						left: this.startPosition.left()+"px"},
-						function(){
-							self.cleanup.apply(self, arguments)
-						}
-				)
+		end: function (event) {
+			if (this._cancelled) return;
+			if (!this._only && this.constructor.responder) this.constructor.responder.end(event, this);
+
+			if (this.callbacks[this.constructor.lowerName + "end"]) this.callbacks[this.constructor.lowerName + "end"].call(this.element, event, this);
+
+			if (this._revert) {
+				var self = this;
+				this.movingElement.animate({
+					top: this.startPosition.top() + "px",
+					left: this.startPosition.left() + "px"
+				}, function () {
+					self.cleanup.apply(self, arguments)
+				})
 			}
-			else
-				this.cleanup();
+			else this.cleanup();
 			this.event = null;
 		},
 		/**
 		 * Cleans up drag element after drag drop.
 		 * @hide
 		 */
-		cleanup : function(){
-			this.movingElement.css({zIndex: ""})
-			if (this.movingElement[0] !== this.element[0])
-				this.movingElement.css({ display: 'none' });
-			if(this._removeMovingElement)
-				this.movingElement.remove();
-				
+		cleanup: function () {
+			this.movingElement.css({
+				zIndex: ""
+			});
+			if (this.movingElement[0] !== this.element[0]) this.movingElement.css({
+				display: 'none'
+			});
+			if (this._removeMovingElement) this.movingElement.remove();
+
 			this.movingElement = this.element = this.event = null;
 		},
 		/**
 		 * Stops drag drop from running.
 		 */
-		cancel: function() {
+		cancel: function () {
 			this._cancelled = true;
 			//this.end(this.event);
-			if(!this._only && this.constructor.responder)
-				this.constructor.responder.clear(this.event.vector(), this, this.event);  
+			if (!this._only && this.constructor.responder) this.constructor.responder.clear(this.event.vector(), this, this.event);
 			this.destroy();
-			
+
 		},
 		/**
 		 * Clones the element and uses it as the moving element.
 		 * @return {jQuery.fn} the ghost
 		 */
-		ghost: function(loc) {
+		ghost: function (loc) {
 			// create a ghost by cloning the source element and attach the clone to the dom after the source element
-			var ghost = this.movingElement.clone().css('position','absolute');
-			(loc ? $(loc) : this.movingElement ).after(ghost);
-			ghost.width(this.movingElement.width())
-				.height(this.movingElement.height())
-				
+			var ghost = this.movingElement.clone().css('position', 'absolute');
+			(loc ? $(loc) : this.movingElement).after(ghost);
+			ghost.width(this.movingElement.width()).height(this.movingElement.height());
+
 			// store the original element and make the ghost the dragged element
 			this.movingElement = ghost;
 			this._removeMovingElement = true;
@@ -695,12 +671,12 @@ jQuery.fn.makePositioned = function() {
 		 * @param {Number} offsetX the x position where you want your mouse on the object
 		 * @param {Number} offsetY the y position where you want your mouse on the object
 		 */
-		representative : function( element, offsetX, offsetY ){
+		representative: function (element, offsetX, offsetY) {
 			this._offsetX = offsetX || 0;
 			this._offsetY = offsetY || 0;
-	
+
 			var p = this.mouseStartPosition;
-	
+
 			this.movingElement = $(element);
 			this.movingElement.css({
 				top: (p.y() - this._offsetY) + "px",
@@ -708,7 +684,7 @@ jQuery.fn.makePositioned = function() {
 				display: 'block',
 				position: 'absolute'
 			}).show();
-	
+
 			this.mouseElementPosition = new $.Vector(this._offsetX, this._offsetY)
 		},
 		/**
@@ -720,82 +696,80 @@ jQuery.fn.makePositioned = function() {
 		 * @codeend
 		 * @param {optional:Boolean} val optional, set to false if you don't want to revert.
 		 */
-		revert : function(val){
+		revert: function (val) {
 			this._revert = val == null ? true : val;
 		},
 		/**
 		 * Isolates the drag to vertical movement.
 		 */
-		vertical : function(){
+		vertical: function () {
 			this._vertical = true;
 		},
 		/**
 		 * Isolates the drag to horizontal movement.
 		 */
-		horizontal : function(){
+		horizontal: function () {
 			this._horizontal = true;
 		},
-		
-		
+
+
 		/**
 		 * Respondables will not be alerted to this drag.
 		 */
-		only :function(only){
+		only: function (only) {
 			return (this._only = (only === undefined ? true : only));
 		}
 	});
-	
+
 	/**
 	 * @add jQuery.event.special static
 	 */
-	event.setupHelper( [
-		/**
-		 * @attribute dragdown
-		 * Listens for when a drag movement has started on a mousedown.
-		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
-		 * @codestart
-		 * $(".handles").live("dragdown", function(ev, drag){})
-		 * @codeend
-		 */
-		'dragdown',
-		/**
-		 * @attribute draginit
-		 * Called when the drag starts.
-		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
-		 */
-		'draginit',
-		/**
-		 * @attribute dragover
-		 * Called when the drag is over a drop.
-		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
-		 */
-		'dragover',
-		/**
-		 * @attribute dragmove
-		 * Called when the drag is moved.
-		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
-		 */
-		'dragmove',
-		/**
-		 * @attribute dragout
-		 * When the drag leaves a drop point.
-		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
-		 */
-		'dragout', 
-		/**
-		 * @attribute dragend
-		 * Called when the drag is done.
-		 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
-		 */
-		'dragend'
-		], "mousedown", function(e){
+	event.setupHelper([
+	/**
+	 * @attribute dragdown
+	 * Listens for when a drag movement has started on a mousedown.
+	 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+	 * @codestart
+	 * $(".handles").live("dragdown", function(ev, drag){})
+	 * @codeend
+	 */
+	'dragdown',
+	/**
+	 * @attribute draginit
+	 * Called when the drag starts.
+	 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+	 */
+	'draginit',
+	/**
+	 * @attribute dragover
+	 * Called when the drag is over a drop.
+	 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+	 */
+	'dragover',
+	/**
+	 * @attribute dragmove
+	 * Called when the drag is moved.
+	 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+	 */
+	'dragmove',
+	/**
+	 * @attribute dragout
+	 * When the drag leaves a drop point.
+	 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+	 */
+	'dragout',
+	/**
+	 * @attribute dragend
+	 * Called when the drag is done.
+	 * <p>Drag events are covered in more detail in [jQuery.Drag].</p>
+	 */
+	'dragend'], "mousedown", function (e) {
 		$.Drag.mousedown.call($.Drag, e, this)
-		
-	} )
-	
-	
+
+	})
+
+
 
 
 
 })(jQuery);
-
