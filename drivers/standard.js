@@ -11,7 +11,9 @@ steal.then(function() {
 	
 	
 	FuncUnit._window = null;
-	var newPage = true, changing;
+	var newPage = true, 
+		reloading = false,
+		changing;
 	var makeArray = function(arr, win){
 		if(!win){
 			win = window;
@@ -24,17 +26,25 @@ steal.then(function() {
 	}
 	FuncUnit._open = function(url){
 		changing = url;
+		var checkReload = function(url){
+			if(FuncUnit._window.location.pathname == url ||
+				FuncUnit._window.href == url){
+				return true;
+			}
+			return false;
+		}
 		if (newPage) {
 			if(FuncUnit.frame){
 				FuncUnit._window = FuncUnit.frame.contentWindow;
+				reloading = checkReload(url);
 				FuncUnit._window.location = url;
 			}else{
 				FuncUnit._window = window.open(url, "funcunit");
 			}
 		}
 		else {
+			reloading = checkReload(url);
 			FuncUnit._window.location = url;
-			
 		}
 		
 	}
@@ -82,7 +92,7 @@ steal.then(function() {
 		if (FuncUnit._window.document !== currentDocument || newDocument) { //we have a new document
 			currentDocument = FuncUnit._window.document;
             newDocument = true;
-			if (FuncUnit._window.document.readyState == "complete" && FuncUnit._window.location.href!="about:blank") {
+			if (FuncUnit._window.document.readyState == "complete" && FuncUnit._window.location.href!="about:blank" && !reloading) {
 				var ls = loadSuccess;
 					loadSuccess = null;
 				if (ls) {
@@ -95,6 +105,8 @@ steal.then(function() {
 			}
 		}
 		
+		// TODO need a better way to determine if a reloaded frame is loaded (like clearing the frame), this might be brittle 
+		reloading = false;
 		setTimeout(arguments.callee, 1000)
 	}
 	
