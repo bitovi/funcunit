@@ -847,8 +847,9 @@ FuncUnit.init.prototype = {
 	 * //deletes it
 	 * S('#zar').type("JavaScriptMVC[shift]"+
 	 *                "[left][left][left]"+
-	 *                "[shift-up][delete]")
+	 *                "[shift-up][delete]");
 	 * @codeend
+	 * 
 	 * <h2>Characters</h2>
 	 * You can type the characters found in [Syn.static.keycodes].
 	 * 
@@ -926,7 +927,7 @@ FuncUnit.init.prototype = {
 			this.selector = sel;
 			return ret;
 		}
-		
+
 	},
 	/**
 	 * Waits until the selector is invisible.  
@@ -1613,7 +1614,6 @@ FuncUnit.makeFunc = function(fname, argIndex){
 	}
 }
 	
-
 
 for (var prop in FuncUnit.funcs) {
 	FuncUnit.makeFunc(prop, FuncUnit.funcs[prop]);
