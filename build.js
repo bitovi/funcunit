@@ -1,6 +1,6 @@
 load('steal/rhino/steal.js')
 
-load('funcunit/synthetic/build.js')
+load('funcunit/syn/build.js')
 
 steal.File('funcunit/dist').mkdir()
 steal.File('funcunit/dist/funcunit').mkdir()
@@ -31,7 +31,7 @@ var userFiles =
 		"funcunit/resources/jquery.js", 
 		"funcunit/java/extensions/wrapped.js", 
 		"funcunit/resources/json.js", 
-		"funcunit/synthetic/dist/syn.js",
+		"funcunit/syn/dist/syn.js",
 		"funcunit/resources/selector.js"],
 	fileText, 
 	userExtensionsText = "";
