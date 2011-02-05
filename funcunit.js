@@ -1072,7 +1072,7 @@ FuncUnit.init.prototype = {
 	scroll: function( direction, amount, callback ) {
 		var selector = this.selector, 
 			context = this.context,
-			direction = /left|right|x/i.test(direction)? "Left" : "Right";
+			direction = /left|right|x/i.test(direction)? "Left" : "Top";
 		FuncUnit.add({
 			method: function(success, error){
 				steal.dev.log("setting " + selector + " scroll" + direction + " " + amount + " pixels")
