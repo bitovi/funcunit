@@ -7,7 +7,6 @@ steal.plugins('funcunit/qunit',
 .then(function(){
 
 
-
 //this gets the global object, even in rhino
 var window = (function(){return this }).call(null),
 
