@@ -114,7 +114,7 @@ steal.then(function() {
 			// TODO need a better way to determine if a reloaded frame is loaded (like clearing the frame), this might be brittle 
 			reloading = false;
 			// checks every second ...
-			setTimeout(arguments.callee, 1000)
+			setTimeout(arguments.callee, 500)
 		}
 	
 	/*
@@ -123,7 +123,18 @@ steal.then(function() {
 	 */
 	FuncUnit._onload = function(success, error){
 		// saver reference to success
-		loadSuccess = success;
+		loadSuccess = function(){
+			// called when load happens ... here we check for steal
+			console.log(FuncUnit._window.steal)
+			if(!FuncUnit._window.steal || FuncUnit._window.steal.isReady){
+				success();
+			}else{
+				console.log('waiting for steal ...');
+				setTimeout(arguments.callee, 200)
+			}
+				
+		}
+		
 		
 		// we only need to do this setup stuff once ...
 		if (!newPage) {
