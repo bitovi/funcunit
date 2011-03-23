@@ -1,6 +1,6 @@
 @echo off
 :: this file is a batch script that invokes loader.bat
-:: ex: documentjs/document cookbook/cookbook.html
+:: ex: funcunit/envjs cookbook/qunit.html
 
 :: relative path to this script
 set BASE=%~dps0
