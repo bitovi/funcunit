@@ -1,7 +1,7 @@
 steal.then(function(){
 	
 	// TODO: we should not do this if documenting ...
-	if (navigator.userAgent.match(/Rhino/) ) {
+	if (navigator.userAgent.match(/Rhino/) && !window.DocumentJS) {
 
 		// configuration defaults
 		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
