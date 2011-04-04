@@ -14,3 +14,6 @@ SET LOADPATH=%BASE%scripts/run.js
 
 :: call js.bat
 CALL %BASE%../steal/rhino/loader.bat %1 %2 %3 %4 %5 %6
+
+:: report errors to CI/build wrapper(s)
+if errorlevel 1 exit 1
