@@ -730,13 +730,29 @@ _opened: function() {}
 			timeout : time + 1000
 		});
 		return this;
-	}
+	};
 	/**
-	 * @hide
 	 * @function repeat
-	 * Takes a function that will be called over and over until it is successful.
+	 * 
+	 * Calls the checker method until it returns true or timeout happens.
+	 * 
+	 *     S.repeat(function(){
+	 *         return S(".foo").size() || S(".bar").size() 
+	 *     })
+	 * 
+	 * @param {Function} checker the checking function.  When it returns true, it will continue to the next command.
+	 * @param {Number} [timeout] the amount of time to wait.  This defaults to 10000 milliseconds.
+	 * @param {Object} [callback] a function to run after checker returns true
+	 * @param {Object} [error] the error message to show if checker doesn't return true in time.
+	 * 
 	 */
-	FuncUnit.repeat = function(checker, callback, error, timeout){
+	FuncUnit.repeat = function(checker, timeout, callback, error ){
+		if(typeof timeout !== 'number'){
+			error = callback;
+			callback = timeout;
+			
+		}
+		
 		var interval,
 			stopped = false	,
 			stop = function(){
@@ -759,7 +775,7 @@ _opened: function() {}
 					if (result) {
 						success();
 					}else if(!stopped){
-						interval = setTimeout(arguments.callee, 10)
+						interval = setTimeout(arguments.callee, 13)
 					}
 					
 				}, 10);
@@ -1602,7 +1618,7 @@ FuncUnit.makeFunc = function(fname, argIndex){
 			FuncUnit.repeat(function(){
 					var ret = FuncUnit.$.apply(FuncUnit.$, args);
 					return tester(ret);
-				}, callback, errorMessage, timeout)
+				},timeout, callback, errorMessage )
 
 			return this;
 		}else{

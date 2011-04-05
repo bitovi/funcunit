@@ -97,7 +97,8 @@ steal.then(function(){
 			},
 			fireLoad: true,
 			logLevel: 2,
-			dontPrintUserAgent: true
+			dontPrintUserAgent: true,
+			exitOnError : FuncUnit.exitOnError
 		});
 	}
 })
