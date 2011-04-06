@@ -2,7 +2,7 @@
 steal.plugins('funcunit/qunit',
 	'funcunit/qunit/rhino')
 	.then('resources/jquery','resources/json','resources/selector')
-//	.plugins('funcunit/syn')
+	.plugins('funcunit/syn')
 //Now describe FuncUnit
 .then(function(){
 
