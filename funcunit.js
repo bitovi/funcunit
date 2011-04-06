@@ -2,7 +2,7 @@
 steal.plugins('funcunit/qunit',
 	'funcunit/qunit/rhino')
 	.then('resources/jquery','resources/json','resources/selector')
-	.plugins('funcunit/syn')
+//	.plugins('funcunit/syn')
 //Now describe FuncUnit
 .then(function(){
 
@@ -19,15 +19,17 @@ var window = (function(){return this }).call(null),
  * @tag core
  * @test test.html
  * @download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-5.zip
- * FuncUnit provides powerful functional testing as an add on to [http://docs.jquery.com/QUnit QUnit].  
- * The same tests can be run 
- * in the browser, or with Selenium.  It also lets you automate basic 
- * QUnit tests in [EnvJS](http://www.envjs.com/) - a command line browser.
- * 
- * <h2>Example:</h2>
- * The following tests that an AutoSuggest returns 5 results.  
- * <a href='funcunit/autosuggest/funcunit.html'>See it in action!</a> (Make sure
- * you turn off your popup blocker!).
+
+FuncUnit is a powerful functional testing framework written in JavaScript with a jQuery-like syntax.  It provides an 
+approachable way to write maintainable cross browser tests.  It is the first functional testing framework written 
+for JavaScript developers by JavaScript developers.
+
+FuncUnit extends [http://docs.jquery.com/QUnit QUnit]'s API with commands like [FuncUnit.prototype.click click], [FuncUnit.prototype.type type], 
+and [FuncUnit.prototype.drag drag].  The same tests can be run in browser or automated via Selenium.
+
+## Example:
+The following tests that an AutoSuggest returns 5 results.  
+<a href='funcunit/autosuggest/funcunit.html'>See it in action!</a> (Make sure you turn off your popup blocker!)
 @codestart
 module("autosuggest",{
   setup: function() {
@@ -44,376 +46,98 @@ test("JavaScript results",function(){
   })
 });
 @codeend
- * 
- * <h2>Basic Setup</h2>
- * <h3>Setup with JavaScriptMVC</h3>
- * If you're setting up FuncUnit with JavaScriptMVC, 
- * use [steal.static.plugins] to get the funcunit plugin.  If you used
- * JavaScriptMVC's generators, it will setup a testing skeleton for you.
- * <h3>Setup with Stand-alone funcunit.js</h3>
- * Lets say you want to test <code>pages/mypage.html</code> and 
- * you've installed funcunit in test/funcunit.</br>
- * Steps:
- * <ol>
- *  <li>Create a HTML file (pages/mypage_test.html) that loads
- *  <code><b>qunit.css</b></code>, <code><b>funcunit.js</b></code>, 
- *  and <code><b>mypage_test.js</b></code>.  We'll create mypage_test.js in step #2.
-@codestart html
-&lt;html>
-  &lt;head>
-    &lt;link   href='../funcunit/<b>qunit.css</b>'
-            type='text/css'
-            rel='stylesheet' />
-    &lt;script src='../funcunit/<b>funcunit.js</b>'
-            type='text/javascript' ></script>
-    &lt;script src='<b>mypage_test.js</b>'
-            type='text/javascript'></script>
-    &lt;title>MyPage Test Suite&lt;/title>
-  &lt;/head>
-  &lt;body>
-    &lt;h1 id="qunit-header">MyPage Test Suite&lt;/h1>
-    &lt;h2 id="qunit-banner">&lt;/h2>
-    &lt;div id="qunit-testrunner-toolbar">&lt;/div>
-    &lt;h2 id="qunit-userAgent">&lt;/h2>
-    &lt;ol id="qunit-tests">&lt;/ol>
-  &lt;/body>
-&lt;/html>
-@codeend
- * </li>
- * 	<li>Create a JS file (<code>pages/mypage_test.js</code>) for your tests.  The skeleton should like:
-@codestart
-module("APPNAME", {
-  setup: function() {
-    // opens the page you want to test
-    $.open("myPage.html");
-  }
-})
-  
-test("page has content", function(){
-  ok( S("body *").size(), "There be elements in that there body")
-})
-@codeend
- *  </li>
- *  <li>Open your html page (<code>mytest.html</code>) in a browser.  Did it pass?  
- *  If not check the paths.  
- *  <div class='whisper'>P.S. Your page and test files don't have to be in the same folder; however,
- *  on the filesystem, Firefox and Chrome don't let you access parent folders.  We wanted the
- *  demo to work without having to host these files.
- *  </div>
- *  
- *  </li>
- *  <li>Now run your test in Selenium.  In windows:
-@codestart text
-> envjs ../../pages/mypage_test.html
-@codeend
-In Linux / Mac:
-@codestart text
-> ./envjs ../../pages/mypage_test.html
-@codeend
-<div class='whisper'>This will run mytest.html on the filesystem.  To run it served, just
-pass in the url of your test page: <pre>envjs http://localhost/pages/mypage_test.html</pre>.
-</div>
-</li>
- * </ol>
- * <h2>Writing Tests</h2>
- * <p>Writing tests is super easy and follows this pattern:</p>
-<ol>
-  <li>Open a page with [FuncUnit.static.open S.open].
-@codestart
-S.open("//myapp/myapp.html")
-@codeend
-  </li>
-  <li>Do some things
-@codestart
-//click something
-S('#myButton').click()
 
-//type something
-S('#myInput').type("hello")
-@codeend
-  </li>
+## Using FuncUnit
 
-  <li>Wait for the page to change:
-@codestart
-//Wait until it is visible
-S('#myMenu').visible()
+FuncUnit works by loading QUnit, FuncUnit, and your tests into a web page.  Your application is opened in a 
+separate browser window.  The FuncUnit page then drives your application via clicks, types, and drags, reporting 
+pass/fail in the initial FuncUnit test page.
 
-//wait until something exists
-S('#myArea').exists()
+### Loading a Test
 
-//waits a second
-S.wait(1000);
-@codeend
-  </li>
-  <li>Check your page in a callback:
-@codestart
-S('#myMenu').visible(function(){
-  //check that offset is right
-  equals(S('#myMenu').offset().left,
-         500,
-         "menu is in the right spot");
-         
-})
-@codeend
-  </li>
-</ol>
-<h2>Actions, Waits, and Getters</h2>
-<p>FuncUnit supports three types of commands: asynchronous actions and waits, 
-and synchronous getters.</p>
-<p><b>Actions</b> are used to simulate user behavior such as clicking, typing, moving the mouse.</p>
-<p><b>Waits</b> are used to pause the test script until a condition has been met.</p>
-<p><b>Getters</b> are used to get information about elements in the page</p>
-<p>Typically, a test looks like a series of action and wait commands followed by qUnit test of
-the result of a getter command.  Getter commands are almost always in a action or wait callback.</p>
-<h3>Actions</h3>
-Actions simulate user behavior.  FuncUnit provides the following actions:
-<ul>
-	<li><code>[FuncUnit.static.open open]</code> - Opens a page.</li>
-	
-	<li><code>[FuncUnit.prototype.click click]</code> - clicks an element (mousedown, mouseup, click).</li>
-	<li><code>[FuncUnit.prototype.dblclick dblclick]</code> - two clicks followed by a dblclick.</li>
-	<li><code>[FuncUnit.prototype.rightClick rightClick]</code> - a right mousedown, mouseup, and contextmenu.</li>
-	
-	<li><code>[FuncUnit.prototype.type type]</code> - Types characters into an element.</li>
-	
-	<li><code>[FuncUnit.prototype.move move]</code> - mousemove, mouseover, and mouseouts from one element to another.</li>
-	<li><code>[FuncUnit.prototype.drag drag]</code> - a drag motion from one element to another.</li>
-	
-	<li><code>[FuncUnit.prototype.scroll scroll]</code> - scrolls an element.</li>
-</ul>
+The first thing any FuncUnit page does is load its dependencies and a test.  A FuncUnit page:
 
-<p>Actions run asynchronously, meaning they do not complete all their events immediately.  
-However, each action is queued so that you can write actions (and waits) linearly.</p>
-<p>The following might simulate typing and resizing a "resizable" textarea plugin:</p>
-@codestart
-S.open('resizableTextarea.html');
+1. loads steal.js
+2. loads funcunit and qunit via steal.plugins
+3. loads one or more test files
 
-S('textarea').click().type("Hello World");
-  
-S('.resizer').drag("+20 +20");
-@codeend
-<h3>Getters</h3>
-Getters are used to test the conditions of the page.  Most getter commands correspond to a jQuery
-method of the same name.  The following getters are provided:
-<table style='font-family: monospace'>
-<tr>
-	<th colspan='2'>Dimensions</th> <th>Attributes</th> <th>Position</th> <th>Selector</th> <th>Style</th>
-</tr>
-<tr>
-	<td>[FuncUnit.prototype.width width]</td>
-	<td>[FuncUnit.prototype.height height]</td> 
-	<td>[FuncUnit.prototype.attr attr]</td> 
-	<td>[FuncUnit.prototype.position position]</td> 
-	<td>[FuncUnit.prototype.size size]</td> 
-	<td>[FuncUnit.prototype.css css]</td>
-</tr>
-<tr>
-	<td>[FuncUnit.prototype.innerWidth innerWidth]</td>
-	<td>[FuncUnit.prototype.innerHeight innerHeight]</td>
-	<td>[FuncUnit.prototype.hasClass hasClass]</td>
-	<td>[FuncUnit.prototype.offset offset]</td>
-	<td>[FuncUnit.prototype.exists exists]</td>
-	<td>[FuncUnit.prototype.visible visible]</td>
-</tr>
-<tr>
-	<td>[FuncUnit.prototype.outerWidth outerWidth]</td>
-	<td>[FuncUnit.prototype.outerHeight outerHeight]</td>
-	<td>[FuncUnit.prototype.val val]</td>
-	<td>[FuncUnit.prototype.scrollLeft scrollLeft]</td>
-	<td>[FuncUnit.prototype.missing missing]</td>
-	<td>[FuncUnit.prototype.invisible invisible]</td>
-</tr>
-<tr>
-	<td colspan='2'></td>
-	<td>[FuncUnit.prototype.text text]</td> 
-	<td>[FuncUnit.prototype.scrollTop scrollTop]</td>
-</tr>
-<tr>
-	<td colspan='2'></td>
-	<td>[FuncUnit.prototype.html html]</td>
-</tr>
-</table>
-<p>
-As getters return synchronously, it's important that they happen after the action or wait command completes.
-This is why getters are typically found in an action or wait command's callback:
-</p>
-The following checks that the textarea is 20 pixels taller after the drag.
-@codestart
-    //save textarea reference
-var txtarea = S('textarea'),
-	
-    // save references to width and height
-    startingWidth = txtarea.width(), 
-    startingHeight = txtarea.height();
+Use js jquery/generate/plugin to generate a basic working test as a starting point.  For more details on setting up a 
+FuncUnit test, check out the [FuncUnit.setup Getting Set Up] guide.  For more details on using FuncUnit without Steal or JavaScriptMVC, 
+check out the [FuncUnit.standalone Using Standalone FuncUnit] guide.
 
-S.open('resizableTextarea.html');
+### Writing a Test
 
-S('textarea').click().type("Hello World");
+There are four types of commands in any FuncUnit tests:
 
-S('.resizer').drag("+20 +20", function(){
-  equals(txtarea.width(), 
-         startingWidth, 
-         "width stays the same");
-         
-  equals(txtarea.height(), 
-         startingHeight+20, 
-         "height got bigger");
-});
-@codeend
-<h3>Waits</h3>
-<p>Waits are used to wait for a specific condition to be met before continuing to the next wait or
-action command.  Every getter commands can become a wait command when given a check value or function.  
-For
-example, the following waits until the width of an element is 200 pixels and tests its offset.
-</p>
-@codestart
-var sm = S("#sliderMenu");
-sm.width( 200, function(){
+1. Actions - simulate a user interaction (clicks, types, drags, etc)
+2. Waits - wait for conditions in the page before continuing the test (width, visible, text, etc)
+3. Getters - get page conditions to use in assertions (width, text, hasClass)
+4. QUnit commands - assertions and methods for setting up tests (module, test, ok, equals, etc)
 
-  var offset = sm.offset();
-  equals( offset.left, 200)
-  equals( offset.top, 200)
-})
-@codeend
-<p>You can also provide a test function that when true, continues to the next action or wait command.
-The following is equivalent to the previous example:
-</p>
-@codestart
-var sm = S("#sliderMenu");
+Tests follow a consistent pattern:
 
-sm.width(
-  function( width ) {
-    return width == 200;
-  }, 
-  function(){
-    var offset = sm.offset();
-    equals( offset.left, 200)
-    equals( offset.top, 200)
-  }
-)
-@codeend
-<div class='whisper'>Notice that the test function is provided the width of the element to use to check.</div>
-<p>In addition to all the getter functions, FuncUnit provides:
-</p>
-<ul>
-  <li>[FuncUnit.static.wait S.wait] - waits a timeout before continuing.</li>
-  <li>[FuncUnit.prototype.wait S().wait] - waits a timeout before continuing.</li>
-  <li>[FuncUnit S(function(){})] - code runs between actions (like a wait with timeout = 0).</li>
-</ul>
-<h2>Automated Testing with Selenium</h2>
-<p>FuncUnit has a command line mode, which allows you to run your tests as part of a checkin script or nightly build.  
-The Selenium server is used to automate opening browsers, and FuncUnit commands are sent to the test window via Selenium RC.</p>
+0. Each test sets itself up in QUnit's [http://docs.jquery.com/QUnit/module setup] method by opening an application page with S.open.
+1. Tests simulate a user action, like clicking a link.
+2. Then they wait for some page condition to change, like a menu appearing.
+3*. Then you assert something about your page, like the right number of links are visible.
 
-<p>The envjs script (written for both Windows and OS X/Linux), is used to load your test page (the 
-same one that runs tests in the browser) in Env.js, a simulated browser running on Rhino.  The 
-test page recognizes its running in the Rhino context and issues commands to Selenium accordingly.</p>
+* This step isn't always necessary.  You can write an entire test without assertions.  If the wait condition fails, the test will fail.
 
-<p>Running these command line tests is simple:</p>
-@codestart
-my\path\to\envjs my\path\to\funcunit.html 
-@codeend
-<p>Configuring settings for the command line mode will be covered next.</p>
-<h3>Configuration</h3>
-<p>FuncUnit loads a settings.js file every time it is runs in Selenium mode.  This file defines 
-configuration that tells Selenium how to run.  You can change which browsers run, their location, 
-the domain to serve from, and the speed of test execution.</p>
-<p>FuncUnit looks first in the same directory as the funcunit page you're running tests from for 
-settings.js.  For example if you're running FuncUnit like this:</p>
-@codestart
-funcunit\envjs mxui\combobox\funcunit.html 
-@codeend
-<p>It will look first for mxui/combobox/settings.js.</p>
-<p>Then it looks in its own root directory, where a default settings.js exists.  
-This is to allow you to create different settings for different projects.</p>
-<h3>Setting Browsers</h3>
-<p>FuncUnit.browsers is an array that defines which browsers Selenium opens and runs your tests in.  
-This is defined in settings.js.  If this null it will default to a standard set of browsers for your OS 
-(FF and IE on Windows, FF on everything else).  You populate it with strings like the following:</p>
-@codestart
-browsers: ["*firefox", "*iexplore", "*safari", "*googlechrome"]
-@codeend
+For more information on writing tests, check out the [FuncUnit.writing Writing Tests] guide.
 
-To define a custom path to a browser, put this in the string following the browser name like this:</p>
+## Running a Test
 
-@codestart
-browsers: ["*custom /path/to/my/browser"]
-@codeend
+To run this test in browser, open funcunit.html in any browser (and turn off your popup blocker!).
 
-See the [http://release.seleniumhq.org/selenium-remote-control/0.9.0/doc/java/com/thoughtworks/selenium/DefaultSelenium.html#DefaultSelenium Selenium docs] for more information on customizing browsers and other settings.</p>
+To run the same test automated via Selenium, run:
 
-## 64-bit Java
+funcunit/envjs path/to/funcunit.html
 
-Some users will find Selenium has trouble opening while using 64 bit java (on Windows).  You will see an error like  
-Could not start Selenium session: Failed to start new browser session.  This is because Selenium 
-looks in the 64-bit Program Files directory, and there is no Firefox there.  To fix this, change 
-browsers to include the path like this:
+For more information about using Selenium, checkout the [FuncUnit.selenium Automated FuncUnit] guide.
 
-@codestart
-FuncUnit.browsers = ["*firefox C:\\PROGRA~2\\MOZILL~1\\firefox.exe", "*iexplore"]
-@codeend
+* Use envjs.bat for Windows users.
 
-<h3>Filesystem for Faster Tests</h3>
-<p>You might want to use envjs to open local funcunit pages, but test pages on your server.  This is possible, you 
-just have to change FuncUnit.href or FuncUnit.jmvcRoot.  This file can load locally while everything else is 
-using a server because it is a static file and loads static script files.</p>
+## What is FuncUnit
 
-<p>Set jmvcRoot to point to the location you want your pages to load from, like this:</p>
-@codestart
-jmvcRoot: "localhost:8000"
-@codeend
+Under the hood, FuncUnit is built on several projects:
 
-<p>Then make sure your test paths contain // in them to signify something relative to the jmvcRoot.  
-For example, S.open("//funcunit/test/myapp.html") would open a page at 
-http://localhost:8000/funcunit/test/myapp.html.</p>
+ - Selenium - used to open browsers and run automated tests
+ - QUnit - Unit testing framework provides test running, assertions, and reporting
+ - jQuery - used to look up elements, trigger events, and query for page conditions
+ - Env.js - Rhino based headless browser used to load pages in the command line
+ - Rhino - command line JavaScript environment running in Java
+ - Syn - event simulation library
 
-<p>To load the command page from filesystem, start your test like you normally do:</p>
-@codestart
-funcunit\envjs path\to\funcunit.html
-@codeend
+FuncUnit is designed to let JavaScript developers write tests in an easy to learn jQuery-like syntax. 
+The tests will run in browser, so developers can check for regressions as they work.  The same tests also run 
+via Selenium, so QA can automate nightly builds or continuous integration.
 
-<h3>Running From Safari and Chrome</h3>
-<p>Certain browsers, like Safari and Chrome, don't run Selenium tests from filesystem because 
-of security resrictions.  To get around this you have to run pages served from a server.  The 
-downside of this is the test takes longer to start up, compared to loading from filesystem.</p>  
-<p>To run served pages, you must 1) provide an absolute path in your envjs path and 2) provide an absolute path 
-in jmvcRoot.</p>
-<p>For example, to run cookbook FuncUnit tests from Google Chrome, I'd set the browsers and jmvcRoot like this:</p>
-@codestart
-	browsers: ["*googlechrome"],
-	jmvcRoot: "http://localhost:8000/framework/",
-@codeend
-<p>then I'd start up Selenium like this:</p>
-@codestart
-funcunit\envjs http://localhost:8000/framework/cookbook/funcunit.html
-@codeend
-<p>To run Safari 5 in Windows, you should use the safariproxy browser string like this:</p>
-@codestart
-	browsers: ["*safariproxy"],
-@codeend
+## Why FuncUnit
 
-Mac Safari is just "*safari".
+TESTING IS PAINFUL.  Everyone simply hates testing, and most front end developers simply don't test.  There 
+are a few reasons for this:
 
-<h3>Slow Mode</h3>
-<p>You can slow down the amount of time between tests by setting FuncUnit.speed.  By default, FuncUnit commands 
-in Selenium will run as soon as the previous command is complete.  If you set FuncUnit.speed to "slow" this 
-becomes 500ms between commands.  You may also provide a number of milliseconds.  
-Slow mode is useful while debugging.</p>
+1. Barriers to entry - Difficult setup, installation, high cost, or difficult APIs.  QTP costs $5K per license.
+2. Completely foreign APIs - Testing frameworks often use other languages (Ruby, C#, Java) and new APIs.
+3. Debugging across platforms - You can't use firebug to debug a test that's driven by PHP.
+4. Low fidelity event simuatlion - Tests are often brittle or low fidelity because frameworks aren't designed to test heavy JavaScript apps, so 
+browser event simualation accuracy isn't a top priority.
+5. QA and developers can't communicate - If only QA has the ability to run tests, sending bug reports is messy and time consuming.
 
-<h2>Limitations</h2>
-<ul>
-	<li>Selenium doesn't run Chrome/Opera/Safari on the filesystem.</li>
-</ul>
+FuncUnit aims to fix these problems:
 
-<h2>Troubleshooting</h2>
+1. FuncUnit is free and has no setup or installation (just requires Java and a browser). 
+2. FuncUnit devs know jQuery, and FuncUnit leverages that knowldge with a jQuery-like API.
+3. You can run tests in browser and set Firebug breakpoints.
+4. Syn.js is a low level event simuation library that goes to extra trouble to make sure each browser simulates events exactly as intended.
+5. Since tests are just JS and HTML, they can be checked into a project and any dev can run them easily.  QA just needs to send a URL to a broken 
+test case.
 
-<p>If you have trouble getting Selenium tests to run in IE, there are some settings that you can to change.  First, disable the security settings for pages that run from the filesystem.  To do this, open the Internet Options in IE and select the "Advanced" tab, and enable the option to "Allow active content to run in files on My Computer."  This is what it looks like:</p>
+There are many testing frameworks out there, but nothing comes close to being a complete solution for front end testing like FuncUnit does.
 
-@image jmvc/images/iesecurity.png
+*/
 
-<p>You may also get an error that the popup blocker is enabled, which prevents the tests from running.  It's actually not the popup blocker that causes this, but the fix is just as easy.  Simply disable "Protected Mode" in IE, which is also in the Internet Options:</p>
-
-@image jmvc/images/iepopups.png
-
+/*
  * 
  * @constructor
  * selects something in the other page
@@ -730,29 +454,13 @@ _opened: function() {}
 			timeout : time + 1000
 		});
 		return this;
-	};
+	}
 	/**
+	 * @hide
 	 * @function repeat
-	 * 
-	 * Calls the checker method until it returns true or timeout happens.
-	 * 
-	 *     S.repeat(function(){
-	 *         return S(".foo").size() || S(".bar").size() 
-	 *     })
-	 * 
-	 * @param {Function} checker the checking function.  When it returns true, it will continue to the next command.
-	 * @param {Number} [timeout] the amount of time to wait.  This defaults to 10000 milliseconds.
-	 * @param {Object} [callback] a function to run after checker returns true
-	 * @param {Object} [error] the error message to show if checker doesn't return true in time.
-	 * 
+	 * Takes a function that will be called over and over until it is successful.
 	 */
-	FuncUnit.repeat = function(checker, timeout, callback, error ){
-		if(typeof timeout !== 'number'){
-			error = callback;
-			callback = timeout;
-			
-		}
-		
+	FuncUnit.repeat = function(checker, callback, error, timeout){
 		var interval,
 			stopped = false	,
 			stop = function(){
@@ -775,7 +483,7 @@ _opened: function() {}
 					if (result) {
 						success();
 					}else if(!stopped){
-						interval = setTimeout(arguments.callee, 13)
+						interval = setTimeout(arguments.callee, 10)
 					}
 					
 				}, 10);
@@ -1618,7 +1326,7 @@ FuncUnit.makeFunc = function(fname, argIndex){
 			FuncUnit.repeat(function(){
 					var ret = FuncUnit.$.apply(FuncUnit.$, args);
 					return tester(ret);
-				},timeout, callback, errorMessage )
+				}, callback, errorMessage, timeout)
 
 			return this;
 		}else{
