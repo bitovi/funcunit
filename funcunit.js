@@ -455,6 +455,29 @@ _opened: function() {}
 		});
 		return this;
 	}
+	
+	FuncUnit.
+	/**
+	 * When a browser's native confirm dialog is used, this method is used to repress the dialog and simulate 
+	 * clicking OK or Cancel.  Alerts are repressed by default in FuncUnit application windows.
+	 * @codestart
+	 * S.confirm(true);
+	 * @codeend
+	 * @param {Boolean} answer true if you want to click OK, false otherwise
+	 */
+	confirm = function(answer){}
+	
+	FuncUnit.
+	/**
+	 * When a browser's native prompt dialog is used, this method is used to repress the dialog and simulate 
+	 * clicking typing something into the dialog.
+	 * @codestart
+	 * S.prompt("Harry Potter");
+	 * @codeend
+	 * @param {String} answer Whatever you want to simulate a user typing in the prompt box
+	 */
+	prompt = function(answer){}
+	
 	/**
 	 * @hide
 	 * @function repeat
