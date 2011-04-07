@@ -1,5 +1,5 @@
 /**
-@page FuncUnit.example Test Examples 
+@page example 2.2. Test Examples 
 @parent FuncUnit
 
 ## Srchr Smoke Test

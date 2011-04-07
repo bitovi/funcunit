@@ -1,6 +1,6 @@
 /**
  * 
-@page FuncUnit.standalone Standalone FuncUnit
+@page standalone Standalone FuncUnit
 @parent FuncUnit
 While FuncUnit is most often used as a JavaScriptMVC component, it can also be used 
 on its own.  This guide will get you started with the standalone package.

@@ -1,5 +1,5 @@
 /**
-@page FuncUnit.setup Getting Set Up
+@page setup 1. Getting Set Up
 @parent FuncUnit
 
 ## Getting Started with Generators
@@ -7,7 +7,7 @@
 This guide assumes you're using a full JavaScript download with Steal.  The easiest way to get started 
 is to use generators to get a basic test in place.  
 
-From a command line, run:
+From a command line, cd to the root of the your JMVC directory and run:
 
 @codestart
 ./js jquery/generate/controller Company.Widget
