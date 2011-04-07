@@ -2,7 +2,7 @@
 steal.plugins('funcunit/qunit',
 	'funcunit/qunit/rhino')
 	.then('resources/jquery','resources/json','resources/selector')
-	.plugins('funcunit/syn')
+//	.plugins('funcunit/syn')
 //Now describe FuncUnit
 .then(function(){
 
@@ -124,7 +124,7 @@ via Selenium, so QA can automate nightly builds or continuous integration.
 
 ## Why FuncUnit
 
-TESTING IS PAINFUL.  Everyone simply hates testing, and most front end developers simply don't test.  There 
+TESTING IS PAINFUL.  Everyone hates testing, and most front end developers simply don't test.  There 
 are a few reasons for this:
 
 1. **Barriers to entry** - Difficult setup, installation, high cost, or difficult APIs.  QTP costs $5K per license.
@@ -145,10 +145,6 @@ test case.
 
 There are many testing frameworks out there, but nothing comes close to being a complete solution for front end testing like FuncUnit does.
 
-*/
-
-/*
- * 
  * @constructor
  * selects something in the other page
  * @param {String|Function|Object} selector FuncUnit behaves differently depending if
