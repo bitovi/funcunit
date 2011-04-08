@@ -47,7 +47,7 @@ flickrInput.click();
 searchInput.click().type("puppy\r");
 resultElements.visible(function(){
 	equals(resultsElements.size(), 10, "There are 10 results");
-	ok(historyElWithPuppy.size(), 1, "History has puppy");
+	ok(/puppy/.test( historyEl.text() ), "History has puppy");
 })
 @codeend
 
@@ -55,13 +55,13 @@ In this test, we're performing the search, waiting for results to appear, then a
 Here's the test with selectors filled in:
 
 @codestart
-S("#cb_flickr").click();
-// \r means hit enter, which submits the form
-S("#query").click().type("puppy\r");
-S("#flickr li").visible(function(){
-	equals(S("#flickr li").size(), 10, "There are 10 results");
-	ok(S("#flickr li:contains('puppy')").size(), 1, "History has puppy");
-})
+ S('#cb_flickr').click();
+ S('#query').click().type('puppy\r');
+ 
+ S('#flickr li').visible(function(){
+      equals(S('#flickr li').size(), 10, 'There are 10 results')
+      ok( /puppy/.test( S('#history .text').text() ), 'History has puppy')
+ })
 @codeend
 
 That's it.  Writing a working test is easy!
