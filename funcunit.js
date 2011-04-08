@@ -2,7 +2,7 @@
 steal.plugins('funcunit/qunit',
 	'funcunit/qunit/rhino')
 	.then('resources/jquery','resources/json','resources/selector')
-//	.plugins('funcunit/syn')
+	.plugins('funcunit/syn')
 //Now describe FuncUnit
 .then(function(){
 
@@ -579,7 +579,7 @@ FuncUnit.init = function(s, c){
 FuncUnit.init.prototype = {
 	funcunit : true,
 	/**
-	 * Types text into an element.  This makes use of [Syn.prototype.type] and works in 
+	 * Types text into an element.  This makes use of [Syn.type] and works in 
 	 * a very similar way.
 	 * <h3>Quick Examples</h3>
 	 * @codestart
@@ -603,7 +603,8 @@ FuncUnit.init.prototype = {
 	 *                "[shift-up][delete]")
 	 * @codeend
 	 * <h2>Characters</h2>
-	 * You can type the characters found in [Syn.static.keycodes].
+	 * 
+	 * For a list of the characters you can type, check [Syn.keycodes].
 	 * 
 	 * @param {String} text the text you want to type
 	 * @param {Function} [callback] a callback that is run after typing, but before the next action.
