@@ -19,6 +19,13 @@ steal('//steal/build/pluginify/pluginify', function(s){
 		packagejquery: true
 	})
 })
+steal('//steal/build/pluginify/pluginify', function(s){
+	steal.build.pluginify("funcunit/qunit",{
+		global: "true",
+		destination: "funcunit/dist/funcunit/qunit.js",
+		packagejquery: true
+	})
+})
 
 var i, fileName, cmd;
 
