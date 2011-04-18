@@ -1,7 +1,7 @@
 steal.then(function(){
 	
 	// TODO: we should not do this if documenting ...
-	if (navigator.userAgent.match(/Rhino/) && !window.DocumentJS) {
+	if (navigator.userAgent.match(/Rhino/) && !window.DocumentJS && !(steal && steal.pluginify)) {
 
 		// configuration defaults
 		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
@@ -43,7 +43,6 @@ steal.then(function(){
 				
 				browser++;
 				if (browser < FuncUnit.browsers.length) {
-					
 					FuncUnit.browserStart(  FuncUnit.browsers[browser] );
 					
 					
@@ -62,7 +61,6 @@ steal.then(function(){
 					//
 				}
 			}
-			
 			FuncUnit.browserStart(FuncUnit.browsers[0]);
 			
 			FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 

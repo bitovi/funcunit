@@ -7457,8 +7457,6 @@ RemoteRunner.prototype.continueTest = function(){
 })(jQuery);
 })
 (function(){
-	
-	
 var extend = function(d, s) { for (var p in s) d[p] = s[p]; return d;},
 	// only uses browser detection for key events
 	browser = {
@@ -7603,23 +7601,19 @@ Syn.key.browsers["Envjs\ Resig/20070309 PilotFish/1.2.0.10\1.6"] = {
  */
 Syn = function(type, options, element, callback){		
 	return ( new Syn.init(type, options, element, callback) )
-}
-	
-if(window.addEventListener){ // Mozilla, Netscape, Firefox
-	bind = function(el, ev, f){
-		el.addEventListener(ev, f, false)
-	}
-	unbind = function(el, ev, f){
-		el.removeEventListener(ev, f, false)
-	}
-}else{
-	bind = function(el, ev, f){
-		el.attachEvent("on"+ev, f)
-	}
-	unbind = function(el, ev, f){
-		el.detachEvent("on"+ev, f)
-	}
-}	
+};
+
+bind = function(el, ev, f){
+	return el.addEventListener ? 
+		el.addEventListener(ev, f, false) : 
+		 el.attachEvent("on"+ev, f) 
+};
+unbind = function(el, ev, f){
+	return el.addEventListener ?
+		el.removeEventListener(ev, f, false) :
+		el.detachEvent("on"+ev, f) 
+};
+
 /**
  * @Static
  */	
@@ -7818,12 +7812,12 @@ extend(Syn,{
 	//some generic helpers
 	helpers : {
 		createEventObject : createEventObject,
-		createBasicStandardEvent: function( type, defaults ) {
+		createBasicStandardEvent: function( type, defaults , doc) {
 			var event;
 			try {
-				event = document.createEvent("Events");
+				event = doc.createEvent("Events");
 			} catch(e2) {
-				event = document.createEvent("UIEvents");
+				event = doc.createEvent("UIEvents");
 			} finally {
 				event.initEvent(type, true, true);
 				extend(event, defaults);
@@ -7881,36 +7875,37 @@ extend(Syn,{
 	 * @param {Object} type
 	 * @param {Object} autoPrevent
 	 */
-	dispatch : (document.documentElement.dispatchEvent ? 
-				function(event, element, type, autoPrevent){
-					var preventDefault = event.preventDefault, 
-						prevents = autoPrevent ? -1 : 0;
-					
-					//automatically prevents the default behavior for this event
-					//this is to protect agianst nasty browser freezing bug in safari
-					if(autoPrevent){
-						bind(element, type, function(ev){
-							ev.preventDefault()
-							unbind(this, type, arguments.callee)
-						})
-					}
-					
-					
-					event.preventDefault = function(){
-						prevents++;
-						if(++prevents > 0){
-							preventDefault.apply(this,[]);
-						}
-					}
-					element.dispatchEvent(event)
-					return prevents <= 0;
-				} : 
-				function(event, element, type){
-					try {window.event = event;}catch(e) {}
-					//source element makes sure element is still in the document
-					return element.sourceIndex <= 0 || element.fireEvent('on'+type, event)
+	dispatch : function(event, element, type, autoPrevent){
+		
+		// dispatchEvent doesn't always work in IE (mostly in a popup)
+		if(element.dispatchEvent && event){	
+			var preventDefault = event.preventDefault, 
+				prevents = autoPrevent ? -1 : 0;
+			
+			//automatically prevents the default behavior for this event
+			//this is to protect agianst nasty browser freezing bug in safari
+			if(autoPrevent){
+				bind(element, type, function(ev){
+					ev.preventDefault()
+					unbind(this, type, arguments.callee)
+				})
+			}
+			
+			
+			event.preventDefault = function(){
+				prevents++;
+				if(++prevents > 0){
+					preventDefault.apply(this,[]);
 				}
-			),
+			}
+			element.dispatchEvent(event)
+			return prevents <= 0;
+		} else {
+			try {window.event = event;}catch(e) {}
+			//source element makes sure element is still in the document
+			return element.sourceIndex <= 0 || (element.fireEvent && element.fireEvent('on'+type, event))
+		}
+	},
 	/**
 	 * @attribute
 	 * @hide
@@ -7919,11 +7914,23 @@ extend(Syn,{
 	create :  {
 		//-------- PAGE EVENTS ---------------------
 		page : {
-			event : document.createEvent ? function(type, options, element){
-					var event = element.ownerDocument.createEvent("Events");
-					event.initEvent(type, true, true ); 
+			event: function(type, options, element){
+				var doc = Syn.helpers.getWindow(element).document || document;
+				if (doc.createEvent) {
+					var event = doc.createEvent("Events");
+
+					event.initEvent(type, true, true);
 					return event;
-				} : createEventObject
+				}
+				else {
+					var event;
+					try {
+						event = createEventObject(type, options, element);
+					}
+					catch (e) {}
+					return event;
+				}
+			}
 		},
 		// unique events
 		focus : {
@@ -8270,11 +8277,13 @@ if (window.jQuery || (window.FuncUnit && window.FuncUnit.jquery)) {
 }
 
 window.Syn = Syn;
-	
-})(true);
+}());
+(function() {
+//handles mosue events
 (function(){
 
-var h = Syn.helpers;
+var h = Syn.helpers,
+	getWin = h.getWindow;
 
 Syn.mouse = {};
 h.extend(Syn.defaults,{
@@ -8292,7 +8301,7 @@ h.extend(Syn.defaults,{
 		//get old values
 		var href,
 			radioChanged = Syn.data(element,"radioChanged"),
-			scope = Syn.helpers.getWindow(element),
+			scope = getWin(element),
 			nodeName = element.nodeName.toLowerCase();
 		
 		if( (href = Syn.data(element,"href") ) ){
@@ -8398,12 +8407,13 @@ h.extend(Syn.create,{
 				relatedTarget : document.documentElement
 			}, options);
 		},
-		event : document.createEvent ? 
-			function(type, defaults, element){  //Everyone Else
+		event : function(type, defaults, element){  //Everyone Else
+			var doc = getWin(element).document || document
+			if(doc.createEvent){
 				var event;
-				
+			
 				try {
-					event = element.ownerDocument.createEvent('MouseEvents');
+					event = doc.createEvent('MouseEvents');
 					event.initMouseEvent(type, 
 						defaults.bubbles, defaults.cancelable, 
 						defaults.view, 
@@ -8412,12 +8422,21 @@ h.extend(Syn.create,{
 						defaults.ctrlKey,defaults.altKey,defaults.shiftKey,defaults.metaKey,
 						defaults.button,defaults.relatedTarget);
 				} catch(e) {
-					event = h.createBasicStandardEvent(type,defaults)
+					event = h.createBasicStandardEvent(type,defaults, doc)
 				}
 				event.synthetic = true;
 				return event;
-			} : 
-			h.createEventObject
+			}else{
+				var event;
+				try {
+					event = h.createEventObject(type, defaults, element)
+				}
+				catch (e) {}
+				
+				return event;
+			}
+			
+		}
 	},
 	click : {
 		setup: function( type, options, element ) {
@@ -8585,8 +8604,9 @@ h.extend(Syn.create,{
 })();
 
 
+})()
 })(true);
-(function(){
+(function() {
 	Syn.key.browsers = {
 		webkit : {
 			'prevent':
@@ -8735,10 +8755,9 @@ h.extend(Syn.create,{
 		}
 		return Syn.mouse.browsers.gecko;
 	})();
-	
 })(true);
+(function() {
 (function(){
-
 var h = Syn.helpers,
 	S = Syn,
 
@@ -9051,6 +9070,7 @@ h.extend(Syn.key,{
 					after = current.substr(sel.end),
 					character = key;
 				
+				console.log("setting",this.value,before, character, after)
 				this.value = before+character+after;
 				//handle IE inserting \r\n
 				var charLength = character == "\n" && S.support.textareaCarriage ? 2 : character.length;
@@ -9286,6 +9306,16 @@ h.extend(Syn.create,{
 			}
 		}
 	},
+	keypress : {
+		setup : function(type, options, element){
+			// if this browsers supports writing keys on events
+			// but doesn't write them if the element isn't focused
+			// focus on the element (ignored if already focused)
+			if(S.support.keyCharacters && !S.support.keysOnNotFocused){
+				element.focus()
+			}
+		}
+	},
 	keyup : {
 		setup: function( type, options, element ) {
 			if(h.inArray(options,Syn.key.kinds.special )!= -1){
@@ -9293,15 +9323,17 @@ h.extend(Syn.create,{
 			}
 		}
 		},
-	key : {
+	key: {
 		// return the options for a key event
-		options: function( type, options, element ) {
+		options: function(type, options, element){
 			//check if options is character or has character
-			options = typeof options != "object" ? {character : options} : options;
+			options = typeof options != "object" ? {
+				character: options
+			} : options;
 			
 			//don't change the orignial
 			options = h.extend({}, options)
-			if(options.character){
+			if (options.character) {
 				h.extend(options, S.key.options(options.character, type));
 				delete options.character;
 			}
@@ -9316,30 +9348,35 @@ h.extend(Syn.create,{
 			return options;
 		},
 		// creates a key event
-		event : document.createEvent ? 
-			function(type, options, element){  //Everyone Else
+		event: function(type, options, element){ //Everyone Else
+		
+			var doc = h.getWindow(element).document || document;
+			if (doc.createEvent) {
 				var event;
 				
 				try {
-		
-					event = element.ownerDocument.createEvent("KeyEvents");
-					event.initKeyEvent(type, true, true, window, 
-						options.ctrlKey, options.altKey, options.shiftKey, options.metaKey,
-						options.keyCode, options.charCode );
-				} catch(e) {
-					event = h.createBasicStandardEvent(type,options)
+				
+					event = doc.createEvent("KeyEvents");
+					event.initKeyEvent(type, true, true, window, options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.keyCode, options.charCode);
+				} 
+				catch (e) {
+					event = h.createBasicStandardEvent(type, options, doc);
 				}
 				event.synthetic = true;
 				return event;
-
-			} : 
-			function(type, options, element){
-				var event = h.createEventObject.apply(this,arguments);
-				h.extend(event, options)
-
+			}
+			else {
+				var event;
+				try {
+					event = h.createEventObject.apply(this, arguments);
+					h.extend(event, options)
+				}
+				catch (e) {}
+				
 				return event;
 			}
 		}
+	}
 });
 
 var convert = {
@@ -9440,7 +9477,7 @@ h.extend(Syn.init.prototype,
 	},
 	/**
 	 * @function type
-	 * Types sequence of [Syn.prototype.key key actions].  Each
+	 * Types sequence of [Syn.key key actions].  Each
 	 * character is typed, one at a type.
 	 * Multi-character keys like 'left' should be
 	 * enclosed in square brackents.
@@ -9498,7 +9535,8 @@ h.extend(Syn.init.prototype,
 		input, 
 		submitted = false,
 		anchor,
-		textarea;
+		textarea,
+		inputter;
 		
 	div.innerHTML = "<form id='outer'>"+
 		"<input name='checkbox' type='checkbox'/>"+
@@ -9516,33 +9554,40 @@ h.extend(Syn.init.prototype,
 	checkbox = form.childNodes[0];
 	submit = form.childNodes[2];
 	anchor = form.getElementsByTagName("a")[0];
-	textarea = form.getElementsByTagName("textarea")[0]
+	textarea = form.getElementsByTagName("textarea")[0];
+	inputter = form.childNodes[3];
+	
 	form.onsubmit = function(ev){
 		if (ev.preventDefault) 
 			ev.preventDefault();
 		S.support.keypressSubmits = true;
 		ev.returnValue = false;
 		return false;
-	}
-	Syn.trigger("keypress", "\r", form.childNodes[3]);
+	};
+	// Firefox 4 won't write key events if the element isn't focused
+	inputter.focus();
+	Syn.trigger("keypress", "\r", inputter);
 	
 	
-	Syn.trigger("keypress", "a", form.childNodes[3]);
-	S.support.keyCharacters = form.childNodes[3].value == "a";
+	Syn.trigger("keypress", "a", inputter);
+	S.support.keyCharacters = inputter.value == "a";
 	
 	
-	form.childNodes[3].value = "a"
-	Syn.trigger("keypress", "\b", form.childNodes[3]);
-	S.support.backspaceWorks = form.childNodes[3].value == "";
+	inputter.value = "a";
+	Syn.trigger("keypress", "\b", inputter);
+	S.support.backspaceWorks = inputter.value == "";
 	
 		
 	
-	form.childNodes[3].onchange = function(){
+	inputter.onchange = function(){
 		S.support.focusChanges = true;
 	}
-	form.childNodes[3].focus();
-	Syn.trigger("keypress", "a", form.childNodes[3]);
-	form.childNodes[5].focus();
+	inputter.focus();
+	Syn.trigger("keypress", "a", inputter);
+	form.childNodes[5].focus(); // this will throw a change event
+	
+	Syn.trigger("keypress", "b", inputter);
+	S.support.keysOnNotFocused = inputter.value == "ab"; 
 	
 	//test keypress \r on anchor submits
 	S.bind(anchor,"click",function(ev){
@@ -9559,11 +9604,9 @@ h.extend(Syn.init.prototype,
 	
 	S.support.ready++;
 })();
-
-
-
-	
+}())
 })(true);
+(function() {
 (function(){
 	// document body has to exists for this test
 
@@ -9837,7 +9880,7 @@ Syn.helpers.extend(Syn.init.prototype,{
 		startDrag(fro, to, options.duration || 500, from, callback);
 	}
 })
-
+}())
 })(true)
 steal.then(function(){
 
