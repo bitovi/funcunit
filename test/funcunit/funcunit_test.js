@@ -17,9 +17,16 @@ test("Iframe access", function(){
 	
 })
 
+test("typing alt and shift characters", function(){
+	S('#typehere').type("@", function(){
+		equals(S('#typehere').text(), "@", "types weird chars" );
+	})
+})
+
 test("html with function", 1, function(){
 	S("#clickToChange").click()
 		.html(function(html){
+			console.log('html', html)
 			return html == "changed"
 		}, function(){
 			equals(S("#clickToChange").html(),"changed","wait actually waits")

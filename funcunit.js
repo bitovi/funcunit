@@ -747,7 +747,7 @@ _opened: function() {}
 	 * 
 	 */
 	FuncUnit.repeat = function(checker, timeout, callback, error ){
-		if(typeof timeout !== 'number'){
+		if(typeof timeout == 'function'){
 			error = callback;
 			callback = timeout;
 			
