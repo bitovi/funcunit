@@ -490,6 +490,13 @@ _opened: function() {}
 	 * Takes a function that will be called over and over until it is successful.
 	 */
 	FuncUnit.repeat = function(checker, callback, error, timeout){
+		
+		if(typeof timeout == 'function'){
+			error = callback;
+			callback = timeout;
+			
+		}
+		
 		var interval,
 			stopped = false	,
 			stop = function(){
