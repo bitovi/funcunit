@@ -19,7 +19,7 @@ test("Iframe access", function(){
 
 test("typing alt and shift characters", function(){
 	S('#typehere').type("@", function(){
-		equals(S('#typehere').text(), "@", "types weird chars" );
+		equals(S('#typehere').val(), "@", "types weird chars" );
 	})
 })
 

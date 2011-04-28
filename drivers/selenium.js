@@ -144,6 +144,14 @@ steal.then(function(){
 					return eval("(" + response + ")")//  q[method].apply(q, args);
 				}
 			}
+			/**
+			 * var val = S.eval("$(\".contacts\").controller().val()");
+			 * Appends "window." to the front of the string, so currently this method only works with one liners
+			 * @param {Object} str
+			 */
+			FuncUnit.eval = function(str){
+				return FuncUnit.selenium.getEval("selenium.browserbot.getCurrentWindow()."+str)
+			}
 			
 			
 			

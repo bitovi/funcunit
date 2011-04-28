@@ -161,6 +161,10 @@ steal.then(function() {
 		
 	}
 	
+	FuncUnit.eval = function(str){
+		return FuncUnit._window.eval(str)
+	}
+	
 	FuncUnit.jquery(window).unload(function(){
 		if (FuncUnit._window) 
 			FuncUnit._window.close();
