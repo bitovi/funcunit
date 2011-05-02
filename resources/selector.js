@@ -1,4 +1,4 @@
-steal.plugins('jquery').then(function($){
+steal('jquery').then(function($){
 
 (function($){
 	var getWindow = function( element ) {

@@ -310,9 +310,9 @@ var QUnit = {
 	 *
 	 * @example equal( format("Received {0} bytes.", 2), "Received 2 bytes." );
 	 *
-	 * @param Object actual
-	 * @param Object expected
-	 * @param String message (optional)
+	 * @param {Object} actual
+	 * @param {Object} expected
+	 * @param {String} message (optional)
 	 */
 	equal: function(actual, expected, message) {
 		push(expected == actual, actual, expected, message);
