@@ -29,9 +29,6 @@ steal('//steal/build/pluginify/pluginify', function(s){
 
 var i, fileName, cmd;
 
-// copy qunit, json, and jquery
-steal.File("jquery/lang/json/json.js").copyTo("funcunit/resources/json.js")
-
 // read: wrapped, jQuery, json, syn
 var userFiles = 
 		["funcunit/java/extensions/fakesteal.js", 
@@ -58,7 +55,7 @@ var copyToDist = function(path){
 }
 var filesToCopy = [
 	"funcunit/qunit/qunit.css",
-	"funcunit/java/selenium-server-standalone-2.0a5.jar",
+	"funcunit/java/selenium-server-standalone-2.0b3.jar",
 	"funcunit/java/selenium-java-client-driver.jar",
 	"funcunit/java/user-extensions.js",
 	"funcunit/scripts/run.js",
