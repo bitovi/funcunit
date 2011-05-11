@@ -86,6 +86,13 @@ test("Trigger", function(){
 	S("#trigger").trigger('myCustomEvent');
 	S("#trigger p").text("I was triggered");
 })
+test("Confirm", function(){
+	S("#confirm").click();
+	S.confirm(true);
+	S("#confirm p").text("I was confirmed");
+	S("#confirm").click();
+	S.confirm(false);
+})
 test("Accessing the window", function(){
 	ok(S(S.window).width()> 20, "I can get the window's width")
 })

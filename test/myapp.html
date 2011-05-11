@@ -67,6 +67,14 @@
 					$("#trigger").append("<p>I was triggered</p>")
 				})
 				
+				//confirm
+				$('#confirm').bind('click', function(){
+					if(confirm("are you sure?")){
+						$("#confirm .result").html("<p>I was confirmed</p>")
+					} else {
+						$("#confirm .result").html("<p>I was not confirmed</p>")
+					}
+				})
 			})
 			changeText = function(){
                 $('#changelink').text('Changed')
@@ -102,6 +110,9 @@
 		<div id='exists'>Click Me</div>
 		<h3>Trigger Custom Event</h3>
 		<div id='trigger'>Trigger Me</div>
+		<div id='confirm'>Confirm Me
+		<div class='result'></div>
+		</div>
 		
 		
 	</body>

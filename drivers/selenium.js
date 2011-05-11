@@ -75,6 +75,18 @@ steal.then(function(){
 			FuncUnit._open = function(url){
 				this.selenium.open(url);
 			};
+			var confirms = [], prompts = [];
+			FuncUnit.confirm = function(answer){
+				confirms.push(!!answer)
+				print(FuncUnit.jquery.toJSON(confirms))
+				FuncUnit.selenium.getEval("_win().confirm = function(){var confirms = "+FuncUnit.jquery.toJSON(confirms)+
+					";return confirms.shift();};");
+			}
+			FuncUnit.prompt = function(answer){
+				prompts.push(answer)
+				FuncUnit.selenium.getEval("_win().prompt = function(){var prompts = "+FuncUnit.jquery.toJSON(prompts)+
+					";return prompts.shift();};");
+			}
 			FuncUnit._onload = function(success, error){
 				setTimeout(function(){
 					FuncUnit.selenium.getEval("selenium.browserbot.getCurrentWindow().focus();selenium.browserbot.getCurrentWindow().document.documentElement.tabIndex = 0;");
@@ -85,14 +97,6 @@ steal.then(function(){
 			var convertToJson = function(arg){
 				return arg === FuncUnit.window ? "selenium.browserbot.getCurrentWindow()" : FuncUnit.jquery.toJSON(arg)
 				
-			}
-			FuncUnit.confirm = function(answer){
-				// TODO make this work with an array and shifting like standard driver
-				FuncUnit.selenium.getEval("_win().confirm = function(){return "+answer+"};");
-			}
-			FuncUnit.prompt = function(answer){
-				// TODO make this work with an array and shifting
-				FuncUnit.selenium.getEval("_win().confirm = function(){return "+answer+"};");
 			}
 			FuncUnit.$ = function(selector, context, method){
 				var args = FuncUnit.makeArray(arguments);

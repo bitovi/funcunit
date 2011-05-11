@@ -109,7 +109,7 @@ steal.then(function() {
 	}
 	var confirms = [], prompts = [];
 	FuncUnit.confirm = function(answer){
-		confirms.push(!!confirms)
+		confirms.push(!!answer)
 	}
 	FuncUnit.prompt = function(answer){
 		prompts.push(answer)
@@ -117,7 +117,8 @@ steal.then(function() {
 	FuncUnit._opened = function(){
 		FuncUnit._window.alert = function(){}
 		FuncUnit._window.confirm = function(){
-			return confirms.shift();
+			var res = confirms.shift();
+			return res;
 		}
 		FuncUnit._window.prompt = function(){
 			return prompts.shift();
