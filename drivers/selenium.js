@@ -78,6 +78,7 @@ steal.then(function(){
 			FuncUnit._onload = function(success, error){
 				setTimeout(function(){
 					FuncUnit.selenium.getEval("selenium.browserbot.getCurrentWindow().focus();selenium.browserbot.getCurrentWindow().document.documentElement.tabIndex = 0;");
+					FuncUnit.selenium.getEval("_win().alert = function(){};");
 					success();
 				}, 1000)
 			};
@@ -85,23 +86,13 @@ steal.then(function(){
 				return arg === FuncUnit.window ? "selenium.browserbot.getCurrentWindow()" : FuncUnit.jquery.toJSON(arg)
 				
 			}
-			FuncUnit.prompt = function(answer){
-				this.selenium.answerOnNextPrompt(answer);
+			FuncUnit.confirm = function(answer){
+				// TODO make this work with an array and shifting like standard driver
+				FuncUnit.selenium.getEval("_win().confirm = function(){return "+answer+"};");
 			}
-			FuncUnit.confirm = function(answer, callback){
-				var self = this;
-				FuncUnit.add({
-					method: function(success, error){
-						var confirm = FuncUnit.selenium.getConfirmation();
-						if (answer) 
-							FuncUnit.selenium.chooseOkOnNextConfirmation();
-						else 
-							FuncUnit.selenium.chooseCancelOnNextConfirmation();
-						setTimeout(success, 13)
-					},
-					callback: callback,
-					error: "Could not confirm"
-				});
+			FuncUnit.prompt = function(answer){
+				// TODO make this work with an array and shifting
+				FuncUnit.selenium.getEval("_win().confirm = function(){return "+answer+"};");
 			}
 			FuncUnit.$ = function(selector, context, method){
 				var args = FuncUnit.makeArray(arguments);
