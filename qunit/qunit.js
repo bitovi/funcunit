@@ -552,7 +552,7 @@ QUnit.load = function() {
 	process();
 };
 
-steal.load(function(){
+steal.one("ready",function(){
 	QUnit.load()
 })
 
