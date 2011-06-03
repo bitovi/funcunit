@@ -31,7 +31,7 @@ steal.then(function(){
 						+ formattedtime + ' seconds'): ""))
 		},
 		done: function(failures, total){
-			print("\nALL DONEe - fail " + failures + ", pass " + total)
+			print("\nALL DONE - fail " + failures + ", pass " + total)
 		}
 	});
 	/**
