@@ -1,5 +1,7 @@
 steal.then(function(){
-	if (navigator.userAgent.match(/Rhino/) && FuncUnit.browsers !== undefined) {
+	
+	// TODO: we should not do this if documenting ...
+	if (navigator.userAgent.match(/Rhino/) && !window.DocumentJS) {
 
 		// configuration defaults
 		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
@@ -20,19 +22,30 @@ steal.then(function(){
 		
 		FuncUnit.startSelenium();
 		(function(){
-			var browser = 0;
+			var browser = 0,
+				fails = 0,
+				totals = 0;
 			//convert spaces to %20.
 			var location = /file:/.test(window.location.protocol) ? window.location.href.replace(/ /g,"%20") : window.location.href;
+			
+			
+			// overwrite QUnit.done to do the 'restarting' ....
 			QUnit.done = function(failures, total){
 				FuncUnit.selenium.close();
 				FuncUnit.selenium.stop();
 				FuncUnit.endtime = new Date().getTime();
 				var formattedtime = (FuncUnit.endtime - FuncUnit.starttime) / 1000;
-				print("\nALL DONE " + failures + ", " + total + (FuncUnit.showTimestamps? (' - ' 
-						+ formattedtime + ' seconds'): ""))
+				
+				FuncUnit.browserDone(FuncUnit.browsers[browser], failures, total);
+				fails +=  failures;
+				totals += total;
+				
+				
 				browser++;
 				if (browser < FuncUnit.browsers.length) {
-					print("\nSTARTING " + FuncUnit.browsers[browser])
+					
+					FuncUnit.browserStart(  FuncUnit.browsers[browser] );
+					
 					
 					FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
 						FuncUnit.serverPort, FuncUnit.browsers[browser], location);
@@ -40,19 +53,27 @@ steal.then(function(){
 					FuncUnit.selenium.start();
 					QUnit.restart();
 				} else {
+					// Exit ...
 					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium" > NUL')
 						//quit()
 					}
+					FuncUnit.done(fails, totals);
+					//
 				}
 			}
 			
+			FuncUnit.browserStart(FuncUnit.browsers[0]);
 			
-			print("\nSTARTING " + FuncUnit.browsers[0])
 			FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
-				FuncUnit.serverPort, FuncUnit.browsers[0], location);
+				FuncUnit.serverPort, 
+				FuncUnit.browsers[0], 
+				location);
+				
 			FuncUnit.starttime = new Date().getTime();
 			FuncUnit.selenium.start();
+			
+			
 			FuncUnit._open = function(url){
 				this.selenium.open(url);
 			};

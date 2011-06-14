@@ -58,7 +58,7 @@ var QUnit = {
 	
 	// call on start of module test to prepend name to all tests
 	module: function(name, testEnvironment) {
-		config.currentModule = name;
+		config.currentModuleName = name;
 
 		synchronize(function() {
 			if ( config.currentModule ) {
@@ -68,7 +68,6 @@ var QUnit = {
 			config.currentModule = name;
 			config.moduleTestEnvironment = testEnvironment;
 			config.moduleStats = { all: 0, bad: 0 };
-
 			QUnit.moduleStart( name, testEnvironment );
 		}, true);
 	},
@@ -95,8 +94,8 @@ var QUnit = {
 			expected = null;
 		}
 
-		if ( config.currentModule ) {
-			name = config.currentModule + " module: " + name;
+		if ( config.currentModuleName ) {
+			name = config.currentModuleName + " module: " + name;
 		}
 
 		if ( !validTest(name) ) {
@@ -376,6 +375,7 @@ var QUnit = {
 		}
 	},
 	restart : function(){
+		config.currentModule = undefined;
         this.init();
         for(var i =0; i < config.cachelist.length; i++){
             synchronize(config.cachelist[i]);

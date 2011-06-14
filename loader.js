@@ -1,15 +1,54 @@
+// This code is always run ...
+
 steal.then(function(){
 	if (typeof FuncUnit == 'undefined') {
 		FuncUnit = {};
 	}
+	// these are the 
+	steal.extend(FuncUnit,{
+		testStart: function(name){
+			print("--" + name + "--")
+		},
+		log: function(result, message){
+			if (!message) 
+				message = ""
+			print((result ? "  PASS " : "  FAIL ") + message)
+		},
+		testDone: function(name, failures, total){
+			print("  done - fail " + failures + ", pass " + total + "\n")
+		},
+		moduleStart: function(name){
+			print("MODULE " + name + "\n")
+		},
+		moduleDone: function(name, failures, total){
+		
+		},
+		browserStart : function(name){
+			print("BROWSER " + name + " ===== \n")
+		},
+		browserDone : function(name, failures, total){
+			print("\n"+name+" DONE " + failures + ", " + total + (FuncUnit.showTimestamps? (' - ' 
+						+ formattedtime + ' seconds'): ""))
+		},
+		done: function(failures, total){
+			print("\nALL DONEe - fail " + failures + ", pass " + total)
+		}
+	});
 	/**
+	 * Loads the FuncUnit page in EnvJS.  This loads FuncUnit, but we probably want settings 
+	 * on it already ....
+	 * 
 	 * 2 ways to include settings.js:
 	 * 1. Manually before funcunit.js 
 	 * 2. FuncUnit.load will try to load settings.js if there hasn't been one loaded
 	 */ 
 	FuncUnit.load = function(page){
+		//clear out steal ... you are done with it...
+		steal = undefined;
 		load('steal/rhino/env.js');
-		if (!navigator.userAgent.match(/Rhino/)) return;
+		if (!navigator.userAgent.match(/Rhino/)){
+			return;
+		} 
 		
 		var dirArr = page.split("/"), 
 			dir = dirArr.slice(0, dirArr.length - 1).join("/"), 
@@ -18,25 +57,37 @@ steal.then(function(){
 		// if settings.js was already loaded, don't try to load it again
 		if (FuncUnit.browsers === undefined) {
 			//this gets the global object, even in rhino
-			var window = (function(){return this}).call(null), 
-				//if there is an old FuncUnit, save that in case it gets overwritten
-				backupFunc = window.FuncUnit;
-				
-			load('funcunit/settings.js')
-			// try to load a local settings
-			var foundSettings = true;
-			try {
-				readUrl(settingsPath)
-			} 
-			catch (e) {
-				foundSettings = false;
-			}
-			if (foundSettings) {
-				load(settingsPath)
+			var window = (function(){return this}).call(null);
+			
+			if(readFile('funcunit/settings.js')){
+				load('funcunit/settings.js')
 			}
 			
-			steal.extend(FuncUnit, backupFunc)
+			// try to load a local settings
+			var foundSettings = false;
+			if(/^http/.test(settingsPath)){
+				try {
+					readUrl(settingsPath)
+					foundSettings = true;
+				} 
+				catch (e) {}
+			}else{
+				if(readFile(settingsPath)){
+					foundSettings = true;
+				}
+
+			}
+			
+			if (foundSettings) {
+				print("Reading Settings From "+settingsPath)
+				load(settingsPath)
+			}else{
+				print("Using Default Settings")
+			}
+			
+			
 		}
+		
 		
 		Envjs(page, {
 			scriptTypes: {
@@ -46,7 +97,8 @@ steal.then(function(){
 			},
 			fireLoad: true,
 			logLevel: 2,
-			dontPrintUserAgent: true
+			dontPrintUserAgent: true,
+			exitOnError : FuncUnit.exitOnError
 		});
 	}
 })
