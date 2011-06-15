@@ -1,8 +1,8 @@
 //what we need from javascriptmvc or other places
-steal.plugins('funcunit/qunit',
-	'funcunit/qunit/rhino')
+steal.plugins('funcunit/qunit')
+	.then('//funcunit/qunit/rhino/rhino')
 	.then('resources/jquery','resources/json','resources/selector')
-	.plugins('funcunit/syn')
+	.then('//funcunit/syn/syn')
 //Now describe FuncUnit
 .then(function(){
 
@@ -1383,6 +1383,6 @@ if(!FuncUnit.jquery.fn.triggerSyn){
 }
 })
 //now add drivers
-.then('resources/selenium_start',
-'drivers/selenium',
+.then('resources/selenium_start')
+.then('drivers/selenium',
 'drivers/standard')
