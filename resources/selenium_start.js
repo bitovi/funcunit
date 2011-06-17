@@ -1,4 +1,4 @@
-steal.then(function(){
+steal(function(){
 
 FuncUnit.startSelenium = function(){
 	importClass(Packages.com.thoughtworks.selenium.DefaultSelenium);
@@ -11,7 +11,7 @@ FuncUnit.startSelenium = function(){
 	catch (ex) {
 		spawn(function(){
 			var jarCommand = 'java -jar '+
-				'funcunit/java/selenium-server-standalone-2.0a5.jar'+
+				'funcunit/java/selenium-server-standalone-2.0b3.jar'+
 				' -userExtensions '+
 				'funcunit/java/user-extensions.js';
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {

@@ -7,7 +7,6 @@ steal.plugins('funcunit/qunit',
 .then(function(){
 
 
-
 //this gets the global object, even in rhino
 var window = (function(){return this }).call(null),
 
@@ -55,23 +54,31 @@ pass/fail in the initial FuncUnit test page.
 
 ### Loading a Test
 
+To get started with a basic test, run:
+
+@codestart
+./js jquery/generate/controller Company.Widget
+@codeend
+
+Open company/widget/funcunit.html in a browser.  You should see a passing test.
+
 The first thing any FuncUnit page does is load its dependencies and a test.  A FuncUnit page:
 
-1. loads steal.js
-2. loads funcunit and qunit via steal.plugins
-3. loads one or more test files
+1. Loads steal.js
+2. Loads funcunit and qunit via steal.plugins
+3. Loads one or more test files
 
-Use js jquery/generate/plugin to generate a basic working test as a starting point.  For more details on setting up a 
-FuncUnit test, check out the [FuncUnit.setup Getting Set Up] guide.  For more details on using FuncUnit without Steal or JavaScriptMVC, 
-check out the [FuncUnit.standalone Using Standalone FuncUnit] guide.
+For more details on setting up a FuncUnit test, check out the [FuncUnit.setup Getting Set Up] guide.  
+For more details on using FuncUnit without Steal or JavaScriptMVC, check out the [FuncUnit.standalone Using Standalone FuncUnit] guide.
 
 ### Writing a Test
 
 There are four types of commands in any FuncUnit tests:
 
-1. Actions - simulate a user interaction (clicks, types, drags, etc)
-2. Waits - wait for conditions in the page before continuing the test (width, visible, text, etc)
-3. Getters - get page conditions to use in assertions (width, text, hasClass)
+1. Actions - simulate a user interaction ([FuncUnit.prototype.click clicks], [FuncUnit.prototype.type types], [FuncUnit.prototype.drag drags], etc)
+2. Waits - wait for conditions in the page before continuing the test ([FuncUnit.prototype.width width], [FuncUnit.prototype.visible visible],  
+[FuncUnit.prototype.text text], etc)
+3. Getters - get page conditions to use in assertions ([FuncUnit.prototype.width width], [FuncUnit.prototype.hasClass hasClass], [FuncUnit.prototype.text text])
 4. QUnit commands - assertions and methods for setting up tests (module, test, ok, equals, etc)
 
 Tests follow a consistent pattern:
@@ -91,7 +98,9 @@ To run this test in browser, open funcunit.html in any browser (and turn off you
 
 To run the same test automated via Selenium, run:
 
-funcunit/envjs path/to/funcunit.html
+@codestart
+./funcunit/envjs path/to/funcunit.html
+@codeend
 
 For more information about using Selenium, checkout the [FuncUnit.selenium Automated FuncUnit] guide.
 
@@ -101,12 +110,12 @@ For more information about using Selenium, checkout the [FuncUnit.selenium Autom
 
 Under the hood, FuncUnit is built on several projects:
 
- - Selenium - used to open browsers and run automated tests
- - QUnit - Unit testing framework provides test running, assertions, and reporting
- - jQuery - used to look up elements, trigger events, and query for page conditions
- - Env.js - Rhino based headless browser used to load pages in the command line
- - Rhino - command line JavaScript environment running in Java
- - Syn - event simulation library
+ - [http://seleniumhq.org/ Selenium] - used to open browsers and run automated tests
+ - [http://docs.jquery.com/Qunit QUnit] - Unit testing framework provides test running, assertions, and reporting
+ - [http://jquery.com/ jQuery] - used to look up elements, trigger events, and query for page conditions
+ - [http://www.envjs.com Env.js] - Rhino based headless browser used to load pages in the command line
+ - [http://www.mozilla.org/rhino/ Rhino] - command line JavaScript environment running in Java
+ - [https://github.com/jupiterjs/syn Syn] - event simulation library
 
 FuncUnit is designed to let JavaScript developers write tests in an easy to learn jQuery-like syntax. 
 The tests will run in browser, so developers can check for regressions as they work.  The same tests also run 
@@ -114,15 +123,15 @@ via Selenium, so QA can automate nightly builds or continuous integration.
 
 ## Why FuncUnit
 
-TESTING IS PAINFUL.  Everyone simply hates testing, and most front end developers simply don't test.  There 
+TESTING IS PAINFUL.  Everyone hates testing, and most front end developers simply don't test.  There 
 are a few reasons for this:
 
-1. Barriers to entry - Difficult setup, installation, high cost, or difficult APIs.  QTP costs $5K per license.
-2. Completely foreign APIs - Testing frameworks often use other languages (Ruby, C#, Java) and new APIs.
-3. Debugging across platforms - You can't use firebug to debug a test that's driven by PHP.
-4. Low fidelity event simuatlion - Tests are often brittle or low fidelity because frameworks aren't designed to test heavy JavaScript apps, so 
+1. **Barriers to entry** - Difficult setup, installation, high cost, or difficult APIs.  QTP costs $5K per license.
+2. **Completely foreign APIs** - Testing frameworks often use other languages (Ruby, C#, Java) and new APIs.
+3. **Debugging across platforms** - You can't use firebug to debug a test that's driven by PHP.
+4. **Low fidelity event simulation** - Tests are often brittle or low fidelity because frameworks aren't designed to test heavy JavaScript apps, so 
 browser event simualation accuracy isn't a top priority.
-5. QA and developers can't communicate - If only QA has the ability to run tests, sending bug reports is messy and time consuming.
+5. **QA and developers can't communicate** - If only QA has the ability to run tests, sending bug reports is messy and time consuming.
 
 FuncUnit aims to fix these problems:
 
@@ -135,10 +144,6 @@ test case.
 
 There are many testing frameworks out there, but nothing comes close to being a complete solution for front end testing like FuncUnit does.
 
-*/
-
-/*
- * 
  * @constructor
  * selects something in the other page
  * @param {String|Function|Object} selector FuncUnit behaves differently depending if
@@ -350,7 +355,16 @@ _opened: function() {}
 	 * stop : 
 	 */
 	add = function(handler){
-		
+		if(window.__s){
+			//make handler call s again with same 
+			//args
+			var old = handler.method,
+				cur = __s.cur;
+			handler.method = function(){
+				__s(cur);
+				old.apply(this,arguments);
+			}
+		}
 		//if we are in a callback, add to the current position
 		if (incallback) {
 			queue.splice(currentPosition,0,handler)
@@ -484,6 +498,13 @@ _opened: function() {}
 	 * Takes a function that will be called over and over until it is successful.
 	 */
 	FuncUnit.repeat = function(checker, callback, error, timeout){
+		
+		if(typeof timeout == 'function'){
+			error = callback;
+			callback = timeout;
+			
+		}
+		
 		var interval,
 			stopped = false	,
 			stop = function(){
@@ -573,7 +594,7 @@ FuncUnit.init = function(s, c){
 FuncUnit.init.prototype = {
 	funcunit : true,
 	/**
-	 * Types text into an element.  This makes use of [Syn.prototype.type] and works in 
+	 * Types text into an element.  This makes use of [Syn.type] and works in 
 	 * a very similar way.
 	 * <h3>Quick Examples</h3>
 	 * @codestart
@@ -597,7 +618,8 @@ FuncUnit.init.prototype = {
 	 *                "[shift-up][delete]")
 	 * @codeend
 	 * <h2>Characters</h2>
-	 * You can type the characters found in [Syn.static.keycodes].
+	 * 
+	 * For a list of the characters you can type, check [Syn.keycodes].
 	 * 
 	 * @param {String} text the text you want to type
 	 * @param {Function} [callback] a callback that is run after typing, but before the next action.
@@ -810,7 +832,7 @@ FuncUnit.init.prototype = {
 	scroll: function( direction, amount, callback ) {
 		var selector = this.selector, 
 			context = this.context,
-			direction = /left|right|x/i.test(direction)? "Left" : "Right";
+			direction = /left|right|x/i.test(direction)? "Left" : "Top";
 		FuncUnit.add({
 			method: function(success, error){
 				steal.dev.log("setting " + selector + " scroll" + direction + " " + amount + " pixels")
