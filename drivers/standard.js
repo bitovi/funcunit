@@ -1,9 +1,6 @@
 steal.then(function() {
-	var readystate = document.readyState;
-	FuncUnit.jquery(window).load(function(){
-		if(document.readyState != readystate)
-			FuncUnit.support.readystate = true;
-	})
+	
+	FuncUnit.support.readystate = "readyState" in document;
 	//don't do any of this if in rhino (IE selenium)
 	if (navigator.userAgent.match(/Rhino/)) {
 		return;	
@@ -11,7 +8,10 @@ steal.then(function() {
 	
 	
 	FuncUnit._window = null;
-	var newPage = true, changing;
+	// are we waiting on a new page ....
+	var newPage = true, 
+		reloading = false,
+		changing;
 	var makeArray = function(arr, win){
 		if(!win){
 			win = window;
@@ -21,15 +21,35 @@ steal.then(function() {
 			narr.push(arr[i])
 		}
 		return narr;
-	}
+	};
+	
+	
 	FuncUnit._open = function(url){
 		changing = url;
-		if (newPage) {
-			FuncUnit._window = window.open(url, "funcunit");
+		
+		var checkReload = function(url){
+			if(FuncUnit._window.location.pathname == url ||
+				FuncUnit._window.href == url){
+				return true;
+			}
+			return false;
 		}
+		// if the first time ..
+		if (newPage) {
+			if(FuncUnit.frame){
+				FuncUnit._window = FuncUnit.frame.contentWindow;
+				reloading = checkReload(url);
+				FuncUnit._window.location = url;
+			}else{
+				// open the new page ....
+				FuncUnit._window = window.open(url, "funcunit");
+			}
+		}
+		// otherwise, change the frame's url
 		else {
-			FuncUnit._window.location = url;
 			
+			reloading = checkReload(url);
+			FuncUnit._window.location = url;
 		}
 		
 	}
@@ -69,35 +89,59 @@ steal.then(function() {
 	}
 	
 	//check for window location change, documentChange, then readyState complete -> fire load if you have one
-	var newDocument = false, poller = function(){
-		if(FuncUnit._window.document  == null){
-			return
-		}
-		
-		if (FuncUnit._window.document !== currentDocument || newDocument) { //we have a new document
-			currentDocument = FuncUnit._window.document;
-            newDocument = true;
-			if (FuncUnit._window.document.readyState == "complete" && FuncUnit._window.location.href!="about:blank") {
-				var ls = loadSuccess;
-					loadSuccess = null;
-				if (ls) {
-					FuncUnit._window.focus();
-					FuncUnit._window.document.documentElement.tabIndex = 0;
-					
-					ls();
-				}
-				
+	var newDocument = false, 
+		poller = function(){
+			if(FuncUnit._window.document  == null){
+				return
 			}
+			
+			if (FuncUnit._window.document !== currentDocument || newDocument) { //we have a new document
+				currentDocument = FuncUnit._window.document;
+	            newDocument = true;
+				if (FuncUnit._window.document.readyState == "complete" && FuncUnit._window.location.href!="about:blank" && !reloading) {
+					var ls = loadSuccess;
+						loadSuccess = null;
+					if (ls) {
+						FuncUnit._window.focus();
+						FuncUnit._window.document.documentElement.tabIndex = 0;
+						
+						ls();
+					}
+					
+				}
+			}
+			
+			// TODO need a better way to determine if a reloaded frame is loaded (like clearing the frame), this might be brittle 
+			reloading = false;
+			// checks every second ...
+			setTimeout(arguments.callee, 500)
+		}
+	
+	/*
+	 * @hide
+	 * Takes success and error to callback on next load ...
+	 */
+	FuncUnit._onload = function(success, error){
+		// saver reference to success
+		loadSuccess = function(){
+			// called when load happens ... here we check for steal
+			console.log(FuncUnit._window.steal)
+			if(!FuncUnit._window.steal || FuncUnit._window.steal.isReady){
+				success();
+			}else{
+				console.log('waiting for steal ...');
+				setTimeout(arguments.callee, 200)
+			}
+				
 		}
 		
-		setTimeout(arguments.callee, 1000)
-	}
-	
-	FuncUnit._onload = function(success, error){
-		loadSuccess = success;
-		if (!newPage) 
+		
+		// we only need to do this setup stuff once ...
+		if (!newPage) {
 			return;
+		}
 		newPage = false;
+		
 		if (FuncUnit.support.readystate)
 		{
 			poller();

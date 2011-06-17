@@ -7,7 +7,6 @@ steal.plugins('funcunit/qunit',
 .then(function(){
 
 
-
 //this gets the global object, even in rhino
 var window = (function(){return this }).call(null),
 
@@ -356,7 +355,16 @@ _opened: function() {}
 	 * stop : 
 	 */
 	add = function(handler){
-		
+		if(window.__s){
+			//make handler call s again with same 
+			//args
+			var old = handler.method,
+				cur = __s.cur;
+			handler.method = function(){
+				__s(cur);
+				old.apply(this,arguments);
+			}
+		}
 		//if we are in a callback, add to the current position
 		if (incallback) {
 			queue.splice(currentPosition,0,handler)
@@ -824,7 +832,7 @@ FuncUnit.init.prototype = {
 	scroll: function( direction, amount, callback ) {
 		var selector = this.selector, 
 			context = this.context,
-			direction = /left|right|x/i.test(direction)? "Left" : "Right";
+			direction = /left|right|x/i.test(direction)? "Left" : "Top";
 		FuncUnit.add({
 			method: function(success, error){
 				steal.dev.log("setting " + selector + " scroll" + direction + " " + amount + " pixels")

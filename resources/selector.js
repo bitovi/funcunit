@@ -41,6 +41,7 @@ $.fn.prettySelector= function() {
 	}
 };
 $.each(["closest","find","next","prev","siblings","last","first"], function(i, name){
+	
 	$.fn[name+"Selector"] = function(selector){
 		return this[name](selector).prettySelector();
 	}

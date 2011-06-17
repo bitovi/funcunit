@@ -89,6 +89,11 @@ steal.then(function(){
 			}
 			FuncUnit._onload = function(success, error){
 				setTimeout(function(){
+					// this only will work with the newer steal ...
+					var isSteal = FuncUnit.selenium.getEval("typeof selenium.browserbot.getCurrentWindow().steal");
+					if(isSteal === 'function'){
+						FuncUnit.selenium.waitForCondition("selenium.browserbot.getCurrentWindow().steal.isReady",5000);
+					}
 					FuncUnit.selenium.getEval("selenium.browserbot.getCurrentWindow().focus();selenium.browserbot.getCurrentWindow().document.documentElement.tabIndex = 0;");
 					FuncUnit.selenium.getEval("_win().alert = function(){};");
 					success();
