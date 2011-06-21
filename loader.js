@@ -30,7 +30,7 @@ steal.then(function(){
 						+ formattedtime + ' seconds'): ""))
 		},
 		done: function(failures, total){
-			print("\nALL DONEe - fail " + failures + ", pass " + total)
+			print("\nALL DONE - fail " + failures + ", pass " + total)
 		}
 	};
 	for ( var evt in qunitEvents ) {
@@ -46,6 +46,7 @@ steal.then(function(){
 	 */ 
 	FuncUnit.load = function(page){
 		//clear out steal ... you are done with it...
+		var extend = steal.extend;
 		steal = undefined;
 		load('steal/rhino/env.js');
 		if (!navigator.userAgent.match(/Rhino/)){
@@ -55,11 +56,12 @@ steal.then(function(){
 		var dirArr = page.split("/"), 
 			dir = dirArr.slice(0, dirArr.length - 1).join("/"), 
 			settingsPath = dir + "/settings.js";
-		
+			
 		// if settings.js was already loaded, don't try to load it again
 		if (FuncUnit.browsers === undefined) {
 			//this gets the global object, even in rhino
-			var window = (function(){return this}).call(null);
+			var window = (function(){return this}).call(null), 
+				backupFunc = window.FuncUnit;
 			
 			if(readFile('funcunit/settings.js')){
 				load('funcunit/settings.js')
@@ -87,9 +89,10 @@ steal.then(function(){
 				print("Using Default Settings")
 			}
 			
+			extend(FuncUnit, backupFunc)
+			
 			
 		}
-		
 		
 		Envjs(page, {
 			scriptTypes: {
