@@ -31,8 +31,8 @@ FuncUnit.startSelenium = function(){
 				started = true;
 			} 
 			catch (ex) {
-				if (timeouts > 3) {
-					print("Selenium is not running. Please use steal/js -selenium to start it.")
+				if (timeouts > 20) {
+					print("Selenium is not running. Please use js -selenium to start it.")
 					quit();
 				} else {
 					timeouts++;
