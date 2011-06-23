@@ -133,10 +133,15 @@ steal.then(function(){
 					}
 				}
 				var response = FuncUnit.selenium.getEval("jQuery.wrapped(" + args.join(',') + ")");
+				// false responses mean an error happened, so fail the test
+				var res = eval("(" + response + ")");
+				if(res.error === true){
+					throw res.message;
+				}
 				if(callbackPresent){
-					return callback( eval("(" + response + ")") )
+					return callback( res )
 				} else {
-					return eval("(" + response + ")")//  q[method].apply(q, args);
+					return res;
 				}
 			}
 			/**

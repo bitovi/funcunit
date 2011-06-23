@@ -32,8 +32,16 @@ jQuery.wrapped = function(){
 	} else {
     	q = jQuery(selector, context);
 	}
-	
-	res = q[method].apply(q, args);
+	try {
+		res = q[method].apply(q, args);
+	} catch(e){
+		e.message && LOG.error(e.message)
+		Selenium.unpause();
+		res = {
+			message: e.message,
+			error: true
+		};
+	}
     //need to convert to json
     return jQuery.toJSON(res.jquery ? true : res)
 };
@@ -52,6 +60,9 @@ _doc = function(){
 Selenium.pause = function(){
 	Selenium.paused = true;
 };
+Selenium.unpause = function(){
+	Selenium.paused = false;
+}
 
 Selenium.resume = function(){
 	Selenium.paused = false;
