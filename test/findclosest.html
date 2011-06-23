@@ -15,17 +15,14 @@
 		</div>
 		<div class='combo'>combo</div>
 	</div>
-<script type='text/javascript' src='../../jquery/jquery.js'></script>
+<script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript'>
-
-$(document.documentElement).click(function(ev){
-	$(ev.target).addClass("iWasClicked")
-});
-window.onload = function(){
-	$(document.body).append("<p>Loaded</p>")
-}
+	steal.plugins('jquery').then( function(){
+		$(document.documentElement).click(function(ev){
+			$(ev.target).addClass("iWasClicked")
+		})
 		
-	
+	}).start();
 </script>
     </body>
 </html>

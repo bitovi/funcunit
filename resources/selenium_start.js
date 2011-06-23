@@ -1,4 +1,4 @@
-steal(function(){
+steal.then(function(){
 
 FuncUnit.startSelenium = function(){
 	importClass(Packages.com.thoughtworks.selenium.DefaultSelenium);

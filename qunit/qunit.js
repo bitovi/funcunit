@@ -266,12 +266,9 @@ var QUnit = {
 				done();
 			}
 		}, true);
-		
-		//needed to make a done call.
-		if ( window.setTimeout ) {
-			clearTimeout(config.doneTimer);
+
+		if ( window.setTimeout && !config.doneTimer ) {
 			config.doneTimer = window.setTimeout(function(){
-				//console.log("doing stuff ...", config.queue.length)
 				if ( !config.queue.length ) {
 					done();
 				} else {
@@ -356,6 +353,7 @@ var QUnit = {
 	
 	stop: function(timeout) {
 		config.blocking = true;
+
 		if ( timeout && window.setTimeout ) {
 			config.timeout = window.setTimeout(function() {
 				QUnit.ok( false, "Test timed out" );
@@ -440,7 +438,6 @@ var config = {
 	cachelist : []
 };
 
-
 // Load paramaters
 (function() {
 	var location = window.location || { search: "", protocol: "file:" },
@@ -477,11 +474,11 @@ if ( typeof exports === "undefined" || typeof require === "undefined" ) {
 
 QUnit.config = config;
 
-//if ( typeof document === "undefined" || document.readyState === "complete" ) {
+if ( typeof document === "undefined" || document.readyState === "complete" ) {
 	config.autorun = true;
-//}
+}
 
-QUnit.load = function() {
+addEvent(window, "load", function() {
 	// Initialize the config, saving the execution queue
 	var oldconfig = extend({}, config);
 	QUnit.init();
@@ -546,15 +543,10 @@ QUnit.load = function() {
 		config.ajaxSettings = window.jQuery.ajaxSettings;
 	}
 
-	//if (config.autostart) {
-	//	QUnit.start();
-	//}
-	process();
-};
-
-steal.load(function(){
-	QUnit.load()
-})
+	if (config.autostart) {
+		QUnit.start();
+	}
+});
 
 function done() {
 	if ( config.doneTimer && window.clearTimeout ) {
@@ -641,22 +633,21 @@ function push(result, actual, expected, message) {
 }
 
 function synchronize( callback , save) {
-	
 	config.queue.push( callback );
     if(save){
 		config.cachelist.push( callback )
 	}
-	
 	if ( config.autorun && !config.blocking ) {
 		process();
 	}
 }
 function process() {
 	var start = (new Date()).getTime();
+
 	while ( config.queue.length && !config.blocking ) {
 		if ( config.updateRate <= 0 || (((new Date()).getTime() - start) < config.updateRate) ) {
 			config.queue.shift()();
-			
+
 		} else {
 			setTimeout( process, 13 );
 			break;
