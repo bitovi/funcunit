@@ -15,7 +15,7 @@ var window = (function(){return this }).call(null),
 
 /**
  * @class FuncUnit
- * @tag core
+ * @parent index 2
  * @test test.html
  * @download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-5.zip
 
