@@ -11,7 +11,7 @@ FuncUnit.startSelenium = function(){
 	catch (ex) {
 		spawn(function(){
 			var jarCommand = 'java -jar '+
-				'funcunit/java/selenium-server-standalone-2.0b3.jar'+
+				'funcunit/java/selenium-server-standalone-2.0rc3.jar'+
 				' -userExtensions '+
 				'funcunit/java/user-extensions.js';
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
@@ -31,8 +31,8 @@ FuncUnit.startSelenium = function(){
 				started = true;
 			} 
 			catch (ex) {
-				if (timeouts > 3) {
-					print("Selenium is not running. Please use steal/js -selenium to start it.")
+				if (timeouts > 20) {
+					print("Selenium is not running. Please use js -selenium to start it.")
 					quit();
 				} else {
 					timeouts++;

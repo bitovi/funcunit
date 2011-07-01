@@ -1,6 +1,6 @@
 /**
  
-@page FuncUnit.selenium Running Tests Via Selenium
+@page runselenium 3. Running Tests Via Selenium
 @parent FuncUnit
 
 <h2>Automated Testing with Selenium</h2>

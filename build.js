@@ -1,4 +1,4 @@
-load('steal/rhino/steal.js')
+load('steal/rhino/rhino.js')
 
 load('funcunit/syn/build.js')
 
@@ -12,18 +12,22 @@ steal.File('funcunit/dist/steal/rhino').mkdir()
 /**
  * Build funcunit, user-extensions
  */
-steal('//steal/build/pluginify/pluginify', function(s){
+steal.plugins('steal/build/pluginify', function(s){
 	steal.build.pluginify("funcunit",{
 		global: "true",
 		destination: "funcunit/dist/funcunit/funcunit.js",
 		packagejquery: true
 	})
 })
+steal('//steal/build/pluginify/pluginify', function(s){
+	steal.build.pluginify("funcunit/qunit",{
+		global: "true",
+		destination: "funcunit/dist/funcunit/qunit.js",
+		packagejquery: true
+	})
+})
 
 var i, fileName, cmd;
-
-// copy qunit, json, and jquery
-steal.File("jquery/lang/json/json.js").copyTo("funcunit/resources/json.js")
 
 // read: wrapped, jQuery, json, syn
 var userFiles = 
@@ -51,7 +55,7 @@ var copyToDist = function(path){
 }
 var filesToCopy = [
 	"funcunit/qunit/qunit.css",
-	"funcunit/java/selenium-server-standalone-2.0a5.jar",
+	"funcunit/java/selenium-server-standalone-2.0b3.jar",
 	"funcunit/java/selenium-java-client-driver.jar",
 	"funcunit/java/user-extensions.js",
 	"funcunit/scripts/run.js",
@@ -63,7 +67,7 @@ var filesToCopy = [
 	"funcunit/envjs.bat",
 	"funcunit/settings.js",
 	"funcunit/loader.js",
-	"steal/rhino/steal.js",
+	"steal/rhino/rhino.js",
 	"steal/rhino/utils.js",
 	"steal/rhino/file.js"
 ]

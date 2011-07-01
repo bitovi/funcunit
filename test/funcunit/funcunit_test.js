@@ -17,6 +17,12 @@ test("Iframe access", function(){
 	
 })
 
+test("typing alt and shift characters", function(){
+	S('#typehere').type("@", function(){
+		equals(S('#typehere').val(), "@", "types weird chars" );
+	})
+})
+
 test("html with function", 1, function(){
 	S("#clickToChange").click()
 		.html(function(html){
@@ -79,6 +85,13 @@ test("Exists", function(){
 test("Trigger", function(){
 	S("#trigger").trigger('myCustomEvent');
 	S("#trigger p").text("I was triggered");
+})
+test("Confirm", function(){
+	S("#confirm").click();
+	S.confirm(true);
+	S("#confirm p").text("I was confirmed");
+	S("#confirm").click();
+	S.confirm(false);
 })
 test("Accessing the window", function(){
 	ok(S(S.window).width()> 20, "I can get the window's width")

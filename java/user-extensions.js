@@ -7234,6 +7234,10 @@ _win = function(){
 	var sel = selenium.browserbot
 	return sel.getCurrentWindow()
 };
+_winVars = function(){
+	var sel = selenium.browserbot
+	return sel.getCurrentWindow()
+};
 _doc = function(){
 	var sel = selenium.browserbot
 	return sel.getCurrentWindow().document
@@ -7255,6 +7259,8 @@ RemoteRunner.prototype.continueTest = function(){
 	RRTest.call(this);
 };
 
+// IE9 has problems with open hanging.  It was because this method would return true when win.document couldn't be accessed.
+// I overwrite this method and check if it happens while page is unloading, then continue.
 IEBrowserBot.prototype._windowClosed = function(win) {
     try {
         var c = win.closed;
@@ -7306,7 +7312,6 @@ IEBrowserBot.prototype._windowClosed = function(win) {
         }
     }
 };
-
 })()
 /*
  * jQuery JSON Plugin
@@ -7509,8 +7514,8 @@ IEBrowserBot.prototype._windowClosed = function(win) {
     };
 })(jQuery);
 })
+(undefined)(true);
 (function(){
-(function() {
 	var extend = function( d, s ) {
 		var p;
 		for (p in s) {
@@ -8276,7 +8281,7 @@ IEBrowserBot.prototype._windowClosed = function(win) {
 			//timeout is b/c IE is stupid and won't call focus handlers
 			setTimeout(function() {
 				Syn.trigger("mouseup", mouseopts, element);
-				if ( Syn.mouse.browser.contextmenu ) {
+				if ( Syn.mouse.browser.right.contextmenu ) {
 					Syn.trigger("contextmenu", extend(extend({}, Syn.mouse.browser.right.contextmenu), options), element);
 				}
 				callback(true);
@@ -8339,12 +8344,9 @@ IEBrowserBot.prototype._windowClosed = function(win) {
 		}
 
 		window.Syn = Syn;
-}());
 })(true);
 (function(){
-//steal("synthetic").then(function() {
 //handles mosue events
-(function() {
 
 	var h = Syn.helpers,
 		getWin = h.getWindow;
@@ -8626,15 +8628,8 @@ IEBrowserBot.prototype._windowClosed = function(win) {
 		window.__synthTest = oldSynth;
 		Syn.support.ready++;
 	})();
-
-
-})()
-//});
 })(true);
 (function(){
-//steal("synthetic")
-//	.then("mouse")
-//	.then(function() {
 	Syn.key.browsers = {
 		webkit : {
 			'prevent':
@@ -8783,10 +8778,8 @@ IEBrowserBot.prototype._windowClosed = function(win) {
 		}
 		return Syn.mouse.browsers.gecko;
 	})();
-//});
 })(true);
 (function(){
-(function() {
 	var h = Syn.helpers,
 		S = Syn,
 
@@ -9690,7 +9683,6 @@ IEBrowserBot.prototype._windowClosed = function(win) {
 
 		S.support.ready++;
 	})();
-}());
 })(true);
 (function() {
 	
@@ -10014,7 +10006,7 @@ IEBrowserBot.prototype._windowClosed = function(win) {
 			}
 		})
 }());
-steal('jquery').then(function(){
+steal('jquery').then(function($){
 
 (function($){
 	var getWindow = function( element ) {
@@ -10057,6 +10049,7 @@ $.fn.prettySelector= function() {
 	}
 };
 $.each(["closest","find","next","prev","siblings","last","first"], function(i, name){
+	
 	$.fn[name+"Selector"] = function(selector){
 		return this[name](selector).prettySelector();
 	}
