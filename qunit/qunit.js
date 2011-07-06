@@ -1130,4 +1130,4 @@ QUnit.jsDump = (function() {
 
 
 })(this);
-}).plugins("funcunit/qunit/rhino");
+}).then("funcunit/qunit/rhino");
