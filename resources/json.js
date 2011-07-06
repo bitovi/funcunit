@@ -13,8 +13,7 @@
  * It is also influenced heavily by MochiKit's serializeJSON, which is 
  * copyrighted 2005 by Bob Ippolito.
  */
- steal('jquery').then(function(){
-(function($) {
+ steal('jquery').then(function($){
     /** jQuery.toJSON( json-serializble )
         Converts the given argument into a JSON respresentation.
 
@@ -197,5 +196,4 @@
         '"' : '\\"',
         '\\': '\\\\'
     };
-})(jQuery);
 })

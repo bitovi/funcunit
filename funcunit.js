@@ -1,11 +1,11 @@
 //what we need from javascriptmvc or other places
 steal('funcunit/qunit')
 	.then('funcunit/qunit/rhino')
-	.then('./resources/jquery.js','./resources/json.js','./resources/selector.js')
+	.then('./resources/jquery.js')
+	.then('./resources/json.js','./resources/selector.js')
 	.then('funcunit/syn')
 //Now describe FuncUnit
-.then(function(){
-
+.then(function($){
 
 //this gets the global object, even in rhino
 var window = (function(){return this }).call(null),
