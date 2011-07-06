@@ -1,7 +1,6 @@
-steal
- .plugins("funcunit")
- .then("funcunit_test")
- .then("find_closest_test")
- .then("open_test")
- .then("syn_test")
- .then("protodrag_test")
+steal("funcunit")
+ .then("./funcunit_test.js")
+ .then("./find_closest_test.js")
+ .then("./open_test.js")
+ .then("./syn_test.js")
+ .then("./protodrag_test.js")

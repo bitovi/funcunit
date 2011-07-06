@@ -12,14 +12,14 @@ steal.File('funcunit/dist/steal/rhino').mkdir()
 /**
  * Build funcunit, user-extensions
  */
-steal.plugins('steal/build/pluginify', function(s){
+steal('steal/build/pluginify', function(s){
 	steal.build.pluginify("funcunit",{
 		global: "true",
 		destination: "funcunit/dist/funcunit/funcunit.js",
 		packagejquery: true
 	})
 })
-steal('//steal/build/pluginify/pluginify', function(s){
+steal('steal/build/pluginify', function(s){
 	steal.build.pluginify("funcunit/qunit",{
 		global: "true",
 		destination: "funcunit/dist/funcunit/qunit.js",

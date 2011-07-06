@@ -8,6 +8,6 @@ steal = function () {
     return steal;
 };
 
-steal.plugins = steal.plugin = steal.then = steal.resources = steal;
+steal.then = steal;
 
 steal.dev = function () { };
