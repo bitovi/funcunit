@@ -3,11 +3,11 @@
  *
  * The output file can be used for integration with the Jenkins CI server
  * 
- * Version 0.13
+ * Version 0.14
  * Copyright (c) 2011 Michael Mayer
  * Dual licensed under the MIT and GPL v2 licenses.
  *
- * Date: Mon Jun 20 17:09:05 CEST 2011
+ * Date: Thu Jul  7 15:37:12 CEST 2011
  * 
  * To enable logging, please set FuncUnit.xmlLogFilename to a filename of 
  * your choice in settings.js. You can also define a test case class name
@@ -15,6 +15,8 @@
  */
  
 (function() {
+	if(!window.FuncUnit) return;
+
 	var classPrefix = FuncUnit.xmlLogClassPrefix ? FuncUnit.xmlLogClassPrefix : '';
 	var filename = FuncUnit.xmlLogFilename ? FuncUnit.xmlLogFilename : false;
 	
