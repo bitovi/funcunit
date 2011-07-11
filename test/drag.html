@@ -36,10 +36,16 @@
 	<div class='status'></div>
 <script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript'>
-	steal.plugins('jquery', 'jquery/event/drag', 'jquery/event/drop').start();
-</script>
-<script type='text/javascript' id="demo-source">
-	var hoveredOnce = false;
+	//load a lot of stuff ...
+	steal('http://javascriptmvc.com/jquery')
+		.then('jquery')
+		.then(
+			'jquery/event/drag', 
+			'jquery/event/drop')
+		.then('jquery/controller/subscribe')
+		.then('jquery/model/list')
+		.then(function(){
+		var hoveredOnce = false;
 	$(".over").bind('mouseover',function(){
 		if (!hoveredOnce) {
 			$(this).addClass('hover')
@@ -58,6 +64,8 @@
 				$(".status").html("dragged")
 			})
 		})
+		
+	})
 </script>
     </body>
 </html>

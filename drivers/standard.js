@@ -1,9 +1,5 @@
 steal.then(function() {
-	var readystate = document.readyState;
-	FuncUnit.jquery(window).load(function(){
-		if(document.readyState != readystate)
-			FuncUnit.support.readystate = true;
-	})
+	FuncUnit.support.readystate = "readyState" in document;
 	//don't do any of this if in rhino (IE selenium)
 	if (navigator.userAgent.match(/Rhino/)) {
 		return;	
@@ -90,14 +86,29 @@ steal.then(function() {
 			}
 		}
 		
-		setTimeout(arguments.callee, 1000)
+		setTimeout(arguments.callee, 500)
 	}
 	
 	FuncUnit._onload = function(success, error){
-		loadSuccess = success;
-		if (!newPage) 
+		// saver reference to success
+		loadSuccess = function(){
+			// called when load happens ... here we check for steal
+			if(!FuncUnit._window.steal || FuncUnit._window.steal.isReady){
+				success();
+			}else{
+				console.log('waiting for steal ...');
+				setTimeout(arguments.callee, 200)
+			}
+				
+		}
+		
+		
+		// we only need to do this setup stuff once ...
+		if (!newPage) {
 			return;
+		}
 		newPage = false;
+		
 		if (FuncUnit.support.readystate)
 		{
 			poller();

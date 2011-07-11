@@ -17,12 +17,12 @@
 	</div>
 <script type='text/javascript' src='../../steal/steal.js'></script>
 <script type='text/javascript'>
-	steal.plugins('jquery').then( function(){
+	steal('jquery').then( function(){
 		$(document.documentElement).click(function(ev){
 			$(ev.target).addClass("iWasClicked")
 		})
 		
-	}).start();
+	})
 </script>
     </body>
 </html>

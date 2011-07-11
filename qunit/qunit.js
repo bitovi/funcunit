@@ -3,7 +3,7 @@
  * 
  * http://docs.jquery.com/QUnit
  *
- * Copyright (c) 2009 John Resig, Jï¿½rn Zaefferer
+ * Copyright (c) 2009 John Resig, Jörn Zaefferer
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  */
@@ -15,7 +15,7 @@ steal.then(function(){
  * 
  * http://docs.jquery.com/QUnit
  *
- * Copyright (c) 2009 John Resig, JÃ¶rn Zaefferer
+ * Copyright (c) 2009 John Resig, Jörn Zaefferer
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  */
@@ -266,9 +266,12 @@ var QUnit = {
 				done();
 			}
 		}, true);
-
-		if ( window.setTimeout && !config.doneTimer ) {
+		
+		//needed to make a done call.
+		if ( window.setTimeout ) {
+			clearTimeout(config.doneTimer);
 			config.doneTimer = window.setTimeout(function(){
+				//console.log("doing stuff ...", config.queue.length)
 				if ( !config.queue.length ) {
 					done();
 				} else {
@@ -306,9 +309,9 @@ var QUnit = {
 	 *
 	 * @example equal( format("Received {0} bytes.", 2), "Received 2 bytes." );
 	 *
-	 * @param Object actual
-	 * @param Object expected
-	 * @param String message (optional)
+	 * @param {Object} actual
+	 * @param {Object} expected
+	 * @param {String} message (optional)
 	 */
 	equal: function(actual, expected, message) {
 		push(expected == actual, actual, expected, message);
@@ -353,7 +356,6 @@ var QUnit = {
 	
 	stop: function(timeout) {
 		config.blocking = true;
-
 		if ( timeout && window.setTimeout ) {
 			config.timeout = window.setTimeout(function() {
 				QUnit.ok( false, "Test timed out" );
@@ -438,6 +440,7 @@ var config = {
 	cachelist : []
 };
 
+
 // Load paramaters
 (function() {
 	var location = window.location || { search: "", protocol: "file:" },
@@ -474,11 +477,11 @@ if ( typeof exports === "undefined" || typeof require === "undefined" ) {
 
 QUnit.config = config;
 
-if ( typeof document === "undefined" || document.readyState === "complete" ) {
+//if ( typeof document === "undefined" || document.readyState === "complete" ) {
 	config.autorun = true;
-}
+//}
 
-addEvent(window, "load", function() {
+QUnit.load = function() {
 	// Initialize the config, saving the execution queue
 	var oldconfig = extend({}, config);
 	QUnit.init();
@@ -543,10 +546,15 @@ addEvent(window, "load", function() {
 		config.ajaxSettings = window.jQuery.ajaxSettings;
 	}
 
-	if (config.autostart) {
-		QUnit.start();
-	}
-});
+	//if (config.autostart) {
+	//	QUnit.start();
+	//}
+	process();
+};
+
+steal.one("ready",function(){
+	QUnit.load()
+})
 
 function done() {
 	if ( config.doneTimer && window.clearTimeout ) {
@@ -633,21 +641,22 @@ function push(result, actual, expected, message) {
 }
 
 function synchronize( callback , save) {
+	
 	config.queue.push( callback );
     if(save){
 		config.cachelist.push( callback )
 	}
+	
 	if ( config.autorun && !config.blocking ) {
 		process();
 	}
 }
 function process() {
 	var start = (new Date()).getTime();
-
 	while ( config.queue.length && !config.blocking ) {
 		if ( config.updateRate <= 0 || (((new Date()).getTime() - start) < config.updateRate) ) {
 			config.queue.shift()();
-
+			
 		} else {
 			setTimeout( process, 13 );
 			break;
@@ -734,7 +743,7 @@ function id(name) {
 // Test for equality any JavaScript type.
 // Discussions and reference: http://philrathe.com/articles/equiv
 // Test suites: http://philrathe.com/tests/equiv
-// Author: Philippe RathÃ© <prathe@gmail.com>
+// Author: Philippe Rathé <prathe@gmail.com>
 QUnit.equiv = function () {
 
     var innerEquiv; // the real equiv function
@@ -1121,4 +1130,4 @@ QUnit.jsDump = (function() {
 
 
 })(this);
-}).plugins("funcunit/qunit/rhino");
+}).then("funcunit/qunit/rhino");

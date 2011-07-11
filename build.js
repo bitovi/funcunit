@@ -1,4 +1,4 @@
-load('steal/rhino/steal.js')
+load('steal/rhino/rhino.js')
 
 load('funcunit/syn/build.js')
 
@@ -12,14 +12,14 @@ steal.File('funcunit/dist/steal/rhino').mkdir()
 /**
  * Build funcunit, user-extensions
  */
-steal('//steal/build/pluginify/pluginify', function(s){
+steal('steal/build/pluginify', function(s){
 	steal.build.pluginify("funcunit",{
 		global: "true",
 		destination: "funcunit/dist/funcunit/funcunit.js",
 		packagejquery: true
 	})
 })
-steal('//steal/build/pluginify/pluginify', function(s){
+steal('steal/build/pluginify', function(s){
 	steal.build.pluginify("funcunit/qunit",{
 		global: "true",
 		destination: "funcunit/dist/funcunit/qunit.js",
@@ -67,7 +67,7 @@ var filesToCopy = [
 	"funcunit/envjs.bat",
 	"funcunit/settings.js",
 	"funcunit/loader.js",
-	"steal/rhino/steal.js",
+	"steal/rhino/rhino.js",
 	"steal/rhino/utils.js",
 	"steal/rhino/file.js"
 ]

@@ -4,8 +4,7 @@ steal.then(function(){
 	if (typeof FuncUnit == 'undefined') {
 		FuncUnit = {};
 	}
-	// these are the 
-	steal.extend(FuncUnit,{
+	var qunitEvents = {
 		testStart: function(name){
 			print("--" + name + "--")
 		},
@@ -33,7 +32,10 @@ steal.then(function(){
 		done: function(failures, total){
 			print("\nALL DONE - fail " + failures + ", pass " + total)
 		}
-	});
+	};
+	for ( var evt in qunitEvents ) {
+		FuncUnit[evt] = qunitEvents[evt];
+	}
 	/**
 	 * Loads the FuncUnit page in EnvJS.  This loads FuncUnit, but we probably want settings 
 	 * on it already ....

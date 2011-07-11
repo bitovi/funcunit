@@ -1,12 +1,11 @@
 //what we need from javascriptmvc or other places
-steal.plugins('funcunit/qunit',
-	'funcunit/qunit/rhino')
-	.then('resources/jquery','resources/json','resources/selector')
-	.plugins('funcunit/syn')
+steal('funcunit/qunit')
+	.then('funcunit/qunit/rhino')
+	.then('./resources/jquery.js')
+	.then('./resources/json.js','./resources/selector.js')
+	.then('funcunit/syn')
 //Now describe FuncUnit
-.then(function(){
-
-
+.then(function($){
 
 //this gets the global object, even in rhino
 var window = (function(){return this }).call(null),
@@ -16,7 +15,7 @@ var window = (function(){return this }).call(null),
 
 /**
  * @class FuncUnit
- * @tag core
+ * @parent index 2
  * @test test.html
  * @download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-5.zip
 
@@ -1389,6 +1388,6 @@ if(!FuncUnit.jquery.fn.triggerSyn){
 }
 })
 //now add drivers
-.then('resources/selenium_start',
-'drivers/selenium',
-'drivers/standard')
+.then('./resources/selenium_start.js')
+.then('./drivers/selenium.js',
+'./drivers/standard.js')
