@@ -1,9 +1,9 @@
 // This code is always run ...
 
-steal.then(function(){
-	if (typeof FuncUnit == 'undefined') {
-		FuncUnit = {};
-	}
+if (typeof FuncUnit == 'undefined') {
+	FuncUnit = {};
+}
+steal("funcunit/resources/selenium_start.js").then(function(){
 	var qunitEvents = {
 		testStart: function(name){
 			print("--" + name + "--")
@@ -93,8 +93,20 @@ steal.then(function(){
 			
 			
 		}
+		// configuration defaults
+//		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
+//		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
+//		FuncUnit.startSelenium();
 		
-		Envjs(page, {
+//		var location = /file:/.test(window.location.protocol) ? window.location.href.replace(/ /g,"%20") : window.location.href;
+//		var browser = new DefaultSelenium("localhost", 4444, "*firefox", "http://www.google.com");
+//		browser.start();
+//		
+//		setTimeout(function(){
+//			browser.close();
+//			browser.stop();
+//		}, 5000)
+		Envjs("funcunit/tester.html", {
 			scriptTypes: {
 				"text/javascript": true,
 				"text/envjs": true,

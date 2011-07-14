@@ -6,6 +6,32 @@ steal('funcunit/qunit')
 	.then('funcunit/syn')
 //Now describe FuncUnit
 .then(function($){
+	
+SeleniumQueue = []
+var sendMessage = function(data){
+//	var d = JSON.stringify(data);
+//	window.postMessage(d, "*")
+	SeleniumQueue.push(data)
+}
+
+QUnit.testDone = function(name, failed, passed, total){
+	sendMessage({
+		type: "testStart",
+		name: name, 
+		failed: failed, 
+		passed: passed, 
+		total: total
+	})
+}
+QUnit.done = function(failed, passed, total, runtime){
+	sendMessage({
+		type: "done",
+		runtime: runtime, 
+		failed: failed, 
+		passed: passed, 
+		total: total
+	})
+}
 
 //this gets the global object, even in rhino
 var window = (function(){return this }).call(null),

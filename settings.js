@@ -1,6 +1,6 @@
 FuncUnit = {
 	// the list of browsers that selenium runs tests on
-	browsers: null, // ["*firefox"],
+	browsers: ["*firefox"],
 	
 	// the root for all paths in the tests, defaults to filesystem
 	jmvcRoot: null, // "http://localhost:8000/",

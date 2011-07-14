@@ -135,8 +135,8 @@
      **/
     $.evalJSON = function(src)
     {
-        if (typeof(JSON) == 'object' && JSON.parse)
-            return JSON.parse(src);
+//        if (typeof(JSON) == 'object' && JSON.parse)
+//            return JSON.parse(src);
         return eval("(" + src + ")");
     };
     
