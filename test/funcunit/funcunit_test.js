@@ -12,9 +12,7 @@ test("qUnit module setup works async", function(){
 })
 
 test("Iframe access", function(){
-	
 	equals(S("h2",0).text(), "Goodbye World", "text of iframe")
-	
 })
 
 test("typing alt and shift characters", function(){
@@ -102,9 +100,9 @@ test("Accessing the document", function(){
 
 
 // this should fail
-test("(should fail) Selenium negative test for button that does not exist",function(){
-	S('.button-doesnot-exist').click(function(){
-		// never gets here
-		ok(true, "click worked")
-	})
-})
+//test("(should fail) Selenium negative test for button that does not exist",function(){
+//	S('.button-doesnot-exist').click(function(){
+//		// never gets here
+//		ok(true, "click worked")
+//	})
+//})

@@ -532,15 +532,31 @@ if (!JSON) {
 
 	Selenium.getResult = function(){
 		// window not loaded yet
-		if(typeof selenium == "undefined" || typeof _win().SeleniumQueue == "undefined" || !_win().SeleniumQueue.length){
+		var _win = selenium.browserbot.getCurrentWindow(), 
+			q = _win.SeleniumQueue;
+		_win.SeleniumQueue = [];
+		if(typeof selenium == "undefined" || typeof _win.SeleniumQueue == "undefined"){
 			return;
 		}
-		var res = JSON.stringify(_win().SeleniumQueue);
-		_win().SeleniumQueue = [];
+		var evt,
+			evtCopy, 
+			arrayCopy = [];
+			// not sure why this is necessary but copying allows events to stringify correctly
+			for(var i=0; i<q.length; i++){
+				evt = q[i];
+				copy = {};
+//				alert(JSON.stringify({type: "testStart"}))
+				for(var k in evt){
+					copy[k] = evt[k];
+				}
+//				alert(JSON.stringify(evt)+", "+JSON.stringify(copy))
+				arrayCopy.push(copy);
+			}
+//		if(/testStart/.test(res)){
+//			alert(res)
+//		}
+		var res = JSON.stringify(arrayCopy); 
+		_win.SeleniumQueue = [];
 		return res;
 	}
-	var _win = function(){
-		var sel = selenium.browserbot
-		return sel.getCurrentWindow()
-	};
 })()

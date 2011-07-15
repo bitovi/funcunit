@@ -1,8 +1,8 @@
 //what we need from javascriptmvc or other places
 steal('funcunit/qunit')
 	.then('funcunit/qunit/rhino')
-	.then('./resources/jquery.js')
-	.then('./resources/json.js','./resources/selector.js')
+	.then('jquery')
+	.then('jquery/lang/json','./resources/selector.js')
 	.then('funcunit/syn')
 //Now describe FuncUnit
 .then(function($){
@@ -11,16 +11,23 @@ SeleniumQueue = []
 var sendMessage = function(data){
 //	var d = JSON.stringify(data);
 //	window.postMessage(d, "*")
-	SeleniumQueue.push(data)
+	SeleniumQueue.push(data);
 }
 
 QUnit.testDone = function(name, failed, passed, total){
 	sendMessage({
-		type: "testStart",
+		type: "testDone",
 		name: name, 
 		failed: failed, 
 		passed: passed, 
 		total: total
+	})
+}
+QUnit.testStart = function(name, failed, passed, total){
+//	alert("testStart")
+	sendMessage({
+		type: "testStart",
+		name: name
 	})
 }
 QUnit.done = function(failed, passed, total, runtime){
@@ -1415,5 +1422,4 @@ if(!FuncUnit.jquery.fn.triggerSyn){
 })
 //now add drivers
 .then('./resources/selenium_start.js')
-.then('./drivers/selenium.js',
-'./drivers/standard.js')
+.then('./drivers/standard.js')

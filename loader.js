@@ -3,39 +3,36 @@
 if (typeof FuncUnit == 'undefined') {
 	FuncUnit = {};
 }
-steal("funcunit/resources/selenium_start.js").then(function(){
+steal("funcunit/resources/selenium_start.js", "funcunit/resources/json.js").then(function(){
 	var qunitEvents = {
-		testStart: function(name){
-			print("--" + name + "--")
+		testStart: function(data){
+			print("--" + data.name + "--")
 		},
-		log: function(result, message){
-			if (!message) 
-				message = ""
-			print((result ? "  PASS " : "  FAIL ") + message)
+		log: function(data){
+			if (!data.message) 
+				data.message = ""
+			print((data.result ? "  PASS " : "  FAIL ") + data.message)
 		},
-		testDone: function(name, failures, total){
-			print("  done - fail " + failures + ", pass " + total + "\n")
+		testDone: function(data){
+			print("  done - fail " + data.failed + ", pass " + data.passed + "\n")
 		},
-		moduleStart: function(name){
-			print("MODULE " + name + "\n")
+		moduleStart: function(data){
+			print("MODULE " + data.name + "\n")
 		},
-		moduleDone: function(name, failures, total){
+		moduleDone: function(data){
 		
 		},
 		browserStart : function(name){
 			print("BROWSER " + name + " ===== \n")
 		},
-		browserDone : function(name, failures, total){
-			print("\n"+name+" DONE " + failures + ", " + total + (FuncUnit.showTimestamps? (' - ' 
+		browserDone : function(data){
+			print("\n"+data.name+" DONE " + data.failed + ", " + data.passed + (FuncUnit.showTimestamps? (' - ' 
 						+ formattedtime + ' seconds'): ""))
 		},
-		done: function(failures, total){
-			print("\nALL DONE - fail " + failures + ", pass " + total)
+		done: function(data){
+			print("\nALL DONE - fail " + data.failed + ", pass " + data.passed)
 		}
 	};
-	for ( var evt in qunitEvents ) {
-		FuncUnit[evt] = qunitEvents[evt];
-	}
 	/**
 	 * Loads the FuncUnit page in EnvJS.  This loads FuncUnit, but we probably want settings 
 	 * on it already ....
@@ -48,10 +45,6 @@ steal("funcunit/resources/selenium_start.js").then(function(){
 		//clear out steal ... you are done with it...
 		var extend = steal.extend;
 		steal = undefined;
-		load('steal/rhino/env.js');
-		if (!navigator.userAgent.match(/Rhino/)){
-			return;
-		} 
 		
 		var dirArr = page.split("/"), 
 			dir = dirArr.slice(0, dirArr.length - 1).join("/"), 
@@ -94,28 +87,72 @@ steal("funcunit/resources/selenium_start.js").then(function(){
 			
 		}
 		// configuration defaults
-//		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
-//		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
-//		FuncUnit.startSelenium();
+		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
+		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
+		if(!FuncUnit.browsers){
+			if(FuncUnit.jmvcRoot)
+				// run all browsers if you supply a jmvcRoot
+				// this is because a jmvcRoot means you're not running from filesystem, 
+				// so safari and chrome will work correctly 
+				FuncUnit.browsers = ["*firefox", "*iexplore", "*safari", "*googlechrome"]
+			else {
+				FuncUnit.browsers = ["*firefox"]
+				if(java.lang.System.getProperty("os.name").indexOf("Windows") != -1){
+					FuncUnit.browsers.push("*iexplore")
+				}
+			}
+		}
 		
-//		var location = /file:/.test(window.location.protocol) ? window.location.href.replace(/ /g,"%20") : window.location.href;
-//		var browser = new DefaultSelenium("localhost", 4444, "*firefox", "http://www.google.com");
-//		browser.start();
-//		
-//		setTimeout(function(){
-//			browser.close();
-//			browser.stop();
-//		}, 5000)
-		Envjs("funcunit/tester.html", {
-			scriptTypes: {
-				"text/javascript": true,
-				"text/envjs": true,
-				"": true
-			},
-			fireLoad: true,
-			logLevel: 2,
-			dontPrintUserAgent: true,
-			exitOnError : FuncUnit.exitOnError
-		});
+		FuncUnit.startSelenium();
+		
+		qunitEvents.browserStart("*firefox");
+		
+		//convert spaces to %20.
+		// TODO figure out the filesystem path using java cwd plus page relative path
+		// TODO also remove the spaces and whatever after the path (look in old funcunit)
+		var location = /http:/.test(page) ? page: "file:///opt/local/share/java/tomcat6/webapps/jmvc31/funcunit/funcunit.html";
+		
+		FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
+			FuncUnit.serverPort, 
+			 "*firefox", 
+			location);
+			
+		FuncUnit.starttime = new Date().getTime();
+		FuncUnit.selenium.start();
+		
+		// TODO don't hard code this, get the right path
+		FuncUnit.selenium.open("file:///opt/local/share/java/tomcat6/webapps/jmvc31/funcunit/funcunit.html");
+		var resultJSON, 
+			res,
+			evt,
+			pollForResults = function(){
+				resultJSON = FuncUnit.selenium.getEval("Selenium.getResult()");
+				eval("res = "+resultJSON);
+				if(res && res.length){
+					for (var i = 0; i < res.length; i++) {
+						evt = res[i];
+//						print(resultJSON);
+//						print(res[i])
+//						for(var k in evt){
+//							print(k+", "+evt[k])
+//						}
+						evt.type && qunitEvents[evt.type](evt);
+					}
+				}
+				if (resultJSON.indexOf("done") != -1) {
+					FuncUnit.selenium.close();
+					FuncUnit.selenium.stop();
+					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
+						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium" > NUL')
+						//quit()
+					}
+				}
+				else {
+					// keep polling
+					java.lang.Thread.currentThread().sleep(400);
+					pollForResults();
+				}
+			}
+		pollForResults();
 	}
 })

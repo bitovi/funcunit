@@ -19,7 +19,7 @@ FuncUnit.startSelenium = function(){
 				runCommand("cmd", "/C", command.replace(/\//g, "\\"))
 			}
 			else {
-				var command = jarCommand + " > selenium.log 2> selenium.log &";
+				var command = jarCommand;// + " > selenium.log 2> selenium.log &";
 				runCommand("sh", "-c", command);
 			}
 		})
