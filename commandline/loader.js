@@ -38,6 +38,8 @@ load('funcunit/commandline/selenium_start.js');
 	};
 	
 	var browser = 0, 
+		failed = 0,
+		passed = 0,
 		pollForResults = function(){
 			var resultJSON, 
 				res,
@@ -77,6 +79,8 @@ load('funcunit/commandline/selenium_start.js');
 			pollForResults();
 		},
 		browserDone = function(evt){
+			failed += evt.failed;
+			passed += evt.passed;
 			FuncUnit.endtime = new Date().getTime();
 			var formattedtime = (FuncUnit.endtime - FuncUnit.starttime) / 1000;
 			evt.name = FuncUnit.browsers[browser];
@@ -89,6 +93,7 @@ load('funcunit/commandline/selenium_start.js');
 			} 
 			// kill the process and stop selenium
 			else {
+				qunitEvents.done({passed: passed, failed: failed})
 				FuncUnit.stopSelenium();
 			}
 		}
