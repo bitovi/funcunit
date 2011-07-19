@@ -36,6 +36,64 @@ load('funcunit/commandline/selenium_start.js');
 			print("\nALL DONE - fail " + data.failed + ", pass " + data.passed)
 		}
 	};
+	
+	var browser = 0, 
+		pollForResults = function(){
+			var resultJSON, 
+				res,
+				evt,
+				keepPolling = true;
+			resultJSON = FuncUnit.selenium.getEval("Selenium.getResult()");
+			eval("res = "+resultJSON);
+			if(res && res.length){
+				for (var i = 0; i < res.length; i++) {
+					evt = res[i];
+					if (evt.type == "done") {
+						keepPolling = false;
+						browserDone(evt);
+					}
+					else {
+						qunitEvents[evt.type](evt);
+					}
+				}
+			}
+			if(keepPolling) {
+				// keep polling
+				java.lang.Thread.currentThread().sleep(400);
+				pollForResults();
+			}
+		}, 
+		browserStart = function(browser){
+			qunitEvents.browserStart(FuncUnit.browsers[browser]);
+			FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
+				FuncUnit.serverPort, 
+				FuncUnit.browsers[browser], 
+				FuncUnit.funcunitPage);
+				
+			FuncUnit.starttime = new Date().getTime();
+			FuncUnit.selenium.start();
+			
+			// TODO don't hard code this, get the right path
+			FuncUnit.selenium.open(FuncUnit.funcunitPage);
+			pollForResults();
+		},
+		browserDone = function(evt){
+			FuncUnit.endtime = new Date().getTime();
+			var formattedtime = (FuncUnit.endtime - FuncUnit.starttime) / 1000;
+			evt.name = FuncUnit.browsers[browser];
+			qunitEvents.browserDone(evt)
+			FuncUnit.selenium.close();
+			FuncUnit.selenium.stop();
+			browser++;
+			if (browser < FuncUnit.browsers.length) {
+				browserStart(browser)
+			} 
+			// kill the process and stop selenium
+			else {
+				FuncUnit.stopSelenium();
+			}
+		}
+	
 	/**
 	 * Loads the FuncUnit page in EnvJS.  This loads FuncUnit, but we probably want settings 
 	 * on it already ....
@@ -108,49 +166,14 @@ load('funcunit/commandline/selenium_start.js');
 		
 		FuncUnit.startSelenium();
 		
-		qunitEvents.browserStart("*firefox");
-		
 		//convert spaces to %20.
 		// TODO figure out the filesystem path using java cwd plus page relative path
 		// TODO also remove the spaces and whatever after the path (look in old funcunit)
-		var location = /http:/.test(page) ? page: "file:///opt/local/share/java/tomcat6/webapps/jmvc31/funcunit/funcunit.html";
+//		var location = /file:/.test(window.location.protocol) ? window.location.href.replace(/ /g,"%20") : window.location.href;
+//		var location = /http:/.test(page) ? page: "file:///opt/local/share/java/tomcat6/webapps/jmvc31/funcunit/funcunit.html";
 		
-		FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
-			FuncUnit.serverPort, 
-			 "*firefox", 
-			location);
-			
-		FuncUnit.starttime = new Date().getTime();
-		FuncUnit.selenium.start();
+		FuncUnit.funcunitPage = "file:///opt/local/share/java/tomcat6/webapps/jmvc31/funcunit/funcunit.html";
+		browserStart(browser, FuncUnit.funcunitPage)
 		
-		// TODO don't hard code this, get the right path
-		FuncUnit.selenium.open("file:///opt/local/share/java/tomcat6/webapps/jmvc31/funcunit/funcunit.html");
-		var resultJSON, 
-			res,
-			evt,
-			pollForResults = function(){
-				resultJSON = FuncUnit.selenium.getEval("Selenium.getResult()");
-				eval("res = "+resultJSON);
-				if(res && res.length){
-					for (var i = 0; i < res.length; i++) {
-						evt = res[i];
-						evt.type && qunitEvents[evt.type](evt);
-					}
-				}
-				if (resultJSON.indexOf("done") != -1) {
-					FuncUnit.selenium.close();
-					FuncUnit.selenium.stop();
-					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-						runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium" > NUL')
-						//quit()
-					}
-				}
-				else {
-					// keep polling
-					java.lang.Thread.currentThread().sleep(400);
-					pollForResults();
-				}
-			}
-		pollForResults();
 	}
 })()

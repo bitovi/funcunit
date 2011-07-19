@@ -1,3 +1,10 @@
+FuncUnit.stopSelenium = function(){
+	if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
+		runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium" > NUL')
+		//quit()
+	}
+}
+
 FuncUnit.startSelenium = function(){
 	importClass(Packages.com.thoughtworks.selenium.DefaultSelenium);
 	
