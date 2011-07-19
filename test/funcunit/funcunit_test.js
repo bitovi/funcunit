@@ -97,12 +97,3 @@ test("Accessing the window", function(){
 test("Accessing the document", function(){
 	ok(S(S.window.document).width()> 20, "I can get the document's width")
 })
-
-
-// this should fail
-//test("(should fail) Selenium negative test for button that does not exist",function(){
-//	S('.button-doesnot-exist').click(function(){
-//		// never gets here
-//		ok(true, "click worked")
-//	})
-//})
