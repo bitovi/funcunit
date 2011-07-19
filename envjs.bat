@@ -7,10 +7,10 @@ set BASE=%~dps0
 set CMD=%0
 
 :: classpath
-SET CP=%BASE%java/selenium-java-client-driver.jar;%BASE%../steal/rhino/js.jar
+SET CP=%BASE%selenium/selenium-java-client-driver.jar;%BASE%../steal/rhino/js.jar
 
 :: load the run.js file
-SET LOADPATH=%BASE%scripts/run.js
+SET LOADPATH=%BASE%commandline/run.js
 
 :: call js.bat
 CALL %BASE%../steal/rhino/loader.bat %1 %2 %3 %4 %5 %6

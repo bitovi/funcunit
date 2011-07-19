@@ -31,9 +31,7 @@ var i, fileName, cmd;
 
 // read: wrapped, jQuery, json, syn
 var userFiles = 
-		["funcunit/java/extensions/fakesteal.js", 
-		"funcunit/resources/jquery.js", 
-		"funcunit/java/extensions/wrapped.js", 
+		["jquery/jquery.js",  
 		"funcunit/resources/json.js", 
 		"funcunit/syn/dist/syn.js",
 		"funcunit/resources/selector.js"],

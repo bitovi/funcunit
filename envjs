@@ -19,10 +19,10 @@ BASE=`dirname $SCRIPT`/
 cd $BASE..
 
 # classpath
-CP=$BASE../funcunit/java/selenium-java-client-driver.jar:$BASE../steal/rhino/js.jar
+CP=$BASE../funcunit/selenium/selenium-java-client-driver.jar:$BASE../steal/rhino/js.jar
 
 # load the run.js file
-LOADPATH=${BASE}scripts/run.js
+LOADPATH=${BASE}commandline/run.js
 
 # call js.bat
 . $BASE../steal/rhino/loader $1 $2 $3 $4 $5 $6

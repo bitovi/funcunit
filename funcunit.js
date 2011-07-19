@@ -2,15 +2,14 @@
 steal('funcunit/qunit')
 	.then('funcunit/qunit/rhino')
 	.then('jquery')
-	.then('jquery/lang/json','./resources/selector.js')
+	.then('jquery/lang/json','funcunit/browser/selector.js')
 	.then('funcunit/syn')
 //Now describe FuncUnit
 .then(function($){
 	
 SeleniumQueue = []
+// in jstestdriver, this should stringify and use window.postMessage
 var sendMessage = function(data){
-//	var d = JSON.stringify(data);
-//	window.postMessage(d, "*")
 	SeleniumQueue.push(data);
 }
 
@@ -1421,5 +1420,4 @@ if(!FuncUnit.jquery.fn.triggerSyn){
 }
 })
 //now add drivers
-.then('./resources/selenium_start.js')
-.then('./drivers/standard.js')
+.then('funcunit/browser/standard.js')

@@ -535,7 +535,7 @@ if (!JSON) {
 		var _win = selenium.browserbot.getCurrentWindow(), 
 			q = _win.SeleniumQueue;
 		_win.SeleniumQueue = [];
-		if(typeof selenium == "undefined" || typeof _win.SeleniumQueue == "undefined"){
+		if(typeof selenium == "undefined" || typeof q == "undefined"){
 			return;
 		}
 		var evt,
@@ -545,16 +545,11 @@ if (!JSON) {
 			for(var i=0; i<q.length; i++){
 				evt = q[i];
 				copy = {};
-//				alert(JSON.stringify({type: "testStart"}))
 				for(var k in evt){
 					copy[k] = evt[k];
 				}
-//				alert(JSON.stringify(evt)+", "+JSON.stringify(copy))
 				arrayCopy.push(copy);
 			}
-//		if(/testStart/.test(res)){
-//			alert(res)
-//		}
 		var res = JSON.stringify(arrayCopy); 
 		_win.SeleniumQueue = [];
 		return res;

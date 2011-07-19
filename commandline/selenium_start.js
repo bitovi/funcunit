@@ -1,5 +1,3 @@
-steal.then(function(){
-
 FuncUnit.startSelenium = function(){
 	importClass(Packages.com.thoughtworks.selenium.DefaultSelenium);
 	
@@ -11,15 +9,15 @@ FuncUnit.startSelenium = function(){
 	catch (ex) {
 		spawn(function(){
 			var jarCommand = 'java -jar '+
-				'funcunit/java/selenium-server-standalone-2.0rc3.jar'+
+				'funcunit/selenium/selenium-server-standalone-2.0rc3.jar'+
 				' -userExtensions '+
-				'funcunit/java/user-extensions.js';
+				'funcunit/selenium/user-extensions.js';
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 				var command = 'start "selenium" ' + jarCommand;
 				runCommand("cmd", "/C", command.replace(/\//g, "\\"))
 			}
 			else {
-				var command = jarCommand;// + " > selenium.log 2> selenium.log &";
+				var command = jarCommand + " > selenium.log 2> selenium.log &";
 				runCommand("sh", "-c", command);
 			}
 		})
@@ -45,4 +43,3 @@ FuncUnit.startSelenium = function(){
 		}
 	}
 }
-})

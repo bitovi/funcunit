@@ -3,7 +3,10 @@
 if (typeof FuncUnit == 'undefined') {
 	FuncUnit = {};
 }
-steal("funcunit/resources/selenium_start.js", "funcunit/resources/json.js").then(function(){
+
+load('funcunit/commandline/json.js');
+load('funcunit/commandline/selenium_start.js');
+(function(){
 	var qunitEvents = {
 		testStart: function(data){
 			print("--" + data.name + "--")
@@ -131,11 +134,6 @@ steal("funcunit/resources/selenium_start.js", "funcunit/resources/json.js").then
 				if(res && res.length){
 					for (var i = 0; i < res.length; i++) {
 						evt = res[i];
-//						print(resultJSON);
-//						print(res[i])
-//						for(var k in evt){
-//							print(k+", "+evt[k])
-//						}
 						evt.type && qunitEvents[evt.type](evt);
 					}
 				}
@@ -155,4 +153,4 @@ steal("funcunit/resources/selenium_start.js", "funcunit/resources/json.js").then
 			}
 		pollForResults();
 	}
-})
+})()
