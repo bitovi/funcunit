@@ -73,7 +73,6 @@ load('funcunit/commandline/selenium_start.js');
 			FuncUnit.starttime = new Date().getTime();
 			FuncUnit.selenium.start();
 			
-			// TODO don't hard code this, get the right path
 			FuncUnit.selenium.open(FuncUnit.funcunitPage);
 			pollForResults();
 		},
@@ -103,6 +102,7 @@ load('funcunit/commandline/selenium_start.js');
 	 * 2. FuncUnit.load will try to load settings.js if there hasn't been one loaded
 	 */ 
 	FuncUnit.load = function(page){
+		
 		//clear out steal ... you are done with it...
 		var extend = steal.extend;
 		steal = undefined;
@@ -150,6 +150,14 @@ load('funcunit/commandline/selenium_start.js');
 		// configuration defaults
 		FuncUnit.serverHost = FuncUnit.serverHost || "localhost";
 		FuncUnit.serverPort = FuncUnit.serverPort || 4444;
+		
+		if(!/http:|file:/.test(page)){ // if theres no protocol, turn it into a filesystem url
+			var cwd = (new java.io.File (".")).getCanonicalPath();
+			page = "file://"+cwd+"/"+page;
+		}
+		
+		//convert spaces to %20.
+		FuncUnit.funcunitPage = /http:/.test(page) ? page: page.replace(/ /g,"%20");
 		if(!FuncUnit.browsers){
 			if(FuncUnit.jmvcRoot)
 				// run all browsers if you supply a jmvcRoot
@@ -166,14 +174,6 @@ load('funcunit/commandline/selenium_start.js');
 		
 		FuncUnit.startSelenium();
 		
-		//convert spaces to %20.
-		// TODO figure out the filesystem path using java cwd plus page relative path
-		// TODO also remove the spaces and whatever after the path (look in old funcunit)
-//		var location = /file:/.test(window.location.protocol) ? window.location.href.replace(/ /g,"%20") : window.location.href;
-//		var location = /http:/.test(page) ? page: "file:///opt/local/share/java/tomcat6/webapps/jmvc31/funcunit/funcunit.html";
-		
-		FuncUnit.funcunitPage = "file:///opt/local/share/java/tomcat6/webapps/jmvc31/funcunit/funcunit.html";
 		browserStart(browser, FuncUnit.funcunitPage)
-		
 	}
 })()
