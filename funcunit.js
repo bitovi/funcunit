@@ -1,43 +1,11 @@
 //what we need from javascriptmvc or other places
 steal('funcunit/qunit')
-	.then('funcunit/qunit/rhino')
+	.then('funcunit/qunit/rhino', 'funcunit/qunit/selenium')
 	.then('jquery')
 	.then('jquery/lang/json','funcunit/browser/selector.js')
 	.then('funcunit/syn')
 //Now describe FuncUnit
 .then(function($){
-	
-SeleniumQueue = []
-// in jstestdriver, this should stringify and use window.postMessage
-var sendMessage = function(data){
-	SeleniumQueue.push(data);
-}
-
-QUnit.testDone = function(name, failed, passed, total){
-	sendMessage({
-		type: "testDone",
-		name: name, 
-		failed: failed, 
-		passed: passed, 
-		total: total
-	})
-}
-QUnit.testStart = function(name, failed, passed, total){
-//	alert("testStart")
-	sendMessage({
-		type: "testStart",
-		name: name
-	})
-}
-QUnit.done = function(failed, passed, total, runtime){
-	sendMessage({
-		type: "done",
-		runtime: runtime, 
-		failed: failed, 
-		passed: passed, 
-		total: total
-	})
-}
 
 //this gets the global object, even in rhino
 var window = (function(){return this }).call(null),
