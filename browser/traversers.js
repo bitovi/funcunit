@@ -46,8 +46,16 @@ $.each(["closest","find","next","prev","siblings","last","first"], function(i, n
 	}
 });
 
-
-
+//do traversers
+var traversers = ["closest","next","prev","siblings","last","first"],
+	makeTraverser = function(name){
+		FuncUnit.init.prototype[name] = function(selector){
+			return FuncUnit( FuncUnit.$(this.selector, this.context, name+"Selector", selector), this.context )
+		}
+	};
+for(var i  =0; i < traversers.length; i++){
+	makeTraverser(traversers[i]);
+}
 
 
 }(window.jQuery  || window.FuncUnit.jQuery));
