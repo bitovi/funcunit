@@ -1,4 +1,5 @@
-/*
+(function(){
+	/*
     json.js
     2011-02-23
 
@@ -528,3 +529,29 @@ if (!JSON) {
         };
     }
 }());
+
+	Selenium.getResult = function(){
+		// window not loaded yet
+		var _win = selenium.browserbot.getCurrentWindow(), 
+			q = _win.SeleniumQueue;
+		_win.SeleniumQueue = [];
+		if(typeof selenium == "undefined" || typeof q == "undefined"){
+			return;
+		}
+		var evt,
+			evtCopy, 
+			arrayCopy = [];
+			// not sure why this is necessary but copying allows events to stringify correctly
+			for(var i=0; i<q.length; i++){
+				evt = q[i];
+				copy = {type: evt.type, data: {}};
+				for(var k in evt.data){
+					copy.data[k] = evt.data[k];
+				}
+				arrayCopy.push(copy);
+			}
+		var res = JSON.stringify(arrayCopy); 
+		_win.SeleniumQueue = [];
+		return res;
+	}
+})()

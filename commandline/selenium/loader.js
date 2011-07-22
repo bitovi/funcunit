@@ -4,38 +4,9 @@ if (typeof FuncUnit == 'undefined') {
 	FuncUnit = {};
 }
 
-load('funcunit/commandline/json.js');
-load('funcunit/commandline/selenium_start.js');
+load('funcunit/commandline/selenium/selenium_start.js');
+load('funcunit/qunit/print.js');
 (function(){
-	var qunitEvents = {
-		testStart: function(data){
-			print("--" + data.name + "--")
-		},
-		log: function(data){
-			if (!data.message) 
-				data.message = ""
-			print((data.result ? "  PASS " : "  FAIL ") + data.message)
-		},
-		testDone: function(data){
-			print("  done - fail " + data.failed + ", pass " + data.passed + "\n")
-		},
-		moduleStart: function(data){
-			print("MODULE " + data.name + "\n")
-		},
-		moduleDone: function(data){
-		
-		},
-		browserStart : function(name){
-			print("BROWSER " + name + " ===== \n")
-		},
-		browserDone : function(data){
-			print("\n"+data.name+" DONE " + data.failed + ", " + data.passed + (FuncUnit.showTimestamps? (' - ' 
-						+ formattedtime + ' seconds'): ""))
-		},
-		done: function(data){
-			print("\nALL DONE - fail " + data.failed + ", pass " + data.passed)
-		}
-	};
 	
 	var browser = 0, 
 		failed = 0,
@@ -52,10 +23,10 @@ load('funcunit/commandline/selenium_start.js');
 					evt = res[i];
 					if (evt.type == "done") {
 						keepPolling = false;
-						browserDone(evt);
+						browserDone(evt.data);
 					}
 					else {
-						qunitEvents[evt.type](evt);
+						QUnitPrint[evt.type](evt.data)
 					}
 				}
 			}
@@ -66,7 +37,7 @@ load('funcunit/commandline/selenium_start.js');
 			}
 		}, 
 		browserStart = function(browser){
-			qunitEvents.browserStart(FuncUnit.browsers[browser]);
+			QUnitPrint.browserStart(FuncUnit.browsers[browser]);
 			FuncUnit.selenium = new DefaultSelenium(FuncUnit.serverHost, 
 				FuncUnit.serverPort, 
 				FuncUnit.browsers[browser], 
@@ -83,8 +54,7 @@ load('funcunit/commandline/selenium_start.js');
 			passed += evt.passed;
 			FuncUnit.endtime = new Date().getTime();
 			var formattedtime = (FuncUnit.endtime - FuncUnit.starttime) / 1000;
-			evt.name = FuncUnit.browsers[browser];
-			qunitEvents.browserDone(evt)
+			QUnitPrint.browserDone(FuncUnit.browsers[browser], passed, failed)
 			FuncUnit.selenium.close();
 			FuncUnit.selenium.stop();
 			browser++;
@@ -93,7 +63,7 @@ load('funcunit/commandline/selenium_start.js');
 			} 
 			// kill the process and stop selenium
 			else {
-				qunitEvents.done({passed: passed, failed: failed})
+				QUnitPrint.done(passed, failed)
 				FuncUnit.stopSelenium();
 			}
 		}

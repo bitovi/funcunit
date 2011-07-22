@@ -1,6 +1,6 @@
 //what we need from javascriptmvc or other places
 steal('funcunit/qunit')
-	.then('funcunit/qunit/rhino', 'funcunit/qunit/selenium')
+	.then('funcunit/qunit/selenium.js')
 	.then('jquery')
 	.then('jquery/lang/json')
 	.then('funcunit/syn')
