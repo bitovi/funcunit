@@ -23,7 +23,7 @@ QUnitPrint = {
 		print("\n"+name+" DONE " + failed + ", " + passed + (FuncUnit.showTimestamps? (' - ' 
 					+ formattedtime + ' seconds'): ""))
 	},
-	done: function(passed, failed){
-		print("\nALL DONE - fail " + failed + ", pass " + passed)
+	done: function(data){
+		print("\nALL DONE - fail " + data.failed + ", pass " + data.passed)
 	}
 };

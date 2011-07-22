@@ -7,8 +7,8 @@ steal('funcunit/qunit/print.js').then(function(){
 			'moduleStart',
 			'moduleDone',
 			'done'].forEach(function(item){
-				QUnit[item] = function(){
-					QUnitPrint[item].apply(FuncUnit, arguments);
+				QUnit[item] = function(data){
+					QUnitPrint[item].apply(this, arguments);
 				};
 				
 			})

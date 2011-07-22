@@ -63,7 +63,10 @@ load('funcunit/qunit/print.js');
 			} 
 			// kill the process and stop selenium
 			else {
-				QUnitPrint.done(passed, failed)
+				QUnitPrint.done({
+					passed: passed,
+					failed: failed
+				})
 				FuncUnit.stopSelenium();
 			}
 		}

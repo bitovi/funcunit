@@ -1,7 +1,8 @@
 // This code is always run ...
 
-load('steal/rhino/envjs.js');
+load('steal/rhino/env.js');
 (function(){
+	Envjsloader = {};
 	Envjsloader.load = function(page){
 		
 		//clear out steal ... you are done with it...
