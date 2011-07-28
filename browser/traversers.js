@@ -11,10 +11,11 @@ var traversers = ["closest","next","prev","siblings","last","first", "find"],
 		var orig = FuncUnit.prototype[name];
 		FuncUnit.prototype[name] = function(selector){
 			var args = arguments;
-			// find is called (with this as document) from FuncUnit.fn.init
+			// find is called (with "this" as document) from FuncUnit.fn.init, so in this case don't queue it up, just run the regular find
 			if (FuncUnit._window && this[0] !== FuncUnit._window.document) {
 				FuncUnit.add({
 					method: function(success, error){
+						// adjust the collection by using the real traverser method
 						this.bind = orig.apply(this.bind, args);
 						success()
 					},

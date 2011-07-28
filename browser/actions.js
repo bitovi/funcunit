@@ -61,7 +61,6 @@
 					method: function(success, error){
 						options = options || {}
 						steal.dev.log("Clicking " + selector)
-						this.bind.triggerSyn
 						this.bind.triggerSyn("_" + name, options, success);
 					},
 					callback: callback,

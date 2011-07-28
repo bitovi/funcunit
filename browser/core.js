@@ -182,17 +182,22 @@
 			selector = FuncUnit._window;
 		}
 		return selector;
-}
+	}
+	// override the subbed init method
 	FuncUnit.fn.init = function(selector, context){
+		// if its a function, just run it in the queue
 		if(typeof selector == "function"){
 			return FuncUnit.wait(0, selector);
 		}
 		var self = this;
+		// if its a string or targets the app window
 		if (typeof selector === "string" || selector == FuncUnit.window.document || selector == FuncUnit.window) {
+			// if the app window already exists, adjust the params (for the sync return value)
 			if (FuncUnit._window) {
 				context = getContext(context);
 				selector = getSelector(selector);
 			}
+			// run this method in the queue also
 			FuncUnit.add({
 				method : function(success, error){
 					context = getContext(context);
@@ -202,6 +207,7 @@
 				},
 				error : "selector failed: "+selector
 			});
+			// return a collection
 			return init.call(this, selector, context);
 		} else {
 			return init.call(this, selector, context);

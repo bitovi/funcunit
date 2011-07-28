@@ -390,11 +390,13 @@
 					method : function(){
 						// keep getting new collection because the page might be updating, we need to keep re-checking
 						this.bind = S(this.bind.selector)
+						// for repeating methods, only print once
 						if(!printed){
 							printed = true;
 							steal.dev.log("Checking "+fname+" on "+this.bind.selector)
 						}
 						var methodArgs = [];
+						// might need an argument
 						if(argIndex > 0){
 							methodArgs.push(args[3]);
 						}
@@ -408,7 +410,7 @@
 				})
 				return this;
 			}else{
-				//get the value
+				// just call the original jQ method
 				var methodArgs = [];
 				if(argIndex > 0){
 					methodArgs.push(args[3]);

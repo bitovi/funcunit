@@ -62,9 +62,11 @@
 						FuncUnit._done();
 					}, 
 					(next.timeout || 10000) + speed)
+				// if the last successful method had a collection, save it
 				if(el){
 					currentEl = el;
 				}
+				// make the new collection the last successful collection
 				if(currentEl){
 					next.bind = currentEl;
 				}
@@ -77,6 +79,7 @@
 						
 						incallback = true;
 						if (next.callback) 
+							// callback's "this" is the collection
 							next.callback.apply(next.bind || null, arguments);
 						incallback = false;
 						
