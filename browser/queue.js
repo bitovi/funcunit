@@ -39,16 +39,14 @@
 	}
 	//this is called after every command
 	// it gets the next function from the queue
-	FuncUnit._done = function(){
+	var currentEl;
+	FuncUnit._done = function(el){
 		var next, 
 			timer,
 			speed = 0;
 			
 		if(FuncUnit.speed == "slow"){
 			speed = 500;
-		}
-		else if (FuncUnit.speed){
-			speed = FuncUnit.speed;
 		}
 		if (queue.length > 0) {
 			next = queue.shift();
@@ -64,7 +62,12 @@
 						FuncUnit._done();
 					}, 
 					(next.timeout || 10000) + speed)
-				
+				if(el){
+					currentEl = el;
+				}
+				if(currentEl){
+					next.bind = currentEl;
+				}
 				next.method(	//success
 					function(){
 						//make sure we don't create an error
@@ -78,7 +81,7 @@
 						incallback = false;
 						
 						
-						FuncUnit._done();
+						FuncUnit._done(next.bind);
 					}, //error
 					function(message){
 						clearTimeout(timer);

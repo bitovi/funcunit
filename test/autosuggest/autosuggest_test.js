@@ -1,3 +1,4 @@
+steal("funcunit").then(function(){
 module("autosuggest",{
   setup: function() {
     S.open('autosuggest.html')
@@ -8,7 +9,9 @@ test("JavaScript results",function(){
   S('input').click().type("JavaScript")
 
   // wait until we have some results
-  S('.autocomplete_item').visible(function(){
+  S('.autocomplete_item').wait(1000).then(function(){
+  		console.log(this)
+	}).visible(function(){
     equal( S('.autocomplete_item').size(), 5, "there are 5 results")
   })
 });
@@ -31,3 +34,4 @@ test("JavaScript results",function(){
 //
 //- get rid of getters completely
 //- change waits to waitWidth, etc
+})
