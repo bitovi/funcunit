@@ -1,4 +1,3 @@
-
 (function(){
 	var clicks = [
 	/**
@@ -50,7 +49,7 @@
 	 */
 	'rightClick'],
 		makeClick = function(name){
-			FuncUnit.prototype[name] = function(options, callback){
+			FuncUnit.init.prototype[name] = function(options, callback){
 				if(typeof options == 'function'){
 					callback = options;
 					options = {};
@@ -61,7 +60,7 @@
 					method: function(success, error){
 						options = options || {}
 						steal.dev.log("Clicking " + selector)
-						this.bind.triggerSyn("_" + name, options, success);
+						FuncUnit.$(selector, context, "triggerSyn", "_" + name, options, success)
 					},
 					callback: callback,
 					error: "Could not " + name + " " + this.selector,
@@ -75,7 +74,7 @@
 		makeClick(clicks[i])
 	}
 	
-	$.extend(FuncUnit.prototype, { 
+	$.extend(FuncUnit.init.prototype, { 
 		/**
 		 * Types text into an element.  This makes use of [Syn.type] and works in 
 		 * a very similar way.
@@ -114,23 +113,10 @@
 			FuncUnit.add({
 				method : function(success, error){
 					steal.dev.log("Typing "+text+" on "+selector)
-					this.bind.triggerSyn("_type", text, success);
+					FuncUnit.$(selector, context, "triggerSyn", "_type", text, success)
 				},
 				callback : callback,
 				error : "Could not type " + text + " into " + this.selector,
-				bind : this
-			});
-			return this;
-		},
-		trigger: function(evName){
-			FuncUnit.add({
-				method : function(success, error){
-					steal.dev.log("Triggering "+evName+" on "+this.bind.selector)
-					// need to use the page's jquery to trigger events
-					FuncUnit._window.jQuery(this.bind.selector).trigger(evName)
-					success()
-				},
-				error : "Could not trigger " + evName,
 				bind : this
 			});
 			return this;
@@ -180,7 +166,7 @@
 			FuncUnit.add({
 				method: function(success, error){
 					steal.dev.log("dragging " + selector)
-					this.bind.triggerSyn("_drag", options, success);
+					FuncUnit.$(selector, context, "triggerSyn", "_drag", options, success)
 				},
 				callback: callback,
 				error: "Could not drag " + this.selector,
@@ -234,7 +220,7 @@
 			FuncUnit.add({
 				method: function(success, error){
 					steal.dev.log("moving " + selector)
-					this.bind.triggerSyn("_move", options, success);
+					FuncUnit.$(selector, context, "triggerSyn", "_move", options, success)
 				},
 				callback: callback,
 				error: "Could not move " + this.selector,
@@ -255,7 +241,7 @@
 			FuncUnit.add({
 				method: function(success, error){
 					steal.dev.log("setting " + selector + " scroll" + direction + " " + amount + " pixels")
-					this.bind["scroll" + direction](amount);
+					FuncUnit.$(selector, context, "scroll" + direction, amount)
 					success();
 				},
 				callback: callback,

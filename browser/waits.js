@@ -35,13 +35,14 @@ wait = function(time, callback){
  * @hide
  * @function repeat
  * Takes a function that will be called over and over until it is successful.
- * method : function(){},
-	callback : callback,
-	error : errorMessage,
-	timeout : timeout,
-	bind: this
  */
-FuncUnit.repeat = function(options){
+FuncUnit.repeat = function(checker, callback, error, timeout){
+	
+	if(typeof timeout == 'function'){
+		error = callback;
+		callback = timeout;
+		
+	}
 	
 	var interval,
 		stopped = false	,
@@ -49,23 +50,21 @@ FuncUnit.repeat = function(options){
 			clearTimeout(interval)
 			stopped = true;
 		};
+
 	FuncUnit.add({
 		method : function(success, error){
-			options.bind = this.bind;
-			options.selector = this.selector;
 			interval = setTimeout(function(){
-//				console.log("repeat", self)
+				
 				var result = null;
 				try {
-					result = options.method()
+					result = checker()
 				} 
 				catch (e) {
 					//should we throw this too error?
 				}
 				
 				if (result) {
-//					console.log("success", options, result)
-					success(options.bind);
+					success();
 				}else if(!stopped){
 					interval = setTimeout(arguments.callee, 10)
 				}
@@ -74,16 +73,15 @@ FuncUnit.repeat = function(options){
 			
 			
 		},
-		callback : options.callback,
-		error : options.error,
-		timeout : options.timeout,
-		stop : stop,
-		bind : options.bind
+		callback : callback,
+		error : error,
+		timeout : timeout,
+		stop : stop
 	});
 	
 }
 
-$.extend(FuncUnit.prototype, {
+$.extend(FuncUnit.init.prototype, {
 	/**
 	 * Waits until an element exists before running the next action.
 	 * @codestart
@@ -128,12 +126,18 @@ $.extend(FuncUnit.prototype, {
 			sel = this.selector,
 			ret;
 		this.selector += ":visible"
-		return this.size(function(size){
-			return size > 0;
-		}, function(){
-			self.selector = sel;
-			callback && callback();
-		})
+		if(true){
+			return this.size(function(size){
+				return size > 0;
+			}, function(){
+				self.selector = sel;
+				callback && callback();
+			})
+		}else{
+			ret = this.size() > 0;
+			this.selector = sel;
+			return ret;
+		}
 		
 	},
 	/**
@@ -163,7 +167,19 @@ $.extend(FuncUnit.prototype, {
 	 */
 	wait: function( timeout, callback ) {
 		FuncUnit.wait(timeout, callback)
-		return this;
+	},
+	/**
+	 * Returns a FuncUnit wrapped selector with 
+	 * selector appended to the current selector.
+	 * @codestart
+	 * S('#foo').find(".bar") //-> S("#foo .bar")
+	 * @codeend
+	 * @param {String} selector
+	 * @return {FuncUnit} the funcunit wrapped selector.
+	 */
+
+	find : function(selector){
+		return FuncUnit(this.selector+" "+selector, this.context);
 	},
 	/**
 	 * Calls the callback function after all previous asynchronous actions have completed.  Then
@@ -173,7 +189,7 @@ $.extend(FuncUnit.prototype, {
 	then : function(callback){
 		var self = this;
 		FuncUnit.wait(0, function(){
-			callback.call(this, this);
+			callback.call(self, self);
 		});
 		return this;
 	}
