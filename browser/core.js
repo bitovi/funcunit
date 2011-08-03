@@ -157,79 +157,69 @@
 	 * 
 	 *     S("a.mylink",0)
 	 */
-	FuncUnit = function(selector, context){
-		// if someone wraps a funcunit selector
-		if(selector && selector.funcunit === true){
-			return selector;
+	FuncUnit = jQuery.sub();
+	var init = FuncUnit.fn.init;
+	
+	var getContext = function(context){
+		if (context == FuncUnit.window.document) {
+			context = FuncUnit._window.document
 		}
+		else if (context === FuncUnit.window) {
+			context = FuncUnit._window;
+		}
+		else if (typeof context == "number" || typeof context == "string") {
+			context = FuncUnit._window.frames[context].document;
+		} else {
+			context = FuncUnit._window.document;
+		}
+		return context;
+	}, 
+	getSelector = function(selector){
+		if (selector == FuncUnit.window.document) {
+			selector = FuncUnit._window.document
+		}
+		else if (selector === FuncUnit.window) {
+			selector = FuncUnit._window;
+		}
+		return selector;
+	}
+	// override the subbed init method
+	FuncUnit.fn.init = function(selector, context){
+		// if its a function, just run it in the queue
 		if(typeof selector == "function"){
 			return FuncUnit.wait(0, selector);
 		}
-		
-		return new FuncUnit.init(selector, context)
+		var self = this;
+		// if its a string or targets the app window
+		if (typeof selector === "string" || selector == FuncUnit.window.document || selector == FuncUnit.window) {
+			// if the app window already exists, adjust the params (for the sync return value)
+			if (FuncUnit._window) {
+				context = getContext(context);
+				selector = getSelector(selector);
+			}
+			// run this method in the queue also
+			FuncUnit.add({
+				method : function(success, error){
+					context = getContext(context);
+					selector = getSelector(selector);
+					this.bind = init.call(self, selector, context);
+					success();
+				},
+				error : "selector failed: "+selector
+			});
+			// return a collection
+			return init.call(this, selector, context);
+		} else {
+			return init.call(this, selector, context);
+		}
 	}
-	/**
-	 * @Static
-	 */
+	FuncUnit.fn.init.prototype = FuncUnit.fn;
 	window.jQuery.extend(FuncUnit,oldFunc)
 	
-	
-	FuncUnit.makeArray = function(arr){
-		var narr = [];
-		for (var i = 0; i < arr.length; i++) {
-			narr[i] = arr[i]
-		}
-		return narr;
-	}
-	
-	/**
-	 * @prototype
-	 */
-	FuncUnit.init = function(s, c){
-		this.selector = s;
-		this.context = c == null ? FuncUnit.window.document : c;
-	}
 	
 	S = FuncUnit;
 	
 	
-	FuncUnit.$ = function(selector, context, method){
-	
-		var args = FuncUnit.makeArray(arguments);
-		for (var i = 0; i < args.length; i++) {
-			args[i] = args[i] === FuncUnit.window ? FuncUnit._window : args[i]
-		}
-		
-		var selector = args.shift(), 
-			context = args.shift(), 
-			method = args.shift(), 
-			q;
-		
-		//convert context	
-		if (context == FuncUnit.window.document) {
-			context = FuncUnit._window.document
-		}else if(context === FuncUnit.window){
-			context = FuncUnit._window;
-		}else if (typeof context == "number" || typeof context == "string") {
-			context = FuncUnit._window.frames[context].document;
-		}
-		if (selector == FuncUnit.window.document) {
-			selector = FuncUnit._window.document
-		}else if(selector === FuncUnit.window){
-			selector = FuncUnit._window;
-		}
-	
-		// for trigger, we have to use the page's jquery because it uses jQuery's event system, which uses .data() in the page
-		if (FuncUnit._window.jQuery && method == 'trigger') {
-			args = FuncUnit.makeArray(args, FuncUnit._window)
-			q = FuncUnit._window.jQuery(selector, context)
-		} else {
-			q = $(selector, context);
-		}
-		return q[method].apply(q, args);
-		
-		
-	}
 	
 	FuncUnit.eval = function(str){
 		return FuncUnit._window.eval(str)

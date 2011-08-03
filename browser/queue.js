@@ -39,16 +39,14 @@
 	}
 	//this is called after every command
 	// it gets the next function from the queue
-	FuncUnit._done = function(){
+	var currentEl;
+	FuncUnit._done = function(el){
 		var next, 
 			timer,
 			speed = 0;
 			
 		if(FuncUnit.speed == "slow"){
 			speed = 500;
-		}
-		else if (FuncUnit.speed){
-			speed = FuncUnit.speed;
 		}
 		if (queue.length > 0) {
 			next = queue.shift();
@@ -64,7 +62,14 @@
 						FuncUnit._done();
 					}, 
 					(next.timeout || 10000) + speed)
-				
+				// if the last successful method had a collection, save it
+				if(el){
+					currentEl = el;
+				}
+				// make the new collection the last successful collection
+				if(currentEl){
+					next.bind = currentEl;
+				}
 				next.method(	//success
 					function(){
 						//make sure we don't create an error
@@ -74,11 +79,12 @@
 						
 						incallback = true;
 						if (next.callback) 
+							// callback's "this" is the collection
 							next.callback.apply(next.bind || null, arguments);
 						incallback = false;
 						
 						
-						FuncUnit._done();
+						FuncUnit._done(next.bind);
 					}, //error
 					function(message){
 						clearTimeout(timer);
