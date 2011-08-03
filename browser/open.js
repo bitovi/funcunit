@@ -153,13 +153,10 @@ $.extend(FuncUnit,{
 	_onload: function(success, error){
 		// saver reference to success
 		loadSuccess = function(){
-//			console.log("LOADSUCCESS")
-//			Syn.bind(FuncUnit._window, "unload", onunload)
 			// called when load happens ... here we check for steal
 			if(!FuncUnit._window.steal || FuncUnit._window.steal.isReady){
 				success();
 			}else{
-//				console.log('waiting for steal ...');
 				setTimeout(arguments.callee, 200)
 			}
 				
@@ -258,7 +255,6 @@ $.extend(FuncUnit,{
 			Syn.unbind(FuncUnit._window, "load", onload);
 		}
 	unloadLoader = function(){
-		console.log("UNLOADLOADER")
 		if(!firstLoad) // dont remove the first run, fixes issue in FF 3.6
 			removeListeners();
 		

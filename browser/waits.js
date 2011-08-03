@@ -54,7 +54,6 @@ FuncUnit.repeat = function(options){
 			options.bind = this.bind;
 			options.selector = this.selector;
 			interval = setTimeout(function(){
-//				console.log("repeat", self)
 				var result = null;
 				try {
 					result = options.method()
@@ -64,7 +63,6 @@ FuncUnit.repeat = function(options){
 				}
 				
 				if (result) {
-//					console.log("success", options, result)
 					success(options.bind);
 				}else if(!stopped){
 					interval = setTimeout(arguments.callee, 10)
