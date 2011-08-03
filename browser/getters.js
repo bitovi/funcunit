@@ -26,18 +26,6 @@
 	 */
 	'size' : 0,
 	/**
-	 * @function trigger
-	 * Triggers an event on a set of elements in the page.  Use it to trigger
-	 * custom user events that a user can't easily simulate.  Do NOT use
-	 * it to simulate 'click' and 'keypress' events, that is what .click() and .type() 
-	 * are for.  This only works if the page you are testing has jQuery in it.
-	 * @codestart
-	 * S('#foo').trigger("myCustomEvent")
-	 * @codeend
-	 * @param {String} eventType A string containing a JavaScript event type, such as click or submit.
-	 */
-	'trigger' : 100,
-	/**
 	 * @attr data
 	 * Gets data from jQuery.data or waits until data
 	 * equals some value.  
@@ -363,9 +351,9 @@
 	
 	//makes a jQuery like command.
 	FuncUnit.makeFunc = function(fname, argIndex){
-		
+		var orig = FuncUnit.fn[fname];
 		//makes a read / wait function
-		FuncUnit.init.prototype[fname] = function(){
+		FuncUnit.prototype[fname] = function(){
 			//assume last arg is callback
 			var args = FuncUnit.makeArray(arguments), 
 				callback,
@@ -380,7 +368,8 @@
 					timeout = args[argIndex+4],
 					callback = args[argIndex+5],
 					testVal = tester,
-					errorMessage = "waiting for "+fname +" on " + this.selector;
+					errorMessage = "waiting for "+fname +" on " + this.selector, 
+					printed = false;
 				
 				if(typeof timeout == 'function'){
 					callback = timeout;
@@ -397,16 +386,40 @@
 							(testVal instanceof RegExp && testVal.test(val) );
 					}
 				}
-				FuncUnit.repeat(function(){
-						var ret = FuncUnit.$.apply(FuncUnit.$, args);
+//				console.log("BEFORE", this)
+				FuncUnit.repeat({
+					method : function(){
+						// keep getting new collection because the page might be updating, we need to keep re-checking
+//						console.log("BEFRE", this.bind)
+						this.bind = S(this.selector, false)
+//						console.log("AFTER", this.bind)
+						// for repeating methods, only print once
+//						console.log("gETTERS", this.selector)
+						if(!printed){
+							printed = true;
+							steal.dev.log("Checking "+fname+" on "+this.selector)
+						}
+						var methodArgs = [];
+						// might need an argument
+						if(argIndex > 0){
+							methodArgs.push(args[3]);
+						}
+						var ret = this.bind[fname].apply(this.bind, methodArgs)
 						return tester(ret);
-					}, callback, errorMessage, timeout)
-	
+					},
+					callback : callback,
+					error : errorMessage,
+					timeout : timeout,
+					bind: this
+				})
 				return this;
 			}else{
-				//get the value
-				steal.dev.log("Getting "+fname+" on "+this.selector)
-				return FuncUnit.$.apply(FuncUnit.$, args);
+				// just call the original jQ method
+				var methodArgs = [];
+				if(argIndex > 0){
+					methodArgs.push(args[3]);
+				}
+				return orig.apply(this, methodArgs);
 			}
 		}
 	}

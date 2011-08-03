@@ -20,7 +20,7 @@
 	 * stop : 
 	 */
 	add = function(handler){
-		
+//		console.log('ADD', handler)
 		//if we are in a callback, add to the current position
 		if (incallback) {
 			queue.splice(currentPosition,0,handler)
@@ -39,16 +39,18 @@
 	}
 	//this is called after every command
 	// it gets the next function from the queue
-	FuncUnit._done = function(){
+	var currentEl;
+	FuncUnit._done = function(prevItem){
+//		console.log("DONE START", el)
+//		if(FuncUnit.stop == true) return;
 		var next, 
 			timer,
+			el = prevItem && prevItem.bind,
+			selector = prevItem && prevItem.selector,
 			speed = 0;
 			
 		if(FuncUnit.speed == "slow"){
 			speed = 500;
-		}
-		else if (FuncUnit.speed){
-			speed = FuncUnit.speed;
 		}
 		if (queue.length > 0) {
 			next = queue.shift();
@@ -56,29 +58,52 @@
 			// set a timer that will error
 			
 			
+//		console.log("before settimeout", speed, FuncUnit._window, window)
+		window.focus()
 			//call next method
 			setTimeout(function(){
+//		console.log("in settimeout")
 				timer = setTimeout(function(){
 						next.stop && next.stop();
 						ok(false, next.error);
 						FuncUnit._done();
 					}, 
 					(next.timeout || 10000) + speed)
-				
+				// if the last successful method had a collection, save it
+				if(el && el.jquery){
+					currentEl = el;
+//					console.log("currentEl", currentEl)
+				}
+				// make the new collection the last successful collection
+				if(currentEl){
+					next.bind = currentEl;
+//					console.log("bind", next.bind)
+				}
+				if(selector){
+					next.selector = selector;
+				}
+//		if(FuncUnit.stop == true) return;
+//		console.log("in settimeout22", next)
 				next.method(	//success
-					function(){
+					function(el){
+						if(el && el.jquery && el.length){
+							next.bind = el;
+						}
+//						console.log("success", next)
 						//make sure we don't create an error
 						clearTimeout(timer);
 						
 						//mark in callback so the next set of add get added to the front
 						
 						incallback = true;
+//						console.log("DONE", next, next.bind)
 						if (next.callback) 
+							// callback's "this" is the collection
 							next.callback.apply(next.bind || null, arguments);
 						incallback = false;
 						
 						
-						FuncUnit._done();
+						FuncUnit._done(next);
 					}, //error
 					function(message){
 						clearTimeout(timer);

@@ -665,11 +665,12 @@ extend(QUnit, {
 	moduleDone: function() {}
 });
 
-if ( typeof document === "undefined" || document.readyState === "complete" ) {
-	config.autorun = true;
-}
+//if ( typeof document === "undefined" || document.readyState === "complete" ) {
+//	config.autorun = true;
+//}
 
-addEvent(window, "load", function() {
+//addEvent(window, "load", function() {
+QUnit.load = function(){
 	QUnit.begin({});
 
 	// Initialize the config, saving the execution queue
@@ -734,10 +735,15 @@ addEvent(window, "load", function() {
 		config.fixture = main.innerHTML;
 	}
 
-	if (config.autostart) {
-		QUnit.start();
-	}
-});
+//	if (config.autostart) {
+//		QUnit.start();
+//	}
+	process()
+};
+
+steal.bind("end", function(){
+	QUnit.load();
+})
 
 function done() {
 	config.autorun = true;

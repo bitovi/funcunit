@@ -5,52 +5,25 @@ steal('jquery').then(function($){
 		return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
 	}
 
-/**
- * Returns a unique selector for the matched element.
- * @param {Object} target
- */
-$.fn.prettySelector= function() {
-	var target = this[0];
-	if(!target){
-		return null
-	}
-	var selector = target.nodeName.toLowerCase();
-	//always try to get an id
-	if(target.id){
-		return "#"+target.id;
-	}else{
-		var parent = target.parentNode;
-		while(parent){
-			if(parent.id){
-				selector = "#"+parent.id+" "+selector;
-				break;
-			}else{
-				parent = parent.parentNode
-			}
-		}
-	}
-	if(target.className){
-		selector += "."+target.className.split(" ")[0]
-	}
-	var others = $(selector, getWindow(target).document); //jquery should take care of the #foo if there
-	
-	if(others.length > 1){
-		return selector+":eq("+others.index(target)+")";
-	}else{
-		return selector;
-	}
-};
-$.each(["closest","find","next","prev","siblings","last","first"], function(i, name){
-	$.fn[name+"Selector"] = function(selector){
-		return this[name](selector).prettySelector();
-	}
-});
-
 //do traversers
-var traversers = ["closest","next","prev","siblings","last","first"],
+var traversers = ["closest","next","prev","siblings","last","first", "find"],
 	makeTraverser = function(name){
-		FuncUnit.init.prototype[name] = function(selector){
-			return FuncUnit( FuncUnit.$(this.selector, this.context, name+"Selector", selector), this.context )
+		var orig = FuncUnit.prototype[name];
+		FuncUnit.prototype[name] = function(selector){
+			var args = arguments;
+			// find is called (with "this" as document) from FuncUnit.fn.init, so in this case don't queue it up, just run the regular find
+			if (FuncUnit._window && this[0] !== FuncUnit._window.document) {
+				FuncUnit.add({
+					method: function(success, error){
+						// adjust the collection by using the real traverser method
+						this.bind = orig.apply(this.bind, args);
+						success()
+					},
+					error: "Could not traverse: " + name + " " + selector,
+					bind: this
+				});
+			}
+			return orig.apply(this, arguments);
 		}
 	};
 for(var i  =0; i < traversers.length; i++){
