@@ -185,6 +185,10 @@
 	}
 	// override the subbed init method
 	FuncUnit.fn.init = function(selector, context){
+//		console.log('init start', selector, typeof isAsync === "undefined", typeof isAsync);
+//		console.log("init start")
+		// if you pass true as context, this will avoid doing a synchronous query
+		var isAsync = (context === true || context === false)? context: true;
 		// if its a function, just run it in the queue
 		if(typeof selector == "function"){
 			return FuncUnit.wait(0, selector);
@@ -197,20 +201,34 @@
 				context = getContext(context);
 				selector = getSelector(selector);
 			}
+			this.selector = selector;
 			// run this method in the queue also
-			FuncUnit.add({
-				method : function(success, error){
-					context = getContext(context);
-					selector = getSelector(selector);
-					this.bind = init.call(self, selector, context);
-					success();
-				},
-				error : "selector failed: "+selector
-			});
-			// return a collection
-			return init.call(this, selector, context);
+			if (isAsync === true) {
+//				console.log("INIT1", selector)
+				FuncUnit.add({
+					method: function(success, error){
+//						console.log("INIT", selector)
+						this.selector = selector;
+						context = getContext(context);
+						selector = getSelector(selector);
+						this.bind = init.call(self, selector, context);
+						success();
+						return this;
+					},
+					error: "selector failed: " + selector
+				});
+				return init.call(this, selector, context);
+			} else {
+				// return a collection
+//				console.log("INIT2", selector)
+				return init.call(this, selector, context);
+			}
 		} else {
-			return init.call(this, selector, context);
+//			console.log("INIT3", selector, context)
+			var res = init.call(this, selector, context);
+//			console.log("AFTER INIT3", res)
+			return res;
+//			return init.call(this, selector, context);
 		}
 	}
 	FuncUnit.fn.init.prototype = FuncUnit.fn;

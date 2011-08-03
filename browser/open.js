@@ -112,7 +112,7 @@ $.extend(FuncUnit,{
 	_open: function(url){
 		changing = url;
 		if (newPage) {
-			FuncUnit._window = window.open(url, "funcunit");
+			FuncUnit._window = window.open(url, "funcunit", "modal=yes");
 		}
 		else {
 			FuncUnit._window.location = url;
@@ -153,11 +153,13 @@ $.extend(FuncUnit,{
 	_onload: function(success, error){
 		// saver reference to success
 		loadSuccess = function(){
+//			console.log("LOADSUCCESS")
+//			Syn.bind(FuncUnit._window, "unload", onunload)
 			// called when load happens ... here we check for steal
 			if(!FuncUnit._window.steal || FuncUnit._window.steal.isReady){
 				success();
 			}else{
-				console.log('waiting for steal ...');
+//				console.log('waiting for steal ...');
 				setTimeout(arguments.callee, 200)
 			}
 				
@@ -245,6 +247,8 @@ $.extend(FuncUnit,{
 			Syn.unbind(FuncUnit._window, "load", onload);
 		},
 		onunload = function(){
+			console.log("unload")
+			FuncUnit.stop = true;
 			removeListeners();
 			setTimeout(unloadLoader, 0)
 			
@@ -254,6 +258,7 @@ $.extend(FuncUnit,{
 			Syn.unbind(FuncUnit._window, "load", onload);
 		}
 	unloadLoader = function(){
+		console.log("UNLOADLOADER")
 		if(!firstLoad) // dont remove the first run, fixes issue in FF 3.6
 			removeListeners();
 		

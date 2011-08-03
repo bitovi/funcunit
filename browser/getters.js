@@ -386,14 +386,18 @@
 							(testVal instanceof RegExp && testVal.test(val) );
 					}
 				}
+//				console.log("BEFORE", this)
 				FuncUnit.repeat({
 					method : function(){
 						// keep getting new collection because the page might be updating, we need to keep re-checking
-						this.bind = S(this.bind.selector)
+//						console.log("BEFRE", this.bind)
+						this.bind = S(this.selector, false)
+//						console.log("AFTER", this.bind)
 						// for repeating methods, only print once
+//						console.log("gETTERS", this.selector)
 						if(!printed){
 							printed = true;
-							steal.dev.log("Checking "+fname+" on "+this.bind.selector)
+							steal.dev.log("Checking "+fname+" on "+this.selector)
 						}
 						var methodArgs = [];
 						// might need an argument

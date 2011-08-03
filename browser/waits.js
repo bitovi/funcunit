@@ -49,11 +49,12 @@ FuncUnit.repeat = function(options){
 			clearTimeout(interval)
 			stopped = true;
 		};
-
 	FuncUnit.add({
 		method : function(success, error){
+			options.bind = this.bind;
+			options.selector = this.selector;
 			interval = setTimeout(function(){
-				
+//				console.log("repeat", self)
 				var result = null;
 				try {
 					result = options.method()
@@ -63,7 +64,8 @@ FuncUnit.repeat = function(options){
 				}
 				
 				if (result) {
-					success();
+//					console.log("success", options, result)
+					success(options.bind);
 				}else if(!stopped){
 					interval = setTimeout(arguments.callee, 10)
 				}
