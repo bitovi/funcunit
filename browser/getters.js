@@ -390,7 +390,7 @@
 					method : function(){
 						// keep getting new collection because the page might be updating, we need to keep re-checking
 						// pass false so it will only do one synchronous request
-						this.bind = S(this.selector, false)
+						this.bind = S(this.selector, true)
 						if(!printed){
 							printed = true;
 							steal.dev.log("Checking "+fname+" on "+this.selector)

@@ -161,37 +161,61 @@
 	var init = FuncUnit.fn.init;
 	
 	var getContext = function(context){
-		if (context == FuncUnit.window.document) {
-			context = FuncUnit._window.document
+			if (context == FuncUnit.window.document) {
+				context = FuncUnit._window.document
+			}
+			else if (context === FuncUnit.window) {
+				context = FuncUnit._window;
+			}
+			else if (typeof context == "number" || typeof context == "string") {
+				context = FuncUnit._window.frames[context].document;
+			} else {
+				context = FuncUnit._window.document;
+			}
+			return context;
+		}, 
+		getSelector = function(selector){
+			if (selector == FuncUnit.window.document) {
+				selector = FuncUnit._window.document
+			}
+			else if (selector === FuncUnit.window) {
+				selector = FuncUnit._window;
+			}
+			return selector;
+		},
+		performAsyncQuery = function(selector, context, self){
+			FuncUnit.add({
+				method: function(success, error){
+					this.selector = selector;
+					context = getContext(context);
+					selector = getSelector(selector);
+					this.bind = init.call(self, selector, context);
+					success();
+					return this;
+				},
+				error: "selector failed: " + selector
+			});
+		},
+		performSyncQuery = function(selector, context, self){
+			return init.call(self, selector, context);
 		}
-		else if (context === FuncUnit.window) {
-			context = FuncUnit._window;
-		}
-		else if (typeof context == "number" || typeof context == "string") {
-			context = FuncUnit._window.frames[context].document;
-		} else {
-			context = FuncUnit._window.document;
-		}
-		return context;
-	}, 
-	getSelector = function(selector){
-		if (selector == FuncUnit.window.document) {
-			selector = FuncUnit._window.document
-		}
-		else if (selector === FuncUnit.window) {
-			selector = FuncUnit._window;
-		}
-		return selector;
-	}
+	
 	// override the subbed init method
 	FuncUnit.fn.init = function(selector, context){
 		// if you pass true as context, this will avoid doing a synchronous query
-		var isAsync = (context === true || context === false)? context: true;
+		var isSyncOnly = false,
+			isAsyncOnly = false;
+		if (FuncUnit._queue.length > 0) { // if there's something in the queue, only perform asynchronous query
+			isAsyncOnly = true;
+		}
+		if (FuncUnit._incallback === true) { // if you're in a callback, only do the synchronous query
+			isSyncOnly = true;
+		}
+		isSyncOnly = (context === true || context === false)? context: isSyncOnly;
 		// if its a function, just run it in the queue
 		if(typeof selector == "function"){
 			return FuncUnit.wait(0, selector);
 		}
-		var self = this;
 		// if its a string or targets the app window
 		if (typeof selector === "string" || selector == FuncUnit.window.document || selector == FuncUnit.window) {
 			// if the app window already exists, adjust the params (for the sync return value)
@@ -201,25 +225,17 @@
 			}
 			this.selector = selector;
 			// run this method in the queue also
-			if (isAsync === true) {
-				FuncUnit.add({
-					method: function(success, error){
-						this.selector = selector;
-						context = getContext(context);
-						selector = getSelector(selector);
-						this.bind = init.call(self, selector, context);
-						success();
-						return this;
-					},
-					error: "selector failed: " + selector
-				});
-				return init.call(this, selector, context);
-			} else {
-				// return a collection
-				return init.call(this, selector, context);
+			if(isSyncOnly === true){
+				return performSyncQuery(selector, context, this)
+			} else if(isAsyncOnly === true){
+				performAsyncQuery(selector, context, this)
+				return this;
+			} else { // do both
+				performAsyncQuery(selector, context, this)
+				return performSyncQuery(selector, context, this)
 			}
 		} else {
-			return init.call(this, selector, context);
+			return performSyncQuery(selector, context, this)
 		}
 	}
 	FuncUnit.fn.init.prototype = FuncUnit.fn;

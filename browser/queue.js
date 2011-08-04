@@ -1,12 +1,12 @@
 (function(){
+	//are we in a callback function (something we pass to a FuncUnit plugin)
+	FuncUnit._incallback = false;
 	//the queue of commands waiting to be run
 	var queue = [], 
-		//are we in a callback function (something we pass to a FuncUnit plugin)
-		incallback = false,
 		//where we should add things in a callback
 		currentPosition = 0;
 		
-	
+	FuncUnit._queue = queue;
 	FuncUnit.
 	/**
 	 * @hide
@@ -21,9 +21,12 @@
 	 */
 	add = function(handler){
 		//if we are in a callback, add to the current position
-		if (incallback) {
-			queue.splice(currentPosition,0,handler)
-			currentPosition++;
+		if (FuncUnit._incallback) {
+			// Removing this so we can safely perform every query immediately and not queue it in the cbs
+			// This means doing asynchronous stuff in callbacks isn't supported anymore.  I don't know any places this is a problem, 
+			// but if it is, we can add this back
+//			queue.splice(currentPosition,0,handler)
+//			currentPosition++;
 		}
 		else {
 			//add to the end
@@ -31,7 +34,7 @@
 		}
 		//if our queue has just started, stop qunit
 		//call done to call the next command
-        if (queue.length == 1 && ! incallback) {
+        if (queue.length == 1 && ! FuncUnit._incallback) {
 			stop();
             setTimeout(FuncUnit._done, 13)
         }
@@ -79,11 +82,11 @@
 						
 						//mark in callback so the next set of add get added to the front
 						
-						incallback = true;
+						FuncUnit._incallback = true;
 						if (next.callback) 
 							// callback's "this" is the collection
 							next.callback.apply(next.bind, arguments);
-						incallback = false;
+						FuncUnit._incallback = false;
 						
 						
 						FuncUnit._done(next.bind, next.selector);
