@@ -112,7 +112,8 @@ $.extend(FuncUnit,{
 	_open: function(url){
 		changing = url;
 		if (newPage) {
-			FuncUnit._window = window.open(url, "funcunit", "modal=yes");
+			// giving a large height forces it to not open in a new tab and just opens to the window's height
+			FuncUnit._window = window.open(url, "funcunit",  "height=1000");
 		}
 		else {
 			FuncUnit._window.location = url;

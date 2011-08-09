@@ -202,7 +202,6 @@ if (!JSON) {
     JSON = {};
 }
 
-(function () {
     "use strict";
 
     function f(n) {
@@ -528,16 +527,15 @@ if (!JSON) {
             return JSON.parse(this, filter);
         };
     }
-}());
-
 	Selenium.getResult = function(){
 		// window not loaded yet
 		var _win = selenium.browserbot.getCurrentWindow(), 
-			q = _win.SeleniumQueue;
-		_win.SeleniumQueue = [];
-		if(typeof selenium == "undefined" || typeof q == "undefined"){
+			steal = _win.steal;
+		if(!steal || !steal.client){
 			return;
 		}
+		var q = _win.steal.client.dataQueue;
+		_win.steal.client.dataQueue = [];
 		var evt,
 			evtCopy, 
 			arrayCopy = [];
@@ -551,7 +549,7 @@ if (!JSON) {
 				arrayCopy.push(copy);
 			}
 		var res = JSON.stringify(arrayCopy); 
-		_win.SeleniumQueue = [];
+		_win.steal.client.dataQueue = [];
 		return res;
 	}
 })()

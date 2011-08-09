@@ -1,14 +1,15 @@
 // This code is always run ...
 
-load('steal/rhino/env.js');
-(function(){
+if (typeof FuncUnit == 'undefined') {
+	FuncUnit = {};
+}
+
+steal('funcunit/commandline/print.js', 'steal/browser/drivers/envjs.js')
+.then('funcunit/commandline/events.js')
+.then(function(){
 	Envjsloader = {};
 	Envjsloader.load = function(page){
-		
-		//clear out steal ... you are done with it...
-		var extend = steal.extend;
-		steal = undefined;
-		Envjs(page, {
+		Envjs.browser = new steal.browser.envjs({
 			scriptTypes: {
 				"text/javascript": true,
 				"text/envjs": true,
@@ -18,5 +19,9 @@ load('steal/rhino/env.js');
 			logLevel: 2,
 			dontPrintUserAgent: true
 		});
+		
+		Envjs.browser
+			.bindEvents()
+			.open(page);
 	}
-})()
+})

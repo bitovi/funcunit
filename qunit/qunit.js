@@ -1451,4 +1451,4 @@ QUnit.diff = (function() {
 })();
 
 })(this);
-}).then('funcunit/qunit/envjs.js')
+}).then('funcunit/browser/events.js')

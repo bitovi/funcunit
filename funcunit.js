@@ -1,6 +1,5 @@
 //what we need from javascriptmvc or other places
 steal('funcunit/qunit')
-	.then('funcunit/qunit/selenium.js')
 	.then('jquery')
 	.then('jquery/lang/json')
 	.then('funcunit/syn')
@@ -11,3 +10,5 @@ steal('funcunit/qunit')
 	.then('funcunit/browser/traversers.js')
 	.then('funcunit/browser/queue.js')
 	.then('funcunit/browser/waits.js')
+	// only used in selenium/jstestdriver/envjs mode, but including here so standalone funcunit can have all the code in one file
+	.then('funcunit/browser/events.js')
