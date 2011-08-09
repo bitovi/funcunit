@@ -4,11 +4,13 @@ if (typeof FuncUnit == 'undefined') {
 	FuncUnit = {};
 }
 
-steal('funcunit/commandline/print.js', 'steal/browser/drivers/envjs.js')
-.then('funcunit/commandline/events.js')
+steal('steal/browser/drivers/envjs.js')
+.then('funcunit/commandline/utils.js')
 .then(function(){
 	Envjsloader = {};
 	Envjsloader.load = function(page){
+		FuncUnit._loadSettingsFile(page)
+		FuncUnit.funcunitPage = FuncUnit._getPageUrl(page)
 		Envjs.browser = new steal.browser.envjs({
 			scriptTypes: {
 				"text/javascript": true,
