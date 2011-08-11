@@ -1,15 +1,4 @@
-// This code is always run ...
-
-if (typeof FuncUnit == 'undefined') {
-	FuncUnit = {};
-}
-if(!FuncUnit.loader){
-	FuncUnit.loader = {};
-}
-
-steal('steal/browser/drivers/selenium.js')
-.then('funcunit/commandline/utils.js')
-.then(function(){
+(function(){
 	
 	var getDefaultBrowsers = function(){
 		var browsers;
@@ -47,4 +36,4 @@ steal('steal/browser/drivers/selenium.js')
 			.bindEvents()
 			.open(FuncUnit.funcunitPage, FuncUnit.browsers);
 	}
-})
+})()

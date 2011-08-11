@@ -11,8 +11,15 @@
 	type = _args[0];
 	page = _args[1];
 	
-	steal('funcunit/commandline/'+type+'.js', function(){
-		FuncUnit.loader[type](page)
+	if (typeof FuncUnit == 'undefined') {
+		FuncUnit = {};
+	}
+	if(!FuncUnit.loader){
+		FuncUnit.loader = {};
+	}
+	steal('steal/browser/drivers/'+type+'.js', 'funcunit/commandline/'+type+'.js', 
+		'funcunit/commandline/utils.js', function(){
+			FuncUnit.loader[type](page)
 	})
 
 })()

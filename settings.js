@@ -9,7 +9,7 @@ FuncUnit = {
 	speed: null, //"slow"
 	
 	// a script in funcunit/commandline/output that formats the output
-//	output: 'xunit',
+	output: 'xunit',
 
 	// the name of the file to save results to (only when using xunit formatter)
 //	xmlLogFilename: 'testresults.xml',  
