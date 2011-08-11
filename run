@@ -2,7 +2,7 @@
 // _args = ['selenium', 'path/to/page.html']; load('funcunit/run')
 (function(){
 	var type, page;
-	if(phantom.args.length){ // this is run via phantomjs
+	if(typeof phantom !== "undefined" && phantom.args.length){ // this is run via phantomjs
 		console.log('PHANTOM')
 		type = phantom.args[0];
 		page = phantom.args[1];
