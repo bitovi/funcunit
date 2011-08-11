@@ -4,7 +4,6 @@ steal('funcunit/commandline/output/default.js', function(){
 	var totalFailed = 0,
 		total = 0,
 		browserFailed, browserTotal;
-	
 	steal.extend(steal.browser.prototype, {
 		// bind all events
 		bindEvents: function(){

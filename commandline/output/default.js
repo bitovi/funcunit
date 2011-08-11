@@ -1,31 +1,31 @@
 (function(){
 	QUnitPrint = {
 		testStart: function(name){
-			print("--" + name + "--")
+			console.log("--" + name + "--")
 		},
 		log: function(result, message){
 			if (!message) 
 				message = ""
-			print((result ? "  PASS " : "  FAIL ") + message)
+			console.log((result ? "  PASS " : "  FAIL ") + message)
 		},
 		testDone: function(name, failures, total){
-			print("  done - fail " + failures + ", pass " + (total-failures) + "\n")
+			console.log("  done - fail " + failures + ", pass " + (total-failures) + "\n")
 		},
 		moduleStart: function(name){
-			print("MODULE " + name + "\n")
+			console.log("MODULE " + name + "\n")
 		},
 		moduleDone: function(name, failures, total){
 		
 		},
 		browserStart : function(name){
-			print("BROWSER " + name + " ===== \n")
+			console.log("BROWSER " + name + " ===== \n")
 		},
 		browserDone : function(name, failed, total, formattedtime){
-			print("\n"+name+" DONE " + failed + ", " + (total - failed) 
+			console.log("\n"+name+" DONE " + failed + ", " + (total - failed) 
 				+ ' - ' + formattedtime + ' seconds')
 		},
 		done: function(failed, total){
-			print("\nALL DONE - fail " + failed + ", pass " + (total - failed))
+			console.log("\nALL DONE - fail " + failed + ", pass " + (total - failed))
 		}
 	};
 	

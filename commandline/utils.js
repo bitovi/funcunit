@@ -53,7 +53,7 @@ steal('funcunit/commandline/events.js', function(){
 	}
 	
 	FuncUnit._getPageUrl = function(page){
-		if(!/http:|file:/.test(page)){ // if theres no protocol, turn it into a filesystem url
+		if(typeof phantom === "undefined" && !/http:|file:/.test(page)){ // if theres no protocol, turn it into a filesystem url
 			var cwd = (new java.io.File (".")).getCanonicalPath();
 			page = "file://"+cwd+"/"+page;
 		}

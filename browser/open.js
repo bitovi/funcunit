@@ -2,6 +2,7 @@
 
 var confirms = [], prompts = [];
 $.extend(FuncUnit,{
+	frame: $('iframe').length? $('iframe')[0]: null,
 	/**
 	 * @attribute browsers
 	 * Used to configure the browsers selenium uses to run FuncUnit tests.
@@ -111,11 +112,36 @@ $.extend(FuncUnit,{
 	},
 	_open: function(url){
 		changing = url;
-		if (newPage) {
-			// giving a large height forces it to not open in a new tab and just opens to the window's height
-			FuncUnit._window = window.open(url, "funcunit",  "height=1000");
+//		if (newPage) {
+//			// giving a large height forces it to not open in a new tab and just opens to the window's height
+//			FuncUnit._window = window.open(url, "funcunit",  "height=1000");
+//		}
+//		else {
+//			FuncUnit._window.location = url;
+//		}
+	
+		var checkReload = function(url){
+			if(FuncUnit._window.location.pathname == url ||
+				FuncUnit._window.href == url){
+				return true;
+			}
+			return false;
 		}
+		// if the first time ..
+		if (newPage) {
+			if(FuncUnit.frame){
+				FuncUnit._window = FuncUnit.frame.contentWindow;
+				reloading = checkReload(url);
+				FuncUnit._window.location = url;
+			}else{
+				// open the new page ....
+				FuncUnit._window = window.open(url, "funcunit");
+			}
+		}
+		// otherwise, change the frame's url
 		else {
+			
+			reloading = checkReload(url);
 			FuncUnit._window.location = url;
 		}
 	},
@@ -227,7 +253,7 @@ $.extend(FuncUnit,{
 	
 	
 	FuncUnit._window = null;
-	var newPage = true, changing;
+	var newPage = true, changing, reloading = false;
 	var unloadLoader, 
 		loadSuccess, 
 		firstLoad = true,
@@ -274,7 +300,7 @@ $.extend(FuncUnit,{
 		if (FuncUnit._window.document !== currentDocument || newDocument) { //we have a new document
 			currentDocument = FuncUnit._window.document;
             newDocument = true;
-			if (FuncUnit._window.document.readyState == "complete" && FuncUnit._window.location.href!="about:blank") {
+			if (FuncUnit._window.document.readyState == "complete" && FuncUnit._window.location.href!="about:blank" && !reloading) {
 				var ls = loadSuccess;
 					loadSuccess = null;
 				if (ls) {
@@ -286,7 +312,8 @@ $.extend(FuncUnit,{
 				
 			}
 		}
-		
+		// TODO need a better way to determine if a reloaded frame is loaded (like clearing the frame), this might be brittle 
+		reloading = false;
 		setTimeout(arguments.callee, 500)
 	}
 	
