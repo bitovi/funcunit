@@ -1,4 +1,5 @@
 (function(){
+	var start = new Date();
 	QUnitPrint = {
 		testStart: function(name){
 			console.log("--" + name + "--")
@@ -25,7 +26,10 @@
 				+ ' - ' + formattedtime + ' seconds')
 		},
 		done: function(failed, total){
-			console.log("\nALL DONE - fail " + failed + ", pass " + (total - failed))
+			var end = new Date(),
+			totaltime = (end-start)/1000;
+			console.log("\nALL DONE - fail " + failed + ", pass " + (total - failed)
+				+ ' - ' + totaltime + ' seconds')
 		}
 	};
 	

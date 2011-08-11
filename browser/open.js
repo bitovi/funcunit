@@ -112,13 +112,6 @@ $.extend(FuncUnit,{
 	},
 	_open: function(url){
 		changing = url;
-//		if (newPage) {
-//			// giving a large height forces it to not open in a new tab and just opens to the window's height
-//			FuncUnit._window = window.open(url, "funcunit",  "height=1000");
-//		}
-//		else {
-//			FuncUnit._window.location = url;
-//		}
 	
 		var checkReload = function(url){
 			if(FuncUnit._window.location.pathname == url ||
@@ -134,8 +127,8 @@ $.extend(FuncUnit,{
 				reloading = checkReload(url);
 				FuncUnit._window.location = url;
 			}else{
-				// open the new page ....
-				FuncUnit._window = window.open(url, "funcunit");
+				// giving a large height forces it to not open in a new tab and just opens to the window's height
+				FuncUnit._window = window.open(url, "funcunit",  "height=1000");
 			}
 		}
 		// otherwise, change the frame's url
