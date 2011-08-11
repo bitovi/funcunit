@@ -24,6 +24,6 @@ steal('steal/browser/drivers/phantomjs.js')
 		FuncUnit.browser
 			// bind all the events (has to happen before we open the page)
 			.bindEvents()
-//			.open(FuncUnit.funcunitPage);
+			.open(FuncUnit.funcunitPage);
 	}
 })

@@ -2,17 +2,6 @@
 // _args = ['selenium', 'path/to/page.html']; load('funcunit/run')
 (function(){
 	var type, page;
-	if(typeof phantom !== "undefined" && phantom.args.length){ // this is run via phantomjs
-		console.log('PHANTOM')
-		type = phantom.args[0];
-		page = phantom.args[1];
-		_args = phantom.args;
-		load = phantom.injectJs
-		readFile = function(){
-			return false;
-		}
-		//print = console.log
-	}
 	if (!_args[0]) {
 		print("Usage: js funcunit/run selenium path/to/page.html");
 		quit();
