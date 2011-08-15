@@ -12,8 +12,8 @@ FuncUnit = {
 	output: 'xunit',
 
 	// the name of the file to save results to (only when using xunit formatter)
-//	xmlLogFilename: 'testresults.xml',  
+	xmlLogFilename: 'testresults.xml',  
 
 	// a prefix for the xml log file classes
-//	xmlLogClassPrefix: 'Qunit.'
+	xmlLogClassPrefix: 'Qunit.'
 }
