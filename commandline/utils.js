@@ -6,9 +6,11 @@ steal('funcunit/commandline/events.js', function(){
 	 * 2. FuncUnit.load will try to load settings.js if there hasn't been one loaded
 	 */
 	FuncUnit._loadSettingsFile = function(page){
-		var dirArr = page.split("/"), 
-			dir = dirArr.slice(0, dirArr.length - 1).join("/"), 
-			settingsPath = dir + "/settings.js";
+		var dirArr = page.split("/")
+		
+		dirArr = dirArr.slice(0, dirArr.length - 1);
+		dirArr.push("settings.js");
+		var settingsPath = dirArr.join("/");
 			
 		// if settings.js was already loaded, don't try to load it again
 		if (FuncUnit.browsers === undefined) {
