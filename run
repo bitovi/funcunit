@@ -17,7 +17,7 @@
 	if(!FuncUnit.loader){
 		FuncUnit.loader = {};
 	}
-	steal('steal/browser/drivers/'+type+'.js', 'funcunit/commandline/'+type+'.js', 
+	steal('steal/browser/'+type, 'funcunit/commandline/'+type+'.js', 
 		'funcunit/commandline/utils.js', function(){
 			FuncUnit.loader[type](page)
 	})
