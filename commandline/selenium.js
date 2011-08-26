@@ -27,13 +27,15 @@
 		// expose FuncUnit.browser so people can call close themselves
 		FuncUnit.browser = new steal.browser.selenium({
 			serverHost: FuncUnit.serverHost,
-			serverPort: FuncUnit.serverPort,
-			serverDomain: FuncUnit.funcunitPage
+			serverPort: FuncUnit.serverPort
 		});
 		
 		FuncUnit.browser
 			// bind all the events (has to happen before we open the page)
 			.bindEvents()
-			.open(FuncUnit.funcunitPage, FuncUnit.browsers);
+			.bind('clientloaded', function(){
+				this.injectJS('funcunit/browser/events.js')
+			})
+			.open(FuncUnit.funcunitPage, FuncUnit.browsers)
 	}
 })()

@@ -1,5 +1,3 @@
-// loaded into the browser only if we're in commandline mode (not browser mode)
-
 (function(){
 	var evts = ['testStart', 'testDone', 'moduleStart', 'moduleDone', 'done', 'log'], type;
 	
@@ -11,4 +9,4 @@
 			};
 		})(type);
 	}
-})()
+})();

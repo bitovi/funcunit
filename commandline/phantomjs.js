@@ -7,9 +7,10 @@
 		});
 		
 		FuncUnit.browser
+			.bind('clientloaded', function(){
+				this.injectJS('funcunit/browser/events.js')
+			})
 			.bindEvents()
 			.open(FuncUnit.funcunitPage)
-		// load the code that triggers steal.browser events
-			.injectJS('funcunit/browser/events.js')
 	}
 })()
