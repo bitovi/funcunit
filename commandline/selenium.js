@@ -35,6 +35,9 @@
 			.bindEvents()
 			.bind('clientloaded', function(){
 				this.injectJS('funcunit/browser/events.js')
+				this.evaluate(function(){
+					$.holdReady(false);
+				})
 			})
 			.open(FuncUnit.funcunitPage, FuncUnit.browsers)
 	}

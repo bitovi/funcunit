@@ -6,9 +6,7 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * or GPL (GPL-LICENSE.txt) licenses.
  */
-steal(function(){
-(function(window) {
-
+steal("jquery", function() {
 var defined = {
 	setTimeout: typeof window.setTimeout !== "undefined",
 	sessionStorage: (function() {
@@ -741,7 +739,7 @@ QUnit.load = function(){
 	process()
 };
 
-steal.bind("end", function(){
+$(document).ready(function(){
 	QUnit.load();
 })
 
@@ -1450,5 +1448,4 @@ QUnit.diff = (function() {
 	};
 })();
 
-})(this);
-}).then('funcunit/browser/events.js')
+})
