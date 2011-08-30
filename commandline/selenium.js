@@ -1,5 +1,4 @@
-(function(){
-	
+steal('steal/browser/selenium', './utils.js', function(){
 	var getDefaultBrowsers = function(){
 		var browsers;
 		if(FuncUnit.jmvcRoot)
@@ -41,4 +40,4 @@
 			})
 			.open(FuncUnit.funcunitPage, FuncUnit.browsers)
 	}
-})()
+})

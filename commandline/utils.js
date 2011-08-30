@@ -1,5 +1,13 @@
-steal('funcunit/commandline/events.js', function(){
-		
+steal(function(){	
+	if (typeof FuncUnit == 'undefined') {
+		FuncUnit = {};
+	}
+	if(!FuncUnit.loader){
+		FuncUnit.loader = {};
+	}
+}, 
+	'funcunit/commandline/events.js', function(){
+	
 	/**
 	 * 2 ways to include settings.js:
 	 * 1. Manually before funcunit.js 

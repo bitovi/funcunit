@@ -15,15 +15,9 @@
  */
  
 (function() {
-	var classPrefix = FuncUnit.xmlLogClassPrefix ? FuncUnit.xmlLogClassPrefix : '';
-	var filename = FuncUnit.xmlLogFilename ? FuncUnit.xmlLogFilename : false;
-	
-	if(filename) {
-		var fstream = new java.io.FileWriter(filename, false);
-		var out = new java.io.BufferedWriter(fstream);
-		out.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n");
-		out.write('<testsuites>' + "\n");
-	}
+	var classPrefix = FuncUnit.xmlLogClassPrefix ? FuncUnit.xmlLogClassPrefix : '',
+		filename = FuncUnit.xmlLogFilename ? FuncUnit.xmlLogFilename : false,
+		fstream, out;
 	
 	var writeToLog = function (line, postfix) {
 		if(typeof postfix == 'undefined') {
@@ -56,6 +50,14 @@
 	var moduleAssertionCounter = 0;
 
 	steal.extend(FuncUnit,{
+		begin: function(){
+			if(filename) {
+				fstream = new java.io.FileWriter(filename, false);
+				out = new java.io.BufferedWriter(fstream);
+				out.write('<?xml version="1.0" encoding="UTF-8"?>' + "\n");
+				out.write('<testsuites>' + "\n");
+			}
+		},
 		testStart: function(name){
 			print('  ' + name);
 			// Prefix class to have a destinct namespace
@@ -117,7 +119,7 @@
 			moduleAssertionCounter = 0;
 			moduleStartTime = new Date();
 		},	    
-		done: function(failures, total){ 
+		done: function(failures, total){
 			// Summary similar to JUnit/PHPUnit
 			var currentDate = new Date();
 			var timeDiff = Math.round((currentDate.getTime() - globalStartTime) / 1000);

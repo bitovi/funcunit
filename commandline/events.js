@@ -7,6 +7,9 @@ steal('funcunit/commandline/output/default.js', function(){
 	steal.extend(steal.browser.prototype, {
 		// bind all events
 		bindEvents: function(){
+			this.bind("begin", function(data){
+				FuncUnit.begin();
+			})
 			this.bind("browserStart", function(data){
 				FuncUnit.starttime = new Date().getTime();
 				browserFailed = browserTotal = 0;
@@ -38,6 +41,11 @@ steal('funcunit/commandline/output/default.js', function(){
 			})
 			.bind('done', function(data){
 				FuncUnit.done(totalFailed, total);
+				this.close();
+			})
+			// for selenium, all browsers are done running
+			.bind('allDone', function(data){
+				
 			})
 			return this;
 		}

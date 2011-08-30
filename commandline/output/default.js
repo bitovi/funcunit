@@ -1,6 +1,9 @@
 (function(){
 	var start = new Date();
 	QUnitPrint = {
+		begin: function(){
+			
+		},
 		testStart: function(name){
 			console.log("--" + name + "--")
 		},

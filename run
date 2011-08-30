@@ -11,13 +11,7 @@
 	type = _args[0];
 	page = _args[1];
 	
-	if (typeof FuncUnit == 'undefined') {
-		FuncUnit = {};
-	}
-	if(!FuncUnit.loader){
-		FuncUnit.loader = {};
-	}
-	steal('steal/browser/'+type, 'funcunit/commandline/'+type+'.js', 
+	steal('funcunit/commandline/'+type+'.js', 
 		'funcunit/commandline/utils.js', function(){
 			FuncUnit.loader[type](page)
 	})

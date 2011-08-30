@@ -1,4 +1,5 @@
-(function(){
+steal('steal/browser/envjs', function(){
+}, './utils.js', function(){
 	FuncUnit.loader.envjs = function(page){
 		FuncUnit._loadSettingsFile(page)
 		FuncUnit.funcunitPage = page;
@@ -16,4 +17,4 @@
 			.bindEvents()
 			.open(FuncUnit.funcunitPage);
 	}
-})()
+})

@@ -1,5 +1,5 @@
 steal("funcunit/qunit", function(){
-	var evts = ['testStart', 'testDone', 'moduleStart', 'moduleDone', 'done', 'log'], type;
+	var evts = ['begin', 'testStart', 'testDone', 'moduleStart', 'moduleDone', 'done', 'log'], type;
 	
 	for (var i = 0; i < evts.length; i++) {
 		type = evts[i];
