@@ -1,5 +1,4 @@
-steal('steal/browser/envjs', function(){
-}, './utils.js', function(){
+steal('steal/browser/envjs', './utils.js', function(){
 	FuncUnit.loader.envjs = function(page){
 		FuncUnit._loadSettingsFile(page)
 		FuncUnit.funcunitPage = page;

@@ -8,6 +8,11 @@ steal('steal/browser/phantomjs', './utils.js', function(){
 		
 		FuncUnit.browser
 			.bind('clientloaded', function(){
+				this.evaluate(function(){
+					if(!$('iframe').length){
+						$("<iframe></iframe>").appendTo(document.body);
+					}
+				})
 				this.injectJS('funcunit/browser/events.js')
 				this.evaluate(function(){
 					$.holdReady(false);
