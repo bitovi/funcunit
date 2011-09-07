@@ -2,7 +2,6 @@
 
 var confirms = [], prompts = [];
 $.extend(FuncUnit,{
-	frame: $('iframe').length? $('iframe')[0]: null,
 	/**
 	 * @attribute browsers
 	 * Used to configure the browsers selenium uses to run FuncUnit tests.
@@ -112,6 +111,8 @@ $.extend(FuncUnit,{
 	},
 	_open: function(url){
 		changing = url;
+		// this will determine if this is supposed to open within a frame
+		FuncUnit.frame =  $('#funcunit_app').length? $('#funcunit_app')[0]: null;
 	
 		var checkReload = function(url){
 			if(FuncUnit._window.location.pathname == url ||
