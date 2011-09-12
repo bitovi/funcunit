@@ -142,6 +142,10 @@
 			if(filename) {
 				out.close();
 			}
+			
+			if (failures > 0 && FuncUnit.failOnError) {
+				java.lang.System.exit(1);
+			}
 		},
 		browserStart: function(name){
 			print("Starting " + name + "...")
