@@ -10,12 +10,12 @@
  * @download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-5.zip
 
 FuncUnit is functional testing for JavaScript applications. Tests are written in jQuery and run in a browser. 
-Via integration with Selenium and PhantomJS, you can run the same tests automated.
+Via integration with [selenium Selenium] and [phantomjs PhantomJS], you can run the same tests automated.
 
 <b>FuncUnit is designed to make writing JavaScript functional tests super easy and approachable. 
 FuncUnit will transform your development lifecycle, give your developers confidence, and improve quality.</b>
 
-[FuncUnit.getstarted Get started], then read about the [FuncUnit.api API] and [FuncUnit.integrations integrations].
+[getstartedfuncunit Get started], then read about the [apifuncunit API] and [integrations integrations].
 
 ## Example:
 @codestart

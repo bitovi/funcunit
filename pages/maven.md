@@ -1,2 +1,2 @@
-@page maven 3.6 Maven
+@page maven 3.5 Maven
 @parent FuncUnit

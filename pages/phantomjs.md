@@ -1,2 +1,2 @@
-@page phantomjs 3.2 Phantom JS
+@page phantomjs 3.2 PhantomJS
 @parent FuncUnit
