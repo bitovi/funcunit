@@ -1,4 +1,7 @@
 (function(){
+	/**
+	 * @add FuncUnit
+	 */
 	//are we in a callback function (something we pass to a FuncUnit plugin)
 	FuncUnit._incallback = false;
 	//the queue of commands waiting to be run
@@ -9,7 +12,6 @@
 	FuncUnit._queue = queue;
 	FuncUnit.
 	/**
-	 * @hide
 	 * Adds a function to the queue.  The function is passed within an object that
 	 * can have several other properties:
 	 * method : the method to be called.  It will be provided a success and error function to call

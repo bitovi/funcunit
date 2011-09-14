@@ -1,6 +1,13 @@
 
 (function(){
+	/**
+	 * @add FuncUnit
+	 */
 	var clicks = [
+	/**
+	 * @Prototype
+	 */
+	// methods
 	/**
 	 * @function click
 	 * Clicks an element.  This uses [Syn.prototype.click] to issue a:

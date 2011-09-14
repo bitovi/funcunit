@@ -1,8 +1,15 @@
 (function(){
 	
+	/**
+	 * @add FuncUnit
+	 */
 	//list of jQuery functions we want, number is argument index
 	//for wait instead of getting value
 	FuncUnit.funcs = {
+	/**
+	 * @Prototype
+	 */
+	// methods
 	/**
 	 * @function size
 	 * Gets the number of elements matched by the selector or

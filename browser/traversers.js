@@ -5,8 +5,51 @@ steal('jquery').then(function($){
 		return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
 	}
 
+/**
+ * @add FuncUnit
+ */
+// prototype
+/**
+ * @Prototype
+ */
 //do traversers
-var traversers = ["closest","next","prev","siblings","last","first", "find"],
+var traversers = [
+	/**
+	 * @function closest
+	 * Asynchronous version of closest
+	 */
+	"closest",
+	/**
+	 * @function next
+	 * Asynchronous version of next
+	 */
+	"next",
+	/**
+	 * @function prev
+	 * Asynchronous version of prev
+	 */
+	"prev",
+	/**
+	 * @function siblings
+	 * Asynchronous version of siblings
+	 */
+	"siblings",
+	/**
+	 * @function last
+	 * Asynchronous version of last
+	 */
+	"last",
+	/**
+	 * @function first
+	 * Asynchronous version of first
+	 */
+	"first", 
+	/**
+	 * @function find
+	 * Asynchronous version of find
+	 */
+	"find"
+],
 	makeTraverser = function(name){
 		var orig = FuncUnit.prototype[name];
 		FuncUnit.prototype[name] = function(selector){

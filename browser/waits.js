@@ -1,4 +1,7 @@
 (function(){
+/**
+ * @add FuncUnit
+ */
 FuncUnit.
 /**
  * Waits a timeout before running the next command.  Wait is an action and gets 
@@ -32,7 +35,6 @@ wait = function(time, callback){
 }
 
 /**
- * @hide
  * @function repeat
  * Takes a function that will be called over and over until it is successful.
  * method : function(){},
@@ -81,6 +83,9 @@ FuncUnit.repeat = function(options){
 	
 }
 
+/**
+ * @Prototype
+ */
 $.extend(FuncUnit.prototype, {
 	/**
 	 * Waits until an element exists before running the next action.

@@ -1,6 +1,9 @@
 (function(){
 
 var confirms = [], prompts = [];
+/**
+ * @add FuncUnit
+ */
 $.extend(FuncUnit,{
 	/**
 	 * @attribute browsers
@@ -8,6 +11,7 @@ $.extend(FuncUnit,{
 	 * If you need to learn how to configure selenium, and we haven't filled in this page,
 	 * post a note on the forum and we will fill this out right away.
 	 */
+	// href comes from settings
 	/**
 	 * @attribute href
 	 * The location of the page running the tests on the server and where relative paths passed in to [FuncUnit.static.open] will be 
@@ -21,7 +25,7 @@ $.extend(FuncUnit,{
 	})
 	@codeend
 	 */
-	// href comes from settings
+	// jmvcRoot comes from settings
 	/**
 	 * @attribute jmvcRoot
 	 * jmvcRoot should be set to url of JMVC's root folder.  
@@ -33,8 +37,8 @@ $.extend(FuncUnit,{
 	FuncUnit = {jmvcRoot: "http://localhost/script/" }
 	@codeend
 	 */
-	// jmvcRoot comes from settings
 	
+	// open is a method
 	/**
 	 * Opens a page.  It will error if the page can't be opened before timeout. 
 	 * <h3>Example</h3>
