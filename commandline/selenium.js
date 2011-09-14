@@ -1,4 +1,4 @@
-steal('steal/browser/selenium', './utils.js', function(){
+steal('funcunit/selenium', './utils.js', function(){
 	var getDefaultBrowsers = function(){
 		var browsers;
 		if(FuncUnit.jmvcRoot)
