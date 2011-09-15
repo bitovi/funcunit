@@ -119,8 +119,8 @@ $.extend(FuncUnit,{
 		FuncUnit.frame =  $('#funcunit_app').length? $('#funcunit_app')[0]: null;
 	
 		var checkReload = function(url){
-			if(FuncUnit._window.location.pathname == url ||
-				FuncUnit._window.href == url){
+			if(FuncUnit._window.location.pathname === url ||
+				FuncUnit._window.href === url){
 				return true;
 			}
 			return false;
@@ -131,9 +131,10 @@ $.extend(FuncUnit,{
 				FuncUnit._window = FuncUnit.frame.contentWindow;
 				reloading = checkReload(url);
 				FuncUnit._window.location = url;
-			}else{
+			}
+			else{
 				// giving a large height forces it to not open in a new tab and just opens to the window's height
-				FuncUnit._window = window.open(url, "funcunit",  "height=1000");
+				FuncUnit._window = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes");
 			}
 		}
 		// otherwise, change the frame's url
@@ -315,9 +316,9 @@ $.extend(FuncUnit,{
 		setTimeout(arguments.callee, 500)
 	}
 	
-	$(window).unload(function(){
-		if (FuncUnit._window) 
-			FuncUnit._window.close();
-	})
+//	$(window).unload(function(){
+//		if (FuncUnit._window) 
+//			FuncUnit._window.close();
+//	})
 	
 })()
