@@ -1,26 +1,55 @@
+<!DOCTYPE html>
 <html>
-<head>
-    <link rel="stylesheet" type="text/css" href="autosuggest.css" />
-	<script type='text/javascript' src='auto_suggest.js'></script>
-	<script type='text/javascript'>
-	var data1 = [
-		{value: "21", name: "JavaScriptMVC"},
-		{value: "43", name: "Jupiter JavaScript Consulting"},
-		{value: "46", name: "Jupiter JavaScript Training"},
-		{value: "54", name: "Jupiter JavaScript Development"},
-		{value: "55", name: "FuncUnit JavaScript Testing"},
-		{value: "79", name: "Michael Jordan"}
-	],
-	data2 = ["JavaScriptMVC","Jupiter JavaScript Consulting",
-			"Jupiter JavaScript Training","Jupiter JavaScript Development",
-			"FuncUnit JavaScript Testing","Michael Jordan"];
-	
-	window.onload = function(){
-		AutoComplete_Create("auto",data2)
-	}
-	</script>
-</head>
-<body>
-	<input id='auto'/>
-</body>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Autocomplete Example Page</title>
+		<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="stylesheet" />	
+		<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.16.custom.min.js"></script>
+		<!--<script type="text/javascript" src="development-bundle/ui/jquery.ui.core.js"></script>	
+		<script type="text/javascript" src="development-bundle/ui/jquery.ui.widget.js"></script>	
+		<script type="text/javascript" src="development-bundle/ui/jquery.ui.position.js"></script>
+		<script type="text/javascript" src="development-bundle/ui/jquery.ui.autocomplete.js"></script>-->	
+		
+		<script>
+			$(function() {
+				var availableTags = [
+					"ActionScript",
+					"AppleScript",
+					"Asp",
+					"BASIC",
+					"C",
+					"C++",
+					"Clojure",
+					"COBOL",
+					"ColdFusion",
+					"Erlang",
+					"Fortran",
+					"Groovy",
+					"Haskell",
+					"Java",
+					"JavaScript",
+					"Lisp",
+					"Perl",
+					"PHP",
+					"Python",
+					"Ruby",
+					"Scala",
+					"Scheme"
+				];
+				$( "#tags" ).autocomplete({
+					source: availableTags
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="demo">
+			<div class="ui-widget">
+				<input id="tags" />
+			</div>
+		</div>
+	</body>
 </html>
+
+

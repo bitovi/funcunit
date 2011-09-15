@@ -408,7 +408,7 @@
 							methodArgs.push(args[3]);
 						}
 						var ret = this.bind[fname].apply(this.bind, methodArgs)
-						return tester(ret);
+						return tester.call(this.bind, ret);
 					},
 					callback : callback,
 					error : errorMessage,
