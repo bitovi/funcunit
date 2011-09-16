@@ -1,2 +1,2 @@
-@page integrations 3. Integrations
+@page funcunit.integrations Integrations
 @parent FuncUnit

@@ -15,13 +15,13 @@ steal("funcunit").then(function(){
 		})
 	});
 	
-	
-	test("keyboard navigation",function(){
-		S('input').visible().click().type("JavaS")
-	
-		S('.ui-menu-item').visible()
-		S('input').type('[down][enter]').val("JavaScript")
-	});
-	
+	test("keyboard nav", function(){
+		S('input').visible().click().type("JavaS");
+		S('.ui-menu-item').visible();
+		S('input').type('[down][enter]')
+			.val('JavaScript')
+		
+	})
+
 
 })

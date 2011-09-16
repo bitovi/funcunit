@@ -1,2 +1,2 @@
-@page assertions 2.4 Getters & Assertions
+@page funcunit.getters Getters & Assertions
 @parent FuncUnit

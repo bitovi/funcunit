@@ -135,7 +135,7 @@ $.extend(FuncUnit.prototype, {
 			return size > 0;
 		}, function(){
 			self.selector = sel;
-			callback && callback();
+			callback && callback.apply(this, arguments);
 		})
 		
 	},
@@ -155,7 +155,7 @@ $.extend(FuncUnit.prototype, {
 		this.selector += ":visible"
 		return this.size(0, function(){
 			self.selector = sel;
-			callback && callback();
+			callback && callback.apply(this, arguments);
 		})
 	},
 	/**
@@ -176,7 +176,8 @@ $.extend(FuncUnit.prototype, {
 	then : function(callback){
 		var self = this;
 		FuncUnit.wait(0, function(){
-			callback.call(this, this);
+//			var el = S(this.selector, true)
+			callback.call(el, el);
 		});
 		return this;
 	}

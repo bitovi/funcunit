@@ -1,2 +1,2 @@
-@page envjs 3.3 EnvJS
-@parent FuncUnit
+@page funcunit.envjs EnvJS
+@parent funcunit.integrations

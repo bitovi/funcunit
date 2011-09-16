@@ -1,2 +1,2 @@
-@page demos 5. Demos
+@page funcunit.demos Demos
 @parent FuncUnit

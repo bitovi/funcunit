@@ -1,2 +1,2 @@
-@page selenium 3.1 Selenium
-@parent FuncUnit
+@page funcunit.selenium Selenium
+@parent funcunit.integrations

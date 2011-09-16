@@ -1,4 +1,4 @@
-@page s 2.1 The S Method
+@page funcunit.s The S Method
 @parent FuncUnit
 
 selects something in the application window

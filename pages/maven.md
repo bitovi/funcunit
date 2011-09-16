@@ -1,2 +1,2 @@
-@page maven 3.5 Maven
-@parent FuncUnit
+@page funcunit.maven Maven
+@parent funcunit.integrations

@@ -1,2 +1,2 @@
-@page actions 2.2 Actions
+@page funcunit.actions Actions
 @parent FuncUnit

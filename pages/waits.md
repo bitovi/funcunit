@@ -1,2 +1,2 @@
-@page waits 2.3 Waits
+@page funcunit.waits Waits
 @parent FuncUnit

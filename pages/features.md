@@ -1,2 +1,2 @@
-@page features 4. Features
+@page funcunit.features Features
 @parent FuncUnit
