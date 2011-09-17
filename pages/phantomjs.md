@@ -1,2 +1,2 @@
 @page funcunit.phantomjs PhantomJS
-@parent funcunit.integrations
+@parent funcunit.integrations 2

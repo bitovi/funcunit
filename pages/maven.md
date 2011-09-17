@@ -1,2 +1,2 @@
 @page funcunit.maven Maven
-@parent funcunit.integrations
+@parent funcunit.integrations 4

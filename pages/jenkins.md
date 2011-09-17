@@ -1,2 +1,2 @@
 @page funcunit.jenkins Jenkins
-@parent funcunit.integrations
+@parent funcunit.integrations 3
