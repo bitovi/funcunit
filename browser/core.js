@@ -15,7 +15,7 @@ FuncUnit tests web applications with a simple jQuery-like syntax. Via integratio
 FuncUnit uses [http://docs.jquery.com/Qunit QUnit] for organizing tests and assertions.  But FuncUnit extends QUnit so you can:
 
  - [FuncUnit.open Opens] an application page
- - [funcunit.s Queries] for elements
+ - [funcunit.finding Queries] for elements
  - [funcunit.actions Simulates] a user action
  - [funcunit.waits Waits] for a condition to be true
  - [funcunit.getters Gets] information about your page and runs assertions
@@ -79,7 +79,7 @@ module("autosuggest",{
 
 ## Query for elements
 
-FuncUnit tests are written just like jQuery.  The [funcunit.s S method] is a copy of jQuery, which queries for elements in 
+FuncUnit tests are written just like jQuery.  The [funcunit.finding S method] is a copy of jQuery, which queries for elements in 
 the application page.  Like $, FuncUnit methods are chainable on the results of S.
 
 @codestart

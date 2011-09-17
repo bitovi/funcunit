@@ -9,6 +9,10 @@
 		//where we should add things in a callback
 		currentPosition = 0;
 		
+	/**
+	 * A queue of methods.  Each method in the queue are run in order.  After the method is complete, it 
+	 * calls FuncUnit._done, which pops the next method off the queue and runs it.
+	 */
 	FuncUnit._queue = queue;
 	FuncUnit.
 	/**
