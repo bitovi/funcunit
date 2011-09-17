@@ -3,6 +3,8 @@
 
 Actions are used to simulate user behavior such as clicking, typing, moving the mouse.
 
+## Commands
+
  - [FuncUnit.open open] - opens a page.
  - [FuncUnit.prototype.click click] - clicks an element (mousedown, mouseup, click).
  - [FuncUnit.prototype.dblclick dblclick] - two clicks followed by a dblclick.

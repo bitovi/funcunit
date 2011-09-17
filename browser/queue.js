@@ -9,6 +9,11 @@
 		//where we should add things in a callback
 		currentPosition = 0;
 		
+		
+	/**
+	 * A global timeout value for wait commands.  Defaults to 10 seconds.
+	 */
+	FuncUnit.timeout = 10000;
 	/**
 	 * A queue of methods.  Each method in the queue are run in order.  After the method is complete, it 
 	 * calls FuncUnit._done, which pops the next method off the queue and runs it.
@@ -68,7 +73,7 @@
 						ok(false, next.error);
 						FuncUnit._done();
 					}, 
-					(next.timeout || 10000) + speed)
+					(next.timeout || FuncUnit.timeout) + speed)
 				// if the last successful method had a collection, save it
 				if(el && el.jquery){
 					currentEl = el;

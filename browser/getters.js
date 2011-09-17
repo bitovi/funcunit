@@ -33,7 +33,7 @@
 	 */
 	'size' : 0,
 	/**
-	 * @attr data
+	 * @function data
 	 * Gets data from jQuery.data or waits until data
 	 * equals some value.  
 	 * @codestart
