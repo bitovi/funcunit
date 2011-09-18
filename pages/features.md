@@ -1,5 +1,5 @@
 @page funcunit.features Features
-@parent FuncUnit 0
+@parent FuncUnit 7
 
 ## Why FuncUnit
 
@@ -34,14 +34,64 @@ There are many testing frameworks out there, but nothing comes close to being a 
 
 ## Changes from 3.1
 
-* collections instead of selectors
-* easier to extend
-* debuggability
-* improved selenium architecture
-* phantomjs
-* jenkins/maven
+FuncUnit has undergone some big changes from JavaScriptMVC 3.1.
+
+### Commandline revamp
+
+The method of running from commandline is now more consistent. You configure reporting and settings the same 
+way in settings.js.  Env, Phantom, and Selenium work in the same way.
+
+### Steal.browsers
+
+The new steal.browser API is a layer that abstracts opening a browser using a browser automation tool and 
+makes it easy to add new ones.  PhantomJS was a new browser added with this API. Steal.browser can be used in 
+other parts of JavaScriptMVC, like steal/html.
+
+### No more separate browser drivers
+
+There used to be separate browser drivers for running in browser and selenium. Now there is only one way of 
+using the FuncUnit API, which brings consistency no matter the environments.
+
+The driver system created difficult to debug issues when running from Selenium, which would not occur in 
+browser mode. Without drivers, tests run more consistently.
+
+Also, implementing features in both drivers was difficult and required a complex build step. Adding 
+to the FuncUnit API is now simpler and faster.
+
+### CI integration
+
+Integration with Jenkins and Maven are part of the 3.2 changes. Using the XUnit plugin and passing error 
+codes, you can more easily build FuncUnit into your build and CI system.
+
+Its also possible to easily customize FuncUnit output by making your own reporting functionality. All you have 
+to do is add your own FuncUnit event handlers.
+
+### Passing around collections
+
+FuncUnit's internals are reworked so that S is now a subbed version of jQuery.  S calls $ with the context 
+set to your app window. "this" always points to current collection, whereas before it wasn't possible to access 
+the actual collection, just the selector.
+
+This has several advantages. Its easier to add plugins to S.  Its also easier to get information about 
+the elements, using any jQuery.fn method.  Debugging is easier, because there is more visibility while 
+executing asynchronous callbacks.  You can inspect at various points and see why the test is failing
+
+### No breaking changes
+
+We were very careful while making these changes to not break the API.  Any existing tests will still 
+work, but will be less brittle when using Selenium and other automation tools.
+
+### Updated to latest QUnit
+
+The latest version of QUnit has a few nice features and an updated UI.
+
+### PhantomJS
+
+PhantomJS support now makes it more feasible to run FuncUnit tests as part of a build process.
 
 ## Roadmap
 
-* test coverage
-* jstestdriver integration
+The next FuncUnit features we plan to work on include. Let us know if you want these features or want to help!
+
+* [http://siliconforks.com/jscoverage/ JSCoverage] integration for test coverage stats
+* [http://code.google.com/p/js-test-driver/ JSTestDriver] integration

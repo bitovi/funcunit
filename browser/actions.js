@@ -26,15 +26,15 @@
 	 * //clicks the bar element
 	 * S("#bar").click()
 	 * @codeend
-	 * @param {Object} [options] options to pass to the click event.  Typically, this is clientX/Y or pageX/Y like:
+	 * @param {Object} [options] options to pass to the click event.  Typically, this is clientX/Y or pageX/Y:
 	 * @codestart
 	 * $('#foo').click({pageX: 200, pageY: 100});
 	 * @codeend
-	 * You can pass it any of the serializable parameters you'd send to : 
+	 * You can pass it any of the serializable parameters you'd send to 
 	 * [http://developer.mozilla.org/en/DOM/event.initMouseEvent initMouseEvent], but command keys are 
 	 * controlled by [FuncUnit.prototype.type].
 	 * @param {Function} [callback] a callback that runs after the click, but before the next action.
-	 * @return {funcUnit} returns the funcunit selector for chaining.
+	 * @return {funcUnit} returns the funcunit object for chaining.
 	 */
 	'click',
 	/**
@@ -43,7 +43,7 @@
 	 * @param {Object} options options to add to the mouse events.  This works
 	 * the same as [FuncUnit.prototype.click]'s options.
 	 * @param {Function} [callback] a callback that runs after the double click, but before the next action.
-	 * @return {funcUnit} returns the funcunit selector for chaining.
+	 * @return {funcUnit} returns the funcunit object for chaining.
 	 */
 	'dblclick',
 	/**
@@ -53,7 +53,7 @@
 	 * @param {Object} options options to add to the mouse events.  This works
 	 * the same as [FuncUnit.prototype.click]'s options.
 	 * @param {Function} [callback] a callback that runs after the click, but before the next action.
-	 * @return {funcUnit} returns the funcunit selector for chaining.
+	 * @return {funcUnit} returns the funcunit object for chaining.
 	 */
 	'rightClick'],
 		makeClick = function(name){
@@ -113,7 +113,7 @@
 		 * 
 		 * @param {String} text the text you want to type
 		 * @param {Function} [callback] a callback that is run after typing, but before the next action.
-		 * @return {FuncUnit} returns the funcUnit for chaining.
+		 * @return {FuncUnit} returns the funcUnit object for chaining.
 		 */
 		type: function( text, callback ) {
 			var selector = this.selector, 
@@ -174,7 +174,7 @@
 		 * }) 
 		 * @codeend
 		 * @param {Function} [callback] a callback that runs after the drag, but before the next action.
-		 * @return {funcUnit} returns the funcunit selector for chaining.
+		 * @return {funcUnit} returns the funcunit object for chaining.
 		 */
 		drag: function( options, callback ) {
 			if(typeof options == 'string'){
@@ -228,7 +228,7 @@
 		 * }) 
 		 * @codeend
 		 * @param {Function} [callback] a callback that runs after the drag, but before the next action.
-		 * @return {funcUnit} returns the funcunit selector for chaining.
+		 * @return {funcUnit} returns the funcunit object for chaining.
 		 */
 		move: function( options, callback ) {
 			if(typeof options == 'string'){

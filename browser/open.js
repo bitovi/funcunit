@@ -7,16 +7,17 @@ var confirms = [], prompts = [];
 $.extend(FuncUnit,{
 	/**
 	 * @attribute browsers
-	 * Used to configure the browsers selenium uses to run FuncUnit tests.
-	 * If you need to learn how to configure selenium, and we haven't filled in this page,
-	 * post a note on the forum and we will fill this out right away.
+	 * Used to configure the browsers selenium uses to run FuncUnit tests.  See the 
+	 * [funcunit.selenium Selenium] page for more information.
 	 */
 	// href comes from settings
 	/**
 	 * @attribute href
-	 * The location of the page running the tests on the server and where relative paths passed in to [FuncUnit.static.open] will be 
-	 * referenced from.
-	 * <p>This is typically where the test page runs on the server.  It can be set before calls to [FuncUnit.static.open]:</p>
+	 * The location of the page running the tests on the server and where relative paths 
+	 * passed in to [FuncUnit.static.open] will be referenced from.
+	 * 
+	 * This is typically where the test page runs on the server.  It can be set before 
+	 * calls to [FuncUnit.static.open]:
 	@codestart
 	test("opening something", function(){
 	  S.href = "http://localhost/tests/mytest.html"
@@ -242,6 +243,14 @@ $.extend(FuncUnit,{
 	// for feature detection
 	support: {
 		readystate: "readyState" in document
+	},
+	/**
+	 * Used to evaluate code in the application page.
+	 * @param {String} str the code to evaluate
+	 * @return {Object} the result of the evaluated code
+	 */
+	eval: function(str){
+		return FuncUnit._window.eval(str)
 	}
 });
 
@@ -315,10 +324,5 @@ $.extend(FuncUnit,{
 		reloading = false;
 		setTimeout(arguments.callee, 500)
 	}
-	
-//	$(window).unload(function(){
-//		if (FuncUnit._window) 
-//			FuncUnit._window.close();
-//	})
 	
 })()

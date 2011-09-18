@@ -291,9 +291,4 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 	
 	S = FuncUnit;
 	
-	
-	
-	FuncUnit.eval = function(str){
-		return FuncUnit._window.eval(str)
-	}
 })()

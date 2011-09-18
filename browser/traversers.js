@@ -16,37 +16,79 @@ steal('jquery').then(function($){
 var traversers = [
 	/**
 	 * @function closest
-	 * Asynchronous version of closest
+	 * Asynchronous version of jQuery's closest.  Performs the exact same functionality as the jQuery method 
+	 * but adds itself to the queue.
+	 * 
+	 * @codestart
+	 * // after the click, filter the collection, then wait for result to be visible
+	 * S(".foo").click().closest(".bar").visible();
+	 * @codeend
 	 */
 	"closest",
 	/**
 	 * @function next
-	 * Asynchronous version of next
+	 * Asynchronous version of next. Performs the exact same functionality as the jQuery method 
+	 * but adds itself to the queue.
+	 * 
+	 * @codestart
+	 * // after the click, filter the collection, then wait for result to be visible
+	 * S(".foo").click().next().visible();
+	 * @codeend
 	 */
 	"next",
 	/**
 	 * @function prev
-	 * Asynchronous version of prev
+	 * Asynchronous version of prev. Performs the exact same functionality as the jQuery method 
+	 * but adds itself to the queue.
+	 * 
+	 * @codestart
+	 * // after the click, filter the collection, then wait for result to be visible
+	 * S(".foo").click().prev().visible();
+	 * @codeend
 	 */
 	"prev",
 	/**
 	 * @function siblings
-	 * Asynchronous version of siblings
+	 * Asynchronous version of siblings. Performs the exact same functionality as the jQuery method 
+	 * but adds itself to the queue.
+	 * 
+	 * @codestart
+	 * // after the click, filter the collection, then wait for result to be visible
+	 * S(".foo").click().siblings().visible();
+	 * @codeend
 	 */
 	"siblings",
 	/**
 	 * @function last
-	 * Asynchronous version of last
+	 * Asynchronous version of last. Performs the exact same functionality as the jQuery method 
+	 * but adds itself to the queue.
+	 * 
+	 * @codestart
+	 * // after the click, filter the collection, then wait for result to be visible
+	 * S(".foo").click().last().visible();
+	 * @codeend
 	 */
 	"last",
 	/**
 	 * @function first
-	 * Asynchronous version of first
+	 * Asynchronous version of first. Performs the exact same functionality as the jQuery method 
+	 * but adds itself to the queue.
+	 * 
+	 * @codestart
+	 * // after the click, filter the collection, then wait for result to be visible
+	 * S(".foo").click().first().visible();
+	 * @codeend
 	 */
 	"first", 
 	/**
 	 * @function find
-	 * Asynchronous version of find
+	 * Asynchronous version of find. Performs the exact same functionality as the jQuery method 
+	 * but adds itself to the queue.
+	 * 
+	 * @codestart
+	 * // after the click, filter the collection, then wait for result to be visible
+	 * S(".foo").click().find(".bar").visible();
+	 * @codeend
 	 */
 	"find"
 ],
