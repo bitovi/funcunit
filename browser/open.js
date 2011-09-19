@@ -180,8 +180,12 @@ $.extend(FuncUnit,{
 	_onload: function(success, error){
 		// saver reference to success
 		loadSuccess = function(){
+			if(FuncUnit._window.steal){
+				hasSteal = true;
+			}
 			// called when load happens ... here we check for steal
-			if(!FuncUnit._window.steal || FuncUnit._window.steal.isReady){
+			// console.log((!FuncUnit._window.steal || FuncUnit._window.steal.isReady), typeof FuncUnit._window.steal)
+			if((FuncUnit._window.steal && FuncUnit._window.steal.isReady) || !hasSteal){
 				success();
 			}else{
 				setTimeout(arguments.callee, 200)
@@ -261,8 +265,11 @@ $.extend(FuncUnit,{
 	
 	
 	FuncUnit._window = null;
-	var newPage = true, changing, reloading = false;
-	var unloadLoader, 
+	var newPage = true, 
+		changing, 
+		reloading = false,
+		hasSteal = false,
+		unloadLoader, 
 		loadSuccess, 
 		firstLoad = true,
 		currentDocument,
@@ -279,7 +286,6 @@ $.extend(FuncUnit,{
 			Syn.unbind(FuncUnit._window, "load", onload);
 		},
 		onunload = function(){
-			console.log("unload")
 			FuncUnit.stop = true;
 			removeListeners();
 			setTimeout(unloadLoader, 0)
@@ -324,5 +330,13 @@ $.extend(FuncUnit,{
 		reloading = false;
 		setTimeout(arguments.callee, 500)
 	}
+	
+	$(window).unload(function(){	 
+		// helps with page reloads
+		if (FuncUnit._window && FuncUnit._window.steal){
+			delete FuncUnit._window.steal.isReady;
+			delete FuncUnit._window.document.readyState
+		}
+	})
 	
 })()
