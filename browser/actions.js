@@ -107,6 +107,7 @@
 		 *                "[left][left][left]"+
 		 *                "[shift-up][delete]")
 		 * @codeend
+		 *
 		 * <h2>Characters</h2>
 		 * 
 		 * For a list of the characters you can type, check [Syn.keycodes].
