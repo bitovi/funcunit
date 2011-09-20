@@ -1,0 +1,52 @@
+@page funcunit.phantomjs PhantomJS
+@parent funcunit.integrations 2
+
+[http://www.phantomjs.org/ PhantomJS] is a headless WebKit. FuncUnit integrates with Phantom to run 
+tests from the commandline.  This has large performance benefits, enough that it makes it much more 
+feasible to integrate FuncUnit tests into your build process without significantly slowing it down.
+
+## Install
+
+Before you can use PhantomJS, you have to install it. The other automation tools come prepackaged in 
+JMVC, but Phantom is too large of a download.
+
+On Mac
+
+1. Download [http://phantomjs.googlecode.com/files/phantomjs-1.2.0-macosx-universal.dmg phantomjs-1.2.0]
+1. Unzip it somewhere like /Applications/ 
+1. Add it to your path:
+
+@codestart
+sudo ln -s /Applications/phantomjs.app/Contents/MacOS/phantomjs /usr/local/bin/
+@codeend
+
+On Windows
+
+1. Download [http://phantomjs.googlecode.com/files/phantomjs-1.2.0-win32-static.zip phantomjs-1.2.0]
+1. Install it
+1. Add it to your path
+
+## Use
+
+To run any test via PhantomJS, use funcunit/run
+
+@codestart
+./js funcunit/run phantomjs path/to/funcunit.html
+@codeend
+
+## Debugging
+
+If you notice a broken test, debugging it in Phantom is not the place to start. Open the test in browser, and 
+verify the same test breaks there.  If so, debug the test in browser.
+
+If you notice the more rare event that a test breaks in Phantom but works in browser, you can use console.log 
+to debug it. In <code>funcunit/commandline/phantomjs.js</code>, uncomment the print: true option. Add console.logs 
+to your code and debug.
+
+One thing to be aware of is that phantomjs tests run within an iframe in the funcunit.html page. This is different 
+from the normal behavior of opening the application page using window.open. Phantom doesn't support window.open, 
+so a frame is used instead. This can occassionally cause problems if your application assumes it is running within 
+window.top.
+
+
+

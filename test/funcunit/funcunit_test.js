@@ -12,9 +12,7 @@ test("qUnit module setup works async", function(){
 })
 
 test("Iframe access", function(){
-	
 	equals(S("h2",0).text(), "Goodbye World", "text of iframe")
-	
 })
 
 test("typing alt and shift characters", function(){
@@ -99,4 +97,3 @@ test("Accessing the window", function(){
 test("Accessing the document", function(){
 	ok(S(S.window.document).width()> 20, "I can get the document's width")
 })
-
