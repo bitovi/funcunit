@@ -262,7 +262,9 @@
 			FuncUnit.add({
 				method: function(success, error){
 					steal.dev.log("setting " + selector + " scroll" + direction + " " + amount + " pixels")
-					this.bind["scroll" + direction](amount);
+					this.bind.each(function(i, el){
+						this["scroll" + direction] = amount;
+					})
 					success();
 				},
 				callback: callback,
