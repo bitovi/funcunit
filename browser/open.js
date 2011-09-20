@@ -116,6 +116,7 @@ $.extend(FuncUnit,{
 	},
 	_open: function(url){
 		changing = url;
+		hasSteal = false;
 		// this will determine if this is supposed to open within a frame
 		FuncUnit.frame =  $('#funcunit_app').length? $('#funcunit_app')[0]: null;
 	
@@ -184,7 +185,8 @@ $.extend(FuncUnit,{
 				hasSteal = true;
 			}
 			// called when load happens ... here we check for steal
-			// console.log((!FuncUnit._window.steal || FuncUnit._window.steal.isReady), typeof FuncUnit._window.steal)
+			// console.log((FuncUnit._window.steal && FuncUnit._window.steal.isReady) || !hasSteal, 
+				// (FuncUnit._window.steal && FuncUnit._window.steal.isReady), !hasSteal, typeof FuncUnit._window.steal)
 			if((FuncUnit._window.steal && FuncUnit._window.steal.isReady) || !hasSteal){
 				success();
 			}else{

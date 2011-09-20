@@ -1,4 +1,4 @@
-module("funcunit - find / closest",{
+module("funcunit find closest",{
 	setup: function() {
 		var self = this;
 		S.open("//funcunit/test/findclosest.html", function(){
