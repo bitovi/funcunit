@@ -240,7 +240,8 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 					success();
 					return this;
 				},
-				error: "selector failed: " + selector
+				error: "selector failed: " + selector,
+				type: "query"
 			});
 		},
 		performSyncQuery = function(selector, context, self){
@@ -252,7 +253,7 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 		// if you pass true as context, this will avoid doing a synchronous query
 		var isSyncOnly = false,
 			isAsyncOnly = false;
-		if (FuncUnit._queue.length > 0) { // if there's something in the queue, only perform asynchronous query
+		if (!FuncUnit._needSyncQuery()) { // if there's something in the queue, only perform asynchronous query
 			isAsyncOnly = true;
 		}
 		if (FuncUnit._incallback === true) { // if you're in a callback, only do the synchronous query

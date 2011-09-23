@@ -334,9 +334,7 @@ $.extend(FuncUnit,{
 		}
 		// TODO need a better way to determine if a reloaded frame is loaded (like clearing the frame), this might be brittle 
 		reloading = false;
-		if(!ls){
-			setTimeout(arguments.callee, 500)
-		}
+		setTimeout(arguments.callee, 500)
 	}
 	
 	$(window).unload(function(){

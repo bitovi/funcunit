@@ -21,6 +21,26 @@
 	 * calls FuncUnit._done, which pops the next method off the queue and runs it.
 	 */
 	FuncUnit._queue = queue;
+	/**
+	 * @hide
+	 * Logic that determines if this next query needs to be sync, or if we can optimize it.
+	 * Returns false if there are actual actions in the queue, returns true if the only queued methods are 
+	 * S methods. If the only method is an S query, remove it from the queue.
+	 */
+	FuncUnit._needSyncQuery = function(){
+		// if only method is query, need sync
+		if(FuncUnit._queue.length === 1){
+			if(FuncUnit._queue[0].type === "query"){
+				FuncUnit._queue = [];
+				return true;
+			}
+		}
+		// if empty queue, need sync
+		if(FuncUnit._queue.length === 0){
+			return true;
+		}
+		return false
+	}
 	FuncUnit.
 	/**
 	 * Adds a function to the queue.
@@ -31,6 +51,7 @@
  - error : an error message if the command fails
  - timeout : the time until success should be called
  - bind : an object that will be 'this' of the success
+ - type: the type of method (optional)
  
 	 */
 	add = function(handler){
