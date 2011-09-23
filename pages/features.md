@@ -24,14 +24,6 @@ test case.
 
 There are many testing frameworks out there, but nothing comes close to being a complete solution for front end testing like FuncUnit does.
 
-## Comparison to other frameworks
-
-### Functional vs unit
-
-### Automated vs browser based
-
-### Accurate event simulation
-
 ## Changes from 3.1
 
 FuncUnit has undergone some big changes from JavaScriptMVC 3.1.
@@ -81,6 +73,11 @@ executing asynchronous callbacks.  You can inspect at various points and see why
 We were very careful while making these changes to not break the API.  Any existing tests will still 
 work, but will be less brittle when using Selenium and other automation tools.
 
+** There is actually one minor difference, which most users won't ever notice. It used to be that you could 
+"cache" S objects and reuse them within callbacks.  The query they represented would be re-run.  In 3.2+ FuncUnit, 
+this is no longer the case.  Since S objects are just jQuery collections, synchronous queries need to be rerun by 
+calling S again.
+
 ### Updated to latest QUnit
 
 The latest version of QUnit has a few nice features and an updated UI.
@@ -95,3 +92,11 @@ The next FuncUnit features we plan to work on include. Let us know if you want t
 
 * [http://siliconforks.com/jscoverage/ JSCoverage] integration for test coverage stats
 * [http://code.google.com/p/js-test-driver/ JSTestDriver] integration
+
+## Comparison to other frameworks
+
+### Functional vs unit
+
+### Automated vs browser based
+
+### Accurate event simulation

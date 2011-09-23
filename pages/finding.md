@@ -30,7 +30,7 @@ S(".foo")
 
 _Function_
 
-If a function is provided, it will be added to the [FuncUnit.queue] to be run after previous queued methods.
+If a function is provided, it will be added to the queue to be run after previous queued methods.
 
 @codestart
 // Wait for this to be visible
@@ -104,6 +104,19 @@ test("contacts test", function(){
     var newNbrItems = S(".contacts").size();
     ok(newNbrItems > origNbrItems);
   });
+})
+@codeend
+
+Beware that you MUST put any synchronous getters inside a callback or at before any actions or waits.
+
+@codestart
+test("contacts test", function(){
+  S(".addNew").click(function(){
+    var newNbrItems = S(".contacts").size();
+    ok(newNbrItems > origNbrItems);
+  });
+  // this will fail!  
+  var origNbrItems = S(".contacts").size();
 })
 @codeend
 

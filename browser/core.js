@@ -14,11 +14,11 @@ FuncUnit tests web applications with a simple jQuery-like syntax. Via integratio
 
 FuncUnit uses [http://docs.jquery.com/Qunit QUnit] for organizing tests and assertions.  But FuncUnit extends QUnit so you can:
 
- - [FuncUnit.open Opens] an application page
- - [funcunit.finding Queries] for elements
- - [funcunit.actions Simulates] a user action
- - [funcunit.waits Waits] for a condition to be true
- - [funcunit.getters Gets] information about your page and runs assertions
+ - [FuncUnit.open Open] a web page
+ - [funcunit.finding Query] for elements
+ - [funcunit.actions Simulate] a user action
+ - [funcunit.waits Wait] for a condition to be true
+ - [funcunit.getters Get] information about your page and run assertions
  
 Then, you can:
  
