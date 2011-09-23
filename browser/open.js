@@ -1,6 +1,8 @@
 (function(){
 
-var confirms = [], prompts = [];
+var confirms = [], 
+	prompts = [], 
+	currentDocument;
 /**
  * @add FuncUnit
  */
@@ -136,12 +138,13 @@ $.extend(FuncUnit,{
 			}
 			else{
 				// giving a large height forces it to not open in a new tab and just opens to the window's height
-				FuncUnit._window = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes");
+				var width = $(window).width();
+				FuncUnit._window = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
+				currentDocument = FuncUnit._window.document;
 			}
 		}
 		// otherwise, change the frame's url
 		else {
-			
 			reloading = checkReload(url);
 			FuncUnit._window.location = url;
 		}
@@ -185,8 +188,8 @@ $.extend(FuncUnit,{
 				hasSteal = true;
 			}
 			// called when load happens ... here we check for steal
-			// console.log((FuncUnit._window.steal && FuncUnit._window.steal.isReady) || !hasSteal, 
-				// (FuncUnit._window.steal && FuncUnit._window.steal.isReady), !hasSteal, typeof FuncUnit._window.steal)
+			// console.log("success", (FuncUnit._window.steal && FuncUnit._window.steal.isReady) || !hasSteal, 
+				// "isReady", (FuncUnit._window.steal && FuncUnit._window.steal.isReady));
 			if((FuncUnit._window.steal && FuncUnit._window.steal.isReady) || !hasSteal){
 				success();
 			}else{
@@ -274,7 +277,6 @@ $.extend(FuncUnit,{
 		unloadLoader, 
 		loadSuccess, 
 		firstLoad = true,
-		currentDocument,
 		onload = function(){
 			FuncUnit._window.document.documentElement.tabIndex = 0;
 			setTimeout(function(){
@@ -309,6 +311,7 @@ $.extend(FuncUnit,{
 	
 	//check for window location change, documentChange, then readyState complete -> fire load if you have one
 	var newDocument = false, poller = function(){
+		var ls;
 		if(FuncUnit._window.document  == null){
 			return
 		}
@@ -316,9 +319,10 @@ $.extend(FuncUnit,{
 		if (FuncUnit._window.document !== currentDocument || newDocument) { //we have a new document
 			currentDocument = FuncUnit._window.document;
             newDocument = true;
-			if (FuncUnit._window.document.readyState == "complete" && FuncUnit._window.location.href!="about:blank" && !reloading) {
-				var ls = loadSuccess;
-					loadSuccess = null;
+			if (FuncUnit._window.document.readyState === "complete" && FuncUnit._window.location.href!="about:blank" && !reloading) {
+				ls = loadSuccess;
+				
+				loadSuccess = null;
 				if (ls) {
 					FuncUnit._window.focus();
 					FuncUnit._window.document.documentElement.tabIndex = 0;
@@ -330,10 +334,12 @@ $.extend(FuncUnit,{
 		}
 		// TODO need a better way to determine if a reloaded frame is loaded (like clearing the frame), this might be brittle 
 		reloading = false;
-		setTimeout(arguments.callee, 500)
+		if(!ls){
+			setTimeout(arguments.callee, 500)
+		}
 	}
 	
-	$(window).unload(function(){	 
+	$(window).unload(function(){
 		// helps with page reloads
 		if (FuncUnit._window && FuncUnit._window.steal){
 			delete FuncUnit._window.steal.isReady;
