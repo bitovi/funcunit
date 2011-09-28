@@ -413,10 +413,15 @@
 					callback : callback,
 					error : errorMessage,
 					timeout : timeout,
-					bind: this
+					bind: this,
+					type: "wait"
 				})
 				return this;
 			}else{
+				// throw a warning if user tries to use a getter after the start of the test (if there are other async methods)
+				if(!FuncUnit._incallback && FuncUnit._haveAsyncQueries()){
+					throw "You can't run getters outside callbacks and after actions and waits. Please put your getters in a callback or at the beginning of the test."
+				}
 				// just call the original jQ method
 				var methodArgs = [];
 				if(argIndex > 0){

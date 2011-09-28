@@ -78,7 +78,8 @@ FuncUnit.repeat = function(options){
 		error : options.error,
 		timeout : options.timeout,
 		stop : stop,
-		bind : options.bind
+		bind : options.bind,
+		type: options.type
 	});
 	
 }

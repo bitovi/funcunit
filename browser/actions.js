@@ -72,7 +72,8 @@
 					},
 					callback: callback,
 					error: "Could not " + name + " " + this.selector,
-					bind: this
+					bind: this,
+					type: "action"
 				});
 				return this;
 			}
@@ -126,7 +127,8 @@
 				},
 				callback : callback,
 				error : "Could not type " + text + " into " + this.selector,
-				bind : this
+				bind : this,
+				type: "action"
 			});
 			return this;
 		},
@@ -139,7 +141,8 @@
 					success()
 				},
 				error : "Could not trigger " + evName,
-				bind : this
+				bind : this,
+				type: "action"
 			});
 			return this;
 		},
@@ -192,7 +195,8 @@
 				},
 				callback: callback,
 				error: "Could not drag " + this.selector,
-				bind: this
+				bind: this,
+				type: "action"
 			})
 			return this;
 		},
@@ -246,7 +250,8 @@
 				},
 				callback: callback,
 				error: "Could not move " + this.selector,
-				bind: this
+				bind: this,
+				type: "action"
 			});
 			return this;
 		},
@@ -270,7 +275,8 @@
 				},
 				callback: callback,
 				error: "Could not scroll " + this.selector,
-				bind: this
+				bind: this,
+				type: "action"
 			});
 			return this;
 		}

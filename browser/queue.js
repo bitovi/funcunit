@@ -41,6 +41,17 @@
 		}
 		return false
 	}
+	/**
+	 * @hide
+	 * Return true if there are already async methods queued.  If true, getters need throw errors.
+	 */
+	FuncUnit._haveAsyncQueries = function(){
+		for(var i=0; i < FuncUnit._queue.length; i++){
+			if(FuncUnit._queue[i].type === "action" || FuncUnit._queue[i].type === "wait")
+				return true;
+		}
+		return false;
+	}
 	FuncUnit.
 	/**
 	 * Adds a function to the queue.
@@ -57,6 +68,9 @@
 	add = function(handler){
 		//if we are in a callback, add to the current position
 		if (FuncUnit._incallback) {
+			if(handler.type === "action" || handler.type === "wait"){
+				throw "You can't put "+handler.type+"s inside a callback because they're asynchronous.  Add this method outside the callback."
+			}
 			// Removing this so we can safely perform every query immediately and not queue it in the cbs
 			// This means doing asynchronous stuff in callbacks isn't supported anymore.  I don't know any places this is a problem, 
 			// but if it is, we can add this back
@@ -121,9 +135,10 @@
 						//mark in callback so the next set of add get added to the front
 						
 						FuncUnit._incallback = true;
-						if (next.callback) 
+						if (next.callback) {
 							// callback's "this" is the collection
 							next.callback.apply(next.bind, arguments);
+						}
 						FuncUnit._incallback = false;
 						
 						
