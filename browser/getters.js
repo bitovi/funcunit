@@ -395,9 +395,12 @@
 				}
 				FuncUnit.repeat({
 					method : function(){
-						// keep getting new collection because the page might be updating, we need to keep re-checking
-						// pass false so it will only do one synchronous request
-						this.bind = S(this.selector, frame, true)
+						// only need to perform this check for .exists, .invisible, etc
+						if(fname === "size"){
+							// keep getting new collection because the page might be updating, we need to keep re-checking
+							// pass false so it will only do one synchronous request
+							this.bind = S(this.selector, frame, true)
+						}
 						if(!printed){
 							printed = true;
 							steal.dev.log("Checking "+fname+" on "+this.selector)
