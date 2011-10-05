@@ -65,6 +65,9 @@ test("hasClass", function(){
 	S("#hasClass").hasClass("someClass",true, function(){
 		ok(fast,"waited until it has a class exists")
 	});
+	S("#hasClass").hasClass("someOtherClass",false, function(){
+		ok(fast,"waited until it has a class exists")
+	});
 })
 
 test("Exists", function(){
@@ -102,4 +105,11 @@ test("Accessing the document", function(){
 test("two getters in a row", function(){
 	equal(S("h1").text(), "Hello World")
 	equal(S("h1").text(), "Hello World")
+})
+
+
+test("then", function(){
+	S("#exists").exists().then(function(){
+		equals(this.length, 1, "this is correct")
+	});
 })
