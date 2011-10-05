@@ -28,6 +28,7 @@ $.extend(FuncUnit,{
 	})
 	@codeend
 	 */
+	
 	// jmvcRoot comes from settings
 	/**
 	 * @attribute jmvcRoot
@@ -172,14 +173,25 @@ $.extend(FuncUnit,{
 		prompts.push(answer)
 	},
 	_opened: function(){
-		FuncUnit._window.alert = function(){}
-		FuncUnit._window.confirm = function(){
-			var res = confirms.shift();
-			return res;
+		if (!this._isOverridden("alert")) {
+			FuncUnit._window.alert = function(){}
 		}
-		FuncUnit._window.prompt = function(){
-			return prompts.shift();
+		
+		if (!this._isOverridden("confirm")) {
+			FuncUnit._window.confirm = function(){
+				var res = confirms.shift();
+				return res;
+			}
 		}
+		
+		if (!this._isOverridden("prompt")) {
+			FuncUnit._window.prompt = function(){
+				return prompts.shift();
+			}
+		}
+	},
+	_isOverridden:function(type) {
+		return !(/native code/.test(FuncUnit._window[type]));
 	},
 	_onload: function(success, error){
 		// saver reference to success
@@ -336,7 +348,7 @@ $.extend(FuncUnit,{
 		reloading = false;
 		setTimeout(arguments.callee, 500)
 	}
-	
+
 	$(window).unload(function(){
 		// helps with page reloads
 		if (FuncUnit._window && FuncUnit._window.steal){
