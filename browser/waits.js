@@ -98,12 +98,9 @@ $.extend(FuncUnit.prototype, {
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
 	exists: function( callback ) {
-		if(true){
-			return this.size(function(size){
-				return size > 0;
-			}, callback)
-		}
-		return this.size() == 0;
+		return this.size(function(size){
+			return size > 0;
+		}, callback);
 	},
 	/**
 	 * Waits until no elements are matched by the selector.  Missing is equivalent to calling
@@ -177,8 +174,7 @@ $.extend(FuncUnit.prototype, {
 	then : function(callback){
 		var self = this;
 		FuncUnit.wait(0, function(){
-//			var el = S(this.selector, true)
-			callback.call(el, el);
+			callback.call(this, this);
 		});
 		return this;
 	}
