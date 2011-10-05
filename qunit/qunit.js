@@ -7,7 +7,7 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * or GPL (GPL-LICENSE.txt) licenses.
  */
-steal("jquery", function() {
+steal("funcunit/browser/resources/jquery.js", function() {
 var defined = {
 	setTimeout: typeof window.setTimeout !== "undefined",
 	sessionStorage: (function() {
@@ -958,7 +958,7 @@ function id(name) {
 // Test for equality any JavaScript type.
 // Discussions and reference: http://philrathe.com/articles/equiv
 // Test suites: http://philrathe.com/tests/equiv
-// Author: Philippe RathŽ <prathe@gmail.com>
+// Author: Philippe Rathï¿½ <prathe@gmail.com>
 QUnit.equiv = function () {
 
     var innerEquiv; // the real equiv function

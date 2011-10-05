@@ -1,4 +1,4 @@
-steal('jquery').then(function($){
+steal('funcunit/browser/resources/jquery.js').then(function($){
 
 (function($){
 	var getWindow = function( element ) {
