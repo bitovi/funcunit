@@ -1,4 +1,4 @@
-(function(){
+(function($){
 
 var confirms = [], 
 	prompts = [], 
@@ -357,4 +357,4 @@ $.extend(FuncUnit,{
 		}
 	})
 	
-})()
+})(window.jQuery || window.FuncUnit.jQuery)

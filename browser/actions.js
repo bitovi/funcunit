@@ -1,5 +1,4 @@
-
-(function(){
+(function($){
 	/**
 	 * @add FuncUnit
 	 */
@@ -281,4 +280,4 @@
 			return this;
 		}
 	})
-})()
+})(window.jQuery || window.FuncUnit.jQuery)

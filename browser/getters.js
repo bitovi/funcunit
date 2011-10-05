@@ -1,4 +1,4 @@
-(function(){
+(function($){
 	
 	/**
 	 * @add FuncUnit
@@ -399,7 +399,10 @@
 						if(fname === "size"){
 							// keep getting new collection because the page might be updating, we need to keep re-checking
 							// pass false so it will only do one synchronous request
-							this.bind = S(this.selector, frame, true)
+							this.bind = S(this.selector, {
+								frame: frame, 
+								forceSync: true
+							})
 						}
 						if(!printed){
 							printed = true;
@@ -410,7 +413,10 @@
 						if(argIndex > 0){
 							methodArgs.push(args[3]);
 						}
+						// lazy flag to ignore the getter error below
+						FuncUnit._ignoreGetterError = true;
 						var ret = this.bind[fname].apply(this.bind, methodArgs)
+						FuncUnit._ignoreGetterError = false;
 						return tester.call(this.bind, ret);
 					},
 					callback : callback,
@@ -422,8 +428,8 @@
 				return this;
 			}else{
 				// throw a warning if user tries to use a getter after the start of the test (if there are other async methods)
-				if(!FuncUnit._incallback && FuncUnit._haveAsyncQueries()){
-					throw "You can't run getters outside callbacks and after actions and waits. Please put your getters in a callback or at the beginning of the test."
+				if(!FuncUnit._ignoreGetterError && !FuncUnit._incallback && FuncUnit._haveAsyncQueries()){
+					console && console.error("You can't run getters outside callbacks and after actions and waits. Please put your getters in a callback or at the beginning of the test.")
 				}
 				// just call the original jQ method
 				var methodArgs = [];
@@ -438,4 +444,4 @@
 	for (var prop in FuncUnit.funcs) {
 		FuncUnit.makeFunc(prop, FuncUnit.funcs[prop]);
 	}
-})()
+})(window.jQuery || window.FuncUnit.jQuery)

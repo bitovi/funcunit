@@ -1,4 +1,4 @@
-(function(){
+(function($){
 /**
  * @add FuncUnit
  */
@@ -180,4 +180,4 @@ $.extend(FuncUnit.prototype, {
 	}
 })
 
-})()
+})(window.jQuery || window.FuncUnit.jQuery)

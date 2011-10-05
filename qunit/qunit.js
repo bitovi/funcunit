@@ -740,7 +740,9 @@ QUnit.load = function(){
 	process()
 };
 
-$(document).ready(function(){
+var jQ = $ || FuncUnit.jQuery;
+
+jQ(document).ready(function(){
 	QUnit.load();
 })
 
