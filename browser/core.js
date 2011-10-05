@@ -215,7 +215,12 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 				context = FuncUnit._window;
 			}
 			else if (typeof context == "number" || typeof context == "string") {
-				context = FuncUnit._window.frames[context].document;
+				var frame = FuncUnit._window.frames[context];
+				if(frame){
+					context = frame.document;
+				} else {
+					context = FuncUnit._window.document;
+				}
 			} else {
 				context = FuncUnit._window.document;
 			}
@@ -233,6 +238,10 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 		performAsyncQuery = function(selector, context, self){
 			FuncUnit.add({
 				method: function(success, error){
+					if (FuncUnit._window) {
+						context = getContext(context);
+						selector = getSelector(selector);
+					}
 					this.selector = selector;
 					context = getContext(context);
 					selector = getSelector(selector);
@@ -245,21 +254,29 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 			});
 		},
 		performSyncQuery = function(selector, context, self){
+			if (FuncUnit._window) {
+				context = getContext(context);
+				selector = getSelector(selector);
+			}
 			return init.call(self, selector, context);
 		}
 	
 	// override the subbed init method
-	FuncUnit.fn.init = function(selector, context){
+	FuncUnit.fn.init = function(selector, context, forceSync){
 		// if you pass true as context, this will avoid doing a synchronous query
-		var isSyncOnly = false,
+		var frame, 
+			isSyncOnly = false,
 			isAsyncOnly = false;
+		if (typeof context == "number" || typeof context == "string") {
+			frame = context;
+		}
 		if (!FuncUnit._needSyncQuery()) { // if there's something in the queue, only perform asynchronous query
 			isAsyncOnly = true;
 		}
 		if (FuncUnit._incallback === true) { // if you're in a callback, only do the synchronous query
 			isSyncOnly = true;
 		}
-		isSyncOnly = (context === true || context === false)? context: isSyncOnly;
+		isSyncOnly = (forceSync === true || forceSync === false)? forceSync: isSyncOnly;
 		// if its a function, just run it in the queue
 		if(typeof selector == "function"){
 			return FuncUnit.wait(0, selector);
@@ -267,20 +284,20 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 		// if its a string or targets the app window
 		if (typeof selector === "string" || selector == FuncUnit.window.document || selector == FuncUnit.window) {
 			// if the app window already exists, adjust the params (for the sync return value)
-			if (FuncUnit._window) {
-				context = getContext(context);
-				selector = getSelector(selector);
-			}
 			this.selector = selector;
 			// run this method in the queue also
 			if(isSyncOnly === true){
-				return performSyncQuery(selector, context, this)
+				var collection = performSyncQuery(selector, context, this);
+				collection.frame = frame;
+				return collection;
 			} else if(isAsyncOnly === true){
-				performAsyncQuery(selector, context, this)
+				performAsyncQuery(selector, context, this);
 				return this;
 			} else { // do both
-				performAsyncQuery(selector, context, this)
-				return performSyncQuery(selector, context, this)
+				performAsyncQuery(selector, context, this);
+				var collection = performSyncQuery(selector, context, this);
+				collection.frame = frame;
+				return collection;
 			}
 		} else {
 			return performSyncQuery(selector, context, this)

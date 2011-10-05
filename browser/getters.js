@@ -368,7 +368,6 @@
 				callback;
 			
 			args.unshift(this.selector,this.context,fname)
-	
 			if(isWait){
 				//get the args greater and equal to argIndex
 				var tester = args[argIndex+3],
@@ -376,7 +375,8 @@
 					callback = args[argIndex+5],
 					testVal = tester,
 					errorMessage = "waiting for "+fname +" on " + this.selector, 
-					printed = false;
+					printed = false, 
+					frame = this.frame;
 				
 				if(typeof timeout == 'function'){
 					callback = timeout;
@@ -397,7 +397,7 @@
 					method : function(){
 						// keep getting new collection because the page might be updating, we need to keep re-checking
 						// pass false so it will only do one synchronous request
-						this.bind = S(this.selector, true)
+						this.bind = S(this.selector, frame, true)
 						if(!printed){
 							printed = true;
 							steal.dev.log("Checking "+fname+" on "+this.selector)
