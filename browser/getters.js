@@ -374,8 +374,7 @@
 					timeout = args[argIndex+4],
 					callback = args[argIndex+5],
 					testVal = tester,
-					errorMessage = "waiting for "+fname +" on " + this.selector, 
-					printed = false, 
+					errorMessage = "waiting for "+fname +" on " + this.selector,
 					frame = this.frame;
 				
 				if(typeof timeout == 'function'){
@@ -394,7 +393,7 @@
 					}
 				}
 				FuncUnit.repeat({
-					method : function(){
+					method : function(print){
 						// only need to perform this check for .exists, .invisible, etc
 						if(fname === "size"){
 							// keep getting new collection because the page might be updating, we need to keep re-checking
@@ -404,10 +403,7 @@
 								forceSync: true
 							})
 						}
-						if(!printed){
-							printed = true;
-							steal.dev.log("Checking "+fname+" on "+this.selector)
-						}
+						print("Checking "+fname+" on "+this.selector)
 						var methodArgs = [];
 						// might need an argument
 						if(argIndex > 0){

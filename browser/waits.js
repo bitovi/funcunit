@@ -34,6 +34,48 @@ wait = function(time, callback){
 	return this;
 }
 
+FuncUnit.
+/**
+Uses 2 checker methods to see which success function to call.  This is a way to conditionally 
+run one method if you're unsure about the conditions of your page, without causing a test 
+failure.  For example, this is useful for login steps, if you're not sure whether the app 
+is logged in.
+
+    S.branch(function(){
+    	return (S("#exists").size() > 0);
+    }, function(){
+    	ok(true, "found exists")
+    }, function(){
+    	return (S("#notexists").size() > 0);
+    }, function(){
+    	ok(false, "found notexists")
+    });
+    
+@param check1 {Function} a checker function that, if it returns true, causes success1 to be called
+@param success1 {Function} a function that runs when check1 returns true
+@param check2 {Function} a checker function that, if it returns true, causes success2 to be called
+@param success2 {Function} a function that runs when check2 returns true 
+@param timeout {Number} if neither checker returns true before this timeout, the test fails
+ */
+branch = function(check1, success1, check2, success2, timeout){
+	FuncUnit.repeat({
+		method : function(print){
+			print("Running a branch statement")
+			if(check1()){
+				success1();
+				return true;
+			}
+			if(check2()){
+				success2();
+				return true;
+			}
+		},
+		error : "no branch condition was ever true",
+		timeout : timeout,
+		type: "branch"
+	})
+}
+
 /**
  * @function repeat
  * Takes a function that will be called over and over until it is successful.
@@ -55,10 +97,17 @@ FuncUnit.repeat = function(options){
 		method : function(success, error){
 			options.bind = this.bind;
 			options.selector = this.selector;
+			var printed = false,
+				print = function(msg){
+					if(!printed){
+						steal.dev.log(msg);
+						printed = true;
+					}
+				}
 			interval = setTimeout(function(){
 				var result = null;
 				try {
-					result = options.method()
+					result = options.method(print)
 				} 
 				catch (e) {
 					//should we throw this too error?

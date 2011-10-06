@@ -113,3 +113,28 @@ test("then", function(){
 		equals(this.length, 1, "this is correct")
 	});
 })
+
+
+test("branch", function(){
+	S.branch(function(){
+		return (S("#exists").size() > 0);
+	}, function(){
+		ok(true, "found exists")
+	}, function(){
+		return (S("#notexists").size() > 0);
+	}, function(){
+		ok(false, "found notexists")
+	});
+	
+	
+	S.branch(function(){
+		return (S("#notexists").size() > 0);
+	}, function(){
+		ok(false, "found notexists")
+	}, function(){
+		return (S("#exists").size() > 0);
+	}, function(){
+		ok(true, "found exists")
+	});
+	
+})

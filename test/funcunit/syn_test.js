@@ -17,7 +17,6 @@ test("Nested actions", function(){
 	S.open("//funcunit/test/myapp.html", null, 10000);
 	
 	S("#typehere").exists(function(){
-		console.log('here')
 		this.type("javascriptmvc", function(){
 			equals(S("#seewhatyoutyped").text(), "typed javascriptmvc","typing");
 		})
