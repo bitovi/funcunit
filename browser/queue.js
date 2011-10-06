@@ -6,10 +6,9 @@
 	 * True when we are in a callback function (something we pass to a FuncUnit plugin).
 	 */
 	FuncUnit._incallback = false;
-	//the queue of commands waiting to be run
-	var queue = [], 
-		//where we should add things in a callback
-		currentPosition = 0;
+	//where we should add things in a callback
+	var currentPosition = 0,
+		startedQueue = false;
 		
 		
 	/**
@@ -20,7 +19,7 @@
 	 * A queue of methods.  Each method in the queue are run in order.  After the method is complete, it 
 	 * calls FuncUnit._done, which pops the next method off the queue and runs it.
 	 */
-	FuncUnit._queue = queue;
+	FuncUnit._queue = [];
 	/**
 	 * @hide
 	 * Logic that determines if this next query needs to be sync, or if we can optimize it.
@@ -68,24 +67,18 @@
 	add = function(handler){
 		//if we are in a callback, add to the current position
 		if (FuncUnit._incallback) {
-			if(handler.type === "action" || handler.type === "wait"){
-				throw "You can't put "+handler.type+"s inside a callback because they're asynchronous.  Add this method outside the callback."
-			}
-			// Removing this so we can safely perform every query immediately and not queue it in the cbs
-			// This means doing asynchronous stuff in callbacks isn't supported anymore.  I don't know any places this is a problem, 
-			// but if it is, we can add this back
-//			queue.splice(currentPosition,0,handler)
-//			currentPosition++;
+			FuncUnit._queue.splice(currentPosition, 0, handler);
+			currentPosition++;
 		}
 		else {
 			//add to the end
-			queue.push(handler);
+			FuncUnit._queue.push(handler);
 		}
 		//if our queue has just started, stop qunit
 		//call done to call the next command
-        if (queue.length == 1 && ! FuncUnit._incallback) {
+        if (FuncUnit._queue.length == 1 && ! FuncUnit._incallback) {
 			stop();
-            setTimeout(FuncUnit._done, 13)
+    		setTimeout(FuncUnit._done, 13)
         }
 	}
 	var currentEl;
@@ -102,8 +95,8 @@
 		if(FuncUnit.speed == "slow"){
 			speed = 500;
 		}
-		if (queue.length > 0) {
-			next = queue.shift();
+		if (FuncUnit._queue.length > 0) {
+			next = FuncUnit._queue.shift();
 			currentPosition = 0;
 			// set a timer that will error
 			

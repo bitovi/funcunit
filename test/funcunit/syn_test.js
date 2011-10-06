@@ -8,18 +8,23 @@ test("Type and slow Click", function(){
 		equals(S("#seewhatyoutyped").text(), "typed javascriptmvc","typing");
 	})
 	
-
-	
-	//click is going to run slow, to make sure we don't continue
-	//until after it is done.
 	S("#copy").click(function(){
 		equals(S("#seewhatyoutyped").text(), "copied javascriptmvc","copy");
 	});
-	
+})
 
-	//S("#typehere").offset(function(offset){
-	//	ok(offset.top,"has values")
-	//})
+test("Nested actions", function(){
+	S.open("//funcunit/test/myapp.html", null, 10000);
+	
+	S("#typehere").exists(function(){
+		console.log('here')
+		this.type("javascriptmvc", function(){
+			equals(S("#seewhatyoutyped").text(), "typed javascriptmvc","typing");
+		})
+		S("#copy").click(function(){
+			equals(S("#seewhatyoutyped").text(), "copied javascriptmvc","copy");
+		});
+	})
 })
 
 test("Move To", function(){

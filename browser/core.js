@@ -273,20 +273,12 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 		if(typeof context === "string"){
 			frame = context;
 		}
-		if(context && context.frame){
-			if(typeof context.forceSync === "boolean"){
-				forceSync = context.forceSync;	
-			}
+		if(context && typeof context.forceSync === "boolean"){
+			forceSync = context.forceSync;	
 			if (typeof context.frame == "number" || typeof context.frame == "string") {
 				frame = context.frame;
 				context = context.frame;
 			}
-		}
-		if (!FuncUnit._needSyncQuery()) { // if there's something in the queue, only perform asynchronous query
-			isAsyncOnly = true;
-		}
-		if (FuncUnit._incallback === true) { // if you're in a callback, only do the synchronous query
-			isSyncOnly = true;
 		}
 		isSyncOnly = typeof forceSync === "boolean"? forceSync: isSyncOnly;
 		// if its a function, just run it in the queue
