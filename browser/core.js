@@ -4,10 +4,10 @@
 	var oldFunc = window.FuncUnit;
 
 /**
- * @class FuncUnit
- * @parent index 2
- * @test test.html
- * @download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-5.zip
+@class FuncUnit
+@parent index 2
+@test test.html
+@download http://github.com/downloads/jupiterjs/funcunit/funcunit-beta-5.zip
 
 FuncUnit tests web applications with a simple jQuery-like syntax. Via integration with 
 [funcunit.selenium Selenium] and [funcunit.phantomjs PhantomJS], you can run the same tests automated.
@@ -35,57 +35,47 @@ __Module__
 
 [http://docs.jquery.com/QUnit/module#namelifecycle Modules] are groups of tests with setup and teardown methods that run for each test.
 
-@codestart
-module("Contacts", {
-  // runs before each test
-  setup: function(){
-    // setup code
-  },
-  // runs after each test
-  teardown: function(){
-    // cleanup code
-  }
-})
-@codeend
+    module("Contacts", {
+      // runs before each test
+      setup: function(){
+        // setup code
+      },
+      // runs after each test
+      teardown: function(){
+        // cleanup code
+      }
+    })
 
 __Test__
 
-@codestart
-test("findOne", function(){
-  // define a test
-})
-@codeend
+    test("findOne", function(){
+      // define a test
+    })
 
 __Assertions__
 
-@codestart
-test("counter", function() {
-  ok(Conctacts.first().name, "there is a name property");
-  equal(Contacts.counter(), 5, "there are 5 contacts");
-});
-@codeend
+    test("counter", function() {
+      ok(Conctacts.first().name, "there is a name property");
+      equal(Contacts.counter(), 5, "there are 5 contacts");
+    });
 
 ## Open a page
 
 The following uses <code>S.open( URL )</code> to open autocomplete.html before every test.
 
-@codestart
-module("autosuggest",{
-  setup: function() {
-    S.open('autosuggest.html')
-  }
-});
-@codeend
+    module("autosuggest",{
+      setup: function() {
+        S.open('autosuggest.html')
+      }
+    });
 
 ## Query for elements
 
 FuncUnit tests are written just like jQuery.  The [funcunit.finding S method] is a copy of jQuery, which queries for elements in 
 the application page.  Like $, FuncUnit methods are chainable on the results of S.
 
-@codestart
-// grab the #description element, wait for it to be visible, type in it
-S("#description").visible().type("Test Framework")
-@codeend
+    // grab the #description element, wait for it to be visible, type in it
+    S("#description").visible().type("Test Framework")
 
 ## Simulate user actions
 
@@ -95,24 +85,18 @@ level actions like [click] and [type].  The following shows how to simulate comm
 
 __Click__
 
-@codestart
-// click a button
-S('#submit_button').click()
-@codeend
+    // click a button
+    S('#submit_button').click()
 
 __Type__
 
-@codestart
-// type in an input
-S('#task_name').type("Learn FuncUnit")
-@codeend
+    // type in an input
+    S('#task_name').type("Learn FuncUnit")
 
 __Drag__
 
-@codestart
-// drag a task item to the trash area
-S('.task').drag(".trash");
-@codeend
+    // drag a task item to the trash area
+    S('.task').drag(".trash");
 
 ## Wait for page conditions
 
@@ -122,38 +106,28 @@ Wait commands are used to wait for some page condition before continuing.
 Waits are overloaded jQuery getter methods.  <code>S.fn.text( textVal, callback )</code> 
 waits for an element's $.fn.text to match the textVal.
 
-@codestart
-// wait for result to show "task complete"
-S("#result").text("task complete")
-@codeend
+    // wait for result to show "task complete"
+    S("#result").text("task complete")
 
 __Visible__
 
-@codestart
-// wait for first result to be visible
-S('#autocomplete_results:first-child').visible()
-@codeend
+    // wait for first result to be visible
+    S('#autocomplete_results:first-child').visible()
 
 __Width__
 
-@codestart
-// after clicking a menu item, wait for its width to be 200px
-S('#horizontal_menu_item').width(200)
-@codeend
+    // after clicking a menu item, wait for its width to be 200px
+    S('#horizontal_menu_item').width(200)
 
 __Val__
 
-@codestart
-// wait for the input value
-S('#language_input').val("JavaScript")
-@codeend
+    // wait for the input value
+    S('#language_input').val("JavaScript")
 
 __Size__
 
-@codestart
-// wait for number of matched elements
-S('.contact').size(5)
-@codeend
+    // wait for number of matched elements
+    S('.contact').size(5)
 
 There are many more [funcunit.waits waits] possible. 
 
@@ -165,27 +139,23 @@ about an element and run assertions.  You can use jQuery getter methods in combi
 
 These methods (which return synchronous results) are used in callbacks that run after a wait method completes.
 
-@codestart
-// wait until we have some results, then call the calback
-S('.autocomplete_item').visible(function(){
-  equal( S('.autocomplete_item').size(), 5, "there are 5 results")
-})
-@codeend
+    // wait until we have some results, then call the calback
+    S('.autocomplete_item').visible(function(){
+      equal( S('.autocomplete_item').size(), 5, "there are 5 results")
+    })
 
 ## Running in browser
 
 These tests can be loaded in any browser.  The app page opens in a separate window and results show up in the QUnit page.
 
-@codestart
-test("JavaScript results",function(){
-  S('input').click().type("JavaScript")
-
-  // wait until we have some results
-  S('.autocomplete_item').visible(function(){
-    equal( S('.autocomplete_item').size(), 5, "there are 5 results")
-  })
-});
-@codeend
+    test("JavaScript results",function(){
+      S('input').click().type("JavaScript")
+    
+      // wait until we have some results
+      S('.autocomplete_item').visible(function(){
+        equal( S('.autocomplete_item').size(), 5, "there are 5 results")
+      })
+    });
 
 <a href='funcunit/test/autosuggest/funcunit.html'>Run this test</a> (turn off your popup blocker!)
 
@@ -196,9 +166,7 @@ The same tests can be run via browser automation tools: [funcunit.selenium Selen
 
 These tools are driven via commandline.
 
-@codestart
-js funcunit/run phantomjs path/to/funcunit.html
-@codeend
+    js funcunit/run phantomjs path/to/funcunit.html
 
 Results are reported on the commandline.  Failed tests can be made to fail your build via [funcunit.maven Maven] 
 or integrated with CI tools like [funcunit.jenkins Jenkins].
