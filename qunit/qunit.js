@@ -7,7 +7,7 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * or GPL (GPL-LICENSE.txt) licenses.
  */
-steal("funcunit/browser/resources/jquery.js", function() {
+steal(function() {
 var defined = {
 	setTimeout: typeof window.setTimeout !== "undefined",
 	sessionStorage: (function() {
@@ -740,9 +740,7 @@ QUnit.load = function(){
 	process()
 };
 
-var jQ = $ || FuncUnit.jQuery;
-
-jQ(document).ready(function(){
+steal.bind("end", function(){
 	QUnit.load();
 })
 
