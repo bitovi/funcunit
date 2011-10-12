@@ -173,65 +173,12 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 
  */
 	FuncUnit = jQuery.sub();
-	var init = FuncUnit.fn.init;
-	
-	var getContext = function(context){
-			if (context == FuncUnit.window.document) {
-				context = FuncUnit._window.document
-			}
-			else if (context === FuncUnit.window) {
-				context = FuncUnit._window;
-			}
-			else if (typeof context == "number" || typeof context == "string") {
-				var frame = FuncUnit._window.frames[context];
-				if(frame){
-					context = frame.document;
-				} else {
-					context = FuncUnit._window.document;
-				}
-			} else {
-				context = FuncUnit._window.document;
-			}
-			return context;
-		}, 
-		getSelector = function(selector){
-			if (selector == FuncUnit.window.document) {
-				selector = FuncUnit._window.document
-			}
-			else if (selector === FuncUnit.window) {
-				selector = FuncUnit._window;
-			}
-			return selector;
-		},
-		performAsyncQuery = function(selector, context, self){
-			FuncUnit.add({
-				method: function(success, error){
-					if (FuncUnit._window) {
-						context = getContext(context);
-						selector = getSelector(selector);
-					}
-					this.selector = selector;
-					this.bind = init.call(self, selector, context);
-					success();
-					return this;
-				},
-				error: "selector failed: " + selector,
-				type: "query"
-			});
-		},
-		performSyncQuery = function(selector, context, self){
-			if (FuncUnit._window) {
-				context = getContext(context);
-				selector = getSelector(selector);
-			}
-			return init.call(self, selector, context);
-		}
-	
+	var origFuncUnit = FuncUnit;
 	// override the subbed init method
 	// context can be an object with frame and forceSync:
 	// - a number or string: this is a frame name/number, and means only do a sync query
 	// - true: means force the query to be sync only
-	FuncUnit.fn.init = function(selector, context){
+	FuncUnit = function( selector, context ) {
 		// if you pass true as context, this will avoid doing a synchronous query
 		var frame,
 			forceSync, 
@@ -253,31 +200,61 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 		if(typeof selector == "function"){
 			return FuncUnit.wait(0, selector);
 		}
-		// if its a string or targets the app window
-		if (typeof selector === "string" || selector == FuncUnit.window.document || selector == FuncUnit.window) {
-			// if the app window already exists, adjust the params (for the sync return value)
-			this.selector = selector;
-			// run this method in the queue also
-			if(isSyncOnly === true){
-				var collection = performSyncQuery(selector, context, this);
-				collection.frame = frame;
-				return collection;
-			} else if(isAsyncOnly === true){
-				performAsyncQuery(selector, context, this);
-				return this;
-			} else { // do both
-				performAsyncQuery(selector, context, this);
-				var collection = performSyncQuery(selector, context, this);
-				collection.frame = frame;
-				return collection;
-			}
-		} else {
-			return performSyncQuery(selector, context, this)
+		// if the app window already exists, adjust the params (for the sync return value)
+		this.selector = selector;
+		// run this method in the queue also
+		if(isSyncOnly === true){
+			var collection = performSyncQuery(selector, context, this);
+			collection.frame = frame;
+			return collection;
+		} else if(isAsyncOnly === true){
+			performAsyncQuery(selector, context, this);
+			return this;
+		} else { // do both
+			performAsyncQuery(selector, context, this);
+			var collection = performSyncQuery(selector, context, this);
+			collection.frame = frame;
+			return collection;
 		}
 	}
-	FuncUnit.fn.init.prototype = FuncUnit.fn;
-	window.jQuery.extend(FuncUnit,oldFunc)
 	
+	var getContext = function(context){
+			if (typeof context == "number" || typeof context == "string") {
+				var frame = FuncUnit.win.frames[context];
+				if(frame){
+					context = frame.document;
+				} else {
+					context = FuncUnit.win.document;
+				}
+			} else {
+				context = FuncUnit.win.document;
+			}
+			return context;
+		},
+		performAsyncQuery = function(selector, context, self){
+			FuncUnit.add({
+				method: function(success, error){
+					if (FuncUnit.win) {
+						context = getContext(context);
+					}
+					this.selector = selector;
+					this.bind = new origFuncUnit.fn.init( selector, context, true );
+					success();
+					return this;
+				},
+				error: "selector failed: " + selector,
+				type: "query"
+			});
+		},
+		performSyncQuery = function(selector, context, self){
+			if (FuncUnit.win) {
+				context = getContext(context);
+			}
+			return new origFuncUnit.fn.init( selector, context, true );
+		}
+	
+	window.jQuery.extend(FuncUnit, oldFunc, origFuncUnit)
+	FuncUnit.prototype = origFuncUnit.prototype;
 	FuncUnit.jQuery = jQuery.noConflict(true);
 	S = FuncUnit;
 	

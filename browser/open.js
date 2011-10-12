@@ -12,6 +12,7 @@ $.extend(FuncUnit,{
 	 * Used to configure the browsers selenium uses to run FuncUnit tests.  See the 
 	 * [funcunit.selenium Selenium] page for more information.
 	 */
+	
 	// href comes from settings
 	/**
 	 * @attribute href
@@ -124,8 +125,8 @@ $.extend(FuncUnit,{
 		FuncUnit.frame =  $('#funcunit_app').length? $('#funcunit_app')[0]: null;
 	
 		var checkReload = function(url){
-			if(FuncUnit._window.location.pathname === url ||
-				FuncUnit._window.href === url){
+			if(FuncUnit.win.location.pathname === url ||
+				FuncUnit.win.href === url){
 				return true;
 			}
 			return false;
@@ -133,21 +134,21 @@ $.extend(FuncUnit,{
 		// if the first time ..
 		if (newPage) {
 			if(FuncUnit.frame){
-				FuncUnit._window = FuncUnit.frame.contentWindow;
+				FuncUnit.win = FuncUnit.frame.contentWindow;
 				reloading = checkReload(url);
-				FuncUnit._window.location = url;
+				FuncUnit.win.location = url;
 			}
 			else{
 				// giving a large height forces it to not open in a new tab and just opens to the window's height
 				var width = $(window).width();
-				FuncUnit._window = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
-				currentDocument = FuncUnit._window.document;
+				FuncUnit.win = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
+				currentDocument = FuncUnit.win.document;
 			}
 		}
 		// otherwise, change the frame's url
 		else {
 			reloading = checkReload(url);
-			FuncUnit._window.location = url;
+			FuncUnit.win.location = url;
 		}
 	},
 	/**
@@ -174,35 +175,35 @@ $.extend(FuncUnit,{
 	},
 	_opened: function(){
 		if (!this._isOverridden("alert")) {
-			FuncUnit._window.alert = function(){}
+			FuncUnit.win.alert = function(){}
 		}
 		
 		if (!this._isOverridden("confirm")) {
-			FuncUnit._window.confirm = function(){
+			FuncUnit.win.confirm = function(){
 				var res = confirms.shift();
 				return res;
 			}
 		}
 		
 		if (!this._isOverridden("prompt")) {
-			FuncUnit._window.prompt = function(){
+			FuncUnit.win.prompt = function(){
 				return prompts.shift();
 			}
 		}
 	},
 	_isOverridden:function(type) {
-		return !(/native code/.test(FuncUnit._window[type]));
+		return !(/native code/.test(FuncUnit.win[type]));
 	},
 	_onload: function(success, error){
 		// saver reference to success
 		loadSuccess = function(){
-			if(FuncUnit._window.steal){
+			if(FuncUnit.win.steal){
 				hasSteal = true;
 			}
 			// called when load happens ... here we check for steal
-			// console.log("success", (FuncUnit._window.steal && FuncUnit._window.steal.isReady) || !hasSteal, 
-				// "isReady", (FuncUnit._window.steal && FuncUnit._window.steal.isReady));
-			if((FuncUnit._window.steal && FuncUnit._window.steal.isReady) || !hasSteal){
+			// console.log("success", (FuncUnit.win.steal && FuncUnit.win.steal.isReady) || !hasSteal, 
+				// "isReady", (FuncUnit.win.steal && FuncUnit.win.steal.isReady));
+			if((FuncUnit.win.steal && FuncUnit.win.steal.isReady) || !hasSteal){
 				success();
 			}else{
 				setTimeout(arguments.callee, 200)
@@ -249,7 +250,7 @@ $.extend(FuncUnit,{
 		return fullPath;
 	},
 	/**
-	 * @attribute window
+	 * @attribute win
 	 * Use this to refer to the window of the application page.  You can also 
 	 * reference window.document.
 	 * @codestart
@@ -258,9 +259,7 @@ $.extend(FuncUnit,{
 	 * })
 	 * @codeend
 	 */
-	window: {
-		document: {}
-	},
+	win: null,
 	// for feature detection
 	support: {
 		readystate: "readyState" in document
@@ -271,7 +270,7 @@ $.extend(FuncUnit,{
 	 * @return {Object} the result of the evaluated code
 	 */
 	eval: function(str){
-		return FuncUnit._window.eval(str)
+		return FuncUnit.win.eval(str)
 	}
 });
 
@@ -281,7 +280,7 @@ $.extend(FuncUnit,{
 	}
 	
 	
-	FuncUnit._window = null;
+	FuncUnit.win = null;
 	var newPage = true, 
 		changing, 
 		reloading = false,
@@ -290,16 +289,16 @@ $.extend(FuncUnit,{
 		loadSuccess, 
 		firstLoad = true,
 		onload = function(){
-			FuncUnit._window.document.documentElement.tabIndex = 0;
+			FuncUnit.win.document.documentElement.tabIndex = 0;
 			setTimeout(function(){
-				FuncUnit._window.focus();
+				FuncUnit.win.focus();
 				var ls = loadSuccess
 				loadSuccess = null;
 				if (ls) {
 					ls();
 				}
 			}, 0);
-			Syn.unbind(FuncUnit._window, "load", onload);
+			Syn.unbind(FuncUnit.win, "load", onload);
 		},
 		onunload = function(){
 			FuncUnit.stop = true;
@@ -308,36 +307,36 @@ $.extend(FuncUnit,{
 			
 		},
 		removeListeners = function(){
-			Syn.unbind(FuncUnit._window, "unload", onunload);
-			Syn.unbind(FuncUnit._window, "load", onload);
+			Syn.unbind(FuncUnit.win, "unload", onunload);
+			Syn.unbind(FuncUnit.win, "load", onload);
 		}
 	unloadLoader = function(){
 		if(!firstLoad) // dont remove the first run, fixes issue in FF 3.6
 			removeListeners();
 		
-		Syn.bind(FuncUnit._window, "load", onload);
+		Syn.bind(FuncUnit.win, "load", onload);
 		
 		//listen for unload to re-attach
-		Syn.bind(FuncUnit._window, "unload", onunload)
+		Syn.bind(FuncUnit.win, "unload", onunload)
 	}
 	
 	//check for window location change, documentChange, then readyState complete -> fire load if you have one
 	var newDocument = false, poller = function(){
 		var ls;
-		if(FuncUnit._window.document  == null){
+		if(FuncUnit.win.document  == null){
 			return
 		}
 		
-		if (FuncUnit._window.document !== currentDocument || newDocument) { //we have a new document
-			currentDocument = FuncUnit._window.document;
+		if (FuncUnit.win.document !== currentDocument || newDocument) { //we have a new document
+			currentDocument = FuncUnit.win.document;
             newDocument = true;
-			if (FuncUnit._window.document.readyState === "complete" && FuncUnit._window.location.href!="about:blank" && !reloading) {
+			if (FuncUnit.win.document.readyState === "complete" && FuncUnit.win.location.href!="about:blank" && !reloading) {
 				ls = loadSuccess;
 				
 				loadSuccess = null;
 				if (ls) {
-					FuncUnit._window.focus();
-					FuncUnit._window.document.documentElement.tabIndex = 0;
+					FuncUnit.win.focus();
+					FuncUnit.win.document.documentElement.tabIndex = 0;
 					
 					ls();
 				}
@@ -351,9 +350,9 @@ $.extend(FuncUnit,{
 
 	$(window).unload(function(){
 		// helps with page reloads
-		if (FuncUnit._window && FuncUnit._window.steal){
-			delete FuncUnit._window.steal.isReady;
-			delete FuncUnit._window.document.readyState
+		if (FuncUnit.win && FuncUnit.win.steal){
+			delete FuncUnit.win.steal.isReady;
+			delete FuncUnit.win.document.readyState
 		}
 	})
 	

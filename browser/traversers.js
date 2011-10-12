@@ -97,7 +97,7 @@ var traversers = [
 		FuncUnit.prototype[name] = function(selector){
 			var args = arguments;
 			// find is called (with "this" as document) from FuncUnit.fn.init, so in this case don't queue it up, just run the regular find
-			if (FuncUnit._window && this[0] !== FuncUnit._window.document) {
+			if (FuncUnit.win && this[0] !== FuncUnit.win.document) {
 				FuncUnit.add({
 					method: function(success, error){
 						// adjust the collection by using the real traverser method

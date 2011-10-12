@@ -136,7 +136,7 @@
 				method : function(success, error){
 					steal.dev.log("Triggering "+evName+" on "+this.bind.selector)
 					// need to use the page's jquery to trigger events
-					FuncUnit._window.jQuery(this.bind.selector).trigger(evName)
+					FuncUnit.win.jQuery(this.bind.selector).trigger(evName)
 					success()
 				},
 				error : "Could not trigger " + evName,
