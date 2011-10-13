@@ -10,21 +10,23 @@ feasible to integrate FuncUnit tests into your build process without significant
 Before you can use PhantomJS, you have to install it. The other automation tools come prepackaged in 
 JMVC, but Phantom is too large of a download.
 
-On Mac
+__On Mac__
 
-1. Download [http://phantomjs.googlecode.com/files/phantomjs-1.2.0-macosx-universal.dmg phantomjs-1.2.0]
-1. Unzip it somewhere like /Applications/ 
+1. Download [http://code.google.com/p/phantomjs/downloads/list PhantomJS]
+1. Unzip it somewhere like: _/Applications/_
 1. Add it to your path:
 
 @codestart
-sudo ln -s /Applications/phantomjs.app/Contents/MacOS/phantomjs /usr/local/bin/
+sudo ln -s /Applications/phantomjs-1.3.0/bin/phantomjs /usr/local/bin/
 @codeend
 
-On Windows
+_Note: Not all systems will have /usr/local/bin/.  Some systems will have: /usr/bin/, /bin/, or usr/X11/bin instead._
 
-1. Download [http://phantomjs.googlecode.com/files/phantomjs-1.2.0-win32-static.zip phantomjs-1.2.0]
+__On Windows__
+
+1. Download [http://code.google.com/p/phantomjs/downloads/list PhantomJS]
 1. Install it
-1. Add it to your path
+1. Add it to your path.  For information on setting path variable in Windows, [http://www.java.com/en/download/help/path.xml click here].
 
 ## Use
 
