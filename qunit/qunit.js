@@ -750,7 +750,9 @@ if(/mode=commandline/.test(window.location.search) || window.jQuery){
 		})
 	})
 } else {
-	steal.bind("end", function(){
+	// on ready because that is when the window is loaded AND when 
+	// steal has finished
+	steal.bind("ready", function(){
 		QUnit.load();
 	})
 }
