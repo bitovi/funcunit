@@ -741,9 +741,13 @@ QUnit.load = function(){
 };
 
 // steal.browser needs to include jQuery to control startup with holdReady
-if(typeof jQuery !== "undefined"){
-	$(document).ready(function(){
-		QUnit.load();
+// in some cases jquery isn't ready by the time qunit runs
+// TODO remove jquery dependency for running funcunit with steal.browsers
+if(/mode=commandline/.test(window.location.search) || window.jQuery){
+	steal("jquery", function(){
+		$(document).ready(function(){
+			QUnit.load();
+		})
 	})
 } else {
 	steal.bind("end", function(){
