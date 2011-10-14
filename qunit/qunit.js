@@ -740,9 +740,17 @@ QUnit.load = function(){
 	process()
 };
 
-steal.bind("end", function(){
-	QUnit.load();
-})
+// steal.browser needs to include jQuery to control startup with holdReady
+if(typeof jQuery !== "undefined"){
+	$(document).ready(function(){
+		QUnit.load();
+	})
+} else {
+	steal.bind("end", function(){
+		QUnit.load();
+	})
+}
+
 
 function done() {
 	config.autorun = true;
