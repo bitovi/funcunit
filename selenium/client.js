@@ -1,4 +1,4 @@
-steal('jquery', function(){
+steal(function(){
 	steal.client = {};
 	steal.client.dataQueue = [];
 	steal.client.trigger = function(type, data){
@@ -7,4 +7,4 @@ steal('jquery', function(){
 			data: data
 		});
 	};
-}, 'steal/browser/client.js')
+})

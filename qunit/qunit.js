@@ -7,6 +7,7 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * or GPL (GPL-LICENSE.txt) licenses.
  */
+
 steal(function() {
 var defined = {
 	setTimeout: typeof window.setTimeout !== "undefined",
@@ -740,22 +741,11 @@ QUnit.load = function(){
 	process()
 };
 
-// steal.browser needs to include jQuery to control startup with holdReady
-// in some cases jquery isn't ready by the time qunit runs
-// TODO remove jquery dependency for running funcunit with steal.browsers
-if(/mode=commandline/.test(window.location.search) || window.jQuery){
-	steal("jquery", function(){
-		$(document).ready(function(){
-			QUnit.load();
-		})
-	})
-} else {
-	// on ready because that is when the window is loaded AND when 
-	// steal has finished
-	steal.bind("ready", function(){
-		QUnit.load();
-	})
-}
+// on ready because that is when the window is loaded AND when 
+// steal has finished
+steal.bind("ready", function(){
+	QUnit.load();
+})
 
 
 function done() {
@@ -1464,3 +1454,7 @@ QUnit.diff = (function() {
 })();
 
 })
+
+if(steal.options.browser){
+	steal('funcunit/browser/events.js');
+};
