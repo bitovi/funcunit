@@ -144,6 +144,10 @@ $.extend(FuncUnit,{
 				FuncUnit.win = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
 				// this fixes opera, but was added b/c of https://github.com/jupiterjs/funcunit/commit/9af55d7a7156fa3db0b916f372cc8156b67d8e7b
 				// currentDocument = FuncUnit.win.document;
+
+				if(!FuncUnit.win){
+					throw "Could not open a popup window.  Your popup blocker is probably on.  Please turn it off and try again";
+				}
 			}
 		}
 		// otherwise, change the frame's url
