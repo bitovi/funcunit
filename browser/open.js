@@ -142,6 +142,9 @@ $.extend(FuncUnit,{
 				// giving a large height forces it to not open in a new tab and just opens to the window's height
 				var width = $(window).width();
 				FuncUnit.win = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
+				if(!FuncUnit.win){
+					throw "Could not open a popup window.  Your popup blocker is probably on.  Please turn it off and try again";
+				}
 				currentDocument = FuncUnit.win.document;
 			}
 		}
