@@ -142,7 +142,8 @@ $.extend(FuncUnit,{
 				// giving a large height forces it to not open in a new tab and just opens to the window's height
 				var width = $(window).width();
 				FuncUnit.win = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
-				currentDocument = FuncUnit.win.document;
+				// this fixes opera, but was added b/c of https://github.com/jupiterjs/funcunit/commit/9af55d7a7156fa3db0b916f372cc8156b67d8e7b
+				// currentDocument = FuncUnit.win.document;
 			}
 		}
 		// otherwise, change the frame's url
