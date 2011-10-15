@@ -1,7 +1,9 @@
 steal(function(){
 
 	if(steal.options.browser === "phantomjs"){
-		$("<iframe></iframe>").attr("id", "funcunit_app").appendTo(document.body);
+		var ifrm = document.createElement("IFRAME"); 
+		ifrm.setAttribute("id", "funcunit_app");
+		document.body.appendChild(ifrm);
 	}
 
 	var evts = ['begin', 'testStart', 'testDone', 'moduleStart', 'moduleDone', 'done', 'log'], type;

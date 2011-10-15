@@ -6,14 +6,7 @@ steal('steal/browser/envjs', './utils.js', function(){
 			fireLoad: true
 		});
 		
-		FuncUnit.browser
-			.bind('clientloaded', function(){
-				this.injectJS('funcunit/browser/events.js')
-				this.evaluate(function(){
-					$.holdReady(false);
-				})
-			})
-			.bindEvents()
-			.open(FuncUnit.funcunitPage);
+		FuncUnit.bindEvents(FuncUnit.browser);
+		FuncUnit.browser.open(FuncUnit.funcunitPage);
 	}
 })
