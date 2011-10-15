@@ -2,7 +2,17 @@
 
 var confirms = [], 
 	prompts = [], 
-	currentDocument;
+	currentDocument,
+	lookingForNewDocument = false,
+	
+	// returns true if url matches current window's url
+	isCurrentPage = function(url){
+		if( FuncUnit.win.location.pathname === url ||
+			FuncUnit.win.href === url ){
+			return true;
+		}
+		return false;
+	};
 /**
  * @add FuncUnit
  */
@@ -119,32 +129,24 @@ $.extend(FuncUnit,{
 		});
 	},
 	_open: function(url){
-		changing = url;
 		hasSteal = false;
 		// this will determine if this is supposed to open within a frame
 		FuncUnit.frame =  $('#funcunit_app').length? $('#funcunit_app')[0]: null;
 	
-		var checkReload = function(url){
-			if(FuncUnit.win.location.pathname === url ||
-				FuncUnit.win.href === url){
-				return true;
-			}
-			return false;
-		}
+		
 		// if the first time ..
 		if (newPage) {
 			if(FuncUnit.frame){
 				FuncUnit.win = FuncUnit.frame.contentWindow;
-				reloading = checkReload(url);
 				FuncUnit.win.location = url;
 			}
 			else{
 				// giving a large height forces it to not open in a new tab and just opens to the window's height
 				var width = $(window).width();
+				//opera.postError("window.open")
 				FuncUnit.win = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
-				// this fixes opera, but was added b/c of https://github.com/jupiterjs/funcunit/commit/9af55d7a7156fa3db0b916f372cc8156b67d8e7b
-				// currentDocument = FuncUnit.win.document;
-
+				
+				
 				if(!FuncUnit.win){
 					throw "Could not open a popup window.  Your popup blocker is probably on.  Please turn it off and try again";
 				}
@@ -152,9 +154,16 @@ $.extend(FuncUnit,{
 		}
 		// otherwise, change the frame's url
 		else {
-			reloading = checkReload(url);
+			var reloading = isCurrentPage(url);
+			lookingForNewDocument = true;
 			FuncUnit.win.location = url;
+			if(reloading){
+				FuncUnit.win.location.reload();
+			}
+			// setting to null b/c opera uses the same document
+			currentDocument = null;
 		}
+		lookingForNewDocument = true;
 	},
 	/**
 	 * When a browser's native confirm dialog is used, this method is used to repress the dialog and simulate 
@@ -287,8 +296,6 @@ $.extend(FuncUnit,{
 	
 	FuncUnit.win = null;
 	var newPage = true, 
-		changing, 
-		reloading = false,
 		hasSteal = false,
 		unloadLoader, 
 		loadSuccess, 
@@ -326,39 +333,62 @@ $.extend(FuncUnit,{
 	}
 	
 	//check for window location change, documentChange, then readyState complete -> fire load if you have one
-	var newDocument = false, poller = function(){
-		var ls;
-		if(FuncUnit.win.document  == null){
-			return
-		}
+	var newDocument = false, 
+		poller = function(){
+			var ls;
+			if(FuncUnit.win.document  == null){
+				return
+			}
+			/*opera.postError("looking "+lookingForNewDocument)
+			opera.postError("equal "+( FuncUnit.win.document === currentDocument) )
+			opera.postError("rest "+newDocument+" "+
+			            FuncUnit.win.document.readyState+" "+
+						"fuo"+" "+
+						FuncUnit.win.___FUNCUNIT_OPENED );*/
+						
+			if (lookingForNewDocument){
+				if( FuncUnit.win.document !== currentDocument && 
+				    FuncUnit.win.document.readyState === "complete" && 
+				    FuncUnit.win.location.href != "about:blank" &&
+					! FuncUnit.win.___FUNCUNIT_OPENED ) {
+				
+					// reset flags
+					lookingForNewDocument = false;
+					currentDocument = FuncUnit.win.document;
+					
+					// mark it as opened
+					FuncUnit.win.___FUNCUNIT_OPENED = true;
+					
+					ls = loadSuccess;
+					
+					loadSuccess = null;
+					if (ls) {
+						FuncUnit.win.focus();
+						FuncUnit.win.document.documentElement.tabIndex = 0;
+						
+						ls();
+					}
+				}
+			}
 		
-		if (FuncUnit.win.document !== currentDocument || newDocument) { //we have a new document
+		/*if (FuncUnit.win.document !== currentDocument || newDocument) { //we have a new document
 			currentDocument = FuncUnit.win.document;
             newDocument = true;
 			if (FuncUnit.win.document.readyState === "complete" && FuncUnit.win.location.href!="about:blank" && !reloading) {
-				ls = loadSuccess;
 				
-				loadSuccess = null;
-				if (ls) {
-					FuncUnit.win.focus();
-					FuncUnit.win.document.documentElement.tabIndex = 0;
-					
-					ls();
-				}
 				
 			}
-		}
+		}*/
 		// TODO need a better way to determine if a reloaded frame is loaded (like clearing the frame), this might be brittle 
-		reloading = false;
 		setTimeout(arguments.callee, 500)
 	}
 
-	$(window).unload(function(){
+	/**$(window).unload(function(){
 		// helps with page reloads
 		if (FuncUnit.win && FuncUnit.win.steal){
 			delete FuncUnit.win.steal.isReady;
 			delete FuncUnit.win.document.readyState
 		}
-	})
+	})*/
 	
 })(window.jQuery || window.FuncUnit.jQuery)
