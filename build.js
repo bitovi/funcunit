@@ -15,14 +15,14 @@ steal.File('funcunit/dist/steal/rhino').mkdir()
 steal('steal/build/pluginify', function(s){
 	steal.build.pluginify("funcunit",{
 		global: "true",
-		destination: "funcunit/dist/funcunit/funcunit.js",
+		out: "funcunit/dist/funcunit/funcunit.js",
 		packagejquery: true
 	})
 })
 steal('steal/build/pluginify', function(s){
 	steal.build.pluginify("funcunit/qunit",{
 		global: "true",
-		destination: "funcunit/dist/funcunit/qunit.js",
+		out: "funcunit/dist/funcunit/qunit.js",
 		packagejquery: true
 	})
 })
@@ -31,10 +31,9 @@ var i, fileName, cmd;
 
 // read: wrapped, jQuery, json, syn
 var userFiles = 
-		["jquery/jquery.js",  
-		"funcunit/resources/json.js", 
-		"funcunit/syn/dist/syn.js",
-		"funcunit/resources/selector.js"],
+		["funcunit/browser/jquery.js",  
+		"funcunit/browser/resources/json.js", 
+		"funcunit/syn/dist/syn.js"],
 	fileText, 
 	userExtensionsText = "";
 for(var i=0; i<userFiles.length; i++){
