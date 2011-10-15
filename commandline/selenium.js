@@ -8,9 +8,9 @@ steal('funcunit/selenium', './utils.js', function(){
 			browsers = ["*firefox", "*iexplore", "*safari", "*googlechrome"]
 		else {
 			browsers = ["*firefox"]
-			if(java.lang.System.getProperty("os.name").indexOf("Windows") != -1){
-				browsers.push("*iexplore")
-			}
+			// if(java.lang.System.getProperty("os.name").indexOf("Windows") != -1){
+				// browsers.push("*iexplore")
+			// }
 		}
 		return browsers;
 	}
