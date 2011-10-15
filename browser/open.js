@@ -206,7 +206,7 @@ $.extend(FuncUnit,{
 		}
 	},
 	_isOverridden:function(type) {
-		return !(/native code/.test(FuncUnit.win[type]));
+		return !(/(native code)|(source code not available)/.test(FuncUnit.win[type]));
 	},
 	_onload: function(success, error){
 		// saver reference to success
