@@ -25,6 +25,7 @@ steal('steal/browser', function(){
 			this.page = this._getPageUrl(page);
 			this.browsers = browsers || ["*firefox"];
 			this._browserStart(0);
+			this._poll();
 			// block until we're done
 			this.browserOpen = true;
 			while(this.browserOpen) {
@@ -125,21 +126,26 @@ steal('steal/browser', function(){
 				this.page);
 			this.selenium.start();
 			this.selenium.open(this.page);
-			this._poll();
+			selThreads.resumePolling();
 		},
 		close: function(data){
-			this.keepPolling = false;
+			//print(">>>>>>>>>>   CLOSING")
+			//this.keepPolling = false;
 			var browser = this.browsers[this._currentBrowserIndex];
 			this.trigger("browserDone", {
 				browser: browser
-			})
+			});
+			selThreads.pausePolling();
 			this.selenium.close();
 			this.selenium.stop();
+			//print(">>>>>>>>>>   STOPPED")
 			this._currentBrowserIndex++;
 			if (this._currentBrowserIndex < this.browsers.length) {
 				this._browserStart(this._currentBrowserIndex)
 			} 
 			else {
+				selThreads.stopPolling();
+				//print(">>>>>>>>>>   ALL DONE")
 				this.trigger("allDone");
 				this.killServer();
 				this.browserOpen = false;
@@ -159,26 +165,59 @@ steal('steal/browser', function(){
 			return true;
 		},
 		_poll: function(){
-			var self = this;
-			this.keepPolling = true;
-			spawn(function(){
-				if(!self.keepPolling) return;
-				var resultJSON, 
-					res,
-					evt;
-				self.keepPolling = true;
-				resultJSON = self.selenium.getEval("Selenium.getResult()");
-				eval("res = "+resultJSON);
-				if(res && res.length){
-					for (var i = 0; i < res.length; i++) {
-						evt = res[i];
-						self.trigger(evt.type, evt.data);
-					}
-				}
-				// keep polling
-				java.lang.Thread.currentThread().sleep(400);
-				arguments.callee();
-			})
+			selThreads.poll(this);
+			
 		}
-	})
+	});
+	
+	var keepPolling = false,
+		stopPolling = false;
+	
+	
+	var selThreads = {
+		poll : function(self){
+			this.resumePolling();
+			
+			spawn(function(){
+				
+				var stop = selThreads.getResult(self);
+				if(!stop){
+					java.lang.Thread.currentThread().sleep(350);
+					arguments.callee();
+				}
+			})
+			
+		},
+		pausePolling :  sync(function(){
+			keepPolling = false;
+		}),
+		resumePolling : sync(function(){
+			keepPolling = true;
+		}),
+		stopPolling : sync(function(){
+			stopPolling = true;
+			keepPolling = false;
+		}),
+		getResult : sync(function(self){
+			if(!keepPolling){
+				return stopPolling;
+			}
+			var resultJSON, 
+				res,
+				evt;
+			//self.keepPolling = true;
+			//print(">>>>>>>>>>   POLLING")
+			resultJSON = self.selenium.getEval("Selenium.getResult()");
+			eval("res = "+resultJSON);
+			if(res && res.length){
+				for (var i = 0; i < res.length; i++) {
+					evt = res[i];
+					self.trigger(evt.type, evt.data);
+				}
+			}
+			return stopPolling;
+		}),
+		keepPolling : false
+	}
+	
 })
