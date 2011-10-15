@@ -6,17 +6,7 @@ steal('steal/browser/phantomjs', './utils.js', function(){
 //			print: true
 		});
 		
-		FuncUnit.browser
-			.bind('clientloaded', function(){
-				this.evaluate(function(){
-					$("<iframe></iframe>").attr("id", "funcunit_app").appendTo(document.body);
-				})
-				this.injectJS('funcunit/browser/events.js')
-				this.evaluate(function(){
-					$.holdReady(false);
-				})
-			})
-			.bindEvents()
-			.open(FuncUnit.funcunitPage)
+		FuncUnit.bindEvents(FuncUnit.browser)
+		FuncUnit.browser.open(FuncUnit.funcunitPage)
 	}
 })

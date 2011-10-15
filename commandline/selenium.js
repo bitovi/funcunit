@@ -29,15 +29,7 @@ steal('funcunit/selenium', './utils.js', function(){
 			serverPort: FuncUnit.serverPort
 		});
 		
-		FuncUnit.browser
-			// bind all the events (has to happen before we open the page)
-			.bindEvents()
-			.bind('clientloaded', function(){
-				this.injectJS('funcunit/browser/events.js')
-				this.evaluate(function(){
-					$.holdReady(false);
-				})
-			})
-			.open(FuncUnit.funcunitPage, FuncUnit.browsers)
+		FuncUnit.bindEvents(FuncUnit.browser)
+		FuncUnit.browser.open(FuncUnit.funcunitPage, FuncUnit.browsers)
 	}
 })

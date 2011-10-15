@@ -1,7 +1,8 @@
 steal('steal/browser', function(){
 	steal.browser.selenium = function(options){
 		steal.browser.call(this, options, 'selenium')
-		this.clientPath = "funcunit-selenium";
+		this._startServer();
+		this.clientPath = "funcunit/selenium";
 	}
 	steal.extend(steal.browser.selenium, {
 		defaults:  {
