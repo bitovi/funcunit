@@ -8,7 +8,7 @@ var confirms = [],
 	// returns true if url matches current window's url
 	isCurrentPage = function(url){
 		if( FuncUnit.win.location.pathname === url ||
-			FuncUnit.win.href === url ){
+			FuncUnit.win.location.href === url ){
 			return true;
 		}
 		return false;
@@ -164,6 +164,7 @@ $.extend(FuncUnit,{
 			lookingForNewDocument = true;
 			FuncUnit.win.location = url;
 			if(reloading){
+				console.log(url, 'reloading');
 				FuncUnit.win.location.reload();
 			}
 			// setting to null b/c opera uses the same document
