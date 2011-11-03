@@ -164,7 +164,6 @@ $.extend(FuncUnit,{
 			lookingForNewDocument = true;
 			FuncUnit.win.location = url;
 			if(reloading){
-				console.log(url, 'reloading');
 				FuncUnit.win.location.reload();
 			}
 			// setting to null b/c opera uses the same document
