@@ -394,9 +394,10 @@
 				}
 				FuncUnit.repeat({
 					method : function(print){
-						// only need to perform this check for .exists, .invisible, etc
-						if(fname === "size"){
-							// keep getting new collection because the page might be updating, we need to keep re-checking
+						// keep getting new collection because the page might be updating, we need to keep re-checking
+						if(this.bind.prevObject && this.bind.prevTraverser){
+							this.bind = this.bind.prevObject[this.bind.prevTraverser](this.bind.prevTraverserSelector)
+						} else {
 							// pass false so it will only do one synchronous request
 							this.bind = S(this.selector, {
 								frame: frame, 
