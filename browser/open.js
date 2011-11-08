@@ -4,11 +4,16 @@ var confirms = [],
 	prompts = [], 
 	currentDocument,
 	lookingForNewDocument = false,
-	
+	urlWithoutHash = function(url){
+		return url.replace(/\#.*$/, "");
+	},
 	// returns true if url matches current window's url
 	isCurrentPage = function(url){
-		if( FuncUnit.win.location.pathname === url ||
-			FuncUnit.win.location.href === url ){
+		var pathname = urlWithoutHash(FuncUnit.win.location.pathname),
+			href = urlWithoutHash(FuncUnit.win.location.href),
+			url = urlWithoutHash(url);
+		// must strip off hash from URLs
+		if( pathname === url || href === url ){
 			return true;
 		}
 		return false;
