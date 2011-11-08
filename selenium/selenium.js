@@ -1,5 +1,7 @@
 steal('steal/browser', function(){
 	steal.browser.selenium = function(options){
+		// kill the server in case it was running from before
+		this.killServer();
 		steal.browser.call(this, options, 'selenium')
 		this._startServer();
 		this.clientPath = "funcunit/selenium";
@@ -106,13 +108,11 @@ steal('steal/browser', function(){
 			this.DefaultSelenium = this._loadDriverClass();
 		},
 		killServer: function(){
-			spawn(function(){
-				if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-					runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium" > NUL')
-				} else { // mac
-					runCommand("sh", "-c", "ps aux | awk '/selenium\\// {print$2}' | xargs kill -9")
-				}
-			})
+			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
+				runCommand("cmd", "/C", 'taskkill /fi "Windowtitle eq selenium" > NUL')
+			} else { // mac
+				runCommand("sh", "-c", "ps aux | awk '/selenium\\// {print$2}' | xargs kill -9")
+			}
 		},
 		// create new selenium instance, start it, open page, set FuncUnit.mode = "Selenium", start polling for data
 		_browserStart: function(index){
