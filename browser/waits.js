@@ -146,10 +146,10 @@ $.extend(FuncUnit.prototype, {
 	 * @param {Function} [callback] a callback that is run after the selector exists, but before the next action.
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
-	exists: function( callback ) {
+	exists: function( timeout, callback ) {
 		return this.size(function(size){
 			return size > 0;
-		}, callback);
+		}, timeout, callback);
 	},
 	/**
 	 * Waits until no elements are matched by the selector.  Missing is equivalent to calling
@@ -161,8 +161,8 @@ $.extend(FuncUnit.prototype, {
 	 * @param {Function} [callback] a callback that is run after the selector exists, but before the next action
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
-	missing: function( callback ) {
-		return this.size(0, callback)
+	missing: function( timeout, callback ) {
+		return this.size(0, timeout, callback)
 	},
 	/**
 	 * Waits until the funcUnit selector is visible.  
@@ -173,14 +173,18 @@ $.extend(FuncUnit.prototype, {
 	 * @param {Function} [callback] a callback that runs after the funcUnit is visible, but before the next action.
 	 * @return [funcUnit] returns the funcUnit for chaining.
 	 */
-	visible: function( callback ) {
+	visible: function( timeout, callback ) {
+		if(typeof timeout == 'function'){
+			callback = timeout;
+			timeout = undefined;
+		}
 		var self = this,
 			sel = this.selector,
 			ret;
 		this.selector += ":visible"
 		return this.size(function(size){
 			return size > 0;
-		}, function(){
+		}, timeout, function(){
 			self.selector = sel;
 			callback && callback.apply(this, arguments);
 		})
@@ -195,12 +199,16 @@ $.extend(FuncUnit.prototype, {
 	 * @param {Function} [callback] a callback that runs after the selector is invisible, but before the next action.
 	 * @return [funcUnit] returns the funcUnit selector for chaining.
 	 */
-	invisible: function( callback ) {
+	invisible: function( timeout, callback ) {
+		if(typeof timeout == 'function'){
+			callback = timeout;
+			timeout = undefined;
+		}
 		var self = this,
 			sel = this.selector,
 			ret;
 		this.selector += ":visible"
-		return this.size(0, function(){
+		return this.size(0, timeout, function(){
 			self.selector = sel;
 			callback && callback.apply(this, arguments);
 		})

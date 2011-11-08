@@ -68,6 +68,8 @@ S(".container").css("font-color", "red")
 
 Several wait methods check for existence/visibility of elements. These require zero parameters.
 
+<code>wait( [timeout], [callback] )</code>
+
 - [FuncUnit.prototype.exists exists]
 - [FuncUnit.prototype.missing missing]
 - [FuncUnit.prototype.visible visibile]
