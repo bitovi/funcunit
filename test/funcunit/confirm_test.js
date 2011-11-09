@@ -5,11 +5,11 @@ module("funcunit - jQuery API",{
 })
 
 test("confirm overridden", function(){
-	S('#confirm').exists().click()
+	S('#confirm').click()
 	S('#confirm').text("I was confirmed");
 });
 
 test("alert overridden", function(){
-	S('#alert').exists().click()
+	S('#alert').click()
 	S('#alert').text("I was alert");
 });

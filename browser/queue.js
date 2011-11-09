@@ -42,6 +42,16 @@
 	}
 	/**
 	 * @hide
+	 * Return last item in the queue.
+	 */
+	FuncUnit._lastQueuedItem = function(){
+		if(!FuncUnit._queue.length){
+			return null;
+		}
+		return FuncUnit._queue[FuncUnit._queue.length-1];
+	}
+	/**
+	 * @hide
 	 * Return true if there are already async methods queued.  If true, getters need throw errors.
 	 */
 	FuncUnit._haveAsyncQueries = function(){

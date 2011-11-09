@@ -5,6 +5,6 @@ module("funcunit - jQuery API",{
 })
 
 test("iframe that doesn't exist", function(){
-	S("#open").exists().click();
+	S("#open").click();
 	S("#title", "myframe").visible();
 })

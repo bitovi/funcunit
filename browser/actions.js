@@ -57,6 +57,7 @@
 	'rightClick'],
 		makeClick = function(name){
 			FuncUnit.prototype[name] = function(options, callback){
+				this._addExists();
 				if(typeof options == 'function'){
 					callback = options;
 					options = {};
@@ -82,7 +83,14 @@
 		makeClick(clicks[i])
 	}
 	
-	$.extend(FuncUnit.prototype, { 
+	$.extend(FuncUnit.prototype, {
+		_addExists: function(){
+			// if the previous item on the queue isn't a "wait"
+			var lastItem = FuncUnit._lastQueuedItem();
+			if(!(lastItem && lastItem.type === "wait")){
+				this.exists();
+			}
+		},
 		/**
 		 * Types text into an element.  This makes use of [Syn.type] and works in 
 		 * a very similar way.
@@ -117,6 +125,7 @@
 		 * @return {FuncUnit} returns the funcUnit object for chaining.
 		 */
 		type: function( text, callback ) {
+			this._addExists();
 			var selector = this.selector, 
 				context = this.context;
 			FuncUnit.add({
@@ -132,6 +141,7 @@
 			return this;
 		},
 		trigger: function(evName){
+			this._addExists();
 			FuncUnit.add({
 				method : function(success, error){
 					steal.dev.log("Triggering "+evName+" on "+this.bind.selector)
@@ -180,6 +190,7 @@
 		 * @return {funcUnit} returns the funcunit object for chaining.
 		 */
 		drag: function( options, callback ) {
+			this._addExists();
 			if(typeof options == 'string'){
 				options = {to: options}
 			}
@@ -235,6 +246,7 @@
 		 * @return {funcUnit} returns the funcunit object for chaining.
 		 */
 		move: function( options, callback ) {
+			this._addExists();
 			if(typeof options == 'string'){
 				options = {to: options}
 			}
@@ -261,6 +273,7 @@
 		 * @param {Function} callback
 		 */
 		scroll: function( direction, amount, callback ) {
+			this._addExists();
 			var selector = this.selector, 
 				context = this.context,
 				direction = /left|right|x/i.test(direction)? "Left" : "Right";

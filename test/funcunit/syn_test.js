@@ -29,7 +29,7 @@ test("Nested actions", function(){
 test("Move To", function(){
 	S.open("//funcunit/test/drag.html", null, 10000);
 	S("#start").move("#end")
-	S("#typer").visible().type("javascriptmvc",function(){
+	S("#typer").type("javascriptmvc",function(){
 		equals(S("#typer").val(), "javascriptmvc","move test worked correctly");
 	})
 
