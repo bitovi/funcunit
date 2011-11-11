@@ -72,9 +72,8 @@ steal('steal/browser', function(){
 			catch (ex) {
 				spawn(function(){
 					var jarCommand = 'java -jar '+
-						'funcunit/selenium/selenium-server-standalone-2.0rc3.jar'+
-						' -userExtensions '+
-						'funcunit/selenium/user-extensions.js';
+						'funcunit/selenium/selenium-server-standalone-2.12.0.jar'+
+						' -userExtensions funcunit/selenium/user-extensions.js';
 					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 						var command = 'start "selenium" ' + jarCommand;
 						runCommand("cmd", "/C", command.replace(/\//g, "\\"))

@@ -27,3 +27,10 @@ test("find", function(){
 			ok(!S(".combo:eq(1)").hasClass("iWasClicked"),"we did not click the 2nd combo")
 		})
 })
+
+test("nested find", function(){
+	S(".baz").exists(function(obj) { 
+		obj.find(".foo").exists(); 
+		obj.find(".another").exists(); 
+	})
+})

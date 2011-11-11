@@ -14,7 +14,7 @@ getters depending on arguments.
 
 Most wait commands only require a single argument.
 
-<code>wait( checkVal, [timeout], [callback] )</code>
+<code>wait( checkVal, [timeout], [callback], [message] )</code>
 
 - [FuncUnit.prototype.size size]
 - [FuncUnit.prototype.html html]
@@ -46,7 +46,7 @@ S(".banner").text("Done")
 
 Some jQuery methods accept 2 parameters.  Similarly, those wait methods accept two arguments.
 
-<code>wait( keyVal, checkVal, [timeout], [callback] )</code>
+<code>wait( keyVal, checkVal, [timeout], [callback], [message] )</code>
 
 - [FuncUnit.prototype.data data]
 - [FuncUnit.prototype.attr attr]
@@ -68,7 +68,7 @@ S(".container").css("font-color", "red")
 
 Several wait methods check for existence/visibility of elements. These require zero parameters.
 
-<code>wait( [timeout], [callback] )</code>
+<code>wait( [timeout], [callback], [message] )</code>
 
 - [FuncUnit.prototype.exists exists]
 - [FuncUnit.prototype.missing missing]
