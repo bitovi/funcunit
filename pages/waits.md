@@ -115,7 +115,7 @@ provided.
 
 ## Callback
 
-The last (optional) parameter for each wait command is a callback method, which runs after the wait completes.
+Another optional parameter for each wait command is a callback method, which runs after the wait completes.
 
 Inside a callback is the place to get information about a page and perform assertions. Callbacks are 
 also useful for debugging.
@@ -124,4 +124,14 @@ also useful for debugging.
 S(".foo").text("bar", function(){
   // runs after wait condition completes
 })
+@codeend
+
+## Message
+
+The last (optional) parameter for each wait command is a message.  By default, wait conditions will pass silently (without a passed assertion).  
+If a user provides a message string, the wait condition will pass an assertion with the given message when the wait completes.  If the wait fails 
+(the timeout is reached), this message will be provided to the failed assertion.
+
+@codestart
+S(".foo").text("bar", "the foo element has text bar")
 @codeend

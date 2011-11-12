@@ -44,9 +44,9 @@ test("Drag To", function(){
 
 })
 
-test("RightClick", function(){
+test("RightClick", 1, function(){
 	S.open("//funcunit/test/myapp.html", null, 10000);
 	S("#rightclick").rightClick()
-	S(".rightclickResult").text("Right Clicked")
+	S(".rightclickResult").text("Right Clicked", "rightclick worked")
 
 })
