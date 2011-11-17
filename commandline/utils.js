@@ -63,7 +63,7 @@ steal(function(){
 	}
 	
 	FuncUnit._getPageUrl = function(page){
-		if(typeof phantom === "undefined" && !/https?:|file:/.test(page)){ // if theres no protocol, turn it into a filesystem url
+		if(!/https?:|file:/.test(page)){ // if theres no protocol, turn it into a filesystem urls
 			var cwd = (new java.io.File (".")).getCanonicalPath();
 			page = "file://"+cwd+"/"+page;
 		}

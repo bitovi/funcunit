@@ -203,7 +203,7 @@ $.extend(FuncUnit.prototype, {
 	 * @param {String} [message] if provided, an assertion will be passed when this wait condition completes successfully
 	 * @return [funcUnit] returns the funcUnit selector for chaining.
 	 */
-	invisible: function( timeout, callback ) {
+	invisible: function( timeout, callback, message ) {
 		var self = this,
 			sel = this.selector,
 			ret;
