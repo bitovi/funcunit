@@ -463,7 +463,15 @@
 						FuncUnit._ignoreGetterError = true;
 						var ret = this.bind[fname].apply(this.bind, methodArgs)
 						FuncUnit._ignoreGetterError = false;
-						return tester.call(this.bind, ret);
+						
+						var passed = tester.call(this.bind, ret);
+						
+						// unless this is a "size" command, require size to be non-zero (don't pass through if there's no elements)
+						if(this.bind.length === 0 && fname !== "size"){
+							passed = false;
+						}
+						
+						return passed;
 					},
 					callback : function(){
 						if(message){

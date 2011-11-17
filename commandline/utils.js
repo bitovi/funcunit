@@ -69,7 +69,7 @@ steal(function(){
 		}
 		
 		//convert spaces to %20.
-		var newPage = /http:/.test(page) ? page: page.replace(/ /g,"%20");
+		var newPage = /https?:/.test(page) ? page: page.replace(/ /g,"%20");
 		return newPage;
 	}
 })
