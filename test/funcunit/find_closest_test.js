@@ -28,6 +28,15 @@ test("find", function(){
 		})
 })
 
+test("find this", function(){
+	S("#foo").visible(function(){
+		var foo = S('#drag').html();
+		this.find(".combo").exists(function(){
+			console.log(this)
+		});
+	})
+})
+
 test("nested find", function(){
 	S(".baz").exists(function(obj) { 
 		obj.find(".foo").exists(); 
