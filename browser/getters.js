@@ -443,6 +443,7 @@
 				}
 				FuncUnit.repeat({
 					method : function(print){
+		// console.log(this, this.selector)
 						// keep getting new collection because the page might be updating, we need to keep re-checking
 						if(this.bind.prevObject && this.bind.prevTraverser){
 							this.bind = this.bind.prevObject[this.bind.prevTraverser](this.bind.prevTraverserSelector)

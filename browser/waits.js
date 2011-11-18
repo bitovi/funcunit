@@ -183,14 +183,9 @@ $.extend(FuncUnit.prototype, {
 		var self = this,
 			sel = this.selector,
 			ret;
-		this.selector += ":visible"
 		return this.size(function(size){
-			return size > 0;
-		}, timeout, function(){
-			self.selector = sel;
-			callback && callback.apply(this, arguments);
-		}, message)
-		
+			return this.is(":visible") === true;
+		}, timeout, message)
 	},
 	/**
 	 * Waits until the selector is invisible.  
@@ -207,11 +202,9 @@ $.extend(FuncUnit.prototype, {
 		var self = this,
 			sel = this.selector,
 			ret;
-		this.selector += ":visible"
-		return this.size(0, timeout, function(){
-			self.selector = sel;
-			callback && callback.apply(this, arguments);
-		}, message)
+		return this.size(function(size){
+			return this.is(":visible") === false;
+		}, timeout, message)
 	},
 	/**
 	 * Waits a timeout before calling the next action.  This is the same as
