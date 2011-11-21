@@ -109,15 +109,15 @@ $.extend(FuncUnit,{
 	</table>
 	 * 
 	 * @param {String} path a full or partial url to open.  If a partial is given, 
-	 * @param {Function} callback
+	 * @param {Function} success
 	 * @param {Number} timeout
 	 */
-	open: function( path, callback, timeout ) {
+	open: function( path, success, timeout ) {
 		var fullPath = FuncUnit.getAbsolutePath(path), 
 		temp;
-		if(typeof callback != 'function'){
-			timeout = callback;
-			callback = undefined;
+		if(typeof success != 'function'){
+			timeout = success;
+			success = undefined;
 		}
 		FuncUnit.add({
 			method: function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
@@ -128,7 +128,7 @@ $.extend(FuncUnit,{
 					success()
 				}, error);
 			},
-			callback: callback,
+			success: success,
 			error: "Page " + path + " not loaded in time!",
 			timeout: timeout || 30000
 		});

@@ -1,9 +1,7 @@
 module("funcunit find closest",{
 	setup: function() {
 		var self = this;
-		S.open("//funcunit/test/findclosest.html", function(){
-			self.pageIsLoaded = true;
-		}, 10000)
+		S.open("//funcunit/test/findclosest.html")
 	}
 });
 
@@ -30,10 +28,11 @@ test("find", function(){
 
 test("find this", function(){
 	S("#foo").visible(function(){
-		var foo = S('#drag').html();
-		this.find(".combo").exists(function(){
-			console.log(this)
-		});
+		// this does a sync and async query
+		var foo = S('#drag').text();
+		// this does an async query, but the selector is now #drag
+		// have to wrap it with S to force another async query
+		S(this).find(".combo").exists("Combo exists");
 	})
 })
 

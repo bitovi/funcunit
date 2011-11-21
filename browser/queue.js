@@ -67,7 +67,7 @@
 	 * @param {Object} handler An object that contains the method to run along with other properties:
 
  - method : the method to be called.  It will be provided a success and error function to call
- - callback : an optional callback to be called after the function is done
+ - success : an optional callback to be called after the function is done
  - error : an error message if the command fails
  - timeout : the time until success should be called
  - bind : an object that will be 'this' of the success
@@ -138,9 +138,9 @@
 						//mark in callback so the next set of add get added to the front
 						
 						FuncUnit._incallback = true;
-						if (next.callback) {
+						if (next.success) {
 							// callback's "this" is the collection
-							next.callback.apply(next.bind, arguments);
+							next.success.apply(next.bind, arguments);
 						}
 						FuncUnit._incallback = false;
 						

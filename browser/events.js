@@ -11,6 +11,11 @@ steal('funcunit/browser/resources/jquery.js', function(){
 		type = evts[i];
 		(function(type){
 			QUnit[type] = function(data){
+				if(type === "done"){
+					if (_$jscoverage) {
+						steal.client.trigger("coverage", _$jscoverage);
+					}
+				}
 				steal.client.trigger(type, data);
 			};
 		})(type);
