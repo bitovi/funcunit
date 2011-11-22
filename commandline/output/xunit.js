@@ -15,8 +15,10 @@
  */
  
 steal('funcunit/commandline/output/json2.js', function(){
-	var classPrefix = FuncUnit.xmlLogClassPrefix ? FuncUnit.xmlLogClassPrefix : '',
-		filename = FuncUnit.xmlLogFilename ? FuncUnit.xmlLogFilename : false,
+	print('JSON2')
+	print(FuncUnit.xmlLogClassPrefix);
+	var classPrefix,
+		filename,
 		fstream, out;
 	
 	var writeToLog = function (line, postfix) {
@@ -61,6 +63,8 @@ steal('funcunit/commandline/output/json2.js', function(){
 
 	steal.extend(FuncUnit,{
 		begin: function(){
+			classPrefix = FuncUnit.xmlLogClassPrefix ? FuncUnit.xmlLogClassPrefix : '';
+			filename = FuncUnit.xmlLogFilename ? FuncUnit.xmlLogFilename : false;
 			if(filename) {
 				fstream = new java.io.FileWriter(filename, false);
 				out = new java.io.BufferedWriter(fstream);
@@ -130,6 +134,7 @@ steal('funcunit/commandline/output/json2.js', function(){
 			moduleStartTime = new Date();
 		},	    
 		done: function(failures, total){
+			print('DON111E')
 			// Summary similar to JUnit/PHPUnit
 			var currentDate = new Date();
 			var timeDiff = Math.round((currentDate.getTime() - globalStartTime) / 1000);
@@ -148,7 +153,8 @@ steal('funcunit/commandline/output/json2.js', function(){
 			}
 
 			writeToLog('</testsuites>');
-			
+			print(filename)
+			print('TESTSUITE')
 			if(filename) {
 				out.close();
 			}
