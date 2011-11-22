@@ -56,19 +56,17 @@
 			for(var i=0; i<ignore.length; i++){
 				noInstrument.push("--no-instrument="+ignore[i]);
 			}
-			var command = "jscoverage ./ ../instrumented --verbose "+noInstrument.join(" "),
-				mvCmd = "mv ../instrumented instrumented";
+			var command = "jscoverage ./ ../instrumented --verbose "+noInstrument.join(" ");
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 				print(command)
 				runCommand("cmd", "/C", command.replace(/\//g, "\\"))
-				print(mvCmd)
-				runCommand("cmd", "/C", mvCmd.replace(/\//g, "\\").replace("mv", "move"))
 			} else {
 				print(command)
 				runCommand("sh", "-c", command);
-				print(mvCmd)
-				runCommand("sh", "-c", mvCmd);
 			}
+			
+			print('moving instrumented directory');
+			steal.File('../instrumented').moveTo('./instrumented')
 		},
 		getTotalStats: function(data){
 			var lines,
