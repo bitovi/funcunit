@@ -132,7 +132,6 @@ steal('funcunit/commandline/output/json2.js', function(){
 			moduleStartTime = new Date();
 		},	    
 		done: function(failures, total){
-			print('DON111E')
 			// Summary similar to JUnit/PHPUnit
 			var currentDate = new Date();
 			var timeDiff = Math.round((currentDate.getTime() - globalStartTime) / 1000);
@@ -151,8 +150,6 @@ steal('funcunit/commandline/output/json2.js', function(){
 			}
 
 			writeToLog('</testsuites>');
-			print(filename)
-			print('TESTSUITE')
 			if(filename) {
 				out.close();
 			}
