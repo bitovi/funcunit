@@ -13,14 +13,16 @@ steal('funcunit/browser/resources/jquery.js', function(){
 				tr.push("<td>", "<a class='file' href='#'>", file, "</a>", "</td>");
 				tr.push("<td>", stats.lines, "</td>");
 				tr.push("<td>", stats.linesRun, "</td>");
-				tr.push("<td>", stats.pct, "</td>");
+				tr.push("<td>", "<img height='15' width='130' src='http://chart.apis.google.com/chart?chf=bg,s,676767&chxs=0,000000,0,0,_,676767|1,000000,0,0,_,676767&chxt=x,y&chbh=23,0,0&chs=130x15&cht=bhs&chco=585858,919191&chp=0,0.033&chma=2&chd=t:", stats.pct.substring(0, stats.pct.length -1), "|100' />", stats.pct ,"</td>");
 				tr.push("</tr>");
 			}
 			$('#coverage').append(tr.join(""))
 		}
 	})
 	$('#coverage').delegate('.file', 'click', function(ev){
-		$("#closeButton").show();
+		$("#closeButton").text('back to grid');
+		$('#coverage').hide();
+		
 		var fileName = $(ev.target).text();
 		$.ajax({
 			url: '../../'+fileName,
@@ -44,7 +46,8 @@ steal('funcunit/browser/resources/jquery.js', function(){
 		})
 	})
 	$("#closeButton").bind("click", function(){
-		$("#closeButton").hide();
+		$("#closeButton").text('back to jenkins');
 		$('#file').hide();
+		$('#coverage').show();
 	})
 })
