@@ -38,6 +38,16 @@ steal('funcunit/commandline/output/json2.js', function(){
 		return text;
 	}
 	
+	var render = function( from, to, data ) {
+		var text = readFile(from),
+			res = new steal.EJS({
+				text: text,
+				name: from
+			}).render(data),
+			file = steal.File(to);
+		steal.File(to).save(res);
+	}
+	
 	var globalStartTime = new Date();
 	var globalTestCounter = 0;
 	var globalErrorCounter = 0;
@@ -169,7 +179,13 @@ steal('funcunit/commandline/output/json2.js', function(){
 				out = new java.io.BufferedWriter(fstream);
 			out.write(JSON.stringify(stats));
 			out.close();
-			
+			this.convertCoverageToCobertura(stats);
+		},
+		convertCoverageToCobertura: function(stats){
+			// eval('stats = '+readFile('funcunit/coverage/coverage.json'))
+			steal("steal/generate/ejs.js", function(){
+				render('funcunit/coverage/cobertura.ejs', 'coverage.xml', stats)
+			})
 		}
 	});
 })
