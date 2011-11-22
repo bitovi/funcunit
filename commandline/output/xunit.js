@@ -15,8 +15,6 @@
  */
  
 steal('funcunit/commandline/output/json2.js', function(){
-	print('JSON2')
-	print(FuncUnit.xmlLogClassPrefix);
 	var classPrefix,
 		filename,
 		fstream, out;
