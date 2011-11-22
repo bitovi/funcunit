@@ -3,7 +3,7 @@
 
 <coverage line-rate="0.9" branch-rate="0.0">
 	<sources>
-		<source><%= java.io.File(".").getCanonicalPath() %></source>
+		<source><%= steal.File.cwd() %></source>
 		<source>--source</source>
 	</sources>
 	<packages>

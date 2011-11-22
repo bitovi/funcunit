@@ -47,13 +47,8 @@
 			if(!opts.includeFuncunit){
 				ignoreArr.push("./funcunit")
 			}
-			var rmCmd = "rm -Rf instrumented";
-			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-				// runCommand("cmd", "/C", command.replace(/\//g, "\\"))
-			} else {
-				print(rmCmd)
-				runCommand("sh", "-c", rmCmd);
-			}
+			
+			steal.File("instrumented").removeDir();
 			
 			var ignore = this._ignoreArray(),
 				noInstrument = [];
@@ -64,7 +59,10 @@
 			var command = "jscoverage ./ ../instrumented --verbose "+noInstrument.join(" "),
 				mvCmd = "mv ../instrumented instrumented";
 			if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
-				// runCommand("cmd", "/C", command.replace(/\//g, "\\"))
+				print(command)
+				runCommand("cmd", "/C", command.replace(/\//g, "\\"))
+				print(mvCmd)
+				runCommand("cmd", "/C", mvCmd.replace(/\//g, "\\").replace("mv", "move"))
 			} else {
 				print(command)
 				runCommand("sh", "-c", command);

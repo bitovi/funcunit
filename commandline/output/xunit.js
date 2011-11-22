@@ -183,7 +183,7 @@ steal('funcunit/commandline/output/json2.js', function(){
 		},
 		convertCoverageToCobertura: function(stats){
 			// eval('stats = '+readFile('funcunit/coverage/coverage.json'))
-			steal("steal/generate/ejs.js", function(){
+			steal("steal/generate/ejs.js", 'steal/rhino/file.js', function(){
 				render('funcunit/coverage/cobertura.ejs', 'coverage.xml', stats)
 			})
 		}
