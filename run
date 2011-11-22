@@ -15,7 +15,8 @@
 	var opts = steal.opts(_args, {
 			coverage: 0,
 			includeFuncunit: 0,
-			ignore: 1
+			ignore: 1,
+			jmvcroot: 1
 		})
 	if(opts.coverage){
 		steal('funcunit/coverage/generate.js', function(){
@@ -25,7 +26,7 @@
 	}
 	steal('funcunit/commandline/'+type+'.js', 
 		'funcunit/commandline/utils.js', function(){
-			var realUrl = FuncUnit._getPageUrl(page, opts.coverage);
+			var realUrl = FuncUnit._getPageUrl(page, opts.coverage, opts.jmvcroot);
 			FuncUnit.loader[type](realUrl)
 	})
 
