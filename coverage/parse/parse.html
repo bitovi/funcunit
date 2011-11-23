@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+	<head>
+		<title>parse</title>
+        <style type='text/css'>
+            body {font-family: verdana}
+            .error {border: solid 1px red;}
+            .error_text { color: red; font-size: 10px;}
+            td {padding: 3px;}
+			textarea {
+				width: 800px;
+				height: 420px;
+			}
+        </style>
+	</head>
+	<body>
+	    <textarea id='code'></textarea>
+		<a href='javascript://' id='refresh'>REFRESH</a>
+		<a href='javascript://' id='parse'>PARSE</a>
+		<a href='javascript://' id='lined'>LINED</a>
+		<pre id='lines'></pre>
+		<script type='text/javascript' 
+                src='../../steal/steal.js'>   
+        </script>
+		<script type='text/javascript'>
+			steal.plugins('funcit/parse','jquery/dom/selection').then(function(){
+				var line = function(str, num){
+					var newLine = new RegExp("\n","g"),
+						previous = 0,
+						count = 0;
+					while(newLine.exec(str) && newLine.lastIndex <= num){
+						previous = newLine.lastIndex;
+						count++;
+					}
+					return {
+						line : count,
+						character : num - previous
+					}
+					
+				},
+				charLocation = function(str, pos){
+					var newLine = new RegExp("\n","g"),
+						previous = 0,
+						total = 0,
+						lines = pos.line;
+					while(lines && newLine.exec(str) ){
+						lines --;
+					}
+					return newLine.lastIndex+pos.character
+				}
+				$('#parse').click(function(){
+					var p = new Funcit.Parse($('#code').val());
+					steal.dev.log(p)
+				})
+				$('#refresh').click(function(){
+					$.get(steal.root.join("funcit/parse/test/tabs_test.js"), function(tabsTest){
+						$('#code').val(tabsTest);
+					},'text');
+				})
+				$('#lined').click(function(){
+					var p = new Funcit.Parse($('#code').val());
+					$('#lines').html(p.stated())
+				})
+				$("#code").click(function(){
+					var code = $(this).val()
+					var p = new Funcit.Parse(code);
+					var sel = $(this).selection(),
+						lines = line(code, sel.start);
+					LAST = p;
+					steal.dev.log("cursor",sel.start);
+					
+					p.get(lines.line+1,lines.character+1, function(val){
+						var $val = new Funcit.Parse(val);
+						var statement = $val.statement();
+						steal.dev.log("got statement",typeof statement[0].second == 'string' ?
+							statement[0].second : statement[0].value, "from",statement[0].from,"thru", statement[0].thru, statement)
+						
+						statement.find({
+							type: "(identifier)",
+							value : "S"
+						}, function(val){
+							steal.dev.log("S code",val.from, val.thru)
+							var $val = new Funcit.Parse(val);
+							var first = $val.args()[0]
+							
+							var start = charLocation(code, {
+									line: first.line -1,
+									character : first.from-1
+								}),
+								end = charLocation(code, {
+									line: first.line -1,
+									character : first.thru-1
+								})
+							steal.dev.log(start,end)
+							$("#code").selection(start, end);
+							return false;
+						})
+					})
+				})
+			})
+		</script>
+	</body>
+</html>
