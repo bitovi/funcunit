@@ -112,7 +112,7 @@
 				text-decoration: underline;
 			}
 			.coverage-wrapper .table-wrapper{
-				padding:0 20px 20px 20px;
+				padding:0 20px 20px 10px;
 			}
 			.coverage-wrapper table{
 				padding:0;
@@ -131,6 +131,7 @@
 				text-shadow: white 0 1px 0;
 				text-transform: uppercase;
 				border-bottom: 1px solid #CCC;
+				padding-right:20px;
 			}
 			.coverage-wrapper table td{
 				padding:3px;
@@ -154,12 +155,12 @@
     			display:block;
     		}
         	#file, #coverage{
-    		    bottom: 10px;
+    		    bottom: 0px;
 			    left: 10px;
 			    overflow: auto;
 			    position: absolute;
 			    right: 10px;
-			    top: 40px;
+			    top: 70px;
         	}
         	.coverage-wrapper table .hit, .coverage-wrapper table tr:nth-child(2n+1) td.hit{
         		background-color:#BFFFBF;
@@ -169,6 +170,14 @@
         	}
         	pre{
         		margin: 0;
+        	}
+        	.stats{
+        		font-size: 11px;
+        		font-weight:bold;
+        		line-height:18px;
+        	}
+        	.stat{
+        		font-weight:normal;
         	}
         </style>
     </head>
@@ -183,13 +192,17 @@
 		<h3><span class="image"></span><span class='title'>Code Coverage</span></h3>
 		
 		<div class="table-wrapper">
-			
+		
+		<div class='stats'>
+			<div class='line'>Total Line Coverage: <span class='stat'></span></div>
+			<div class='block'>Total Block Coverage: <span class='stat'></span></div>
+		</div>
     	<table id='coverage' cellspacing="0" cellpadding="0">
     		<tr>
     			<th>File Name</th>
-    			<th>Number of Lines</th>
+    			<th>Total Lines</th>
     			<th>Line Coverage</th>
-    			<th>Number of Blocks</th>
+    			<th>Total Blocks</th>
     			<th>Block Coverage</th>
     		</tr>
     	</table>
