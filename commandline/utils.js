@@ -62,29 +62,22 @@ steal(function(){
 		}
 	}
 	
-	// if coverage is true, and jmvcroot is supplied, use this to change the URL
-	FuncUnit._getPageUrl = function(page, coverage, jmvcroot){
+	// if coverage is true, use this to change the URL
+	FuncUnit._getPageUrl = function(page, coverage, ignores){
 		if(!/https?:|file:/.test(page)){ // if theres no protocol, turn it into a filesystem urls
 			var cwd = (new java.io.File (".")).getCanonicalPath();
-			if(coverage){
-				page = "file://"+cwd+"/instrumented/"+page;
-			} else {
-				page = "file://"+cwd+"/"+page;
-			}
+			page = "file://"+cwd+"/"+page;
 		}
 		
 		//convert spaces to %20.
 		var newPage = /https?:/.test(page) ? page: page.replace(/ /g,"%20");
 		
-		// insert /instrumented
-		// TODO this only works if you use an http url and the root domain is the jmvc root
-		if(/https?:/.test(page) && coverage){
-			if(jmvcroot){
-				newPage = jmvcroot + "instrumented/" + newPage.substring(jmvcroot.length);
-			} else {
-				var newPageMatch = newPage.match(/(https?\:\/\/[^\/]*\/)(.*)/);
-				newPage = newPageMatch[1]+"instrumented/"+newPageMatch[2];
-			}
+		if(coverage){
+			newPage = newPage+"?steal[instrument]=true";
+		}
+		
+		if(ignores){
+			newPage += "&steal[instrumentIgnore]="+ignores.join(",")
 		}
 		
 		return newPage;

@@ -27,6 +27,8 @@
 		<script src="jquery.event.drop.js" type='text/javascript'></script>
 		<script type='text/javascript'>
 			$(function(){
+				$('#testData').data('idval', 1000);
+				
 				$("#rightclick").bind("contextmenu", function(){
 					$(".rightclickResult").text("Right Clicked")
 				})
@@ -121,6 +123,6 @@
 		<div class='rightclickResult'></div>
 		<div class='hidden' style='display:none;'></div>
 		
-		
+		<div id="testData"></div>
 	</body>
 </html>

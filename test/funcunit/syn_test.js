@@ -50,3 +50,12 @@ test("RightClick", 1, function(){
 	S(".rightclickResult").text("Right Clicked", "rightclick worked")
 
 })
+
+
+test('Data',function(){
+	S.open("//funcunit/test/myapp.html");
+	
+	S('#testData').wait(function(){
+		return S.win.$(this).data('idval') === 1000;
+	}, "Data value matched");
+})

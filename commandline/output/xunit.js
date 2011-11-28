@@ -165,22 +165,26 @@ steal('funcunit/commandline/output/json2.js', function(){
 			print("\n" + name+" done :-)");
 		},
 		coverage: function(stats){
+			var percentage = function(num){
+				return Math.round(num*1000)/10+"%";
+			}
 			print("\n"+'Coverage Statistics:'+"\n")
-			print("% Covered\tTotal Lines\tLines Run\tFile Name")
+			print("% Lines\t\t% Blocks\t\tFile Name")
 			for(var file in stats.files){
-				var fileStats = stats.files[file].stats
-				print(fileStats.pct+"\t\t"+fileStats.lines+"\t\t"+fileStats.linesRun+"\t\t"+file)
+				var fileStats = stats.files[file];
+				print(percentage(fileStats.lineCoverage)+"\t\t"+percentage(fileStats.blockCoverage)+"\t\t"+file)
 			}
 			var total = stats.total
-			print("\n"+'Summary:')
-			print(total.pct+"\t\t"+total.lines+"\t\t"+total.linesRun)
+			print("\nSummary:")
+			print(percentage(total.lineCoverage)+" Line Coverage of "+total.lines+" lines")
+			print(percentage(total.blockCoverage)+" Block Coverage of "+total.blocks+" blocks")
 			
 			
 			var fstream = new java.io.FileWriter('funcunit/coverage/coverage.json', false),
 				out = new java.io.BufferedWriter(fstream);
 			out.write(JSON.stringify(stats));
 			out.close();
-			this.convertCoverageToCobertura(stats);
+			// this.convertCoverageToCobertura(stats);
 		},
 		convertCoverageToCobertura: function(stats){
 			// eval('stats = '+readFile('funcunit/coverage/coverage.json'))

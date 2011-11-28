@@ -48,8 +48,7 @@ steal('funcunit/commandline/output/xunit.js', function(){
 			
 		})
 		.bind('coverage', function(data){
-			var stats = FuncUnit.getTotalStats(data);
-			FuncUnit.coverage(stats)
+			FuncUnit.coverage(data)
 		})
 	
 	}

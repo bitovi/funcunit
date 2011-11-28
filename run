@@ -13,21 +13,14 @@
 	page = _args.shift();
 	
 	var opts = steal.opts(_args, {
-			coverage: 0,
-			includeFuncunit: 0,
-			ignore: 1,
-			jmvcroot: 1
+			coverage: 0
 		})
-	if(opts.coverage){
-		steal('funcunit/coverage/generate.js', function(){
-			FuncUnit.setCoverageOpts(opts);
-			FuncUnit.generateCoverage()
-		})
-	}
-	steal('funcunit/commandline/'+type+'.js', 
-		'funcunit/commandline/utils.js', function(){
-			var realUrl = FuncUnit._getPageUrl(page, opts.coverage, opts.jmvcroot);
-			FuncUnit.loader[type](realUrl)
-	})
+	steal('funcunit/commandline/utils.js') 
+		.then('funcunit/commandline/'+type+'.js', 
+			function(){
+				FuncUnit._loadSettingsFile(page);
+				FuncUnit.funcunitPage = FuncUnit._getPageUrl(page, opts.coverage, FuncUnit.coverageIgnore);
+				FuncUnit.loader[type](FuncUnit.funcunitPage);
+			})
 
 })()

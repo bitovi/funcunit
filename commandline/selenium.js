@@ -1,4 +1,4 @@
-steal('funcunit/selenium', './utils.js', function(){
+steal('funcunit/selenium', function(){
 	var getDefaultBrowsers = function(){
 		var browsers;
 		if(FuncUnit.jmvcRoot)
@@ -19,8 +19,6 @@ steal('funcunit/selenium', './utils.js', function(){
 	 * Loads the FuncUnit page in Selenium
 	 */ 
 	FuncUnit.loader.selenium = function(page){
-		FuncUnit._loadSettingsFile(page)
-		FuncUnit.funcunitPage = FuncUnit._getPageUrl(page)
 		FuncUnit.browsers = FuncUnit.browsers || getDefaultBrowsers();
 		
 		// expose FuncUnit.browser so people can call close themselves
@@ -30,6 +28,6 @@ steal('funcunit/selenium', './utils.js', function(){
 		});
 		
 		FuncUnit.bindEvents(FuncUnit.browser)
-		FuncUnit.browser.open(FuncUnit.funcunitPage, FuncUnit.browsers)
+		FuncUnit.browser.open(page, FuncUnit.browsers)
 	}
 })

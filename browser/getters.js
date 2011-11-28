@@ -35,24 +35,6 @@
 	 */
 	'size' : 0,
 	/**
-	 * @function data
-	 * Gets data from jQuery.data or waits until data
-	 * equals some value.  
-	 * @codestart
-	 * S("#something").data("abc") //gets the abc data
-	 * 
-	 * S("#something").data("abc","some") //waits until the data == some
-	 * @codeend
-	 * @param {String} data The data to get, or wait for.
-	 * @param {Object|Function} [value] If provided uses this as a check before continuing to the next action.
-	 * @param {Number} [timeout] overrides FuncUnit.timeout.  If provided, the wait will fail if not completed before this timeout.
-	 * @param {Function} [success] a callback that will run after this action completes.
-	 * @param {String} [message] if provided, an assertion will be passed when this wait condition completes successfully
-	 * @return {Object} if the size parameter is not provided, returns
-	 * the object.
-	 */
-	'data': 1, 
-	/**
 	 * @function attr
 	 * Gets the value of an attribute from an element or waits until the attribute
 	 * equals the attr param.
@@ -487,7 +469,7 @@
 			}else{
 				// throw a warning if user tries to use a getter after the start of the test (if there are other async methods)
 				if(!FuncUnit._ignoreGetterError && !FuncUnit._incallback && FuncUnit._haveAsyncQueries()){
-					console && console.error("You can't run getters outside callbacks and after actions and waits. Please put your getters in a callback or at the beginning of the test.")
+					console && console.error("You can't run getters after actions and waits. Please put your getters in a callback or at the beginning of the test.")
 				}
 				// just call the original jQ method
 				var methodArgs = [];

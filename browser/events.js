@@ -12,8 +12,8 @@ steal('funcunit/browser/resources/jquery.js', function(){
 		(function(type){
 			QUnit[type] = function(data){
 				if(type === "done"){
-					if (_$jscoverage) {
-						steal.client.trigger("coverage", _$jscoverage);
+					if (steal.instrument) {
+						steal.client.trigger("coverage", steal.instrument.compileStats());
 					}
 				}
 				steal.client.trigger(type, data);

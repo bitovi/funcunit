@@ -65,7 +65,7 @@
 				color: #777;
 			}
 			.coverage-wrapper{
-				width:700px;
+				width:900px;
 				margin:20px;
 				background: #F4F4F4;
 				-webkit-border-radius: 4px;
@@ -75,7 +75,10 @@
 				-moz-box-shadow: inset 0 1px 4px #dddddd;
 				-webkit-box-shadow: inset 0 1px 4px #dddddd;
 				margin-bottom: 20px;
-				position:relative;
+			    position: absolute;
+			    top: 45px;
+			    width: 900px;
+			    bottom:10px;
 			}
 			.coverage-wrapper h3{
 				background: #EFEFEF;
@@ -94,8 +97,9 @@
 				line-height: 140%;
 				margin-bottom: 0.5em;
 				color: #5E6469;
+				margin-top: 0px;
 			}
-			.coverage-wrapper h3 span{
+			.coverage-wrapper h3 span.image{
 				display:block;
 				background:url(chart_icon.png) no-repeat center left;
 				float:left;
@@ -112,7 +116,6 @@
 			}
 			.coverage-wrapper table{
 				padding:0;
-				width:100%;
 			}
 			.coverage-wrapper table td,table th{
 				border-collaspe:collapse;
@@ -144,9 +147,25 @@
 				background: #d1d1d1;
 				color:#000;
 			}
-
         	#file{
         		display: none;
+    		}
+    		#coverage{
+    			display:block;
+    		}
+        	#file, #coverage{
+    		    bottom: 10px;
+			    left: 10px;
+			    overflow: auto;
+			    position: absolute;
+			    right: 10px;
+			    top: 40px;
+        	}
+        	.coverage-wrapper table .hit, .coverage-wrapper table tr:nth-child(2n+1) td.hit{
+        		background-color:#BFFFBF;
+        	}
+        	.coverage-wrapper table tr:hover td.hit{
+        		background-color:#BFFFBF;
         	}
         	pre{
         		margin: 0;
@@ -156,12 +175,12 @@
     <body>
 		<div class="header">
 			<h1>FuncUnit Testing Suite</h1>
-			<a href="#" id="closeButton" class="back">back to jenkins</a>
+			<a href="#" id="closeButton" class="back" style='display:none;'></a>
 		</div>
 
 		<div class="coverage-wrapper">
 			
-		<h3><span class="image"></span>Code Coverage</h3>
+		<h3><span class="image"></span><span class='title'>Code Coverage</span></h3>
 		
 		<div class="table-wrapper">
 			
@@ -169,8 +188,9 @@
     		<tr>
     			<th>File Name</th>
     			<th>Number of Lines</th>
-    			<th>Lines Run</th>
-    			<th>Coverage Percentage</th>
+    			<th>Line Coverage</th>
+    			<th>Number of Blocks</th>
+    			<th>Block Coverage</th>
     		</tr>
     	</table>
 
