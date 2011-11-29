@@ -1,7 +1,7 @@
 (function(){
 	
 	//if there is an old FuncUnit, use that for settings
-	var oldFunc = window.FuncUnit;
+	var oldFuncUnit = window.FuncUnit;
 
 /**
 @class FuncUnit
@@ -172,7 +172,7 @@ Results are reported on the commandline.  Failed tests can be made to fail your 
 or integrated with CI tools like [funcunit.jenkins Jenkins].
 
  */
-	FuncUnit = jQuery.sub();
+	FuncUnit = oldFuncUnit.jQuery.sub();
 	var origFuncUnit = FuncUnit;
 	// override the subbed init method
 	// context can be an object with frame and forceSync:
@@ -264,9 +264,8 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 			return new origFuncUnit.fn.init( selector, context, true );
 		}
 	
-	window.jQuery.extend(FuncUnit, oldFunc, origFuncUnit)
+	oldFuncUnit.jQuery.extend(FuncUnit, oldFuncUnit, origFuncUnit)
 	FuncUnit.prototype = origFuncUnit.prototype;
-	FuncUnit.jQuery = jQuery.noConflict(true);
 	S = FuncUnit;
 	
 	

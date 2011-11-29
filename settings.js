@@ -18,5 +18,5 @@ FuncUnit = {
 	xmlLogClassPrefix: 'Qunit.',
 	
 	// any files or directories that coverage calculations should ignore
-	coverageIgnore: ['jquery', 'steal', 'documentjs', '*/test', "*_test.js"]
+	coverageIgnore: ['funcunit', 'steal', 'documentjs', 'jquery', 'mxui', '*/test', "*_test.js"]
 }

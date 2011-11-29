@@ -787,7 +787,7 @@ QUnit.load = function() {
 	// if (config.autostart) {
 		// QUnit.start();
 	// }
-	process()
+	process(true)
 };
 
 // on ready because that is when the window is loaded AND when 
@@ -795,6 +795,7 @@ QUnit.load = function() {
 steal.bind("ready", function(){
 	QUnit.config.autorun = false;
 	QUnit.config.reorder = false;
+	QUnit.config.testTimeout = 10000;
 	QUnit.load();
 })
 

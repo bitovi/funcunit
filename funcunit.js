@@ -1,6 +1,7 @@
 //what we need from javascriptmvc or other places
 steal('funcunit/qunit')
-	.then('funcunit/browser/resources/jquery.js')
+	// .then('funcunit/browser/resources/jquery.js')
+	.then('funcunit/browser/loadjquery.js')
 	.then('funcunit/browser/resources/json.js')
 	.then('funcunit/syn')
 	.then('funcunit/browser/core.js')

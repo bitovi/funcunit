@@ -1,8 +1,12 @@
-steal('funcunit/browser/resources/jquery.js', function(){
+steal(function(){
 
 	if(steal.options.browser === "phantomjs"){
-		var ifrm = $("<iframe id='funcunit_app' height='800' width='960'></iframe")
-		$(document.body).prepend(ifrm);
+		var ifrm = document.createElement("iframe");
+		ifrm.id = 'funcunit_app';
+		ifrm.setAttribute("width", "960");
+		ifrm.setAttribute("height", "800");
+		
+		document.body.insertBefore(ifrm, document.body.firstChild);
 	}
 
 	var evts = ['begin', 'testStart', 'testDone', 'moduleStart', 'moduleDone', 'done', 'log'], type;
