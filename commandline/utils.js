@@ -74,10 +74,9 @@ steal(function(){
 		
 		if(coverage){
 			newPage = newPage+"?steal[instrument]=true";
-		}
-		
-		if(ignores){
-			newPage += "&steal[instrumentIgnore]="+ignores.join(",")
+			if(ignores){
+				newPage += "&steal[instrumentIgnore]="+ignores.join(",")
+			}
 		}
 		
 		return newPage;
