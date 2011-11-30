@@ -109,6 +109,7 @@
 
 .coverage-wrapper .table-wrapper{
 	padding:0 20px 20px 10px;
+	overflow:auto;
 }
 .coverage-wrapper table{
 	padding:0;
