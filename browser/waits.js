@@ -223,6 +223,7 @@ $.extend(FuncUnit.prototype, {
 	 */
 	wait: function( checker, timeout, success, message ) {
 		if(typeof checker === "number"){
+			timeout = checker;
 			FuncUnit.wait(timeout, success)
 			return this;	
 		} else {
