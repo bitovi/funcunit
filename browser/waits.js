@@ -149,9 +149,20 @@ $.extend(FuncUnit.prototype, {
 	 * @return {FuncUnit} returns the funcUnit for chaining. 
 	 */
 	exists: function( timeout, success, message ) {
-		return this.size(function(size){
-			return size > 0;
-		}, timeout, success, message);
+		var logMessage = "Waiting for '"+this.selector+"' to exist";
+		if(timeout === false){ // pass false to suppress this wait (make it not print any logMessage)
+			logMessage = false
+		}
+		return this.size({
+			condition: function(size){
+				return size > 0;
+			},
+			timeout: timeout,
+			success: success,
+			message: message,
+			errorMessage: "Exist failed: element with selector '"+this.selector+"' not found",
+			logMessage: logMessage
+		})
 	},
 	/**
 	 * Waits until no elements are matched by the selector.  Missing is equivalent to calling

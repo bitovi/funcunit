@@ -393,8 +393,22 @@
 					message = args[argIndex+6],
 					testVal = tester,
 					errorMessage = "waiting for "+fname +" on " + this.selector,
-					frame = this.frame;
+					frame = this.frame,
+					logMessage = "Checking "+fname+" on '"+this.selector+"'";
 				
+				// can pass in an object or list of arguments
+				if(typeof tester == 'object'){
+					timeout = tester.timeout;
+					success = tester.success;
+					message = tester.message;
+					if(tester.errorMessage){
+						errorMessage = tester.errorMessage
+					}
+					if(tester.logMessage){
+						logMessage = tester.logMessage
+					}
+					tester = tester.condition;
+				}
 				if(typeof timeout == 'function'){
 					success = timeout;
 					message = success;
@@ -423,7 +437,6 @@
 				}
 				FuncUnit.repeat({
 					method : function(print){
-		// console.log(this, this.selector)
 						// keep getting new collection because the page might be updating, we need to keep re-checking
 						if(this.bind.prevObject && this.bind.prevTraverser){
 							this.bind = this.bind.prevObject[this.bind.prevTraverser](this.bind.prevTraverserSelector)
@@ -434,7 +447,7 @@
 								forceSync: true
 							})
 						}
-						print("Checking "+fname+" on "+this.selector)
+						print(logMessage)
 						var methodArgs = [];
 						// might need an argument
 						if(argIndex > 0){

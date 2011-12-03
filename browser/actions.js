@@ -88,7 +88,7 @@
 			// if the previous item on the queue isn't a "wait"
 			var lastItem = FuncUnit._lastQueuedItem();
 			if(!(lastItem && lastItem.type === "wait")){
-				this.exists();
+				this.exists(false);
 			}
 		},
 		/**
