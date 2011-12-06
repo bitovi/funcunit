@@ -86,7 +86,7 @@
 	$.extend(FuncUnit.prototype, {
 		// perform check even if last queued item is a wait beacuse certain waits don't guarantee the element is visible (like text)
 		_addExists: function(){
-			this.visible();
+			this.exists(false);
 		},
 		/**
 		 * Types text into an element.  This makes use of [Syn.type] and works in 
