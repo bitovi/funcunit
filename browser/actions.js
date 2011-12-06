@@ -71,7 +71,7 @@
 						this.bind.triggerSyn("_" + name, options, success);
 					},
 					success: success,
-					error: "Could not " + name + " " + this.selector,
+					error: "Could not " + name + " '" + this.selector+"'",
 					bind: this,
 					type: "action"
 				});
