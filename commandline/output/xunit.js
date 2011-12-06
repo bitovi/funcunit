@@ -58,6 +58,7 @@ steal('funcunit/commandline/output/json2.js', function(){
 	var moduleFailureCounter = 0;
 	var moduleErrorCounter = 0;
 	var moduleAssertionCounter = 0;
+	var failureArr = [];
 
 	steal.extend(FuncUnit,{
 		begin: function(){
@@ -76,6 +77,8 @@ steal('funcunit/commandline/output/json2.js', function(){
 			moduleLogOutput += '    <testcase class="' + xmlEncode(classPrefix + moduleName) + '" name="' + xmlEncode(name) + '">' + "\n";
 			moduleTestCounter++;
 			globalTestCounter++;
+			failureArr = [];
+			
 		},
 		log: function(result, message){
 			if (!message) {
@@ -88,17 +91,14 @@ steal('funcunit/commandline/output/json2.js', function(){
 			moduleAssertionCounter++;    		
 
 			if(!result) {
-				if(message.substring(0, 12) == 'Died on test') {
-					moduleLogOutput += '      <error type="JS">' + xmlEncode(message) + '</error>' + "\n";
-					moduleErrorCounter++;
-					globalErrorCounter++;
-				} else {		        
-					moduleLogOutput += '      <failure type="JS">' + xmlEncode(message) + '</failure>' + "\n";
-					moduleFailureCounter++;
-				}    		    
+				failureArr.push(xmlEncode(message));
 			}
 		},
 		testDone: function(name, failures, total){
+			if(failureArr.length > 0){
+				moduleFailureCounter++;
+				moduleLogOutput += '      <failure type="JS">' + "\n" + failureArr.join("\n") + "\n" + '</failure>' + "\n";
+			}
 			moduleLogOutput += '    </testcase>' + "\n";
 		},
 		moduleStart: function(name){
