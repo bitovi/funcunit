@@ -3,7 +3,7 @@ module("funcunit - jQuery API",{
 		var self = this;
 		S.open("//funcunit/test/myapp.html", function(){
 			self.pageIsLoaded = true;
-		}, 10000)
+		})
 	}
 })
 

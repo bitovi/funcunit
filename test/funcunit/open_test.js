@@ -20,9 +20,8 @@ test("URL Test", function(){
 
 
 test("Back to back opens", function(){
-	S.open("//funcunit/test/myotherapp.html", null, 1000);
-	
-	S.open("//funcunit/test/myapp.html", null, 1000);
+	S.open("//funcunit/test/myotherapp.html");
+	S.open("//funcunit/test/myapp.html");
 
 	S("#changelink").click(function(){
 		equals(S("#changelink").text(), "Changed","href javascript run")
@@ -40,4 +39,13 @@ test("Back to back opens with hash", function(){
 	S("#changelink").text(function(text){
 		return text === "Change";
 	});
+})
+
+test('Testing win.confirm in multiple pages', function() {
+	S.open('//funcunit/test/open/first.html');
+	S('.next').click();
+
+	S('.show-confirm').click();
+	S.confirm(true);
+	S('.results').text('confirmed!', "Confirm worked!");
 })

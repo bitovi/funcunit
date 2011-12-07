@@ -404,7 +404,7 @@
 					if(tester.errorMessage){
 						errorMessage = tester.errorMessage
 					}
-					if(tester.logMessage){
+					if(typeof tester.logMessage !== "undefined"){
 						logMessage = tester.logMessage
 					}
 					tester = tester.condition;
@@ -439,7 +439,10 @@
 					method : function(print){
 						// keep getting new collection because the page might be updating, we need to keep re-checking
 						if(this.bind.prevObject && this.bind.prevTraverser){
+							var prev = this.bind;
 							this.bind = this.bind.prevObject[this.bind.prevTraverser](this.bind.prevTraverserSelector)
+							this.bind.prevTraverser = prev.prevTraverser;
+							this.bind.prevTraverserSelector = prev.prevTraverserSelector;
 						} else {
 							// pass false so it will only do one synchronous request
 							this.bind = S(this.selector, {
@@ -447,7 +450,9 @@
 								forceSync: true
 							})
 						}
-						print(logMessage)
+						if(logMessage){
+							print(logMessage)
+						}
 						var methodArgs = [];
 						// might need an argument
 						if(argIndex > 0){
@@ -465,6 +470,16 @@
 							passed = false;
 						}
 						
+						if(passed){
+							// if document is still loading
+							if(!FuncUnit.documentLoaded()){
+								passed = false;
+							} else {
+								// after every successful wait, check for a new document (if someone clicked a link), 
+								// and overwrite alert/confirm/prompt
+								FuncUnit.checkForNewDocument();
+							}
+						}
 						return passed;
 					},
 					success : function(){

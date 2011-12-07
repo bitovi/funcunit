@@ -6,6 +6,7 @@ steal('funcunit/qunit')
 		}
 		FuncUnit.jQuery = jQuery.noConflict(true);
 	})
+	.then('funcunit/browser/events.js')
 	.then('./browser/resources/json.js', 'funcunit/syn')
 	.then('./browser/core.js')
 	.then('./browser/open.js', './browser/actions.js', 

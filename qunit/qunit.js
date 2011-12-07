@@ -664,7 +664,6 @@ extend(QUnit, {
 		output += "</table>";
 
 		runLoggingCallbacks( 'log', QUnit, details );
-
 		config.current.assertions.push({
 			result: !!result,
 			message: output
@@ -1595,20 +1594,5 @@ QUnit.diff = (function() {
 })();
 
 
-if(steal.options.instrument){
-	steal('funcunit/coverage')
-	QUnit.done = function(){
-		var stats = steal.instrument.compileStats()
-		$("<div id='coverage'></div>").appendTo(document.body).coverage({stats: stats});
-		var offsetTop = $('#coverage').offset().top;
-		$(document.body).scrollTop(offsetTop);
-	}
-}
 
 })
-
-
-if(steal.options.browser){
-	steal('funcunit/browser/events.js');
-};
-
