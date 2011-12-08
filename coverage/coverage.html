@@ -6,18 +6,6 @@
     </head>
     <body>
 		<div id='coverage'></div>
-		<script type='text/javascript' src='../../steal/steal.js'></script>
-		<script type='text/javascript'>
-			steal('funcunit/coverage', function(){
-				$.ajax({
-					url: 'coverage.json',
-					dataType: 'json',
-					success: function(d){
-						$('#coverage').coverage({stats: d});
-					}
-				})
-				
-			})
-		</script>
+		<script type='text/javascript' src='../../steal/steal.production.js?funcunit/coverage/display.js'></script>
     </body>
 </html>
