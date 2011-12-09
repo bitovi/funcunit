@@ -73,7 +73,7 @@ steal(function(){
 		var newPage = /https?:/.test(page) ? page: page.replace(/ /g,"%20");
 		
 		if(coverage){
-			var ignores = "true";
+			var ignores = ["true"];
 			newPage = newPage+"?steal[instrument]=";
 			if(ignores){
 				ignores = ignores.join(",")

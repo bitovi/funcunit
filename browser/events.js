@@ -1,7 +1,7 @@
 (function(){
 
 	if(steal.options.instrument){
-		steal('funcunit/coverage')
+		steal('funcunit/coverage/report/production.js')
 		QUnit.done = function(){
 			var stats = steal.instrument.compileStats()
 			$("<div id='coverage'></div>").appendTo(document.body).coverage({stats: stats});
