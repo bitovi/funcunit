@@ -7,16 +7,16 @@ coverage is tracked and calculated by [steal.instrument].
 ## Basic reporting
 
 To turn on code coverage for any funcunit or qunit test, open the page with URL param steal[instrument]=true.  
-For example, to run the FuncUnit test suite with instrumentation turned on (if your JavaScriptMVC folder is 
-served from port 80), open http://localhost/funcunit/funcunit.html?steal[instrument]=true&steal[instrumentIgnore]=false.
+For example, to run the FuncUnit test suite with instrumentation turned on, open 
+[http://javascriptmvc.com/funcunit/funcunit.html?steal[instrument]=true].
 
 After the test completes, a coverage report will be shown:
 
 @image jmvc/images/coverage_report.png
 
 
-InstrumentIgnore=false tells steal.instrument not to ignore any files.  By default all the JMVC folders are ignored (which 
-is the behavior you want for testing an application).
+steal[instrument]=true tells steal.instrument not to ignore any files.  Passing !jmvc will cause all JMVC and test 
+directories to be ignored (which is the behavior you want for testing an application).
 
 To see which blocks of a file are covered and which are not, click a file's name:
 
@@ -29,7 +29,7 @@ The numbers on the left are how many times each line has been run.
 
 To turn on coverage from the commandline, use the -coverage flag, like:
 
-./js funcunit/run selenium http://localhost/funcunit/funcunit.html -coverage
+./js funcunit/run selenium http://javascriptmvc.com/funcunit/funcunit.html -coverage
 
 A report will appear on the console after the test completes:
 
@@ -47,9 +47,9 @@ To ignore files when running from commandline, open funcunit/settings.js and edi
 array will be matched against files.  Matches will be ignored.  * is used as an asterisk.  *__test.js will ignore any file ending in 
 __test.js.
 
-Running in browser, you can add files to ignore via the steal instrumentIgnore option in the URL, like:
+Running in browser, you can add files to ignore via a list of patterns instrument URL param, like:
 
-http://localhost/funcunit.html?steal[instrument]=true&steal[instrumentIgnore]=jquery,*_test.js 
+[http://javascriptmvc.com/funcunit/funcunit.html?steal[instrument]=jquery,*_test.js] 
 
 ## Cobertura-Jenkins integration
 
