@@ -2,7 +2,7 @@ steal("funcunit").then(function(){
 
 	module("autosuggest",{
 		setup: function() {
-			S.open('autosuggest.html')
+			S.open('//funcunit/test/autosuggest/autosuggest.html')
 		}
 	});
 	

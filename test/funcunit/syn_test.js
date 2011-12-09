@@ -26,7 +26,7 @@ test("Nested actions", function(){
 })
 
 test("Move To", function(){
-	S.open("//funcunit/test/drag.html");
+	S.open("//funcunit/test/drag/drag.html");
 	S("#start").move("#end")
 	S("#typer").type("javascriptmvc")
 	S("#typer").val("javascriptmvc","move test worked correctly");
@@ -34,7 +34,7 @@ test("Move To", function(){
 })
 
 test("Drag To", function(){
-	S.open("//funcunit/test/drag.html");
+	S.open("//funcunit/test/drag/drag.html");
 	S("#drag").drag("#drop")
 	S("#clicker").click();
 	S(".status").text("dragged", 'drag worked correctly')
