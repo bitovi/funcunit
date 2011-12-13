@@ -21,7 +21,13 @@ steal("funcunit").then(function(){
 		S('.ui-menu-item a:first').visible().click()
 		S('input').val("JavaScript", "JavaScript selected");
     })
-
-
+    
+    test("keyboard navigation",function(){
+	  S('input').visible().click().type("Java")
+	
+	  S('.ui-menu-item').visible()
+	  S('input').type('[down][down][enter]')
+	    .val("JavaScript")
+	});
 
 })
