@@ -58,19 +58,25 @@ steal('./report.css','jquery/view/ejs', 'jquery/controller').then('./report.ejs'
 				tr = [],
 				lines;
 				
-			$('.title').text(fileName);
+			this.find('.file-details .title').html("<strong>File</strong> " + fileName);
+			this.find('.file-details .coverage').html("<strong>Coverage</strong> " + 22 + "/" + 50);
+			this.find('.file-details .blocks').html("<strong>Blocks</strong> " + 2 + "/" + 50);
 			
 			for(var i=0; i<fileArr.length; i++){
 				var hits = typeof linesUsed[i] == "number"? linesUsed[i] : 0,
 					hitText = typeof linesUsed[i] == "number"? linesUsed[i] : "",
-					isHit = (hits > 0);
+					isHit = (hits > 0),
+					isBlank = (hitText === ''),
+					css = (isHit ? 'hit' : (isBlank ? 'blank' : 'miss'));
+					
 				tr.push("<tr>");
 				tr.push("<td class='line'>", hitText, "</td>");
-				tr.push("<td"+(isHit? " class='hit'" : " class='miss'")+">", "<pre>", fileArr[i], "</pre>", "</td>", "</tr>");
+				tr.push("<td class='", css,"'>", "<pre>", fileArr[i], "</pre>", "</td>", "</tr>");
 			}
 			
 			this.find('#report').hide();
-			this.find('#file').show().html(tr.join(""));
+			this.find('.files-wrapper').show();
+			this.find('#file').html(tr.join(""));
 			
 			this.find('#report-tab').removeClass('btn-pressed')
 			this.find('#file-tab').show().addClass('btn-pressed')
@@ -83,14 +89,15 @@ steal('./report.css','jquery/view/ejs', 'jquery/controller').then('./report.ejs'
 			this.find('#report-tab').addClass('btn-pressed')
 			this.find('#file-tab').hide().removeClass('btn-pressed')
 			
-			this.find('#file').hide();
+			this.find('.files-wrapper').hide();
 			this.find('#report').show();
 		},
 		
 		'#file-tab click': function(el, ev)
 		{
 			ev.preventDefault();
-			this.find('#file').show();
+			
+			this.find('.files-wrapper').show();
 			this.find('#report').hide();
 		}
 		

@@ -145,7 +145,6 @@ pre
 {
 	width:918px;
 	margin:20px auto;
-	overflow:auto;
 	position:relative;
 }
 .coverage-wrapper a
@@ -169,6 +168,10 @@ pre
 	color:#555;
 	font-size:18px;
 	padding:3px;
+}
+.overall-stats h1 .time
+{
+	color:#999;
 }
 .overall-stats .total-stat
 {
@@ -215,18 +218,19 @@ pre
 }
 
 /*************** Coverage Report Table ***************/
-.coverage-wrapper #report
+.report-wrapper #report
 {
 	padding:0;
 	width:100%;
 	border-collaspe:collaspe;
 }
-.coverage-wrapper #report td,#coverage th
+.report-wrapper #report td,
+.report-wrapper #report th
 {
 	border-collaspe:collapse;
 	text-align:left;
 }
-.coverage-wrapper #report th
+.report-wrapper #report th
 {
 	background: white;
 	background: -webkit-gradient(linear, 0% 100%, 0% 0%, color-stop(0, #F4F4F4), color-stop(0.6, white));
@@ -244,42 +248,69 @@ pre
 	text-shadow: 0px 1px 0px white;
 	text-align: left;
 }
-.coverage-wrapper #report td
+.report-wrapper #report td
 {
 	padding:3px;
 }
-.coverage-wrapper #report td img
+.report-wrapper #report td img
 {
 	margin-right:3px;
 	vertical-align:top;
 }
-.coverage-wrapper #report tr:nth-child(odd) td
+.report-wrapper #report tr:nth-child(odd) td
 {
 	background: #fafafa;
 }
-.coverage-wrapper #report tr:hover td,
-.coverage-wrapper #report tr:hover td a
+.report-wrapper #report tr:hover td,
+.report-wrapper #report tr:hover td a
 {
 	background: #d1d1d1;
 	color:#000;
 }
 
 /*************** File Lines Ran Table ***************/
-#file
+.files-wrapper
 {
-	display: none;
+	display:none;
+	border:solid 1px #bbb;
+	border-top:none;
+	overflow:auto;
+}
+.files-wrapper .file-details
+{
+	height:30px;
+	line-height:30px;
+	border-bottom:solid 1px #bbb;
+}
+.files-wrapper .file-details .title,
+.files-wrapper .file-details .coverage,
+.files-wrapper .file-details .blocks
+{
+	margin:0 15px;
+	font-size:12px;
+}
+
+.files-wrapper #file
+{
+	border-collaspe:collaspe;
 	width:100%;
 }
-#file .line
+.files-wrapper #file .line
 {
 	background:#f0f0f0;
 	border-right:solid 1px #bbb;
+	padding:2px;
+	text-align:right;
 }
-#file .hit
+.files-wrapper #file .hit
 {
 	background:#dbffda;
 }
-#file .miss
+.files-wrapper #file .blank
+{
+	background:#fafafa;
+}
+.files-wrapper #file .miss
 {
 	background:#feaaa7;
 }
