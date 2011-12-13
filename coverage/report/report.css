@@ -157,6 +157,63 @@ pre
 	padding:0 20px 20px 20px;
 }
 
+/*************** Overall Stats ***************/
+.overall-stats{
+	width:100%;
+	clear:both;
+	height:230px;
+}
+.overall-stats h1{
+	border-bottom:solid 1px #999;
+	margin:5px 0;
+	color:#555;
+	font-size:18px;
+	padding:3px;
+}
+.overall-stats .total-stat
+{
+	float:left;
+	position:relative;
+	width:200px;
+	margin:0 50px;
+}
+.overall-stats .total-stat h2
+{
+	font-size:32px;
+}
+.overall-stats .total-stat h2 .covered
+{
+	color:orange;
+	font-size:38px;
+}
+.overall-stats .total-stat h2
+{
+	font-size:18px;
+	color:#555;
+	margin:50px 0 0 0;
+}
+.overall-stats .stat-wrap{
+	float:left;
+	position:relative;
+	width:150px;
+	margin:0 40px;
+}
+.overall-stats .stat-wrap h2{
+	color:#555;
+	font-size:12px;
+	padding:0;
+	margin:5px;
+	text-align:center;
+}
+.overall-stats .stat-wrap .stat{
+	font-weight:bold;
+	color:#555;
+	position:absolute;
+	top:65px;
+	left:50px;
+	font-size:18px;
+}
+
 /*************** Coverage Report Table ***************/
 .coverage-wrapper #report
 {

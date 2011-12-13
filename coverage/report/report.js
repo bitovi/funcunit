@@ -1,6 +1,6 @@
 steal('./report.css','jquery/view/ejs', 'jquery/controller').then('./report.ejs', function(){
 	var pct = function(num){
-		return Math.round(num*1000)/10+"%";
+		return Math.round(num*1000)/10;
 	}
 	
 	$.Controller('Coverage',{
@@ -14,10 +14,18 @@ steal('./report.css','jquery/view/ejs', 'jquery/controller').then('./report.ejs'
 		renderReport: function(data)
 		{
 			var tr = [], 
-				stats;
+				stats = null,
+				totalLine = pct(data.total.lineCoverage),
+				totalBlock = pct(data.total.blockCoverage);
 				
-			this.find('.total-line-coverage').text(pct(data.total.lineCoverage));
-			this.find('.total-block-coverage').text(pct(data.total.blockCoverage));
+			this.find('h1 .time').html(new Date().toLocaleTimeString());
+			
+			this.find('.total-stat .covered').html(200 + "/" + 500)
+				
+			this.find('.total-line-coverage .stat').html(totalLine + "%");
+			this.find('.total-block-coverage .stat').html(totalBlock + "%");
+			this.find('.total-line-coverage .chart').html('<img height="150" width="150" src="http://chart.apis.google.com/chart?chs=150x150&cht=pc&chco=0E51A2,BBCCED&chd=t:0|' + totalLine +',' + (100 - totalLine) + '&chma=|2,3" />');
+			this.find('.total-block-coverage .chart').html('<img height="150" width="150" src="http://chart.apis.google.com/chart?chs=150x150&cht=pc&chco=0E51A2,BBCCED&chd=t:0|' + totalBlock + ',' + (100 - totalBlock) + '&chma=|2,3" />');
 			
 			for(var file in data.files){
 				tr.push("<tr>");
