@@ -140,6 +140,13 @@ pre
 	display:none;
 }
 
+.tabs-container .file-options
+{
+	display:none;
+	float:right;
+	margin-top:3px;
+}
+
 /*************** Coverage Wrappers ***************/
 .coverage-wrapper
 {
@@ -302,15 +309,15 @@ pre
 	padding:2px;
 	text-align:right;
 }
-.files-wrapper #file .hit
+.files-wrapper.highlighted #file .hit
 {
 	background:#dbffda;
 }
-.files-wrapper #file .blank
+.files-wrapper.highlighted #file .blank
 {
 	background:#fafafa;
 }
-.files-wrapper #file .miss
+.files-wrapper.highlighted #file .miss
 {
 	background:#feaaa7;
 }

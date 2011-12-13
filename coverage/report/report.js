@@ -36,9 +36,9 @@ steal('./report.css','jquery/view/ejs', 'jquery/controller').then('./report.ejs'
 					
 				tr.push("<td>", "<a class='file' href='#'>", file, "</a>", "</td>");
 				tr.push("<td>", stats.lines, "</td>");
-				tr.push("<td>", "<img height='15' width='130' src='http://chart.apis.google.com/chart?chf=bg,s,dedede&chxs=0,000000,0,0,_,dedede|1,000000,0,0,_,dedede&chxt=x,y&chbh=23,0,0&chs=130x15&cht=bhs&chco=0E51A2,dedede&chp=0,0.033&chma=2&chd=t:", parseInt(linePercentage, 10), "|100' />", linePercentage ,"</td>");
+				tr.push("<td>", "<img height='15' width='130' src='http://chart.apis.google.com/chart?chf=bg,s,dedede&chxs=0,000000,0,0,_,dedede|1,000000,0,0,_,dedede&chxt=x,y&chbh=23,0,0&chs=130x15&cht=bhs&chco=0E51A2,dedede&chp=0,0.033&chma=2&chd=t:", parseInt(linePercentage, 10), "|100' />", linePercentage ,"%</td>");
 				tr.push("<td>", stats.blocks, "</td>");
-				tr.push("<td>", "<img height='15' width='130' src='http://chart.apis.google.com/chart?chf=bg,s,dedede&chxs=0,000000,0,0,_,dedede|1,000000,0,0,_,dedede&chxt=x,y&chbh=23,0,0&chs=130x15&cht=bhs&chco=0E51A2,dedede&chp=0,0.033&chma=2&chd=t:", parseInt(blockPercentage, 10), "|100' />", blockPercentage ,"</td>");
+				tr.push("<td>", "<img height='15' width='130' src='http://chart.apis.google.com/chart?chf=bg,s,dedede&chxs=0,000000,0,0,_,dedede|1,000000,0,0,_,dedede&chxt=x,y&chbh=23,0,0&chs=130x15&cht=bhs&chco=0E51A2,dedede&chp=0,0.033&chma=2&chd=t:", parseInt(blockPercentage, 10), "|100' />", blockPercentage ,"%</td>");
 				tr.push("</tr>");
 			}
 			
@@ -74,12 +74,18 @@ steal('./report.css','jquery/view/ejs', 'jquery/controller').then('./report.ejs'
 				tr.push("<td class='", css,"'>", "<pre>", fileArr[i], "</pre>", "</td>", "</tr>");
 			}
 			
-			this.find('#report').hide();
+			this.find('.report-wrapper').hide();
 			this.find('.files-wrapper').show();
 			this.find('#file').html(tr.join(""));
 			
+			this.find('.file-options').show();
 			this.find('#report-tab').removeClass('btn-pressed')
 			this.find('#file-tab').show().addClass('btn-pressed')
+		},
+		
+		"#showHighlighting change":function(el,ev)
+		{
+			this.find('.files-wrapper').toggleClass('highlighted');
 		},
 		
 		"#report-tab click":function(el,ev)
@@ -88,17 +94,19 @@ steal('./report.css','jquery/view/ejs', 'jquery/controller').then('./report.ejs'
 			
 			this.find('#report-tab').addClass('btn-pressed')
 			this.find('#file-tab').hide().removeClass('btn-pressed')
+			this.find('.file-options').hide();
 			
 			this.find('.files-wrapper').hide();
-			this.find('#report').show();
+			this.find('.report-wrapper').show();
 		},
 		
 		'#file-tab click': function(el, ev)
 		{
 			ev.preventDefault();
 			
+			this.find('.file-options').show();
 			this.find('.files-wrapper').show();
-			this.find('#report').hide();
+			this.find('.report-wrapper').hide();
 		}
 		
 	})
