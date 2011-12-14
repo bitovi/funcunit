@@ -1,0 +1,92 @@
+
+
+.test-pass td, #results tr:nth-child(2n+1).test-pass td{
+	background-color:#dbffda;
+}
+.test-fail td, #results tr:nth-child(2n+1).test-fail td{
+	background-color:#feaaa7;
+}
+.test-running td, #results tr:nth-child(2n+1).test-running td{
+	background-color:#CFD4E6;
+}
+body{
+	font-family: "Helvetica Neue",Arial,Verdana,"Nimbus Sans L",sans-serif;
+	font-size:11px;
+	width:100%;
+}
+iframe{
+	width:100%;
+	height:0px;
+	border:none;
+	position:absolute;
+}
+
+.test{
+	/*** Passing Styles */
+	
+	li.pass {
+		color: #5E740B;
+		background-color: #fff;
+		border-left: 26px solid #C6E746;
+	}
+	
+	.pass                          { color: #528CE0; background-color: #D2E0E6; }
+	.pass .test-name               { color: #366097; }
+	
+	.pass .test-actual,
+	.pass .test-expected           { color: #999999; }
+	
+	.qunit-pass                    { background-color: #C6E746; }
+	
+	/*** Failing Styles */
+	
+	li.fail {
+		color: #710909;
+		background-color: #fff;
+		border-left: 26px solid #EE5757;
+		white-space: pre;
+	}
+	
+	.fail                          { color: #000000; background-color: #EE5757; }
+	.fail .test-name,
+	.fail .module-name             { color: #000000; }
+	
+	.fail .test-actual             { color: #EE5757; }
+	.fail .test-expected           { color: green;   }
+	
+	.qunit-fail                    { background-color: #EE5757; }
+}
+
+.report-wrapper{
+	display:none;
+}
+
+.overall-stats{
+	display:none;
+}
+
+.modulecol{
+	width:200px;	
+}
+.testcol{
+	width:600px;
+}
+
+.play li, .run-options li { 
+	margin: 2px; 
+	position: relative; 
+	padding: 4px 0; 
+	cursor: pointer; 
+	float: left; 
+	list-style: none;
+	width:24px;
+	height:16px; 
+	span{
+		margin: 0 4px;
+	}
+}
+
+.run-options li{
+    bottom: 6px;
+    right: 4px;
+}

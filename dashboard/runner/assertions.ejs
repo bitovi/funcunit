@@ -1,0 +1,22 @@
+<%if(assertions.length){%>
+<ol style="display: block;">
+	<%for(var i=0; i<assertions.length; i++){%>
+	<%var a = assertions[i];%>
+	<li class="<%=a.result? 'pass': 'fail'%>">
+		<span class="test-message"><%=a.message%></span>
+		<%if(a.expected){%>
+		<table>
+			<tbody>
+				<tr class="test-expected">
+					<th>Expected: </th>
+					<td>
+						<pre><%=a.expected%></pre>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<%}%>
+	</li>
+	<%}%>
+</ol>
+<%}%>

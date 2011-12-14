@@ -1,3 +1,4 @@
+
 /*********************************************
  * CSS Styles for Coverage
  *********************************************/
@@ -35,7 +36,7 @@ pre
 .header-wrapper
 {
 	width:918px;
-	margin:0 auto;
+	margin:0;
 }
 .header h1
 {
@@ -140,9 +141,12 @@ pre
 	display:none;
 }
 
-.tabs-container .file-options
-{
+.tabs-container .file-options{
 	display:none;
+}
+
+.tabs-container .file-options, .tabs-container .run-options
+{
 	float:right;
 	margin-top:3px;
 }
@@ -151,7 +155,7 @@ pre
 .coverage-wrapper
 {
 	width:918px;
-	margin:20px auto;
+	margin:20px 40px;
 	position:relative;
 }
 .coverage-wrapper a
@@ -225,19 +229,19 @@ pre
 }
 
 /*************** Coverage Report Table ***************/
-.report-wrapper #report
+#report, #results
 {
 	padding:0;
 	width:100%;
 	border-collaspe:collaspe;
 }
-.report-wrapper #report td,
-.report-wrapper #report th
+#report td, #report th, 
+#results td, #results th
 {
 	border-collaspe:collapse;
 	text-align:left;
 }
-.report-wrapper #report th
+#report th, #results th
 {
 	background: white;
 	background: -webkit-gradient(linear, 0% 100%, 0% 0%, color-stop(0, #F4F4F4), color-stop(0.6, white));
@@ -255,21 +259,24 @@ pre
 	text-shadow: 0px 1px 0px white;
 	text-align: left;
 }
-.report-wrapper #report td
+#report td, #results td
 {
+	font-size:11px;
 	padding:3px;
 }
-.report-wrapper #report td img
+#report td img, #results td img
 {
 	margin-right:3px;
 	vertical-align:top;
 }
-.report-wrapper #report tr:nth-child(odd) td
+#report tr:nth-child(odd) td, #results tr:nth-child(odd) td
 {
 	background: #fafafa;
 }
-.report-wrapper #report tr:hover td,
-.report-wrapper #report tr:hover td a
+#report tr:hover td,
+#report tr:hover td a,
+#results tr:hover td,
+#results tr:hover td a
 {
 	background: #d1d1d1;
 	color:#000;

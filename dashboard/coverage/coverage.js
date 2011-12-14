@@ -1,4 +1,4 @@
-steal('./report.css','jquery/view/ejs', 'jquery/controller').then('./report.ejs', function(){
+steal('./coverage.css','jquery/view/ejs', 'jquery/controller', function(){
 	var pct = function(num){
 		return Math.round(num*1000)/10;
 	}
@@ -7,8 +7,7 @@ steal('./report.css','jquery/view/ejs', 'jquery/controller').then('./report.ejs'
 		
 		init: function()
 		{
-			this.element.html('//funcunit/coverage/report/report.ejs', {});
-			this.renderReport(this.options.stats)
+			this.renderReport(this.options.stats);
 		},
 		
 		renderReport: function(data)
@@ -86,27 +85,6 @@ steal('./report.css','jquery/view/ejs', 'jquery/controller').then('./report.ejs'
 		"#showHighlighting change":function(el,ev)
 		{
 			this.find('.files-wrapper').toggleClass('highlighted');
-		},
-		
-		"#report-tab click":function(el,ev)
-		{
-			ev.preventDefault();
-			
-			this.find('#report-tab').addClass('btn-pressed')
-			this.find('#file-tab').hide().removeClass('btn-pressed')
-			this.find('.file-options').hide();
-			
-			this.find('.files-wrapper').hide();
-			this.find('.report-wrapper').show();
-		},
-		
-		'#file-tab click': function(el, ev)
-		{
-			ev.preventDefault();
-			
-			this.find('.file-options').show();
-			this.find('.files-wrapper').show();
-			this.find('.report-wrapper').hide();
 		}
 		
 	})

@@ -2,12 +2,12 @@
 
 	if(steal.options.instrument){
 		QUnit.done(function(){
-			steal('funcunit/coverage/report', function(){
-				var stats = steal.instrument.compileStats()
-				$("<div id='coverage'></div>").appendTo(document.body).coverage({stats: stats});
-				var offsetTop = $('#coverage').offset().top;
-				$(document.body).scrollTop(offsetTop);
-			})
+			// steal('funcunit/dashboard/coverage', function(){
+				// var stats = steal.instrument.compileStats()
+				// $("<div id='coverage'></div>").appendTo(document.body).coverage({stats: stats});
+				// var offsetTop = $('#coverage').offset().top;
+				// $(document.body).scrollTop(offsetTop);
+			// })
 			// send to console
 			if(steal.options.browser){
 				steal.client.trigger("coverage", steal.instrument.compileStats());
