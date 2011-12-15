@@ -1,14 +1,3 @@
-
-
-.test-pass td, #results tr:nth-child(2n+1).test-pass td{
-	background-color:#dbffda;
-}
-.test-fail td, #results tr:nth-child(2n+1).test-fail td{
-	background-color:#feaaa7;
-}
-.test-running td, #results tr:nth-child(2n+1).test-running td{
-	background-color:#CFD4E6;
-}
 body{
 	font-family: "Helvetica Neue",Arial,Verdana,"Nimbus Sans L",sans-serif;
 	font-size:11px;
@@ -22,15 +11,32 @@ iframe{
 }
 
 .test{
+
+	.test-expected{
+		font-size:12px;
+		font-weight:bold;
+		color:#000;
+	}
+	
+	.test-message{
+		color:#000;
+	}
+
+
 	/*** Passing Styles */
 	
 	li.pass {
 		color: #5E740B;
 		background-color: #fff;
 		border-left: 26px solid #C6E746;
+		padding:5px;
 	}
 	
-	.pass                          { color: #528CE0; background-color: #D2E0E6; }
+	.pass { 
+		color: #528CE0; 
+		background-color: #D2E0E6; 
+	}
+		
 	.pass .test-name               { color: #366097; }
 	
 	.pass .test-actual,
@@ -45,9 +51,14 @@ iframe{
 		background-color: #fff;
 		border-left: 26px solid #EE5757;
 		white-space: pre;
+		padding:5px;
 	}
 	
-	.fail                          { color: #000000; background-color: #EE5757; }
+	.fail { 
+		color: #000000; 
+		background-color: #EE5757;
+	}
+	
 	.fail .test-name,
 	.fail .module-name             { color: #000000; }
 	
@@ -89,4 +100,17 @@ iframe{
 .run-options li{
     bottom: 6px;
     right: 4px;
+}
+
+#results tr.test-pass>td{
+	background-color:#dbffda;
+	border-bottom:solid 1px #999;
+}
+#results tr.test-fail>td{
+	background-color:#feaaa7;
+	border-bottom:solid 1px #999;
+}
+#results tr.test-running>td{
+	background-color:#CFD4E6;
+	border-bottom:solid 1px #999;
 }
