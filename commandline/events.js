@@ -5,7 +5,7 @@ steal('funcunit/commandline/output/xunit.js', function(){
 		total = 0,
 		browserFailed, browserTotal;
 		
-		// bind all events
+	// bind all events
 	FuncUnit.bindEvents = function(browser){
 		browser.bind("begin", function(data){
 			FuncUnit.begin();
