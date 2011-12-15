@@ -227,11 +227,14 @@ pre
 }
 
 /*************** Coverage Report Table ***************/
+.results-wrapper{
+	float:left;
+	margin-top:-2px;
+}
 #report, #results
 {
 	padding:0;
 	width:100%;
-	border-collapse:collapse;
 }
 #report td, 
 #report th, 
@@ -240,8 +243,8 @@ pre
 {
 	text-align:left;
 }
-#report th, 
-#results th
+#report .header th, 
+#results .header th
 {
 	background: white;
 	background: -webkit-gradient(linear, 0% 100%, 0% 0%, color-stop(0, #F4F4F4), color-stop(0.6, white));
@@ -279,7 +282,8 @@ pre
 	margin-right:3px;
 	vertical-align:top;
 }
-#report tr:nth-child(odd) td, #results tr:nth-child(odd) td
+#report tr:nth-child(odd)>td, 
+#results tr:nth-child(odd)>td
 {
 	background: #fafafa;
 }
