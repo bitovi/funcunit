@@ -7,10 +7,14 @@ steal("steal/less", "jquery/view/ejs", "jquery/controller", "funcunit/dashboard/
 	window.module = function(name){
 		currentModule = name;
 	}
-	window.test = function(name){
+	window.test = function(name, expects, fn){
+		if(typeof expects === "function"){
+			fn = expects;
+		}
 		tests.push(new Test({
 			test: name,
-			module: currentModule
+			module: currentModule,
+			testCode: fn.toString()
 		}));
 	}
 	
