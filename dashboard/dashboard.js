@@ -1,6 +1,7 @@
-steal("steal/less", "jquery/view/ejs", "jquery/controller", "funcunit/dashboard/runner", "funcunit/qunit", "funcunit/dashboard/coverage")
+steal("steal/less", "jquery/view/ejs", "jquery/controller").then("funcunit/settings.js")
+	.then("funcunit/dashboard/runner", "funcunit/qunit", "funcunit/dashboard/coverage")
 	.then("./dashboard.less", "./aristo.css", function($){
-
+	
 	var currentModule,
 		currentTest,
 		tests = new Test.List([]);

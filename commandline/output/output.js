@@ -9,9 +9,6 @@
  *
  * Date: Thu Jul  7 15:37:12 CEST 2011
  * 
- * To enable logging, please set FuncUnit.xmlLogFilename to a filename of 
- * your choice in settings.js. You can also define a test case class name
- * prefix in FuncUnit.xmlLogClassPrefix.
  */
  
 steal('funcunit/commandline/output/json2.js', function(){
@@ -62,8 +59,8 @@ steal('funcunit/commandline/output/json2.js', function(){
 
 	steal.extend(FuncUnit,{
 		begin: function(){
-			classPrefix = FuncUnit.xmlLogClassPrefix ? FuncUnit.xmlLogClassPrefix : '';
-			filename = FuncUnit.xmlLogFilename ? FuncUnit.xmlLogFilename : false;
+			classPrefix = 'QUnit.';
+			filename = 'testresults.xml';
 			if(filename) {
 				fstream = new java.io.FileWriter(filename, false);
 				out = new java.io.BufferedWriter(fstream);
@@ -180,10 +177,10 @@ steal('funcunit/commandline/output/json2.js', function(){
 			print(percentage(total.blockCoverage)+" Block Coverage of "+total.blocks+" blocks")
 			
 			
-			var fstream = new java.io.FileWriter('funcunit/coverage/coverage.json', false),
-				out = new java.io.BufferedWriter(fstream);
-			out.write(JSON.stringify(stats));
-			out.close();
+			// var fstream = new java.io.FileWriter('funcunit/coverage/coverage.json', false),
+				// out = new java.io.BufferedWriter(fstream);
+			// out.write(JSON.stringify(stats));
+			// out.close();
 			// this.convertCoverageToCobertura(stats);
 		},
 		convertCoverageToCobertura: function(stats){

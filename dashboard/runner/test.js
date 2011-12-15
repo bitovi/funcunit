@@ -60,9 +60,9 @@ steal("jquery/model/list", function(){
 			});
 			
 			var win = iframe[0].contentWindow,
-				loc = "dashboard/frame/frame.html?";
+				loc = "dashboard/frame/qunit.html?";
 			if(withCoverage){
-				loc+="steal[instrument]=true&";
+				loc+="steal[instrument]="+FuncUnit.coverageIgnore.join(",")+"&";
 			}
 			loc+="filter="+filterArr.join(",")+"&test="+testFile;
 			win.location = loc;

@@ -11,7 +11,7 @@ steal("jquery/controller", "./test.js", function(){
 			if(!el.is(':checked')){
 				this.find('.check-one').removeAttr("checked");
 			} else {
-				this.find('.check-one').attr("checked", "checked");
+				this.find('.check-one').prop("checked", true);
 			}
 		},
 		'{opts} .play click': function(el, ev)

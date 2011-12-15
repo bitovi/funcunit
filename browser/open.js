@@ -28,87 +28,16 @@ $.extend(FuncUnit,{
 	 * [funcunit.selenium Selenium] page for more information.
 	 */
 	
-	// href comes from settings
-	/**
-	 * @attribute href
-	 * The location of the page running the tests on the server and where relative paths 
-	 * passed in to [FuncUnit.static.open] will be referenced from.
-	 * 
-	 * This is typically where the test page runs on the server.  It can be set before 
-	 * calls to [FuncUnit.static.open]:
-	@codestart
-	test("opening something", function(){
-	  S.href = "http://localhost/tests/mytest.html"
-	  S.open("../myapp")
-	  ...
-	})
-	@codeend
-	 */
-	
-	// jmvcRoot comes from settings
-	/**
-	 * @attribute jmvcRoot
-	 * jmvcRoot should be set to url of JMVC's root folder.  
-	 * <p>This is used to calculate JMVC style paths (paths that begin with  //).
-	 * This is the prefered method of referencing pages if
-	 * you want to test on the filesystem and test on the server.</p>
-	 * <p>This is usually set in the global config file in <code>funcunit/settings.js</code> like:</p>
-	@codestart
-	FuncUnit = {jmvcRoot: "http://localhost/script/" }
-	@codeend
-	 */
-	
 	// open is a method
 	/**
-	 * Opens a page.  It will error if the page can't be opened before timeout. 
-	 * <h3>Example</h3>
-	@codestart
-	//a full url
-	S.open("http://localhost/app/app.html")
-	
-	//from jmvc root (FuncUnit.jmvcRoot must be set)
-	S.open("//app/app.html")
-	@codeend
-	
-	 * <h3>Paths in Selenium</h3>
-	 * Selenium runs the testing page from the filesystem and by default will look for pages on the filesystem unless provided a full
-	 * url or information that can translate a partial path into a full url. FuncUnit uses [FuncUnit.static.jmvcRoot] 
-	 * and [FuncUnit.static.href] to 
-	 * translate partial paths.
-	<table>
-	  <tr>
-	  	<th>path</th>
-	  	<th>jmvcRoot</th>
-	  	<th>href</th>
-	  	<th>resulting url</th>
-	  </tr>
-	  <tr>
-	    <td>//myapp/mypage.html</td>
-	    <td>null</td>
-	    <td>null</td>
-	    <td>file:///C:/development/cookbook/public/myapp/mypage.html</td>
-	  </tr>
-	  <tr>
-	    <td>//myapp/mypage.html</td>
-	    <td>http://localhost/</td>
-	    <td></td>
-	    <td>http://localhost/myapp/mypage.html</td>
-	  </tr>
-	  <tr>
-	    <td>http://foo.com</td>
-	    <td></td>
-	    <td></td>
-	    <td>http://foo.com</td>
-	  </tr>
-	  <tr>
-	  	<td>../mypage.html</td>
-	    <td></td>
-	    <td>http://localhost/myapp/funcunit.html</td>
-	    <td>http://localhost/mypage.html</td>
-	  </tr>
-	</table>
+	 * Opens a page.  It will error if the page can't be opened before timeout. If a URL begins with "//", pages are opened 
+	 * from the FuncUnit root (the root folder where funcunit is located)
+	 * ### Example 
+
+    S.open("//app/app.html")
+
 	 * 
-	 * @param {String} path a full or partial url to open.  If a partial is given, 
+	 * @param {String} path a full or partial url to open.
 	 * @param {Function} success
 	 * @param {Number} timeout
 	 */
@@ -256,11 +185,8 @@ $.extend(FuncUnit,{
 	 * @param {String} path
 	 */
 	getAbsolutePath: function( path ) {
-		if(typeof(steal) == "undefined" || steal.root == null){
-			return path;
-		}
 		var fullPath, 
-			root = FuncUnit.jmvcRoot || steal.root.path;
+			root = steal.root.path;
 		
 		if (/^\/\//.test(path)) {
 			fullPath = new steal.File(path.substr(2)).joinFrom(root);

@@ -1,6 +1,6 @@
 // used to 'run' a funcunit/envjs command:
 // _args = ['selenium', 'path/to/page.html']; load('funcunit/run')
-// ./js funcunit/run selenium funcunit/funcunit.html -coverage -includeFuncunit -ignore funcunit/qunit/qunit.js funcunit/browser/resources/json.js funcunit/browser/resources/jquery.js
+// ./js funcunit/run selenium funcunit/funcunit.html -coverage
 (function(){
 	load('steal/rhino/rhino.js');
 	var type, page;
@@ -13,13 +13,14 @@
 	page = _args.shift();
 	
 	var opts = steal.opts(_args, {
-			coverage: 0
-		})
+		coverage: 0
+	})
 	steal('funcunit/commandline/utils.js') 
 		.then('funcunit/commandline/'+type+'.js', 
 			function(){
 				FuncUnit._loadSettingsFile(page);
 				FuncUnit.funcunitPage = FuncUnit._getPageUrl(page, opts.coverage, FuncUnit.coverageIgnore);
+				print("Opening "+FuncUnit.funcunitPage);
 				FuncUnit.loader[type](FuncUnit.funcunitPage);
 			})
 

@@ -1,6 +1,6 @@
 // loaded into the commandline environment (shared by envjs, selenium)
 
-steal('funcunit/commandline/output/xunit.js', function(){
+steal('funcunit/commandline/output', function(){
 	var totalFailed = 0,
 		total = 0,
 		browserFailed, browserTotal;
