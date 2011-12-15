@@ -6,30 +6,38 @@ steal("jquery/controller", "./test.js", function(){
 				tests: this.options.tests
 			})
 		},
-		".test .play click": function(el, ev){
-			var el = el.closest(".test"),
-				test = el.model();
-			test.run();
-			ev.stopImmediatePropagation();
-			ev.preventDefault();
-			el.addClass('test-running')
-		},
-		'{opts} .play click': function(el, ev){
-			var coverage = false;
-			if($('#runCoverage').prop("checked")){
-				coverage = true;
+		".check-all change":function(el,ev)
+		{
+			if(!el.is(':checked')){
+				this.find('.check-one').removeAttr("checked");
+			} else {
+				this.find('.check-one').attr("checked", "checked");
 			}
-			this.options.tests.run(coverage);
+		},
+		'{opts} .play click': function(el, ev)
+		{
+			var tests = new Test.List([]);
+			this.find('.check-one:checked').each(function(i,t){
+				var el = $(t).closest(".test"),
+					test = el.model();
+				
+				tests.push(test);
+			});
+			
+			tests.run($('#runCoverage').is(':checked'));
+			
 			ev.preventDefault();
 		},
 		"{Test} testDone": function(el, ev, test){
 			var el = test.elements();
 			el.removeClass('test-running')
+			
 			if(!test.failed){
 				el.addClass('test-pass')
 			} else {
 				el.addClass('test-fail')
 			}
+			
 			el.find('.assertions').html('//funcunit/dashboard/runner/assertions.ejs', {
 				assertions: test.assertions 
 			})

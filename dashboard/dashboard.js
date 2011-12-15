@@ -4,13 +4,16 @@ steal("steal/less", "jquery/view/ejs", "jquery/controller", "funcunit/dashboard/
 	var currentModule,
 		currentTest,
 		tests = new Test.List([]);
+		
 	window.module = function(name){
 		currentModule = name;
 	}
+	
 	window.test = function(name, expects, fn){
 		if(typeof expects === "function"){
 			fn = expects;
 		}
+		
 		tests.push(new Test({
 			test: name,
 			module: currentModule,
@@ -23,8 +26,8 @@ steal("steal/less", "jquery/view/ejs", "jquery/controller", "funcunit/dashboard/
 			tests: tests,
 			opts: $(".run-options")
 		});
-		steal("steal/instrument");
 		
+		steal("steal/instrument");
 	});
 	
 	$.Controller("Dashboard", {

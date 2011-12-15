@@ -1,7 +1,7 @@
 <% for(var i=0; i<tests.length; i++){ %>
   <tr <%=tests[i]%>>
+	<td class="chkcol"><input type="checkbox" checked="checked" class="check-one" /></td>
   	<td><%= tests[i].module %></td>
   	<td><%= tests[i].test %><div class='assertions'></div></td>
-  	<td class='play'><li class="ui-state-default ui-corner-all" title=".ui-icon-play"><span class="ui-icon ui-icon-play"></span></li></td>
   </tr>
 <%}%>

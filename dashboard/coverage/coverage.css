@@ -8,7 +8,7 @@ body{
 	padding:0;
 	margin:0;
 	font-family: "Helvetica Neue",Arial,Verdana,"Nimbus Sans L",sans-serif;
-	font-size:11px;
+	font-size:12px;
 }
 pre
 {
@@ -35,7 +35,6 @@ pre
 }
 .header-wrapper
 {
-	width:918px;
 	margin:0;
 }
 .header h1
@@ -154,7 +153,6 @@ pre
 /*************** Coverage Wrappers ***************/
 .coverage-wrapper
 {
-	width:918px;
 	margin:20px 40px;
 	position:relative;
 }
@@ -233,15 +231,17 @@ pre
 {
 	padding:0;
 	width:100%;
-	border-collaspe:collaspe;
+	border-collapse:collapse;
 }
-#report td, #report th, 
-#results td, #results th
+#report td, 
+#report th, 
+#results td, 
+#results th
 {
-	border-collaspe:collapse;
 	text-align:left;
 }
-#report th, #results th
+#report th, 
+#results th
 {
 	background: white;
 	background: -webkit-gradient(linear, 0% 100%, 0% 0%, color-stop(0, #F4F4F4), color-stop(0.6, white));
@@ -249,7 +249,6 @@ pre
 	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#f4f4f4');
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff', endColorstr='#f4f4f4')";
 	border-left: 1px solid #CCC;
-	border-right: 1px solid #CCC;
 	border-bottom: 1px solid #CCC;
 	color: #555;
 	font-size: 11px;
@@ -258,11 +257,22 @@ pre
 	padding: 6px 10px;
 	text-shadow: 0px 1px 0px white;
 	text-align: left;
+	font-size:12px;
+}
+#results th.testcol
+{
+	border-right:solid 1px #CCC;
 }
 #report td, #results td
 {
-	font-size:11px;
-	padding:3px;
+	padding:5px;
+	font-size:12px;
+}
+#results th.chkcol,
+#results td.chkcol
+{
+	width:30px;
+	text-align:center;
 }
 #report td img, #results td img
 {
