@@ -879,7 +879,7 @@ function validTest( name ) {
 		filter = filter.slice( 1 );
 	}
 
-	if ( name.indexOf( filter ) !== -1 ) {
+	if ( filter.indexOf( name ) !== -1 ) {
 		return !not;
 	}
 

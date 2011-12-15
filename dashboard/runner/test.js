@@ -29,8 +29,11 @@ steal("jquery/model/list", function(){
 			this.id = Test.hashCode(this.module+this.test);
 			this.assertions = [];
 		},
+		filterString: function(){
+			return this.module+": "+this.test;
+		},
 		run: function(){
-			var filter = this.module+": "+this.test,
+			var filter = this.filterString(),
 				win = iframe[0].contentWindow;
 			win.location = "dashboard/frame/frame.html?filter="+filter+"&test="+testFile;
 			// win.location.reload();
@@ -51,12 +54,17 @@ steal("jquery/model/list", function(){
 	})
 	$.Model.List("Test.List", {
 		run: function(withCoverage){
+			var filterArr = [];
+			this.each(function(i, test){
+				filterArr.push(test.filterString());
+			});
+			
 			var win = iframe[0].contentWindow,
 				loc = "dashboard/frame/frame.html?";
 			if(withCoverage){
 				loc+="steal[instrument]=true&";
 			}
-			loc+="test="+testFile;
+			loc+="filter="+filterArr.join(",")+"&test="+testFile;
 			win.location = loc;
 		}
 	})
