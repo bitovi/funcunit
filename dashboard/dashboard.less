@@ -162,10 +162,12 @@ iframe{
 
 /*************** Overall Stats ***************/
 .overall-stats{
-	width:100%;
+	width:800px;
 	clear:both;
 	height:200px;
 	padding-top:20px;
+	margin:0 auto;
+
 	h1{
 		border-bottom:solid 1px #999;
 		margin:5px 0;
@@ -236,6 +238,9 @@ iframe{
 	padding:0;
 	width:100%;
 }
+#report{
+	border-bottom:solid 1px #CCC;
+}
 #report td, 
 #report th, 
 #results td, 
@@ -260,8 +265,13 @@ iframe{
 	text-align: left;
 	font-size:12px;
 }
+#report th{
+	border-top:solid 1px #CCC;
+}
+#report th.filecol{
+	border-left:none;
+}
 #results th.testcol,
-#report th.blockcol
 {
 	border-right:solid 1px #CCC;
 }
@@ -322,6 +332,7 @@ iframe{
 {
 	border-collaspe:collaspe;
 	width:100%;
+	border-top:solid 1px #CCC;
 }
 .files-wrapper #file .line
 {
@@ -342,6 +353,7 @@ iframe{
 {
 	background:#feaaa7;
 }
+
 
 /*************** Tests ***************/
 .test{
