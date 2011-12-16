@@ -16,15 +16,14 @@ steal('jquery/view/ejs', 'jquery/controller', function(){
 				stats = null,
 				totalLine = pct(data.total.lineCoverage),
 				totalBlock = pct(data.total.blockCoverage);
-				
-			this.find('h1 .time').html(new Date().toLocaleTimeString());
 			
-			this.find('.total-stat .covered').html(200 + "/" + 500)
+			var run = Math.round(data.total.lineCoverage*data.total.lines); 
+			this.find('.report-wrapper .total-stat .covered').html(run + "/" + data.total.lines)
 				
-			this.find('.total-line-coverage .stat').html(totalLine + "%");
-			this.find('.total-block-coverage .stat').html(totalBlock + "%");
-			this.find('.total-line-coverage .chart').html('<img height="150" width="150" src="http://chart.apis.google.com/chart?chs=150x150&cht=pc&chco=0E51A2,BBCCED&chd=t:0|' + totalLine +',' + (100 - totalLine) + '&chma=|2,3" />');
-			this.find('.total-block-coverage .chart').html('<img height="150" width="150" src="http://chart.apis.google.com/chart?chs=150x150&cht=pc&chco=0E51A2,BBCCED&chd=t:0|' + totalBlock + ',' + (100 - totalBlock) + '&chma=|2,3" />');
+			this.find('.report-wrapper .total-line-coverage .stat').html(totalLine + "%");
+			this.find('.report-wrapper .total-block-coverage .stat').html(totalBlock + "%");
+			this.find('.report-wrapper .total-line-coverage .chart').html('<img height="150" width="150" src="http://chart.apis.google.com/chart?chs=150x150&cht=pc&chco=0E51A2,BBCCED&chd=t:0|' + totalLine +',' + (100 - totalLine) + '&chma=|2,3" />');
+			this.find('.report-wrapper .total-block-coverage .chart').html('<img height="150" width="150" src="http://chart.apis.google.com/chart?chs=150x150&cht=pc&chco=0E51A2,BBCCED&chd=t:0|' + totalBlock + ',' + (100 - totalBlock) + '&chma=|2,3" />');
 			
 			for(var file in data.files){
 				tr.push("<tr>");
@@ -52,14 +51,21 @@ steal('jquery/view/ejs', 'jquery/controller', function(){
 			
 			var fileName = $(ev.target).text(),
 				src = data.files[fileName].src,
+				totalLine = pct(data.files[fileName].lineCoverage),
+				totalBlock = pct(data.files[fileName].blockCoverage),
 				linesUsed = data.files[fileName].linesUsed,
 				fileArr = src.replace(/\</g, "&lt;").replace(/\>/g, "&gt;").split("\n"),
 				tr = [],
 				lines;
 				
-			this.find('.file-details .title').html("<strong>File</strong> " + fileName);
-			this.find('.file-details .coverage').html("<strong>Coverage</strong> " + 22 + "/" + 50);
-			this.find('.file-details .blocks').html("<strong>Blocks</strong> " + 2 + "/" + 50);
+			this.find("#file-tab").text(fileName)
+			var run = Math.round(data.files[fileName].lineCoverage*data.files[fileName].lines); 
+			this.find('.files-wrapper .total-stat .covered').html(run + "/" + data.files[fileName].lines)
+				
+			this.find('.files-wrapper .total-line-coverage .stat').html(totalLine + "%");
+			this.find('.files-wrapper .total-block-coverage .stat').html(totalBlock + "%");
+			this.find('.files-wrapper .total-line-coverage .chart').html('<img height="150" width="150" src="http://chart.apis.google.com/chart?chs=150x150&cht=pc&chco=0E51A2,BBCCED&chd=t:0|' + totalLine +',' + (100 - totalLine) + '&chma=|2,3" />');
+			this.find('.files-wrapper .total-block-coverage .chart').html('<img height="150" width="150" src="http://chart.apis.google.com/chart?chs=150x150&cht=pc&chco=0E51A2,BBCCED&chd=t:0|' + totalBlock + ',' + (100 - totalBlock) + '&chma=|2,3" />');
 			
 			for(var i=0; i<fileArr.length; i++){
 				var hits = typeof linesUsed[i] == "number"? linesUsed[i] : 0,
