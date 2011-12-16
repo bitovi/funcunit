@@ -1,4 +1,4 @@
-steal('./coverage.css','jquery/view/ejs', 'jquery/controller', function(){
+steal('jquery/view/ejs', 'jquery/controller', function(){
 	var pct = function(num){
 		return Math.round(num*1000)/10;
 	}
