@@ -1,8 +1,11 @@
 (function(){
 	var testMatch = location.search.match(/test=([^\&]*)/);
 	if(testMatch){
-		steal("funcunit").then(testMatch[1], function(){
-			
+		steal("funcunit").then(function(){
+			if(top.Dashboard && top.Dashboard.currentTests){
+				QUnit.config.filter = top.Dashboard.currentTests.join(",");
+			}
+		}, testMatch[1], function(){
 			if(steal.instrument){
 				QUnit.done(function(){
 					var stats = steal.instrument.compileStats()

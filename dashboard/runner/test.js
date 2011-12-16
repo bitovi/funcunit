@@ -64,7 +64,8 @@ steal("jquery/model/list", function(){
 			if(withCoverage){
 				loc+="steal[instrument]="+FuncUnit.coverageIgnore.join(",")+"&";
 			}
-			loc+="filter="+filterArr.join(",")+"&test="+testFile;
+			loc += "test="+testFile;
+			Dashboard.currentTests = filterArr;
 			win.location = loc;
 		}
 	})
