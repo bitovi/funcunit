@@ -726,7 +726,11 @@ QUnit.load = function() {
 
 	var urlConfigHtml = '', len = config.urlConfig.length;
 	for ( var i = 0, val; i < len, val = config.urlConfig[i]; i++ ) {
-		config[val] = QUnit.urlParams[val];
+		if(val === "coverage"){
+			config["coverage"] = QUnit.urlParams["steal[instrument]"];
+		} else {
+			config[val] = QUnit.urlParams[val];
+		}
 		urlConfigHtml += '<label><input name="' + val + '" type="checkbox"' + ( config[val] ? ' checked="checked"' : '' ) + '>' + val + '</label>';
 	}
 
@@ -739,7 +743,11 @@ QUnit.load = function() {
 		banner.innerHTML = '<a href="' + QUnit.url({ filter: undefined }) + '"> ' + banner.innerHTML + '</a> ' + urlConfigHtml;
 		addEvent( banner, "change", function( event ) {
 			var params = {};
-			params[ event.target.name ] = event.target.checked ? true : undefined;
+			var name = event.target.name;
+			if(event.target.name === "coverage"){
+				name = "steal[instrument]"
+			}
+			params[ name ] = event.target.checked ? true : undefined;
 			window.location = QUnit.url( params );
 		});
 	}
@@ -795,6 +803,7 @@ steal.bind("ready", function(){
 	QUnit.config.autorun = false;
 	QUnit.config.reorder = false;
 	QUnit.config.testTimeout = false;
+	QUnit.config.urlConfig.push('coverage', 'noautorun')
 	QUnit.load();
 })
 
@@ -1593,6 +1602,13 @@ QUnit.diff = (function() {
 	};
 })();
 
-
+if(steal.options.instrument){
+	steal("funcunit/coverage", function(){
+		QUnit.done(function(){
+			var data = steal.instrument.compileStats()
+			QUnit.coverage(data);
+		})
+	});
+}
 
 })
