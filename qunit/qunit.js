@@ -46,6 +46,13 @@ Test.prototype = {
 				li.className = "running";
 				li.id = this.id = "test-output" + testId++;
 			tests.appendChild( li );
+			
+			if(config.noautorun){
+				addEvent(li, "click", function(){
+					var id = parseInt(this.id.match(/(\d+)/)[1], 10)
+					config.deferred_queue[id]()
+				})
+			}
 		}
 	},
 	setup: function() {
@@ -458,6 +465,9 @@ var config = {
 	// The queue of tests to run
 	queue: [],
 
+	// Deferred queue, for noautorun
+	deferred_queue: [],
+
 	// block until document ready
 	blocking: true,
 
@@ -803,7 +813,12 @@ steal.bind("ready", function(){
 	QUnit.config.autorun = false;
 	QUnit.config.reorder = false;
 	QUnit.config.testTimeout = false;
-	QUnit.config.urlConfig.push('coverage', 'noautorun')
+	if(!QUnit.urlParams.noautorun){
+		QUnit.config.urlConfig.push('coverage')
+	}
+	if(!steal.options.instrument){
+		QUnit.config.urlConfig.push('noautorun');
+	}
 	QUnit.load();
 })
 
@@ -948,7 +963,12 @@ function process( last ) {
 
 	while ( config.queue.length && !config.blocking ) {
 		if ( !defined.setTimeout || config.updateRate <= 0 || ( ( new Date().getTime() - start ) < config.updateRate ) ) {
-			config.queue.shift()();
+			var run = config.queue.shift();
+			if(config.noautorun && run.name === "run"){
+				config.deferred_queue.push(run);
+			} else {
+				run();
+			}
 		} else {
 			window.setTimeout( function(){
 				process( last );
