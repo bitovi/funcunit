@@ -773,10 +773,12 @@ QUnit.load = function() {
 		addEvent( banner, "change", function( event ) {
 			var params = {};
 			var name = event.target.name;
+			var val = true;
 			if(event.target.name === "coverage"){
-				name = "steal[instrument]"
+				name = "steal[instrument]";
+				val = "jquery,funcunit,steal,documentjs,*/test,*_test.js,mxui"
 			}
-			params[ name ] = event.target.checked ? true : undefined;
+			params[ name ] = event.target.checked ? val : undefined;
 			window.location = QUnit.url( params );
 		});
 	}

@@ -2,7 +2,10 @@ steal('./coverage.css').then(function(){
 	var pct = function(num){
 			return Math.round(num*1000)/10;
 		},
-		wrapper = "<div class='overall-stats'>"+
+		wrapper = "<h2>Ignored Files</h2>"+ 
+			"<form id='ignores'>"+
+			"</form>"+
+		"<div class='overall-stats'>"+
 			"	<div class='total-stat'>"+
 			"		<h2>Total Lines Covered <br /><span class='covered'></span></h2>"+
 			"	</div>"+
@@ -126,6 +129,20 @@ steal('./coverage.css').then(function(){
 		
 		document.body.insertBefore(tabsEl, document.getElementById("qunit-testrunner-toolbar"));
 		clickTab('report-tab');
+		
+		
+		// add ignores
+		var ignoresHTML = ""; 
+		for(var i=0;i<steal.instrument.ignores.length; i++){
+			ignoresHTML += steal.instrument.ignores[i]+" <input id='newignore' type='checkbox' checked='checked' value='"+steal.instrument.ignores[i]+"'/><br />"
+		}
+		$("ignores").innerHTML = ignoresHTML+"<input id='newignore' type='text' />";
+			
+			
+		
+		var el = document.createElement("div");
+		el.id = 'files-wrapper';
+		document.body.appendChild(el);
 	
 		QUnit.addEvent($('test-tab'), "click", function(){
 			clickTab('test-tab');
@@ -142,6 +159,20 @@ steal('./coverage.css').then(function(){
 				var fileName = ev.target.innerHTML;
 				showFile(fileName)
 			}
+		})
+		QUnit.addEvent($("ignores"), "change", function(ev){
+			ev.preventDefault();
+			console.log(ev.target.value)
+			var index = steal.instrument.ignores.indexOf(ev.target.value); 
+			if(index != -1){
+				steal.instrument.ignores.splice(index,1);
+			} else {
+				steal.instrument.ignores.push(ev.target.value)
+			}
+			window.location = QUnit.url({ "steal[instrument]": steal.instrument.ignores.join(",") });
+		})
+		QUnit.addEvent($("ignores"), "submit", function(ev){
+			ev.preventDefault();
 		})
 	}
 	
@@ -169,10 +200,8 @@ steal('./coverage.css').then(function(){
 		}
 		var table = filesWrapper+tr.join("")+"</table>";
 		
-		var el = document.createElement("div");
-		el.id = 'files-wrapper';
+		var el = $('files-wrapper');
 		el.innerHTML = table;
-		document.body.appendChild(el);
 		
 		
 		var run = Math.round(data.files[fileName].lineCoverage*data.files[fileName].lines); 
