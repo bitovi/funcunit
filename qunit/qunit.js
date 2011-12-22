@@ -736,12 +736,19 @@ QUnit.load = function() {
 
 	var urlConfigHtml = '', len = config.urlConfig.length;
 	for ( var i = 0, val; i < len, val = config.urlConfig[i]; i++ ) {
+		var disable = false;
 		if(val === "coverage"){
+			if(QUnit.urlParams["noautorun"]){
+				disable = true;
+			}
 			config["coverage"] = QUnit.urlParams["steal[instrument]"];
 		} else {
 			config[val] = QUnit.urlParams[val];
 		}
-		urlConfigHtml += '<label><input name="' + val + '" type="checkbox"' + ( config[val] ? ' checked="checked"' : '' ) + '>' + val + '</label>';
+		if(val === "noautorun" && QUnit.urlParams["steal[instrument]"]){
+			disable = true;
+		}
+		urlConfigHtml += '<label><input name="' + val + '" type="checkbox"' + ( config[val] ? ' checked="checked"' : '' ) + ( disable ? ' disabled="disabled"' : '' ) + '>' + val + '</label>';
 	}
 
 	var userAgent = id("qunit-userAgent");
@@ -813,12 +820,7 @@ steal.bind("ready", function(){
 	QUnit.config.autorun = false;
 	QUnit.config.reorder = false;
 	QUnit.config.testTimeout = false;
-	if(!QUnit.urlParams.noautorun){
-		QUnit.config.urlConfig.push('coverage')
-	}
-	if(!steal.options.instrument){
-		QUnit.config.urlConfig.push('noautorun');
-	}
+	QUnit.config.urlConfig.push('coverage', 'noautorun');
 	QUnit.load();
 })
 
