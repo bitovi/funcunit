@@ -42,7 +42,7 @@ steal('./coverage.css').then(function(){
 			'</div>'+
 			'<table id="file" cellspacing="0" cellpadding="0">',
 		tabs = '<a href="#" class="btn-tab" id="test-tab">Test Results</a>'+
-			'<a href="#" class="btn-tab btn-pressed" id="report-tab">Coverage Report</a>'+
+			'<a href="#" class="btn-tab btn-pressed" id="report-tab">Coverage Results</a>'+
 			'<a href="#" class="btn-tab btn-hidden" id="file-tab">Lines Covered</a>',
 		// map from tabId to pane element IDs
 		tabEls = {

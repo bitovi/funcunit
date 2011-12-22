@@ -164,6 +164,7 @@ Test.prototype = {
 					config.moduleStats.bad++;
 				}
 			}
+			this.assertions = [];
 
 			// store result when possible
 			if ( QUnit.config.reorder && defined.sessionStorage ) {
@@ -183,9 +184,18 @@ Test.prototype = {
 
 			var a = document.createElement("a");
 			a.innerHTML = "Rerun";
-			a.href = QUnit.url({ filter: getText([b]).replace(/\([^)]+\)$/, "").replace(/(^\s*|\s*$)/g, "") });
+			if(config.autorun){
+				a.href = "#"
+				addEvent(a, "click", function(ev){
+					ev.preventDefault();
+					// ev.stopPropagation()
+				})
+			} else {
+				a.href = QUnit.url({ filter: getText([b]).replace(/\([^)]+\)$/, "").replace(/(^\s*|\s*$)/g, "") });	
+			}
 
-			addEvent(b, "click", function() {
+			addEvent(b, "click", function(ev) {
+				ev.stopPropagation();
 				var next = b.nextSibling.nextSibling,
 					display = next.style.display;
 				next.style.display = display === "none" ? "block" : "none";
@@ -203,7 +213,9 @@ Test.prototype = {
 
 			var li = id(this.id);
 			li.className = bad ? "fail" : "pass";
-			li.removeChild( li.firstChild );
+			while(li.firstChild){
+				li.removeChild( li.firstChild );
+			}
 			li.appendChild( b );
 			li.appendChild( a );
 			li.appendChild( ol );
