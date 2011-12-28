@@ -776,7 +776,7 @@ QUnit.load = function() {
 			var val = true;
 			if(event.target.name === "coverage"){
 				name = "steal[instrument]";
-				val = "jquery,funcunit,steal,documentjs,*/test,*_test.js,mxui"
+				val = "jquery,funcunit,steal,documentjs,*/test,*_test.js,mxui,*funcunit.js"
 			}
 			params[ name ] = event.target.checked ? val : undefined;
 			window.location = QUnit.url( params );
