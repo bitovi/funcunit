@@ -41,7 +41,10 @@ test("Drag To", function(){
 
 })
 
-test("RightClick", 1, function(){
+test("RightClick", function(){
+	if(/Opera/.test(navigator.userAgent)){
+		return;
+	}
 	S.open("//funcunit/test/myapp.html", null, 10000);
 	S("#rightclick").rightClick()
 	S(".rightclickResult").text("Right Clicked", "rightclick worked")
