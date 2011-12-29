@@ -3,6 +3,7 @@
 var confirms = [], 
 	prompts = [], 
 	currentDocument,
+	currentHref,
 	lookingForNewDocument = false,
 	urlWithoutHash = function(url){
 		return url.replace(/\#.*$/, "");
@@ -231,17 +232,19 @@ $.extend(FuncUnit,{
 	},
 	// return true if new document found
 	checkForNewDocument: function(){
-		var documentFound = FuncUnit.win.document !== currentDocument && // new document 
-							!FuncUnit.win.___FUNCUNIT_OPENED && // hasn't already been marked loaded
+		var documentFound = ((FuncUnit.win.document !== currentDocument && // new document 
+							!FuncUnit.win.___FUNCUNIT_OPENED) // hasn't already been marked loaded
+							// covers opera case after you click a link, since document doesn't change in opera
+							|| (currentHref != FuncUnit.win.location.href)) && // url is different 
 							FuncUnit.documentLoaded(); // fully loaded
 		if(documentFound){
 			// reset flags
 			lookingForNewDocument = false;
 			currentDocument = FuncUnit.win.document;
+			currentHref = FuncUnit.win.location.href;
 			
 			// mark it as opened
 			FuncUnit.win.___FUNCUNIT_OPENED = true;
-			
 			// reset confirm, prompt, alert
 			FuncUnit._opened();
 		}
