@@ -21,7 +21,7 @@ steal('funcunit/commandline/output/json2.js', function(){
 			postfix = "\n";
 		}
 		
-		if(filename) {
+		if(filename && !streamClosed) {
 			out.write(line + postfix);
 		}
 	}
@@ -56,6 +56,7 @@ steal('funcunit/commandline/output/json2.js', function(){
 	var moduleErrorCounter = 0;
 	var moduleAssertionCounter = 0;
 	var failureArr = [];
+	var streamClosed = false;
 
 	steal.extend(FuncUnit,{
 		begin: function(){
@@ -149,6 +150,7 @@ steal('funcunit/commandline/output/json2.js', function(){
 			writeToLog('</testsuites>');
 			if(filename) {
 				out.close();
+				streamClosed = true;
 			}
 			
 			if (failures > 0 && FuncUnit.failOnError) {
