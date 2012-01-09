@@ -190,7 +190,7 @@ $.extend(FuncUnit,{
 			root = steal.root.path;
 		
 		if (/^\/\//.test(path)) {
-			fullPath = new steal.File(path.substr(2)).joinFrom(root);
+			fullPath = new steal.File(root).join(path.substr(2))+'';
 		}
 		else {
 			fullPath = path;
