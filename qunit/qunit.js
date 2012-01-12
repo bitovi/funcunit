@@ -1056,7 +1056,7 @@ function extend(a, b) {
 	for ( var prop in b ) {
 		if ( b[prop] === undefined ) {
 			delete a[prop];
-		} else {
+		} else if ( prop !== "constructor" || a !== window ) {
 			a[prop] = b[prop];
 		}
 	}
