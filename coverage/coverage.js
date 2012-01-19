@@ -186,7 +186,7 @@ steal('./coverage.css').then(function(){
 		i = 0;
 		QUnit.addEvent($("ignores"), "change", function(ev){
 			ev.preventDefault();
-			var input = ev.srcElement,
+			var input = ev.target,
 				type = input.type;
 
 			if(type == 'text'){
