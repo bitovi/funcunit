@@ -8,6 +8,10 @@ var confirms = [],
 	urlWithoutHash = function(url){
 		return url.replace(/\#.*$/, "");
 	},
+	absolutize = function(url){
+		var f = steal.File(url);
+		return f.protocol() ? f.path : f.joinFrom(steal.pageUrl().dir(), true);
+	},
 	// returns true if url matches current window's url
 	isCurrentPage = function(url){
 		var pathname = urlWithoutHash(FuncUnit.win.location.pathname),
@@ -189,19 +193,11 @@ $.extend(FuncUnit,{
 	 * @param {String} path
 	 */
 	getAbsolutePath: function( path ) {
-		var fullPath, 
-			root = steal.root.path;
-		
-		if (/^\/\//.test(path)) {
-			fullPath = new steal.File(root).join(path.substr(2))+'';
+		if ( /^\/\//.test(path) ){
+			return steal.File(absolutize(steal.root.path)).join(path.substr(2)) + '';
+		} else {
+			return absolutize(path);
 		}
-		else {
-			fullPath = path;
-		}
-		
-		if(/^http/.test(path))
-			fullPath = path;
-		return fullPath;
 	},
 	/**
 	 * @attribute win
