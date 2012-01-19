@@ -2,12 +2,10 @@ steal('./coverage.css').then(function(){
 	var pct = function(num){
 			return Math.round(num*1000)/10;
 		},
-		wrapper = "<h2>Ignored Files</h2>"+ 
-			"<form id='ignores'>"+
-			"</form>"+
+		wrapper = 
 		"<div class='overall-stats'>"+
 			"	<div class='total-stat'>"+
-			"		<h2>Total Lines Covered <br /><span class='covered'></span></h2>"+
+			"		<h2>Total Lines Covered<br /><span class='covered'></span></h2>"+
 			"	</div>"+
 			"	<div class='total-line-coverage stat-wrap'>"+
 			"		<span class='stat'></span>"+
@@ -20,6 +18,13 @@ steal('./coverage.css').then(function(){
 			"		<h2>Total Block Coverage</h2>"+
 			"	</div>"+
 			"</div>"+
+			"<div class='ignored-wrapper'>"+
+				"<h2>Ignored Files<span id='rerun'>Rerun</span></h2>"+ 
+				"<form id='ignores'>"+
+				"</form>"+
+			"</div>"+
+			"<div class='covered-wrapper'>"+
+			"<h2>Covered files</h2>"+
 			"<table id='report' cellspacing='0' cellpadding='0'>"+
 			"	<tr class='header'>"+
 			"		<th>File Name</th>"+
@@ -101,18 +106,29 @@ steal('./coverage.css').then(function(){
 			var linePercentage = pct(stats.lineCoverage),
 				blockPercentage = pct(stats.blockCoverage);
 				
-			tr.push("<td>", "<a class='file' href='#'>", file, "</a>", "</td>");
+			
+			/*tr.push("<td>", "<a class='file' href='#'>", file, "</a>", "</td>");
 			tr.push("<td>", stats.lines, "</td>");
 			tr.push("<td>", "<img height='15' width='130' src='http://chart.apis.google.com/chart?chf=bg,s,dedede&chxs=0,000000,0,0,_,dedede|1,000000,0,0,_,dedede&chxt=x,y&chbh=23,0,0&chs=130x15&cht=bhs&chco=0E51A2,dedede&chp=0,0.033&chma=2&chd=t:", parseInt(linePercentage, 10), "|100' />", linePercentage ,"%</td>");
 			tr.push("<td>", stats.blocks, "</td>");
 			tr.push("<td>", "<img height='15' width='130' src='http://chart.apis.google.com/chart?chf=bg,s,dedede&chxs=0,000000,0,0,_,dedede|1,000000,0,0,_,dedede&chxt=x,y&chbh=23,0,0&chs=130x15&cht=bhs&chco=0E51A2,dedede&chp=0,0.033&chma=2&chd=t:", parseInt(blockPercentage, 10), "|100' />", blockPercentage ,"%</td>");
+			tr.push("</tr>");*/
+
+
+
+			tr.push("<td>", "<a class='file' href='#'>", file, "</a>", "</td>");
+			tr.push("<td>", stats.lines, "</td>");
+			tr.push("<td>", "<div class='bar-graph'><div style='width: "+ parseInt(linePercentage, 10) +"%'></div></div>", linePercentage ,"%</td>");
+			tr.push("<td>", stats.blocks, "</td>");
+			tr.push("<td>", "<div class='bar-graph'><div style='width: "+ parseInt(blockPercentage, 10) +"%'></div></div>", blockPercentage ,"%</td>");
 			tr.push("</tr>");
 		}
 		
-		var table = wrapper+tr.join("")+"</table>";
+		var table = wrapper+tr.join("")+"</table></div>";
 		
 		var el = document.createElement("div");
 		el.id = 'report-wrapper';
+		el.className = 'ui-helper-clearfix';
 		el.innerHTML = table;
 		document.body.appendChild(el);
 		
@@ -132,11 +148,18 @@ steal('./coverage.css').then(function(){
 		
 		
 		// add ignores
-		var ignoresHTML = ""; 
-		for(var i=0;i<steal.instrument.ignores.length; i++){
-			ignoresHTML += steal.instrument.ignores[i]+" <input id='newignore' type='checkbox' checked='checked' value='"+steal.instrument.ignores[i]+"'/><br />"
+
+		var buildIgnoresForm = function(){
+			var ignoresHTML = ""; 
+			for(var i=0;i<steal.instrument.ignores.length; i++){
+				ignoresHTML += "<label class='ignore'><input id='newignore' type='checkbox' checked='checked' value='"+steal.instrument.ignores[i]+"' /> " +steal.instrument.ignores[i]+"</label>"
+			}
+			$("ignores").innerHTML = "<input id='newignore' type='text' />" + ignoresHTML;
 		}
-		$("ignores").innerHTML = ignoresHTML+"<input id='newignore' type='text' />";
+
+		buildIgnoresForm();
+
+		
 			
 			
 		
@@ -160,15 +183,27 @@ steal('./coverage.css').then(function(){
 				showFile(fileName)
 			}
 		})
+		i = 0;
 		QUnit.addEvent($("ignores"), "change", function(ev){
 			ev.preventDefault();
-			console.log(ev.target.value)
-			var index = steal.instrument.ignores.indexOf(ev.target.value); 
-			if(index != -1){
-				steal.instrument.ignores.splice(index,1);
-			} else {
-				steal.instrument.ignores.push(ev.target.value)
+			var input = ev.srcElement,
+				type = input.type;
+
+			if(type == 'text'){
+				var index = steal.instrument.ignores.indexOf(input.value);
+				if(index == -1){
+					steal.instrument.ignores.push(ev.target.value);
+				}
+			} else if(type == "checkbox"){
+				var index = steal.instrument.ignores.indexOf(input.value);
+				if(index != -1){
+					steal.instrument.ignores.splice(index,1);
+				}
 			}
+			console.log(steal.instrument.ignores)
+			buildIgnoresForm();
+		})
+		QUnit.addEvent($('rerun'), 'click', function(){
 			window.location = QUnit.url({ "steal[instrument]": steal.instrument.ignores.join(",") });
 		})
 		QUnit.addEvent($("ignores"), "submit", function(ev){
@@ -192,11 +227,12 @@ steal('./coverage.css').then(function(){
 				hitText = typeof linesUsed[i] == "number"? linesUsed[i] : "",
 				isHit = (hits > 0),
 				isBlank = (hitText === ''),
-				css = (isHit ? 'hit' : (isBlank ? 'blank' : 'miss'));
+				css = (isHit ? 'hit' : (isBlank ? 'blank' : 'miss')),
+				padding = fileArr[i].length - fileArr[i].replace(/^\s+/,"").length;
 				
 			tr.push("<tr>");
 			tr.push("<td class='line'>", hitText, "</td>");
-			tr.push("<td class='", css,"'>", "<pre>", fileArr[i], "</pre>", "</td>", "</tr>");
+			tr.push("<td class='", css, "' style='padding-left:", (padding * 5 + 5), "px'>", "", fileArr[i], "", "</td>", "</tr>");
 		}
 		var table = filesWrapper+tr.join("")+"</table>";
 		

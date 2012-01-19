@@ -1,3 +1,8 @@
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
 
 /*************** TABS ***************/
 #tabs-container
@@ -6,14 +11,10 @@
 	background: -webkit-gradient(linear, 0% 100%, 0% 0%, color-stop(0, #CCC), color-stop(0.8, #EEE));
 	background: -moz-linear-gradient(center bottom, #CCC 0%, #EEE 80%) repeat scroll 0 0;
 	border: 1px solid #BBB;
+	border-left: none;
+	border-right: none;
 	display: block;
 	padding: 10px;
-	-moz-border-radius: 6px 6px 0 0;
-	-webkit-border-radius: 6px 6px 0 0;
-	-o-border-radius: 6px 6px 0 0;
-	-ms-border-radius: 6px 6px 0 0;
-	-khtml-border-radius: 6px 6px 0 0;
-	border-radius: 6px 6px 0 0;
 	z-index: 5;
 	height:20px;
 	cursor: pointer;
@@ -85,10 +86,10 @@
 
 /*************** Overall Stats ***************/
 .overall-stats{
-	width:100%;
 	clear:both;
 	height:200px;
 	padding-top:20px;
+	margin-left: 20%;
 }
 
 .overall-stats h1{
@@ -106,8 +107,10 @@
 {
 	float:left;
 	position:relative;
-	width:200px;
-	margin:0 50px;
+	margin:0;
+	margin-right: 20px;
+	text-align: center;
+	
 }
 
 .overall-stats .total-stat h2
@@ -115,6 +118,7 @@
 	font-size:18px;
 	color:#555;
 	margin:50px 0 0 0;
+	text-align: center;
 
 }
 
@@ -122,13 +126,15 @@
 {
 	color:orange;
 	font-size:38px;
+
 }
 
 .overall-stats .stat-wrap {
 	float:left;
 	position:relative;
 	width:150px;
-	margin:0 40px;
+	margin:0 0px;
+	text-align: center;
 }
 
 .overall-stats .stat {
@@ -145,11 +151,13 @@
 	font-size:12px;
 	padding:0;
 	margin:5px;
-	text-align:center;
 }
 
 
 /*************** Coverage Report Table ***************/
+#report-wrapper{
+	padding: 0 50px 20px;
+}
 .results-wrapper{
 	float:left;
 	margin-top:-2px;
@@ -157,7 +165,11 @@
 #report, #results
 {
 	padding:0;
-	width:100%;
+}
+#report {
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+	width: 100%;
 }
 #report td, 
 #report th, 
@@ -215,10 +227,16 @@
 #results tr.test.test-fail:nth-child(odd):hover>td,
 #results tr.test.test-running:nth-child(odd):hover>td
 {
-	background: #d1d1d1;
+	background: #eee;
 	color:#000;
 }
-
+#report a {
+	color: #135E91;
+	text-decoration: none;
+}
+#report a:hover {
+	text-decoration: underline;
+}
 
 
 /*************** File Lines Ran Table ***************/
@@ -227,6 +245,9 @@
 	border:solid 1px #bbb;
 	border-top:none;
 	overflow:auto;
+}
+#files-wrapper .overall-stats {
+	margin-left: 44px;
 }
 #files-wrapper .file-details
 {
@@ -253,6 +274,13 @@
 	border-right:solid 1px #bbb;
 	padding:2px;
 	text-align:right;
+	font-size: 12px;
+	width: 40px;
+}
+#files-wrapper #file .hit, #files-wrapper #file .blank, #files-wrapper #file .miss {
+	font-family: Monaco, Consolas, Courier New, monospace;
+	font-size: 12px;
+	padding: 3px 0;
 }
 #files-wrapper #file .hit
 {
@@ -267,6 +295,29 @@
 	background:#feaaa7;
 }
 
+label.ignore {
+	display: block;
+	line-height: 25px;
+	height: 25px;
+}
+
+.ignored-wrapper {
+	float: left;
+	width: 20%;
+}
+.ignored-wrapper input[type=text] {
+	font-size: 16px;
+	display: block;
+	width: 90%;
+	margin: 1px 0 2px;
+	height: 26px;
+	padding: 0 3px;
+	line-height: 26px;
+}
+.covered-wrapper {
+	width: 80%;
+	float: left;
+}
 
 body{
 	width:100%;
@@ -277,4 +328,43 @@ body{
 }
 pre {
 	margin: 0;
+}
+.bar-graph {
+	height: 8px;
+	border: 1px solid #289ABD;
+	width: 148px;
+	float: left;
+	margin-right: 5px;
+	margin-top: 2px;
+	background: #fff;
+}
+.bar-graph div {
+	background: #289ABD;
+	height: 8px;
+}
+.bar-graph {
+	-moz-border-radius: 1px;
+	-webkit-border-radius: 1px;
+	-o-border-radius: 1px;
+	-ms-border-radius: 1px;
+	-khtml-border-radius: 1px;
+	border-radius: 1px;
+}
+#rerun {
+	float: right;
+	font-size: 12px;
+	color: white;
+	background: green;
+	padding: 5px;
+	margin-right: 10%;
+	cursor: pointer;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-o-border-radius: 3px;
+	-ms-border-radius: 3px;
+	-khtml-border-radius: 3px;
+	border-radius: 3px;
+}
+#rerun:hover {
+	background: #41BD28;
 }
