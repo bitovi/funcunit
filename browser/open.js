@@ -94,11 +94,14 @@ $.extend(FuncUnit,{
 		}
 		// otherwise, change the frame's url
 		else {
-			var reloading = isCurrentPage(url);
 			lookingForNewDocument = true;
-			FuncUnit.win.location = url;
-			if(reloading){
-				FuncUnit.win.location.reload();
+			if(isCurrentPage(url)){
+				// set the hash and reload
+				FuncUnit.win.location.hash = url.split('#')[1] || '';
+				FuncUnit.win.location.reload(true);
+			} else {
+				// setting the location forces a reload; IE freaks out if you try to do both
+				FuncUnit.win.location = url;
 			}
 			// setting to null b/c opera uses the same document
 			currentDocument = null;
