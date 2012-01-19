@@ -304,8 +304,14 @@ $.extend(FuncUnit,{
 	var newDocument = false, 
 		poller = function(){
 			var ls;
-			if(FuncUnit.win && FuncUnit.win.document == null){
-				return
+			// right after setting a new hash and reloading, IE barfs on this occassionally (only the first time)
+			try{
+				if(FuncUnit.win && FuncUnit.win.document == null){
+					return;
+				}
+			}catch(e){
+				setTimeout(arguments.callee, 500);
+				return;
 			}
 			
 			if (lookingForNewDocument && FuncUnit.checkForNewDocument() ) {
