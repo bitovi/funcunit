@@ -179,11 +179,11 @@ steal('funcunit/commandline/output/json2.js', function(){
 			print(percentage(total.blockCoverage)+" Block Coverage of "+total.blocks+" blocks")
 			
 			
-			// var fstream = new java.io.FileWriter('funcunit/coverage/coverage.json', false),
-				// out = new java.io.BufferedWriter(fstream);
-			// out.write(JSON.stringify(stats));
-			// out.close();
-			// this.convertCoverageToCobertura(stats);
+			var fstream = new java.io.FileWriter('funcunit/coverage/coverage.json', false),
+				out = new java.io.BufferedWriter(fstream);
+			out.write(JSON.stringify(stats));
+			out.close();
+			this.convertCoverageToCobertura(stats);
 		},
 		convertCoverageToCobertura: function(stats){
 			// eval('stats = '+readFile('funcunit/coverage/coverage.json'))
