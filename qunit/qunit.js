@@ -1056,7 +1056,7 @@ function extend(a, b) {
 	for ( var prop in b ) {
 		if ( b[prop] === undefined ) {
 			delete a[prop];
-		} else {
+		} else if ( prop !== "constructor" || a !== window ) {
 			a[prop] = b[prop];
 		}
 	}
@@ -1343,19 +1343,20 @@ QUnit.jsDump = (function() {
 				type = "date";
 			} else if (QUnit.is("Function", obj)) {
 				type = "function";
+			} else if (
+				// native arrays
+				toString.call( obj ) === "[object Array]" ||
+				toString.call( obj ) === "[object JavaArray]" ||
+				// NodeList objects
+				( typeof obj.length === "number" && typeof obj.item !== "undefined" && ( obj.length ? obj.item(0) === obj[0] : ( obj.item( 0 ) === null && typeof obj[0] === "undefined" ) ) )
+			) {
+				type = "array";
 			} else if (typeof obj.setInterval !== undefined && typeof obj.document !== "undefined" && typeof obj.nodeType === "undefined") {
 				type = "window";
 			} else if (obj.nodeType === 9) {
 				type = "document";
 			} else if (obj.nodeType) {
 				type = "node";
-			} else if (
-				// native arrays
-				toString.call( obj ) === "[object Array]" ||
-				// NodeList objects
-				( typeof obj.length === "number" && typeof obj.item !== "undefined" && ( obj.length ? obj.item(0) === obj[0] : ( obj.item( 0 ) === null && typeof obj[0] === "undefined" ) ) )
-			) {
-				type = "array";
 			} else {
 				type = typeof obj;
 			}
@@ -1648,3 +1649,4 @@ if(steal.options.instrument){
 }
 
 })
+.then('funcunit/browser/events.js')

@@ -8,6 +8,10 @@ var confirms = [],
 	urlWithoutHash = function(url){
 		return url.replace(/\#.*$/, "");
 	},
+	absolutize = function(url){
+		var f = steal.File(url);
+		return f.protocol() ? f.path : f.joinFrom(steal.pageUrl().dir(), true);
+	},
 	// returns true if url matches current window's url
 	isCurrentPage = function(url){
 		var pathname = urlWithoutHash(FuncUnit.win.location.pathname),
@@ -94,11 +98,14 @@ $.extend(FuncUnit,{
 		}
 		// otherwise, change the frame's url
 		else {
-			var reloading = isCurrentPage(url);
 			lookingForNewDocument = true;
-			FuncUnit.win.location = url;
-			if(reloading){
-				FuncUnit.win.location.reload();
+			if(isCurrentPage(url)){
+				// set the hash and reload
+				FuncUnit.win.location.hash = url.split('#')[1] || '';
+				FuncUnit.win.location.reload(true);
+			} else {
+				// setting the location forces a reload; IE freaks out if you try to do both
+				FuncUnit.win.location = url;
 			}
 			// setting to null b/c opera uses the same document
 			currentDocument = null;
@@ -186,19 +193,11 @@ $.extend(FuncUnit,{
 	 * @param {String} path
 	 */
 	getAbsolutePath: function( path ) {
-		var fullPath, 
-			root = steal.root.path;
-		
-		if (/^\/\//.test(path)) {
-			fullPath = new steal.File(root).join(path.substr(2))+'';
+		if ( /^\/\//.test(path) ){
+			return steal.File(absolutize(steal.root.path)).join(path.substr(2)) + '';
+		} else {
+			return absolutize(path);
 		}
-		else {
-			fullPath = path;
-		}
-		
-		if(/^http/.test(path))
-			fullPath = path;
-		return fullPath;
 	},
 	/**
 	 * @attribute win
@@ -301,8 +300,14 @@ $.extend(FuncUnit,{
 	var newDocument = false, 
 		poller = function(){
 			var ls;
-			if(FuncUnit.win && FuncUnit.win.document == null){
-				return
+			// right after setting a new hash and reloading, IE barfs on this occassionally (only the first time)
+			try{
+				if(FuncUnit.win && FuncUnit.win.document == null){
+					return;
+				}
+			}catch(e){
+				setTimeout(arguments.callee, 500);
+				return;
 			}
 			
 			if (lookingForNewDocument && FuncUnit.checkForNewDocument() ) {
