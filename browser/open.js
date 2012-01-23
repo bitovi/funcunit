@@ -47,19 +47,23 @@ $.extend(FuncUnit,{
 	 * @param {Number} timeout
 	 */
 	open: function( path, success, timeout ) {
-		var fullPath = FuncUnit.getAbsolutePath(path), 
-		temp;
 		if(typeof success != 'function'){
 			timeout = success;
 			success = undefined;
 		}
 		FuncUnit.add({
 			method: function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
-				steal.dev.log("Opening " + path)
-				FuncUnit._open(fullPath, error);
-				FuncUnit._onload(function(){
-					success()
-				}, error);
+				if(typeof path === "string"){
+					var fullPath = FuncUnit.getAbsolutePath(path);
+					steal.dev.log("Opening " + path)
+					FuncUnit._open(fullPath, error);
+					FuncUnit._onload(function(){
+						success()
+					}, error);
+				} else {
+					FuncUnit.win = path;
+					success();
+				}
 			},
 			success: success,
 			error: "Page " + path + " not loaded in time!",

@@ -3,13 +3,11 @@ module("funcunit-syn integration")
 
 test("Type and slow Click", function(){
 	S.open("//funcunit/test/myapp.html");
-	S("#typehere").type("javascriptmvc", function(){
-		equals(S("#seewhatyoutyped").text(), "typed javascriptmvc","typing");
-	})
+	S("#typehere").type("javascriptmvc")
+	S("#seewhatyoutyped").text("typed javascriptmvc","typing");
 	
-	S("#copy").click(function(){
-		equals(S("#seewhatyoutyped").text(), "copied javascriptmvc","copy");
-	});
+	S("#copy").click();
+	S("#seewhatyoutyped").text("copied javascriptmvc","copy");
 })
 
 test("Nested actions", function(){
