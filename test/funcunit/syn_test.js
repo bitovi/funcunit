@@ -14,12 +14,10 @@ test("Nested actions", function(){
 	S.open("//funcunit/test/myapp.html");
 	
 	S("#typehere").exists(function(){
-		this.type("[ctrl]a\b[ctrl-up]javascriptmvc", function(){
-			equals(S("#seewhatyoutyped").text(), "typed javascriptmvc","typing");
-		})
-		S("#copy").click(function(){
-			equals(S("#seewhatyoutyped").text(), "copied javascriptmvc","copy");
-		});
+		this.type("[ctrl]a\b[ctrl-up]javascriptmvc")
+		S("#seewhatyoutyped").text("typed javascriptmvc","typing");
+		S("#copy").click();
+		S("#seewhatyoutyped").text("copied javascriptmvc","copy");
 	})
 })
 

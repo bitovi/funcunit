@@ -4,6 +4,8 @@ var confirms = [],
 	prompts = [], 
 	currentDocument,
 	currentHref,
+	// pointer to the popup window
+	appWin, 
 	lookingForNewDocument = false,
 	urlWithoutHash = function(url){
 		return url.replace(/\#.*$/, "");
@@ -71,6 +73,7 @@ $.extend(FuncUnit,{
 		});
 	},
 	_open: function(url){
+		FuncUnit.win = appWin;
 		hasSteal = false;
 		// this will determine if this is supposed to open within a frame
 		FuncUnit.frame =  $('#funcunit_app').length? $('#funcunit_app')[0]: null;
@@ -99,6 +102,7 @@ $.extend(FuncUnit,{
 					throw "Could not open a popup window.  Your popup blocker is probably on.  Please turn it off and try again";
 				}
 			}
+			appWin = FuncUnit.win;
 		}
 		// otherwise, change the frame's url
 		else {
@@ -205,15 +209,14 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @attribute win
-	 * Use this to refer to the window of the application page.  You can also 
-	 * reference window.document.
+	 * Use this to refer to the window of the application page.
 	 * @codestart
 	 * S(S.window).innerWidth(function(w){
 	 *   ok(w > 1000, "window is more than 1000 px wide")
 	 * })
 	 * @codeend
 	 */
-	win: null,
+	win: window,
 	// for feature detection
 	support: {
 		readystate: "readyState" in document

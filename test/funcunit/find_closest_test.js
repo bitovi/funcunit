@@ -37,7 +37,7 @@ test("find this", function(){
 })
 
 test("nested find", 2, function(){
-	S(".baz").exists(function(obj) { 
+	S(".baz").exists(function() { 
 		S(this).find("#foo").exists(".foo found");
 		S(this).find(".another").exists(".another found"); 
 	})

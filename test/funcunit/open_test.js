@@ -1,5 +1,15 @@
 module("funcunit-open")
 
+test('S.open accepts a window', function() {
+	S.open(window);
+	S('#tester').click();
+	S("#tester").text("Changed", "Changed link")
+	
+	S.open(frames["myapp"]);
+	S("#typehere").type("javascriptmvc")
+	S("#seewhatyoutyped").text("typed javascriptmvc","typing");
+})
+
 test("URL Test", function(){
 	var path = FuncUnit.getAbsolutePath("http://foo.com")
 	equals(path, "http://foo.com", "paths match");
@@ -40,14 +50,4 @@ test('Testing win.confirm in multiple pages', function() {
 	S('.show-confirm').click();
 	S.confirm(true);
 	S('.results').text('confirmed!', "Confirm worked!");
-})
-
-test('S.open accepts a window', function() {
-	S.open(window);
-	S('#tester').click();
-	S("#tester").text("Changed", "Changed link")
-	
-	S.open(frames["myapp"]);
-	S("#typehere").type("javascriptmvc")
-	S("#seewhatyoutyped").text("typed javascriptmvc","typing");
 })
