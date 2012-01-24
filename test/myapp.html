@@ -30,6 +30,7 @@
 		<iframe src='myotherapp.html'></iframe>
 		<div id='clickToChange'>Change Thist Text</div>
         <a href="javascript:changeText()" id='changelink'>Change</a>
+        <a href="javascript:changeHash()" id='changehash'>Change</a>
 		<div id='drag'></div>
 		<div id='drop'></div>
 		<h3>hasClass</h3>
@@ -107,6 +108,9 @@
 				})
 				window.changeText = function(){
 	                $('#changelink').text('Changed')
+	            }
+				window.changeHash = function(){
+					location.hash = "changed"
 	            }
 				
 				$('#drag').live("draginit", function(){})
