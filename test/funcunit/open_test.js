@@ -28,9 +28,8 @@ test("Back to back opens", function(){
 	S.open("//funcunit/test/myotherapp.html");
 	S.open("//funcunit/test/myapp.html");
 
-	S("#changelink").click(function(){
-		equals(S("#changelink").text(), "Changed","href javascript run")
-	})
+	S("#changelink").click()
+	S("#changelink").text("Changed","href javascript run")
 })
 
 
