@@ -42,18 +42,6 @@ test("Back to back opens with hash", function(){
 	S("#changelink").text("Change", "reload with hash works");
 })
 
-test("Back to back opens reload original hashless URL", function(){
-	S.open("//funcunit/test/myapp.html?bar");
-	S("#changehash").click().size(function(){
-		return S.win.location.hash === "#changed"
-	}, "original hash changed");
-	
-	S.open("//funcunit/test/myapp.html?bar");
-	S("#changehash").click().size(function(){
-		return S.win.location.hash === ""
-	}, "reload with hash works");
-})
-
 test('Testing win.confirm in multiple pages', function() {
 	S.open('//funcunit/test/open/first.html');
 	S('.next').click();
