@@ -265,7 +265,6 @@ $.extend(FuncUnit,{
 	}
 	
 	
-	FuncUnit.win = null;
 	var newPage = true, 
 		hasSteal = false,
 		unloadLoader, 

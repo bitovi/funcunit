@@ -1,4 +1,4 @@
-(function(){
+(function(){ 
 	/**
 	 * @add FuncUnit
 	 */
@@ -87,7 +87,7 @@
 		//if our queue has just started, stop qunit
 		//call done to call the next command
         if (FuncUnit._queue.length == 1 && ! FuncUnit._incallback) {
-			stop();
+			FuncUnit.unit.pauseTest();
     		setTimeout(FuncUnit._done, 13)
         }
 	}
@@ -114,7 +114,7 @@
 			setTimeout(function(){
 				timer = setTimeout(function(){
 						next.stop && next.stop();
-						ok(false, next.error);
+						FuncUnit.unit.assertOK(false, next.error);
 						FuncUnit._done();
 					}, 
 					(next.timeout || FuncUnit.timeout) + speed)
@@ -149,7 +149,7 @@
 					}, //error
 					function(message){
 						clearTimeout(timer);
-						ok(false, message);
+						FuncUnit.unit.assertOK(false, message);
 						FuncUnit._done();
 					})
 				
@@ -158,7 +158,7 @@
 			
 		}
 		else {
-			start();
+			FuncUnit.unit.resumeTest();
 		}
 	}
 })()

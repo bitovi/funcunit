@@ -1,5 +1,7 @@
 (function(){
-	
+	if(!window.QUnit && !window.jasmine){
+		steal('funcunit/qunit')
+	}
 	//if there is an old FuncUnit, use that for settings
 	var oldFuncUnit = window.FuncUnit;
 
