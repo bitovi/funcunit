@@ -34,8 +34,9 @@ steal(function(){
 			}
 		}
 		if(!/https?:|file:/.test(page)){ // if theres no protocol, turn it into a filesystem urls
-			var cwd = (new java.io.File (".")).getCanonicalPath();
-			page = "file://"+cwd+"/"+page;
+			var cwd = (new java.io.File (".")).getCanonicalPath()+"";
+			cwd = cwd.replace(/\\/, '/');
+			page = "file:///"+cwd+"/"+page;
 		}
 		
 		//convert spaces to %20.
