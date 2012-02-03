@@ -14,12 +14,13 @@
 	page = _args.shift();
 	
 	var opts = steal.opts(_args, {
-		coverage: 0
+		coverage: 0,
+		settings: 1
 	})
 	steal('funcunit/commandline/utils.js') 
 		.then('funcunit/commandline/'+type+'.js', 
 			function(){
-				FuncUnit._loadSettingsFile(page);
+				FuncUnit._loadSettingsFile(page, opts.settings);
 				FuncUnit.funcunitPage = FuncUnit._getPageUrl(page, opts.coverage, FuncUnit.coverageIgnore);
 				print("Opening "+FuncUnit.funcunitPage);
 				FuncUnit.loader[type](FuncUnit.funcunitPage);
