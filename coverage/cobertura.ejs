@@ -15,6 +15,8 @@
 						<% for(var i=0; i < files[file].lines; i++) { %>
 						<% if(files[file].linesUsed[i]){ %>
 						<line number="<%= i %>" hits="<%= files[file].linesUsed[i] %>" branch="false"/>
+						<% } else { %>
+						<line number="<%= i %>" hits="0" branch="false"/>
 						<% } %>
 						<% } %>
 					</lines>
