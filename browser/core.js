@@ -223,8 +223,9 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 	var getContext = function(context){
 			if (typeof context === "number" || typeof context === "string") {
 				// try to get the context from an iframe in the funcunit document
-				var sel = (typeof context === "number" ? "iframe:eq(" + context + ")" : "iframe[name=" + context + "]"),
+				var sel = (typeof context === "number" ? "iframe:eq(" + context + ")" : "iframe[name='" + context + "']"),
 					frames = new origFuncUnit.fn.init(sel, FuncUnit.win.document, true);
+				console.log(sel)
 				context = (frames.length ? frames.get(0).contentWindow : FuncUnit.win).document;
 			} else {
 				context = FuncUnit.win.document;
