@@ -81,7 +81,7 @@ test("Exists", function(){
 
 test("Trigger", function(){
 	S("#trigger").trigger('myCustomEvent');
-	// S("#trigger p").text("I was triggered");
+	S("#trigger p").text("I was triggered");
 	S("#trigger p").text(/^I\s\w+/, "regex works");
 })
 test("Confirm", function(){

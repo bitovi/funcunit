@@ -125,6 +125,10 @@
 			this._addExists();
 			var selector = this.selector, 
 				context = this.context;
+			// type("") is a shortcut for clearing out a text input
+			if(text === ""){ 
+				text = "[ctrl]a\b[ctrl-up]"
+			}
 			FuncUnit.add({
 				method : function(success, error){
 					steal.dev.log("Typing "+text+" on "+selector)
