@@ -397,7 +397,7 @@
 					logMessage = "Checking "+fname+" on '"+this.selector+"'";
 				
 				// can pass in an object or list of arguments
-				if(typeof tester == 'object'){
+				if(typeof tester == 'object' && !(tester instanceof RegExp)){
 					timeout = tester.timeout;
 					success = tester.success;
 					message = tester.message;
@@ -428,7 +428,6 @@
 				if(typeof tester != 'function'){
 					errorMessage += " !== "+testVal
 					tester = function(val){
-						
 						return FuncUnit.unit.equiv(val, testVal) || 
 							(testVal instanceof RegExp && testVal.test(val) );
 					}
