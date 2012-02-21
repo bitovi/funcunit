@@ -61,7 +61,7 @@ steal('funcunit/commandline/output/json2.js', function(){
 	steal.extend(FuncUnit,{
 		begin: function(){
 			classPrefix = 'QUnit.';
-			filename = 'testresults.xml';
+			filename = FuncUnit.outputFile;
 			if(filename) {
 				fstream = new java.io.FileWriter(filename, false);
 				out = new java.io.BufferedWriter(fstream);
@@ -183,7 +183,7 @@ steal('funcunit/commandline/output/json2.js', function(){
 				out = new java.io.BufferedWriter(fstream);
 			out.write(JSON.stringify(stats));
 			out.close();
-			this.convertCoverageToCobertura(stats);
+			// this.convertCoverageToCobertura(stats);
 		},
 		convertCoverageToCobertura: function(stats){
 			// eval('stats = '+readFile('funcunit/coverage/coverage.json'))
