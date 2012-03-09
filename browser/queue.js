@@ -114,7 +114,11 @@
 			setTimeout(function(){
 				timer = setTimeout(function(){
 						next.stop && next.stop();
-						FuncUnit.unit.assertOK(false, next.error);
+						if(typeof next.error === "function"){
+							next.error();
+						} else {
+							FuncUnit.unit.assertOK(false, next.error);
+						}
 						FuncUnit._done();
 					}, 
 					(next.timeout || FuncUnit.timeout) + speed)
