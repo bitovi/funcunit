@@ -833,7 +833,6 @@ QUnit.load = function() {
 steal.bind("ready", function(){
 	QUnit.config.autorun = false;
 	QUnit.config.reorder = false;
-	QUnit.config.testTimeout = false;
 	QUnit.config.urlConfig.push('coverage', 'noautorun');
 	QUnit.load();
 })

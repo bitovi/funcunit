@@ -10,6 +10,12 @@ test("Type and slow Click", function(){
 	S("#seewhatyoutyped").text("copied javascriptmvc","copy");
 })
 
+test("Type and clear", function(){
+	S.open("//funcunit/test/myapp.html");
+	S("#typehere").type("javascriptmvc").type("")
+	S("#seewhatyoutyped").text("typed ","clear works");
+})
+
 test("Nested actions", function(){
 	S.open("//funcunit/test/myapp.html");
 	
