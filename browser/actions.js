@@ -278,7 +278,12 @@
 			this._addExists();
 			var selector = this.selector, 
 				context = this.context,
-				direction = /left|right|x/i.test(direction)? "Left" : "Right";
+				direction;
+			if (direction == "left" || direction == "right") {
+				direction = "Left";
+			} else if (direction == "top" || direction == "bottom") {
+				direction = "Top";
+			}
 			FuncUnit.add({
 				method: function(success, error){
 					steal.dev.log("setting " + selector + " scroll" + direction + " " + amount + " pixels")
