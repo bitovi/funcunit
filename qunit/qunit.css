@@ -7,6 +7,15 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * or GPL (GPL-LICENSE.txt) licenses.
  */
+#funcunit_app{
+	position:fixed;
+	right:0px;
+	top: 0px;
+	width:960px;
+	height:800px;
+	border:1px solid black;
+}
+
 
 /** Font Family and Sizes */
 

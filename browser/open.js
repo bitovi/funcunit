@@ -1,4 +1,15 @@
 (function($){
+	
+	if(steal.options.browser === "phantomjs"){
+		FuncUnit.frameMode = true;
+	}
+	
+	if(FuncUnit.frameMode){
+		var ifrm = document.createElement("iframe");
+		ifrm.id = 'funcunit_app';
+		document.body.insertBefore(ifrm, document.body.firstChild);
+	}
+
 
 var confirms = [], 
 	prompts = [], 
