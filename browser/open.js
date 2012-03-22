@@ -111,7 +111,7 @@ $.extend(FuncUnit,{
 				/*Sometimes readyState does not correctly reset itself, so we remove the
 				body from the document we are navigating away from, which will get set again
 				when the page has reloaded*/
-				FuncUnit.win.document.body.parentElement.removeChild(FuncUnit.win.document.body);
+				FuncUnit.win.document.body.parentNode.removeChild(FuncUnit.win.document.body);
 				// set the hash and reload
 				FuncUnit.win.location.hash = url.split('#')[1] || '';
 				FuncUnit.win.location.reload(true);
