@@ -1630,9 +1630,13 @@ QUnit.diff = (function() {
 
 if(QUnit.urlParams["coverage"]){
 	steal("steal/instrument").then("funcunit/coverage", function(){
+		var reportBuilt = false;
 		QUnit.done(function(){
-			var data = steal.instrument.compileStats()
-			QUnit.coverage(data);
+			reportBuilt = true;
+			if(!reportBuilt){
+				var data = steal.instrument.compileStats()
+				QUnit.coverage(data);
+			}
 		})
 		
 		var ignores = ["jquery","funcunit","steal","documentjs","*/test","*_test.js","mxui","*funcunit.js"] 
