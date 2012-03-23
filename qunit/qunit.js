@@ -1632,8 +1632,8 @@ if(QUnit.urlParams["coverage"]){
 	steal("steal/instrument").then("funcunit/coverage", function(){
 		var reportBuilt = false;
 		QUnit.done(function(){
-			reportBuilt = true;
 			if(!reportBuilt){
+				reportBuilt = true;
 				var data = steal.instrument.compileStats()
 				QUnit.coverage(data);
 			}
