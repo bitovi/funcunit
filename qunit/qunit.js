@@ -1629,22 +1629,24 @@ QUnit.diff = (function() {
 })();
 
 if(QUnit.urlParams["coverage"]){
-	steal("steal/instrument").then("funcunit/coverage", function(){
-		var reportBuilt = false;
-		QUnit.done(function(){
-			if(!reportBuilt){
-				reportBuilt = true;
-				var data = steal.instrument.compileStats()
-				QUnit.coverage(data);
-			}
-		})
-		
+	steal("steal/instrument", function(){
+		// default ignores
 		var ignores = ["jquery","funcunit","steal","documentjs","*/test","*_test.js","mxui","*funcunit.js"] 
 		if(typeof FuncUnit !== "undefined"){
 			ignores = FuncUnit.coverageIgnore ;
 		}
 		// overwrite with our own ignores
 		steal.instrument.ignores = ignores;
+		steal("funcunit/coverage", function(){
+			var reportBuilt = false;
+			QUnit.done(function(){
+				if(!reportBuilt){
+					reportBuilt = true;
+					var data = steal.instrument.compileStats()
+					QUnit.coverage(data);
+				}
+			})
+		})
 	})
 }
 
