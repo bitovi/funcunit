@@ -20,13 +20,10 @@ steal('steal/browser', function(){
 		/**
 		 * Opens the browser, at each of the specified browsers, one by one
 		 * @param {Object} page
-		 * @param {Object} browsers
 		 */
-		open: function(page, browsers){
-			this._currentBrowserIndex = 0;
+		open: function(page){
 			this.page = this._getPageUrl(page);
-			this.browsers = browsers || ["*firefox"];
-			this._browserStart(0);
+			this._browserStart();
 			this._poll();
 			// block until we're done
 			this.browserOpen = true;
@@ -114,41 +111,22 @@ steal('steal/browser', function(){
 			}
 		},
 		// create new selenium instance, start it, open page, set FuncUnit.mode = "Selenium", start polling for data
-		_browserStart: function(index){
-			var browser = this.browsers[this._currentBrowserIndex];
-			this.trigger("browserStart", {
-				browser: browser
-			})
+		_browserStart: function(){
 			this.selenium = this.DefaultSelenium(this.options.serverHost, 
 				this.options.serverPort, 
-				browser, 
+				FuncUnit.browserName, 
 				this.page);
 			this.selenium.start();
 			this.selenium.open(this.page);
 			selThreads.resumePolling();
 		},
 		close: function(data){
-			//print(">>>>>>>>>>   CLOSING")
-			//this.keepPolling = false;
-			var browser = this.browsers[this._currentBrowserIndex];
-			this.trigger("browserDone", {
-				browser: browser
-			});
 			selThreads.pausePolling();
 			this.selenium.close();
 			this.selenium.stop();
-			//print(">>>>>>>>>>   STOPPED")
-			this._currentBrowserIndex++;
-			if (this._currentBrowserIndex < this.browsers.length) {
-				this._browserStart(this._currentBrowserIndex)
-			} 
-			else {
-				selThreads.stopPolling();
-				//print(">>>>>>>>>>   ALL DONE")
-				this.trigger("allDone");
-				this.killServer();
-				this.browserOpen = false;
-			}
+			selThreads.stopPolling();
+			this.killServer();
+			this.browserOpen = false;
 		},
 		evaluate: function(fn){
 			var txt = fn.toString().replace(/\n|\r\n/g,""),
@@ -204,8 +182,6 @@ steal('steal/browser', function(){
 			var resultJSON, 
 				res,
 				evt;
-			//self.keepPolling = true;
-			//print(">>>>>>>>>>   POLLING")
 			resultJSON = self.selenium.getEval("Selenium.getResult()");
 			eval("res = "+resultJSON);
 			if(res && res.length){

@@ -26,17 +26,9 @@ steal(function(){
 	}
 	
 	// if coverage is true, use this to change the URL
-	// page can be a .html or a .js file
-	FuncUnit._getPageUrl = function(page, coverage, ignores){
-		var isHtml = true,
-			testFile = page;
-			
-		if(!/\.html$/.test(page)){
-			isHtml = false;
-			page = "funcunit/dashboard/frame/qunit.html";
-			if(FuncUnit.jmvcRoot){
-				page = FuncUnit.jmvcRoot + "/" + page;
-			}
+	FuncUnit._getPageUrl = function(page, coverage){
+		if(FuncUnit.jmvcRoot){
+			page = FuncUnit.jmvcRoot + "/" + page;
 		}
 		if(!/https?:|file:/.test(page)){ // if theres no protocol, turn it into a filesystem urls
 			var cwd = (new java.io.File (".")).getCanonicalPath()+"";
@@ -48,14 +40,7 @@ steal(function(){
 		var newPage = /https?:/.test(page) ? page: page.replace(/ /g,"%20");
 		
 		if(coverage){
-			if(!(ignores && ignores.length)){
-				ignores = ["true"];
-			}
-			newPage = newPage+"?steal[instrument]=";
-			newPage += ignores.join(",");
-		}
-		if(!isHtml){
-			newPage += "&test="+testFile;
+			newPage = newPage+"?coverage=true";
 		}
 		return newPage;
 	}
