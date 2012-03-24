@@ -91,6 +91,11 @@ steal('./coverage.css').then(function(){
 	
 	
 	QUnit.coverage = function(d){
+		var appFrame = $("funcunit_app");
+		if(appFrame){
+			appFrame.parentNode.removeChild(appFrame);
+		}
+		
 		data = d;
 		var tr = [], 
 			stats = null,

@@ -133,6 +133,17 @@ FuncUnit.repeat = function(options){
 	
 }
 
+
+/**
+ * Waits until all animations in the page have completed.  Only works
+ * if the tested page has jQuery present.
+ */
+FuncUnit.animationsDone = function(){
+	S("body").wait(200).size(function(){
+		return S.win.$(':animated').length === 0;
+	});
+};
+
 /**
  * @Prototype
  */

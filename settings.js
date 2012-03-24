@@ -13,8 +13,12 @@ FuncUnit = {
 	// failOnError: true,
 	
 	// any files or directories that coverage calculations should ignore
-	coverageIgnore: ['*/test', "*_test.js", "*jquery.js", "*qunit.js"]
+	coverageIgnore: ['*/test', "*_test.js", "*jquery.js", "*qunit.js"],
 	
 	// uncomment this to ignore all JMVC directories
-	// coverageIgnore: ["!jmvc"]
+	// coverageIgnore: ["!jmvc"],
+	
+	// uncomment this to record test output in an xml format that jenkins can read
+	// outputFile: "testresults.xml" 
+	
 }

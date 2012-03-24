@@ -19,14 +19,6 @@
 		}
 	})
 	
-	if(steal.options.browser === "phantomjs"){
-		var ifrm = document.createElement("iframe");
-		ifrm.id = 'funcunit_app';
-		ifrm.setAttribute("width", "960");
-		ifrm.setAttribute("height", "800");
-		document.body.insertBefore(ifrm, document.body.firstChild);
-	}
-
 	if(steal.options.browser){
 		var evts = ['begin', 'testStart', 'testDone', 'moduleStart', 'moduleDone', 'done', 'log'], 
 			type,

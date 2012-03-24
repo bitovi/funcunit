@@ -1,4 +1,15 @@
 (function($){
+	
+	if(steal.options.browser === "phantomjs"){
+		FuncUnit.frameMode = true;
+	}
+	
+	if(FuncUnit.frameMode){
+		var ifrm = document.createElement("iframe");
+		ifrm.id = 'funcunit_app';
+		document.body.insertBefore(ifrm, document.body.firstChild);
+	}
+
 
 var confirms = [], 
 	prompts = [], 
@@ -108,6 +119,10 @@ $.extend(FuncUnit,{
 		else {
 			lookingForNewDocument = true;
 			if(isCurrentPage(url)){
+				/*Sometimes readyState does not correctly reset itself, so we remove the
+				body from the document we are navigating away from, which will get set again
+				when the page has reloaded*/
+				FuncUnit.win.document.body.parentNode.removeChild(FuncUnit.win.document.body);
 				// set the hash and reload
 				FuncUnit.win.location.hash = url.split('#')[1] || '';
 				FuncUnit.win.location.reload(true);
@@ -233,7 +248,8 @@ $.extend(FuncUnit,{
 	// actions check this
 	documentLoaded: function(){
 		var loaded = FuncUnit.win.document.readyState === "complete" && 
-				     FuncUnit.win.location.href != "about:blank";
+				     FuncUnit.win.location.href != "about:blank" &&
+				     FuncUnit.win.document.body;
 		return loaded;
 	},
 	// return true if new document found

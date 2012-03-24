@@ -394,10 +394,11 @@
 					testVal = tester,
 					errorMessage = "waiting for "+fname +" on " + this.selector,
 					frame = this.frame,
-					logMessage = "Checking "+fname+" on '"+this.selector+"'";
+					logMessage = "Checking "+fname+" on '"+this.selector+"'",
+					ret;
 				
 				// can pass in an object or list of arguments
-				if(typeof tester == 'object'){
+				if(typeof tester == 'object' && !(tester instanceof RegExp)){
 					timeout = tester.timeout;
 					success = tester.success;
 					message = tester.message;
@@ -428,7 +429,6 @@
 				if(typeof tester != 'function'){
 					errorMessage += " !== "+testVal
 					tester = function(val){
-						
 						return FuncUnit.unit.equiv(val, testVal) || 
 							(testVal instanceof RegExp && testVal.test(val) );
 					}
@@ -461,7 +461,7 @@
 						}
 						// lazy flag to ignore the getter error below
 						FuncUnit._ignoreGetterError = true;
-						var ret = this.bind[fname].apply(this.bind, methodArgs)
+						ret = this.bind[fname].apply(this.bind, methodArgs)
 						FuncUnit._ignoreGetterError = false;
 						
 						var passed = tester.call(this.bind, ret);
@@ -489,7 +489,13 @@
 						}
 						success && success.apply(this, arguments);
 					},
-					error : errorMessage,
+					error : function(){
+						var msg = errorMessage;
+						if(ret){
+							msg += ", actual value: "+ret;
+						}
+						FuncUnit.unit.assertOK(false, msg);
+					},
 					timeout : timeout,
 					bind: this,
 					type: "wait"

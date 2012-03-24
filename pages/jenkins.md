@@ -14,6 +14,7 @@ if the file shows errors.
 
 1. Install Jenkins
 1. Install the XUnit plugin
+1. Uncomment the outputFile in funcunit/settings.js (which will cause the testresults.xml file to be created)
 1. Create a build
 1. Add the something similar to the following to a shell build step.  This script will run your 
 funcunit tests and copy the testresults.xml file into where jenkins wants it
