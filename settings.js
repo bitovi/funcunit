@@ -1,4 +1,7 @@
 FuncUnit = {
+	// the list of browsers that selenium runs tests on
+	// browsers: ["*firefox", "*googlechrome"],
+	
 	// the root where funcunit folder lives, used when running from commandline
 	// jmvcRoot: "http://localhost:3000/javascriptmvc",
 	
@@ -12,6 +15,6 @@ FuncUnit = {
 	// any files or directories that coverage calculations should ignore
 	coverageIgnore: ['*/test', "*_test.js", "*jquery.js", "*qunit.js"]
 	
-	// uncomment this to record test output in an xml format that jenkins can read
-	// outputFile: "testresults.xml" 
+	// uncomment this to ignore all JMVC directories
+	// coverageIgnore: ["!jmvc"]
 }

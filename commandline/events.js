@@ -8,9 +8,17 @@ steal('funcunit/commandline/output', function(){
 	// bind all events
 	FuncUnit.bindEvents = function(browser){
 		browser.bind("begin", function(data){
+			FuncUnit.begin();
+		})
+		.bind("browserStart", function(data){
 			FuncUnit.starttime = new Date().getTime();
 			browserFailed = browserTotal = 0;
-			FuncUnit.begin(FuncUnit.browserName);
+			FuncUnit.browserStart(data.browser);
+		})
+		.bind("browserDone", function(data){
+			FuncUnit.endtime = new Date().getTime();
+			var duration = (FuncUnit.endtime - FuncUnit.starttime) / 1000;
+			FuncUnit.browserDone(data.browser, browserFailed, browserTotal, duration)
 		})
 		.bind('testDone', function(data){
 			browserFailed += data.failed;
@@ -32,10 +40,12 @@ steal('funcunit/commandline/output', function(){
 			FuncUnit.moduleDone(data.name, data.failed, data.total)
 		})
 		.bind('done', function(data){
-			FuncUnit.endtime = new Date().getTime();
-			var duration = (FuncUnit.endtime - FuncUnit.starttime) / 1000;
-			FuncUnit.done(totalFailed, total, duration);
+			FuncUnit.done(totalFailed, total);
 			this.close();
+		})
+		// for selenium, all browsers are done running
+		.bind('allDone', function(data){
+			
 		})
 		.bind('coverage', function(data){
 			FuncUnit.coverage(data)

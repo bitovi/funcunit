@@ -1,13 +1,13 @@
 steal('funcunit/selenium', function(){
-	var getDefaultBrowser = function(){
-		return "*firefox";
+	var getDefaultBrowsers = function(){
+		return ["*firefox"];
 	}
 	
 	/**
 	 * Loads the FuncUnit page in Selenium
 	 */ 
-	FuncUnit.loader.selenium = function(page, browser){
-		FuncUnit.browserName = browser || getDefaultBrowser();
+	FuncUnit.loader.selenium = function(page){
+		FuncUnit.browsers = FuncUnit.browsers || getDefaultBrowsers();
 		
 		// expose FuncUnit.browser so people can call close themselves
 		FuncUnit.browser = new steal.browser.selenium({
@@ -16,6 +16,6 @@ steal('funcunit/selenium', function(){
 		});
 		
 		FuncUnit.bindEvents(FuncUnit.browser)
-		FuncUnit.browser.open(page)
+		FuncUnit.browser.open(page, FuncUnit.browsers)
 	}
 })
