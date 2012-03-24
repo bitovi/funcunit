@@ -59,7 +59,8 @@ steal('funcunit/commandline/output/json2.js', function(){
 	var streamClosed = false;
 
 	steal.extend(FuncUnit,{
-		begin: function(){
+		begin: function(name){
+			print("Starting " + name + "...")
 			classPrefix = 'QUnit.';
 			filename = 'testresults.xml';
 			if(filename) {
@@ -156,12 +157,6 @@ steal('funcunit/commandline/output/json2.js', function(){
 			if (failures > 0 && FuncUnit.failOnError) {
 				java.lang.System.exit(1);
 			}
-		},
-		browserStart: function(name){
-			print("Starting " + name + "...")
-		},
-		browserDone: function(name, failures, total){
-			print("\n" + name+" done :-)");
 		},
 		coverage: function(stats){
 			var percentage = function(num){
