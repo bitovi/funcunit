@@ -73,7 +73,7 @@ steal('funcunit/open/output/json2.js', function(){
 		testStart: function(name){
 			print('  ' + name);
 			// Prefix class to have a destinct namespace
-			moduleLogOutput += '    <testcase class="' + xmlEncode(FuncUnit.browserName+"/"+ + moduleName) + '" name="' + xmlEncode(name) + '">' + "\n";
+			moduleLogOutput += '    <testcase class="' + xmlEncode(classPrefix + FuncUnit.browserName+':'+moduleName) + '" name="' + xmlEncode(name) + '">' + "\n";
 			moduleTestCounter++;
 			globalTestCounter++;
 			failureArr = [];
