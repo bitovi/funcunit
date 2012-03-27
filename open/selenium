@@ -11,10 +11,7 @@
 		.then('funcunit/selenium',
 			function(){
 				var opts = FuncUnit.opts(_args);
-				FuncUnit.funcunitPage = FuncUnit._getPageUrl(opts.page, opts.coverage);
-				FuncUnit.outputFile = opts.out;
 				
-				print("Opening "+FuncUnit.funcunitPage);
 				FuncUnit.browserName = opts.browser || getDefaultBrowser();
 				
 				// expose FuncUnit.browser so people can call close themselves
@@ -26,7 +23,7 @@
 				FuncUnit.bindEvents(FuncUnit.browser)
 				
 				// Loads the FuncUnit page in Selenium
-				FuncUnit.browser.open(FuncUnit.funcunitPage)
+				FuncUnit.browser.open(opts.page)
 			})
 
 })()

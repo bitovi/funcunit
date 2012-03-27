@@ -7,19 +7,15 @@
 		.then('steal/browser/envjs',
 			function(){
 				var opts = FuncUnit.opts(_args);
-				FuncUnit.funcunitPage = FuncUnit._getPageUrl(opts.page, opts.coverage);
-				FuncUnit.outputFile = opts.out;
 				
-				print("Opening "+FuncUnit.funcunitPage);
-				
-				FuncUnit.browserName = "phantomjs";
+				FuncUnit.browserName = "envjs";
 				
 				FuncUnit.browser = new steal.browser.envjs({
 					fireLoad: true
 				});
 				
 				FuncUnit.bindEvents(FuncUnit.browser);
-				FuncUnit.browser.open(FuncUnit.funcunitPage);
+				FuncUnit.browser.open(opts.page);
 			})
 
 })()

@@ -50,7 +50,7 @@ steal(function(){
 	}
 	
 	// if coverage is true, use this to change the URL
-	FuncUnit._getPageUrl = function(page, coverage){
+	var getPageUrl = function(page, coverage){
 		if(!/https?:|file:/.test(page)){ // if theres no protocol, turn it into a filesystem urls
 			var cwd = (new java.io.File (".")).getCanonicalPath()+"";
 			cwd = cwd.replace(/\\/, '/');
@@ -90,7 +90,11 @@ steal(function(){
 			seleniumPort: 1
 		})
 		
-		opts.page = page;
+		opts.page = getPageUrl(page, opts.coverage)
+		
+		// output.js uses this to create the file
+		FuncUnit.outputFile = opts.out;
+		print("Opening "+opts.page);;
 		return opts;
 	}
 })
