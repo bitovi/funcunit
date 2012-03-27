@@ -268,7 +268,6 @@ Test.prototype = {
 		// defer when previous test run passed, if storage is available
 		var bad = QUnit.config.reorder && defined.sessionStorage && +sessionStorage.getItem("qunit-" + this.module + "-" + this.testName);
 		if (bad) {
-			console.log("bad")
 			run();
 		} else {
 			synchronize(run, true);

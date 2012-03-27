@@ -417,7 +417,6 @@
 				}
 				if(typeof timeout == 'string'){
 					message = timeout;
-					console.log(message)
 					timeout = undefined;
 					success = undefined;
 				}
