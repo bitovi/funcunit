@@ -1650,5 +1650,36 @@ if(QUnit.urlParams["coverage"]){
 	})
 }
 
+var appendToBody = function(type, id){
+	var el = document.createElement(type);
+	el.setAttribute("id", id);
+	document.body.appendChild( el );
+}
+
+// set up page if it hasn't been
+if(!document.getElementsByTagName("link").length){
+	steal("funcunit/qunit/qunit.css")
+}
+if(!id("qunit-header")){
+	appendToBody("h1", "qunit-header");
+}
+if(!id("qunit-banner")){
+	appendToBody("h2", "qunit-banner");
+}
+if(!id("qunit-testrunner-toolbar")){
+	appendToBody("div", "qunit-testrunner-toolbar");
+}
+if(!id("qunit-userAgent")){
+	appendToBody("h2", "qunit-userAgent");
+}
+if(!id("test-content")){
+	appendToBody("div", "test-content");
+}
+if(!id("qunit-tests")){
+	appendToBody("ol", "qunit-tests");
+}
+if(!id("qunit-test-area")){
+	appendToBody("div", "qunit-test-area");
+}
 })
 .then('funcunit/browser/events.js')

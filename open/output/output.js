@@ -11,7 +11,7 @@
  * 
  */
  
-steal('funcunit/commandline/output/json2.js', function(){
+steal('funcunit/open/output/json2.js', function(){
 	var classPrefix,
 		filename,
 		fstream, out;
@@ -108,6 +108,7 @@ steal('funcunit/commandline/output/json2.js', function(){
 		moduleDone: function(name, failures, total){
 			var currentDate = new Date();
 			var timeDiff = (currentDate.getTime() - moduleStartTime) / 1000;
+			name = FuncUnit.browserName+": "+name;
 			
 			writeToLog(
 				'  <testsuite' +     	        

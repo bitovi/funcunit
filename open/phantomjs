@@ -1,0 +1,23 @@
+// _args = ['selenium', 'path/to/page.html']; load('funcunit/open/selenium')
+// ./js funcunit/open/selenium funcunit/funcunit.html -coverage
+(function(){
+	load('steal/rhino/rhino.js');
+	
+	steal('funcunit/open/utils.js') 
+		.then('steal/browser/phantomjs',
+			function(){
+				var opts = FuncUnit.opts(_args);
+				FuncUnit.funcunitPage = FuncUnit._getPageUrl(opts.page, opts.coverage);
+				FuncUnit.outputFile = opts.out;
+				
+				print("Opening "+FuncUnit.funcunitPage);
+				
+				FuncUnit.browserName = "phantomjs";
+				
+				FuncUnit.browser = new steal.browser.phantomjs();
+				
+				FuncUnit.bindEvents(FuncUnit.browser)
+				FuncUnit.browser.open(FuncUnit.funcunitPage)
+			})
+
+})()
