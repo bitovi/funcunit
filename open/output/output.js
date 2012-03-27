@@ -73,7 +73,7 @@ steal('funcunit/open/output/json2.js', function(){
 		testStart: function(name){
 			print('  ' + name);
 			// Prefix class to have a destinct namespace
-			moduleLogOutput += '    <testcase class="' + xmlEncode(classPrefix + moduleName) + '" name="' + xmlEncode(name) + '">' + "\n";
+			moduleLogOutput += '    <testcase class="' + xmlEncode(FuncUnit.browserName+"."+ + moduleName) + '" name="' + xmlEncode(name) + '">' + "\n";
 			moduleTestCounter++;
 			globalTestCounter++;
 			failureArr = [];
@@ -108,7 +108,6 @@ steal('funcunit/open/output/json2.js', function(){
 		moduleDone: function(name, failures, total){
 			var currentDate = new Date();
 			var timeDiff = (currentDate.getTime() - moduleStartTime) / 1000;
-			name = FuncUnit.browserName+": "+name;
 			
 			writeToLog(
 				'  <testsuite' +     	        
