@@ -527,31 +527,33 @@ if (!JSON) {
             return JSON.parse(this, filter);
         };
     }
-	Selenium.getResult = function(){
-		// window not loaded yet
-		var _win = selenium.browserbot.getCurrentWindow(), 
-			steal = _win.steal;
-		if(!steal || !steal.client){
-			return;
-		}
-		var q = _win.steal.client.dataQueue;
-		_win.steal.client.dataQueue = [];
-		var evt,
-			evtCopy, 
-			arrayCopy = [];
-			// not sure why this is necessary but copying allows events to stringify correctly
-			for(var i=0; i<q.length; i++){
-				evt = q[i];
-				copy = {type: evt.type, data: {}};
-				for(var k in evt.data){
-					copy.data[k] = evt.data[k];
-				}
-				arrayCopy.push(copy);
-			}
-		var res = JSON.stringify(arrayCopy); 
-		_win.steal.client.dataQueue = [];
-		return res;
-	}
+    Selenium.getResult = function(){
+          // window not loaded yet
+          var _win = selenium.browserbot.getCurrentWindow(),
+               steal = _win.steal;
+          if(!steal || !steal.client){
+               return;
+          }
+          var evt,
+               arrayCopy = [];
+         
+          // not sure why this is necessary but copying allows events to stringify correctly
+          while(steal.client.dataQueue.length){
+               evt = steal.client.dataQueue.shift();
+               copy = {type: evt.type, data: {}};
+               for(var k in evt.data){
+               		// skipping these because IE chokes on them in some cases and we don't use them in the output
+               		if(k !== "actual" && k != "expected"){
+                    	copy.data[k] = evt.data[k];
+                    }
+               }
+               arrayCopy.push(copy);
+          }
+         
+          var res = JSON.stringify(arrayCopy);
+          return res;
+     }
+
 	Selenium.evaluate = function(script){
 		var _win = selenium.browserbot.getCurrentWindow();
 		_win.eval("var fn = "+script);
