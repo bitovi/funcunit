@@ -23,7 +23,7 @@ var confirms = [],
 	},
 	absolutize = function(url){
 		var f = steal.File(url);
-		return f.protocol() ? f.path : f.joinFrom(steal.pageUrl().dir(), true);
+		return f.isCrossDomain() ? f.path : f.join(steal.root, true);
 	},
 	// returns true if url matches current window's url
 	isCurrentPage = function(url){
