@@ -13,7 +13,7 @@
 				FuncUnit.browser = new steal.browser.phantomjs();
 				
 				FuncUnit.bindEvents(FuncUnit.browser)
-				FuncUnit.browser.open(FuncUnit.funcunitPage)
+				FuncUnit.browser.open(opts.page)
 			})
 
 })()
