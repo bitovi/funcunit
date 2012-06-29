@@ -156,9 +156,13 @@ steal('./coverage.css').then(function(){
 
 		var buildIgnoresForm = function(){
 			var ignoresHTML = ""; 
-			for(var i=0;i<steal.instrument.ignores.length; i++){
-				ignoresHTML += "<label class='ignore'><input id='newignore' type='checkbox' checked='checked' value='"+steal.instrument.ignores[i]+"' /> " +steal.instrument.ignores[i]+"</label>"
+			
+			if(steal.instrument.ignores){
+				for(var i=0;i<steal.instrument.ignores.length; i++){
+					ignoresHTML += "<label class='ignore'><input id='newignore' type='checkbox' checked='checked' value='"+steal.instrument.ignores[i]+"' /> " +steal.instrument.ignores[i]+"</label>"
+				}
 			}
+			
 			$("ignores").innerHTML = "<input id='newignore' type='text' />" + ignoresHTML;
 		}
 
