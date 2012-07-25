@@ -1,6 +1,6 @@
 (function(){
 
-	if(steal.options.instrument){
+	if(steal.instrument){
 		QUnit.done(function(){
 			// send to console
 			if(steal.options.browser){

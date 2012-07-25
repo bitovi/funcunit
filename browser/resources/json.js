@@ -15,7 +15,7 @@
  */
 //
 
- steal('funcunit/browser/resources/jquery.js',function($){
+ steal('jquery', function($) {
     /**
      * @page jQuery.toJSON jQuery.toJSON
      * @parent jquerymx.lang

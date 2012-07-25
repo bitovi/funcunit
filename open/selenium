@@ -26,4 +26,6 @@
 				FuncUnit.browser.open(opts.page)
 			})
 
+	java.lang.System.exit(0);
+
 })()
