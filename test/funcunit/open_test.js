@@ -15,7 +15,7 @@ test("URL Test", function(){
 	equals(path, "http://foo.com", "paths match");
 	
 	path = FuncUnit.getAbsolutePath("//myapp/mypage.html");
-	var root = steal.root;
+	var root = steal.config().root;
 	if(!root.protocol()){
 		root = steal.File(root.joinFrom(steal.pageUrl().dir(), true));
 	}
