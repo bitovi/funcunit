@@ -1,4 +1,4 @@
-(function($){
+steal('jquery', './core.js', function($, FuncUnit) {
 	
 	/**
 	 * @add FuncUnit
@@ -518,4 +518,6 @@
 	for (var prop in FuncUnit.funcs) {
 		FuncUnit.makeFunc(prop, FuncUnit.funcs[prop]);
 	}
-})(window.jQuery || window.FuncUnit.jQuery)
+
+	return FuncUnit;
+});

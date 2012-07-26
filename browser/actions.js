@@ -1,4 +1,4 @@
-(function($){
+steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	/**
 	 * @add FuncUnit
 	 */
@@ -300,4 +300,5 @@
 			return this;
 		}
 	})
-})(window.jQuery || window.FuncUnit.jQuery)
+	return FuncUnit;
+});

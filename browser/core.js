@@ -1,9 +1,7 @@
-(function(){
+steal('./init', function(oldFuncUnit) {
 	if(!window.QUnit && !window.jasmine){
 		steal('funcunit/qunit')
 	}
-	//if there is an old FuncUnit, use that for settings
-	var oldFuncUnit = window.FuncUnit;
 
 /**
 @hide
@@ -175,7 +173,7 @@ Results are reported on the commandline.  Failed tests can be made to fail your 
 or integrated with CI tools like [funcunit.jenkins Jenkins].
 
  */
-	FuncUnit = oldFuncUnit.jQuery.sub();
+	var FuncUnit = oldFuncUnit.jQuery.sub();
 	var origFuncUnit = FuncUnit;
 	// override the subbed init method
 	// context can be an object with frame and forceSync:
@@ -256,7 +254,5 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 	
 	oldFuncUnit.jQuery.extend(FuncUnit, oldFuncUnit, origFuncUnit)
 	FuncUnit.prototype = origFuncUnit.prototype;
-	S = FuncUnit;
-	
-	
+	return FuncUnit;
 })()
