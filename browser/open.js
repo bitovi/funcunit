@@ -1,6 +1,6 @@
 (function($){
 	
-	if(steal.options.browser === "phantomjs"){
+	if(steal.config().browser === "phantomjs"){
 		FuncUnit.frameMode = true;
 	}
 	
