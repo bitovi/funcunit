@@ -1,4 +1,4 @@
-(function(){ 
+steal('jquery', './core.js', function($, FuncUnit) {
 	/**
 	 * @add FuncUnit
 	 */
@@ -165,4 +165,6 @@
 			FuncUnit.unit.resumeTest();
 		}
 	}
-})()
+
+	return FuncUnit;
+});

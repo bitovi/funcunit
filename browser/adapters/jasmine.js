@@ -1,4 +1,4 @@
-(function(){
+steal('../core.js', function(FuncUnit) {
 var paused = false;
 FuncUnit.unit = {
 	pauseTest:function(){
@@ -18,4 +18,5 @@ FuncUnit.unit = {
 	}
 }
 
-})()
+return FuncUnit;
+});

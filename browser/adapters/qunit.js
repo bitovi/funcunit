@@ -1,3 +1,4 @@
+steal('../../core.js', function(FuncUnit) {
 FuncUnit.unit = {
 	pauseTest:function(){
 		stop();
@@ -12,3 +13,5 @@ FuncUnit.unit = {
 		return QUnit.equiv(expected, actual);
 	}
 }
+return FuncUnit;
+});

@@ -1,4 +1,4 @@
-(function(){
+steal('./core.js', 'funcunit/qunit', function(FuncUnit, QUnit) {
 
 	if(steal.instrument){
 		QUnit.done(function(){
@@ -37,5 +37,5 @@
 			})(type);
 		}
 	}
-	
-})()
+	return QUnit;
+});

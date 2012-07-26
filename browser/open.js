@@ -1,5 +1,4 @@
-(function($){
-	
+steal('jquery', './core.js', function($, FuncUnit) {
 	if(steal.options.browser === "phantomjs"){
 		FuncUnit.frameMode = true;
 	}
@@ -353,5 +352,6 @@ $.extend(FuncUnit,{
 	$(window).unload(function(){
 		FuncUnit.win && FuncUnit.win.close();
 	});
-	
-})(window.jQuery || window.FuncUnit.jQuery)
+
+	return FuncUnit;
+});
