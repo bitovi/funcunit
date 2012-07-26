@@ -1,4 +1,4 @@
-steal('./init.js', function(oldFuncUnit) {
+steal('./init', function(oldFuncUnit) {
 	if(!window.QUnit && !window.jasmine){
 		steal('funcunit/qunit')
 	}

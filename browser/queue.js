@@ -1,4 +1,4 @@
-steal('jquery', './core.js', function($, FuncUnit) {
+steal('./core.js', function(FuncUnit) {
 	/**
 	 * @add FuncUnit
 	 */

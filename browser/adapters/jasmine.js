@@ -17,6 +17,6 @@ FuncUnit.unit = {
 		return jasmine.getEnv().equals_(expected, actual)
 	}
 }
-
 return FuncUnit;
 });
+

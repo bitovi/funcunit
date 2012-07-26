@@ -1,5 +1,4 @@
-steal('jquery', './core.js', function(jQuery, FuncUnit) {
-	var $ = FuncUnit.jQuery || jQuery;
+steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	/**
 	 * @add FuncUnit
 	 */

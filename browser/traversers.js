@@ -1,12 +1,12 @@
-steal('jquery', './core.js', function ($, FuncUnit) {
+steal('jquery', './core.js', function($, FuncUnit){
 
-	/**
-	 * @add FuncUnit
-	 */
+/**
+ * @add FuncUnit
+ */
 // prototype
-	/**
-	 * @Prototype
-	 */
+/**
+ * @Prototype
+ */
 //do traversers
 	var traversers = [
 		/**
@@ -108,9 +108,10 @@ steal('jquery', './core.js', function ($, FuncUnit) {
 				return orig.apply(this, arguments);
 			}
 		};
-	for (var i = 0; i < traversers.length; i++) {
-		makeTraverser(traversers[i]);
-	}
 
-	return FuncUnit;
-})
+for(var i  =0; i < traversers.length; i++){
+	makeTraverser(traversers[i]);
+}
+
+return FuncUnit;
+});

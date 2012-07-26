@@ -13,5 +13,6 @@ FuncUnit.unit = {
 		return QUnit.equiv(expected, actual);
 	}
 }
+
 return FuncUnit;
 });

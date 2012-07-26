@@ -353,4 +353,5 @@ $.extend(FuncUnit,{
 		FuncUnit.win && FuncUnit.win.close();
 	});
 
+	return FuncUnit;
 });
