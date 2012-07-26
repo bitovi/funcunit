@@ -1681,5 +1681,5 @@ if(!id("qunit-tests")){
 if(!id("qunit-test-area")){
 	appendToBody("div", "qunit-test-area");
 }
-return QUnit;
-});
+})
+.then('funcunit/browser/events.js')

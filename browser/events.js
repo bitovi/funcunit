@@ -1,4 +1,4 @@
-steal('./core.js', 'funcunit/qunit', function(FuncUnit, QUnit) {
+(function(){
 
 	if(steal.instrument){
 		QUnit.done(function(){
@@ -37,5 +37,5 @@ steal('./core.js', 'funcunit/qunit', function(FuncUnit, QUnit) {
 			})(type);
 		}
 	}
-	return QUnit;
-});
+	
+})()

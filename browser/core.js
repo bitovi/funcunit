@@ -255,4 +255,4 @@ or integrated with CI tools like [funcunit.jenkins Jenkins].
 	oldFuncUnit.jQuery.extend(FuncUnit, oldFuncUnit, origFuncUnit)
 	FuncUnit.prototype = origFuncUnit.prototype;
 	return FuncUnit;
-});
+})()

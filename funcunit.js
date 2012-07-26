@@ -1,14 +1,12 @@
-steal('jquery', './browser/resources/json.js',
-	'./browser/core.js', 'funcunit/syn', './browser/open.js',
-	'./browser/adapters/adapters.js',
-	'./browser/actions.js', './browser/getters.js',
-	'./browser/traversers.js', './browser/queue.js', './browser/waits.js',
-function(jQuery, json, FuncUnit) {
-	window.FuncUnit = FuncUnit;
-	window.S = FuncUnit;
-	return FuncUnit;
-});
 //what we need from javascriptmvc or other places
+steal('funcunit/syn', './browser/resources/json.js',
+	'./browser/core.js', './browser/adapters/adapters.js',
+	'./browser/open.js', './browser/actions.js', './browser/getters.js',
+	'./browser/traversers.js', './browser/queue.js', './browser/waits.js',
+function(Syn, $, FuncUnit) {
+	window.FuncUnit = window.S = FuncUnit;
+});
+
 //steal('./browser/resources/jquery.js', function(){
 //		if(!window.FuncUnit){
 //			window.FuncUnit = {};

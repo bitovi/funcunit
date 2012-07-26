@@ -18,5 +18,4 @@ FuncUnit.unit = {
 	}
 }
 return FuncUnit;
-});
-
+})()

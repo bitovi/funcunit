@@ -1,4 +1,5 @@
 steal('jquery', './core.js', function($, FuncUnit) {
+	
 	if(steal.config().browser === "phantomjs"){
 		FuncUnit.frameMode = true;
 	}

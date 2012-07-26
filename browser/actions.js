@@ -300,6 +300,5 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			return this;
 		}
 	})
-
 	return FuncUnit;
 });
