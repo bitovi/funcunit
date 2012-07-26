@@ -1,9 +1,9 @@
 steal('jquery', './browser/resources/json.js',
-	'./browser/core.js', './browser/adapters/adapters.js',
-	'./browser/open.js', './browser/actions.js', './browser/getters.js',
+	'./browser/core.js', 'funcunit/syn', './browser/open.js',
+	'./browser/adapters/adapters.js',
+	'./browser/actions.js', './browser/getters.js',
 	'./browser/traversers.js', './browser/queue.js', './browser/waits.js',
-function(jQuery, FuncUnit) {
-	FuncUnit.jQuery = jQuery.noConflict(true);
+function(jQuery, json, FuncUnit) {
 	window.FuncUnit = FuncUnit;
 	window.S = FuncUnit;
 	return FuncUnit;

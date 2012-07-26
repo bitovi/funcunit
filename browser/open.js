@@ -1,4 +1,5 @@
 steal('jquery', './core.js', function($, FuncUnit) {
+	console.log("Unit is", FuncUnit);
 	if(steal.options.browser === "phantomjs"){
 		FuncUnit.frameMode = true;
 	}
@@ -353,5 +354,4 @@ $.extend(FuncUnit,{
 		FuncUnit.win && FuncUnit.win.close();
 	});
 
-	return FuncUnit;
 });

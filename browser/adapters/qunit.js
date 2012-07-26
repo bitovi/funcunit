@@ -1,4 +1,4 @@
-steal('../../core.js', function(FuncUnit) {
+steal('../core.js', function(FuncUnit) {
 FuncUnit.unit = {
 	pauseTest:function(){
 		stop();

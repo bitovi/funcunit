@@ -12,7 +12,7 @@ test('S.open accepts a window', function() {
 
 test("URL Test", function(){
 	var path = FuncUnit.getAbsolutePath("http://foo.com")
-	equals(path, "http://foo.com", "paths match");
+	equals(path, "http://foo.com/", "paths match");
 	
 	path = FuncUnit.getAbsolutePath("//myapp/mypage.html");
 	var root = steal.config().root;

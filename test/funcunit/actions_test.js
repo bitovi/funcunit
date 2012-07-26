@@ -1,6 +1,5 @@
 module("scroll", {
    setup:function() {
-	   console.log(S);
       S.open("//funcunit/test/scroll.html", null, 10000) ;
    }
  })
