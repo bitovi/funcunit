@@ -3,7 +3,7 @@ steal('./core.js', 'funcunit/qunit', function(FuncUnit, QUnit) {
 	if(steal.instrument){
 		QUnit.done(function(){
 			// send to console
-			if(steal.options.browser){
+			if(steal.config().browser){
 				steal.client.trigger("coverage", steal.instrument.compileStats());
 			}
 		})
@@ -19,7 +19,7 @@ steal('./core.js', 'funcunit/qunit', function(FuncUnit, QUnit) {
 		}
 	})
 	
-	if(steal.options.browser){
+	if(steal.config().browser){
 		var evts = ['begin', 'testStart', 'testDone', 'moduleStart', 'moduleDone', 'done', 'log'], 
 			type,
 			orig = {};
