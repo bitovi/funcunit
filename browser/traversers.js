@@ -1,9 +1,4 @@
-steal('funcunit/browser/resources/jquery.js').then(function($){
-
-(function($){
-	var getWindow = function( element ) {
-		return element.ownerDocument.defaultView || element.ownerDocument.parentWindow
-	}
+steal('jquery', './core.js', function($, FuncUnit){
 
 /**
  * @add FuncUnit
@@ -117,8 +112,5 @@ for(var i  =0; i < traversers.length; i++){
 	makeTraverser(traversers[i]);
 }
 
-
-}(window.jQuery  || window.FuncUnit.jQuery));
-
-
-})
+return FuncUnit;
+});

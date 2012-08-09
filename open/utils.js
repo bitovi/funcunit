@@ -10,7 +10,7 @@ steal(function(){
 	var totalFailed = 0,
 		total = 0,
 		browserFailed, browserTotal;
-		
+
 	// bind all events
 	FuncUnit.bindEvents = function(browser){
 		browser.bind("begin", function(data){

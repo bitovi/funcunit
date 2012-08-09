@@ -1,4 +1,4 @@
-(function($){
+steal('jquery', './core.js', function($, FuncUnit) {
 /**
  * @add FuncUnit
  */
@@ -265,5 +265,5 @@ $.extend(FuncUnit.prototype, {
 		return this;
 	}
 })
-
-})(window.jQuery || window.FuncUnit.jQuery)
+return FuncUnit;
+});

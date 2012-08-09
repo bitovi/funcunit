@@ -1,10 +1,13 @@
 <html>
-    <head></head>
+    <head>
+      <link rel="stylesheet" type="text/css" href="qunit/qunit.css" />
+      <title>QUnit Test</title>
+    </head>
     <body>
 		<script type='text/javascript' src='../steal/steal.js?funcunit/test/funcunit'></script>
 		<a id='tester' href='#'>Click Me</a>
 		<script type='text/javascript'>
-			steal("jquery", function(){
+			steal("jquery", function($) {
 				$(document).ready(function(){
 					$('#tester').click(function(ev){
 						ev.preventDefault();

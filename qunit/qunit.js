@@ -1630,7 +1630,7 @@ QUnit.diff = (function() {
 if(QUnit.urlParams["coverage"]){
 	steal("steal/instrument", function(){
 		// default ignores
-		var ignores = ["jquery","funcunit","steal","documentjs","*/test","*_test.js","*funcunit.js"] 
+		var ignores = ["/jquery","/can","/funcunit","/steal","/documentjs","*/test","*_test.js","*funcunit.js"] 
 		if(typeof FuncUnit !== "undefined" && FuncUnit.coverageIgnore){
 			ignores = FuncUnit.coverageIgnore;
 		}
