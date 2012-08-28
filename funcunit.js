@@ -1,5 +1,6 @@
 //what we need from javascriptmvc or other places
-steal('jquery', 'funcunit/syn', './browser/core.js', './browser/adapters/adapters.js',
+steal('jquery');
+steal('funcunit/syn', './browser/core.js', './browser/adapters/adapters.js',
 	'./browser/open.js', './browser/actions.js', './browser/getters.js',
 	'./browser/traversers.js', './browser/queue.js', './browser/waits.js',
 function($, Syn, FuncUnit) {
