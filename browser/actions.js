@@ -1,4 +1,4 @@
-steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
+steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit) {
 	/**
 	 * @add FuncUnit
 	 */

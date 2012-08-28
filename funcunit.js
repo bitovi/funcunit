@@ -1,5 +1,5 @@
 //what we need from javascriptmvc or other places
-steal('./browser/resources/json.js').then('funcunit/syn',
+steal('./browser/resources/json.js', 'funcunit/syn',
 	'./browser/core.js', './browser/adapters/adapters.js',
 	'./browser/open.js', './browser/actions.js', './browser/getters.js',
 	'./browser/traversers.js', './browser/queue.js', './browser/waits.js',
