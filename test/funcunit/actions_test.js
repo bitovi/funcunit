@@ -4,7 +4,7 @@ module("scroll", {
    }
  })
 
-test("scroll on click", function(){  
+test("scroll on click", function(){
 	S('#innerdiv').click()
 	S("#scrolldiv").scrollTop(100, "Scrolled down 100")
 	S("#scrolldiv").scrollLeft(100, "Scrolled left 100")
