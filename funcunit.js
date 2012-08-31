@@ -8,6 +8,6 @@ steal('jquery').then('funcunit/syn',
 	'./browser/traversers.js', 
 	'./browser/queue.js', 
 	'./browser/waits.js',
-function(Syn, FuncUnit) {
+function($, Syn, FuncUnit) {
 	window.FuncUnit = window.S = FuncUnit;
 });
