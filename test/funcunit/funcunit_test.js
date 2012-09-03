@@ -12,7 +12,9 @@ test("qUnit module setup works async", function(){
 })
 
 test("Iframe access", function(){
-	equals(S("h2",0).text(), "Goodbye World", "text of iframe")
+	S("h2",0).exists(function(){
+		equals(S("h2",0).text(), "Goodbye World", "text of iframe");
+	});
 })
 
 test("typing alt and shift characters", function(){
