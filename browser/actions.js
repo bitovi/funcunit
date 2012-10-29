@@ -1,4 +1,4 @@
-steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit) {
+steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	/**
 	 * @add FuncUnit
 	 */
@@ -68,7 +68,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit) {
 					method: function(success, error){
 						options = options || {}
 						steal.dev.log("Clicking " + selector)
-						this.bind.triggerSyn("_" + name, options, success);
+						Syn("_" + name, options, this.bind[0],success);
 					},
 					success: success,
 					error: "Could not " + name + " '" + this.selector+"'",
@@ -131,8 +131,9 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit) {
 			}
 			FuncUnit.add({
 				method : function(success, error){
-					steal.dev.log("Typing "+text+" on "+selector)
-					this.bind.triggerSyn("_type", text, success);
+					steal.dev.log("Typing "+text+" on "+selector);
+					Syn("_type", text, this.bind[0], success);
+					
 				},
 				success : success,
 				error : "Could not type " + text + " into " + this.selector,
@@ -202,8 +203,8 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit) {
 				context = this.context;
 			FuncUnit.add({
 				method: function(success, error){
-					steal.dev.log("dragging " + selector)
-					this.bind.triggerSyn("_drag", options, success);
+					steal.dev.log("dragging " + selector);
+					Syn("_drag", options, this.bind[0],success);
 				},
 				success: success,
 				error: "Could not drag " + this.selector,
@@ -258,8 +259,8 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit) {
 				context = this.context;
 			FuncUnit.add({
 				method: function(success, error){
-					steal.dev.log("moving " + selector)
-					this.bind.triggerSyn("_move", options, success);
+					steal.dev.log("moving " + selector);
+					Syn("_move", options, this.bind[0], success);
 				},
 				success: success,
 				error: "Could not move " + this.selector,

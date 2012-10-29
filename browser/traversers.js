@@ -105,6 +105,10 @@ var traversers = [
 					bind: this
 				});
 			}
+			// TODO: closest calling find() doesn't work with context being document 
+			// in latest jQuery
+			// (needs to be document.documentElement)
+			// in latest jQuer
 			return orig.apply(this, arguments);
 		}
 	};

@@ -1,5 +1,5 @@
 //what we need from javascriptmvc or other places
-steal('jquery').then('funcunit/syn',
+steal('funcunit/syn',
 	'./browser/core.js', 
 	'./browser/adapters/adapters.js',
 	'./browser/open.js', 
@@ -10,4 +10,6 @@ steal('jquery').then('funcunit/syn',
 	'./browser/waits.js',
 function(Syn, FuncUnit) {
 	window.FuncUnit = window.S = FuncUnit;
+	
+	return FuncUnit;
 });
