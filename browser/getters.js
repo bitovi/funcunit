@@ -477,6 +477,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 							} else {
 								// after every successful wait, check for a new document (if someone clicked a link), 
 								// and overwrite alert/confirm/prompt
+								// TODO this creates a potential race if a new document is loaded but its steal isn't ready...should poll
 								FuncUnit.checkForNewDocument();
 							}
 						}
