@@ -53,10 +53,10 @@ steal('./init', function(oldFuncUnit) {
 			if (typeof context === "number" || typeof context === "string") {
 				// try to get the context from an iframe in the funcunit document
 				var sel = (typeof context === "number" ? "iframe:eq(" + context + ")" : "iframe[name='" + context + "']"),
-					frames = new origFuncUnit.fn.init(sel, FuncUnit.win.document, true);
-				context = (frames.length ? frames.get(0).contentWindow : FuncUnit.win).document;
+					frames = new origFuncUnit.fn.init(sel, FuncUnit.win.document.documentElement, true);
+				context = (frames.length ? frames.get(0).contentWindow : FuncUnit.win).document.documentElement;
 			} else {
-				context = FuncUnit.win.document;
+				context = FuncUnit.win.document.documentElement;
 			}
 			return context;
 		},
