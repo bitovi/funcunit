@@ -6,7 +6,7 @@ test('S.open accepts a window', function() {
 	S("#tester").text("Changed", "Changed link")
 	
 	S.open(frames["myapp"]);
-	S("#typehere").type("javascriptmvc")
+	S("#typehere").type("").type("javascriptmvc")
 	S("#seewhatyoutyped").text("typed javascriptmvc","typing");
 })
 
