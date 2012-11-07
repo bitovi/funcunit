@@ -1656,6 +1656,17 @@ var appendToBody = function(type, id){
 	document.body.appendChild( el );
 }
 
+
+	
+// TODO remove this once jquery patches http://bugs.jquery.com/ticket/10373
+var gCS = window.getComputedStyle;
+window.getComputedStyle = function(elem){
+	if(window.getComputedStyle !== elem.ownerDocument.defaultView.getComputedStyle) {
+		return elem.ownerDocument.defaultView.getComputedStyle( elem, null );
+	}
+	return gCS(elem, null);
+}
+
 // set up page if it hasn't been
 if(!document.getElementsByTagName("link").length){
 	steal("funcunit/qunit/qunit.css")

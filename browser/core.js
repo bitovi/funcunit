@@ -1,15 +1,5 @@
 steal('jquery', './init', function(oldFuncUnit) {
 	
-	// TODO remove this once jquery patches http://bugs.jquery.com/ticket/10373
-	var gCS = window.getComputedStyle;
-	window.getComputedStyle = function(elem){
-		if(window.getComputedStyle !== elem.ownerDocument.defaultView.getComputedStyle) {
-			return elem.ownerDocument.defaultView.getComputedStyle( elem, null );
-		}
-		return gCS(elem, null);
-	}
-	
-	
 	if(!window.QUnit && !window.jasmine){
 		steal('funcunit/qunit')
 	}
