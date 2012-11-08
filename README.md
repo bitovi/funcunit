@@ -1,4 +1,4 @@
-@page FuncUnit
+@page funcunit FuncUnit
 @parent index 4
 
 FuncUnit tests web applications with a simple jQuery-like syntax. Via integration with
