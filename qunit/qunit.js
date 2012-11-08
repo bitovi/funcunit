@@ -1660,10 +1660,15 @@ var appendToBody = function(type, id){
 // TODO remove this once jquery patches http://bugs.jquery.com/ticket/10373
 var gCS = window.getComputedStyle;
 window.getComputedStyle = function(elem){
-	if(window.getComputedStyle !== elem.ownerDocument.defaultView.getComputedStyle) {
+	if(elem.ownerDocument.defaultView && window.getComputedStyle !== elem.ownerDocument.defaultView.getComputedStyle) {
 		return elem.ownerDocument.defaultView.getComputedStyle( elem, null );
 	}
-	return gCS(elem, null);
+	try {
+		return gCS(elem, null);
+	} catch (ex) {
+		// Here's to IE 8 and under:
+		return elem.currentStyle;
+	}
 }
 
 // set up page if it hasn't been
