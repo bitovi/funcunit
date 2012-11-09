@@ -14,16 +14,16 @@ steal('jquery', './init', function(jQuery, oldFuncUnit) {
 		// if you pass true as context, this will avoid doing a synchronous query
 		var frame,
 			forceSync, 
-			isSyncOnly = false,
-			isAsyncOnly = false;
-			
-		if(frame && frame.frame){ // its passed as an object
-			frame = frame.frame;
-		}
+			isSyncOnly = false;
 		
 		if(frame && frame.forceSync){
 			forceSync = frame.forceSync;
 		}
+		
+		if(frame && typeof frame.frame !== "undefined"){ // its passed as an object
+			frame = frame.frame;
+		}
+		
 		isSyncOnly = typeof forceSync === "boolean"? forceSync: isSyncOnly;
 		// if its a function, just run it in the queue
 		if(typeof selector == "function"){
@@ -33,17 +33,16 @@ steal('jquery', './init', function(jQuery, oldFuncUnit) {
 		this.selector = selector;
 		// run this method in the queue also
 		if(isSyncOnly === true){
-			var collection = performSyncQuery(selector, frame, this);
+			var collection = performSyncQuery(selector, frame);
 			return collection;
-		} else if(isAsyncOnly === true){
-			performAsyncQuery(selector, frame, this);
-			return this;
 		} else { // do both
 			performAsyncQuery(selector, frame, this);
-			var collection = performSyncQuery(selector, frame, this);
+			var collection = performSyncQuery(selector, frame);
 			return collection;
 		}
 	}
+
+
 	
 	var getContext = function(context){
 			if (typeof context === "number" || typeof context === "string") {
@@ -73,12 +72,11 @@ steal('jquery', './init', function(jQuery, oldFuncUnit) {
 				type: "query"
 			});
 		},
-		performSyncQuery = function(selector, frame, self){
+		performSyncQuery = function(selector, frame){
 			var origFrame = frame;
 			if (FuncUnit.win) {
 				frame = getContext(frame);
 			}
-			// console.log('after Acontext', frame.innerHTML.substring(0,50))
 			var obj = new origFuncUnit.fn.init( selector, frame, true );
 			obj.frame = origFrame;
 			return obj;

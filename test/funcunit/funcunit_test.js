@@ -11,12 +11,12 @@ test("qUnit module setup works async", function(){
 	ok(this.pageIsLoaded, "page is loaded set before")
 })
 
-// test("Iframe access", function(){
-	// S("h2",0).exists(function(){
-		// console.log('IN CALLBACK')
-		// equals(S("h2",0).text(), "Goodbye World", "text of iframe");
-	// });
-// })
+test("Iframe access", function(){
+	var frame = 0;
+	S("h2", frame).exists(function(){
+		equals(S("h2", frame).text(), "Goodbye World", "text of iframe");
+	});
+})
 
 test("typing alt and shift characters", function(){
 	S('#typehere').type("@", function(){

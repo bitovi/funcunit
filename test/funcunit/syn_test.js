@@ -23,7 +23,10 @@ test("Nested actions", function(){
 		this.type("[ctrl]a\b[ctrl-up]javascriptmvc")
 		S("#seewhatyoutyped").text("typed javascriptmvc","typing");
 		S("#copy").click();
-		S("#seewhatyoutyped").text("copied javascriptmvc","copy");
+		S("#seewhatyoutyped").text(function(t){
+			console.log('TEXT', t);
+			return t === "copied javascriptmvc"	
+		},"copy");
 	})
 })
 
