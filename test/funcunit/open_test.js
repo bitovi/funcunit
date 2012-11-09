@@ -10,18 +10,6 @@ test('S.open accepts a window', function() {
 	S("#seewhatyoutyped").text("typed javascriptmvc","typing");
 })
 
-test("URL Test", function(){
-	var path = FuncUnit.getAbsolutePath("http://foo.com")
-	equals(path, "/", "paths match");
-	
-	path = FuncUnit.getAbsolutePath("//myapp/mypage.html");
-	var root = steal.config().root;
-	if(!root.protocol){
-		root = steal.File(root.joinFrom(steal.pageUrl().dir(), true));
-	}
-	equals(path, root.join("myapp/mypage.html"), "paths match");
-})
-
 
 
 test("Back to back opens", function(){
