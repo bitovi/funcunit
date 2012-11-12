@@ -10,6 +10,20 @@ test("Type and slow Click", function(){
 	S("#seewhatyoutyped").text("copied javascriptmvc","copy");
 })
 
+test("ctrl test", function(){
+	S.open("//funcunit/test/myapp.html");
+	S("#typehere").type("abc[ctrl]ac[ctrl-up]", function(){
+		equals(S("#typehere").val(), "abc");
+	})
+})
+
+test("clipboard", function(){
+	S.open("//funcunit/test/myapp.html");
+	S("#typehere").type("abc[ctrl]ac[ctrl-up][right][ctrl]v[ctrl-up]", function(){
+		equals(S("#typehere").val(), "abcabc");
+	})
+})
+
 test("Type and clear", function(){
 	S.open("//funcunit/test/myapp.html");
 	S("#typehere").type("javascriptmvc").type("")
@@ -23,10 +37,7 @@ test("Nested actions", function(){
 		this.type("[ctrl]a\b[ctrl-up]javascriptmvc")
 		S("#seewhatyoutyped").text("typed javascriptmvc","typing");
 		S("#copy").click();
-		S("#seewhatyoutyped").text(function(t){
-			console.log('TEXT', t);
-			return t === "copied javascriptmvc"	
-		},"copy");
+		S("#seewhatyoutyped").text("copied javascriptmvc","copy");
 	})
 })
 
