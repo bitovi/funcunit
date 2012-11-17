@@ -82,6 +82,8 @@ steal("funcunit/qunit/qunit-1.10.js", function(){
 	
 	// backwards compatibility
 	window.equals = window.equal;
+	QUnit.equals = QUnit.equal;
 	window.same = window.deepEqual;
+	QUnit.same = QUnit.deepEqual;
 	
 }, 'funcunit/browser/events.js')
