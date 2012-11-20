@@ -1,0 +1,3 @@
+[submodule "syn"]
+	path = syn
+	url = git://github.com/bitovi/syn.git
