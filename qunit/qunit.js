@@ -4,29 +4,16 @@ steal("funcunit/qunit/qunit-1.10.js", function(){
 	steal.bind("ready", function(){
 		QUnit.config.autorun = false;
 		QUnit.config.reorder = false;
-		QUnit.config.urlConfig.push('coverage', 'noautorun');
 		QUnit.load();
 	})
-	if(QUnit.urlParams["coverage"]){
-		steal("steal/instrument", function(){
-			// default ignores
-			var ignores = ["/jquery","/can","/funcunit","/steal","/documentjs","*/test","*_test.js","*funcunit.js"] 
-			if(typeof FuncUnit !== "undefined" && FuncUnit.coverageIgnore){
-				ignores = FuncUnit.coverageIgnore;
+	if(steal.instrument){
+		var reportBuilt = false;
+		QUnit.done(function(){
+			if(!reportBuilt){
+				reportBuilt = true;
+				var data = steal.instrument.compileStats()
+				steal.instrument.report(data);
 			}
-			
-			// overwrite with our own ignores
-			steal.instrument.ignores = ignores;
-			steal("funcunit/coverage", function(){
-				var reportBuilt = false;
-				QUnit.done(function(){
-					if(!reportBuilt){
-						reportBuilt = true;
-						var data = steal.instrument.compileStats()
-						QUnit.coverage(data);
-					}
-				})
-			})
 		})
 	}
 	
