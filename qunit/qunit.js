@@ -1,7 +1,9 @@
 steal("funcunit/qunit/qunit-1.10.js", function(){
 	// on ready because that is when the window is loaded AND when 
 	// steal has finished
+	QUnit.config.autostart = false;
 	steal.bind("ready", function(){
+		QUnit.config.autostart = true;
 		QUnit.config.autorun = false;
 		QUnit.config.reorder = false;
 		QUnit.load();
@@ -17,9 +19,12 @@ steal("funcunit/qunit/qunit-1.10.js", function(){
 		})
 	}
 	
-	var appendToBody = function(type, id){
+	var appendToBody = function(type, id, html){
 			var el = document.createElement(type);
 			el.setAttribute("id", id);
+			if(html){
+				el.innerHTML = html;
+			}
 			document.body.appendChild( el );
 		}, 
 		id = function(id){
@@ -40,13 +45,14 @@ steal("funcunit/qunit/qunit-1.10.js", function(){
 			return elem.currentStyle;
 		}
 	}
-	
+	var startFile = steal.config("startFile"),
+		title = document.title || (startFile ? startFile.replace(/\/.*/,"") +" tests": "")
 	// set up page if it hasn't been
 	if(!document.getElementsByTagName("link").length){
 		steal("funcunit/qunit/qunit.css")
 	}
 	if(!id("qunit-header")){
-		appendToBody("h1", "qunit-header");
+		appendToBody("h1", "qunit-header", title);
 	}
 	if(!id("qunit-banner")){
 		appendToBody("h2", "qunit-banner");
@@ -65,6 +71,9 @@ steal("funcunit/qunit/qunit-1.10.js", function(){
 	}
 	if(!id("qunit-test-area")){
 		appendToBody("div", "qunit-test-area");
+	}
+	if(!document.title){
+		document.title = title
 	}
 	
 	// backwards compatibility
