@@ -4,3 +4,4 @@ coverage/coverage.json
 docs/*
 dist
 synthetic/dist
+node_modules
