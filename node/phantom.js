@@ -16,14 +16,17 @@ exports.run = function(url) {
 						var evt = JSON.parse(msg.substring(5));
 
 						if(evt.trigger) {
-							FuncUnit[evt.trigger](evt.data);
+							var success = FuncUnit[evt.trigger](evt.data);
 
 							if(evt.trigger === 'done') {
 								ph.exit();
-								deferred.resolve();
+								deferred[success ? 'resolve' : 'reject']();
 							}
 						}
 					} catch(e) {}
+				}
+				else {
+					//console.log(msg);
 				}
 			};
 
