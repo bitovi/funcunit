@@ -95,4 +95,8 @@ FuncUnit.done = function(data) {
 	}
 
 	terminal.log(nbrPassed + ' passed, ' + nbrFailed + ' failed');
+
+	//we return false if there were failures so that the node process
+	//can provide any status, eg: exit code
+	return failed.length === 0;
 }
