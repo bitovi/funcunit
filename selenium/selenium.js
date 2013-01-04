@@ -69,7 +69,7 @@ steal('steal/browser', function(){
 			catch (ex) {
 				spawn(function(){
 					var jarCommand = 'java -jar '+
-						'funcunit/selenium/selenium-server-standalone-2.12.0.jar'+
+						'funcunit/selenium/selenium-server-standalone-2.28.0.jar'+
 						' -userExtensions funcunit/selenium/user-extensions.js';
 					if (java.lang.System.getProperty("os.name").indexOf("Windows") != -1) {
 						var command = 'start "selenium" ' + jarCommand;
@@ -112,6 +112,7 @@ steal('steal/browser', function(){
 		},
 		// create new selenium instance, start it, open page, set FuncUnit.mode = "Selenium", start polling for data
 		_browserStart: function(){
+			print("browserStart: "+FuncUnit.browserName)
 			this.selenium = this.DefaultSelenium(this.options.serverHost, 
 				this.options.serverPort, 
 				FuncUnit.browserName, 
