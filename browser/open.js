@@ -249,11 +249,16 @@ $.extend(FuncUnit,{
 	},
 	// return true if new document found
 	checkForNewDocument: function(){
-		var documentFound = ((FuncUnit.win.document !== currentDocument && // new document 
+		var documentFound = false;
+
+		// right after setting a new hash and reloading, IE barfs on this occassionally (only the first time)
+		try {
+			documentFound = ((FuncUnit.win.document !== currentDocument && // new document 
 							!FuncUnit.win.___FUNCUNIT_OPENED) // hasn't already been marked loaded
 							// covers opera case after you click a link, since document doesn't change in opera
 							|| (currentHref != FuncUnit.win.location.href)) && // url is different 
 							FuncUnit.documentLoaded(); // fully loaded
+		} catch(e){}
 		if(documentFound){
 			// reset flags
 			lookingForNewDocument = false;
@@ -317,15 +322,6 @@ $.extend(FuncUnit,{
 	var newDocument = false, 
 		poller = function(){
 			var ls;
-			// right after setting a new hash and reloading, IE barfs on this occassionally (only the first time)
-			try{
-				if(FuncUnit.win && FuncUnit.win.document == null){
-					return;
-				}
-			}catch(e){
-				setTimeout(arguments.callee, 500);
-				return;
-			}
 			
 			if (lookingForNewDocument && FuncUnit.checkForNewDocument() ) {
 				

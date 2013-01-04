@@ -48,9 +48,7 @@ steal("funcunit/qunit/qunit-1.10.js", function(){
 	var startFile = steal.config("startFile"),
 		title = document.title || (startFile ? startFile.replace(/\/.*/,"") +" tests": "")
 	// set up page if it hasn't been
-	if(!document.getElementsByTagName("link").length){
-		steal("funcunit/qunit/qunit.css")
-	}
+	steal("funcunit/qunit/qunit.css")
 	if(!id("qunit-header")){
 		appendToBody("h1", "qunit-header", title);
 	}
