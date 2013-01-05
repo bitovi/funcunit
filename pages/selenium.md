@@ -11,7 +11,9 @@ There is no installation step with Selenium. The jar files come prepackaged with
 1. Write a functional test
 1. Run with Selenium
 
-    ./js funcunit/open/selenium path/to/funcunit.html
+@codestart
+./js funcunit/open/selenium path/to/funcunit.html
+@codeend
 
 ## Other browsers
 
