@@ -47,7 +47,7 @@ This section will walk through creating a smoke test for the [http://javascriptm
 Srchr is a simple demo application that lets you search several sources for images.  There is a search pane, 
 tabs, a history pane, and a results area.
 
-@image jmvc/images/srchr.png
+@image site/images/srchr.png
 
 The purpose of a smoke test is to test enough functionality in an application to verify its working correctly, as 
 quickly as possible.

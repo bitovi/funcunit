@@ -92,11 +92,3 @@ The next FuncUnit features we plan to work on include. Let us know if you want t
 
 * [http://siliconforks.com/jscoverage/ JSCoverage] integration for test coverage stats
 * [http://code.google.com/p/js-test-driver/ JSTestDriver] integration
-
-## Comparison to other frameworks
-
-### Functional vs unit
-
-### Automated vs browser based
-
-### Accurate event simulation

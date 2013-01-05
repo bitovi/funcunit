@@ -21,7 +21,7 @@ test("unit test", function(){
 @codeend
 
 @codestart
-./js funcunit/run envjs path/to/qunit.html
+./js funcunit/open/envjs path/to/qunit.html
 @codeend
 
 The same reporting system that is described in [funcunit.integrations Integrations] works with EnvJS.
