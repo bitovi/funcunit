@@ -36,12 +36,5 @@ run from maven as part of the build, using the
 ## Failing on errors
 
 To force maven to fail the build on errors, FuncUnit has to exit "hard" with exit code 1 if there's a 
-failure.
-
-1. Run the js script with the "-e" flag as shown above. This tells the batch script to exit 
-hard if something throws an error.
-1. Set the failonerror="true" flag in the maven antrun plugin xml, as shown above.
-1. Set the failOnError: true property in settings.js and use the xunit reporter (this is the default). If this 
-property is set, xunit will exit with exit code 1 if there are failed tests.
-
- 
+failure.  Run the js script with the "-e" flag as shown above. This tells the batch script to exit 
+hard if something throws an error.  If this property is set, xunit will exit with exit code 1 if there are failed tests.
