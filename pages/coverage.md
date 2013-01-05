@@ -20,7 +20,7 @@ After the test completes, a coverage report will be shown:
 
 To see which blocks of a file are covered and which are not, click a file's name:
 
-@image jmvc/images/coverage_file.png
+@image site/images/coverage_file.png
 
 The numbers on the left are how many times each line has been run.
 
@@ -32,7 +32,7 @@ To turn on coverage from the commandline, run the same test, with steal/instrume
 
 A report will appear on the console after the test completes:
 
-@image jmvc/images/coverage_commandline.png
+@image site/images/coverage_commandline.png
 
 ## Ignoring files
 

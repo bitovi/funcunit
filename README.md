@@ -61,6 +61,8 @@ The following uses <code>S.open( URL )</code> to open autocomplete.html before e
       }
     });
 
+Calling open on window will cause FuncUnit commands to operate on the current window.  This is also the default if you don't open any page.
+
 ## Query for elements
 
 FuncUnit tests are written just like jQuery.  The [funcunit.finding S method] is a copy of jQuery, which queries for elements in
@@ -73,7 +75,7 @@ the application page.  Like $, FuncUnit methods are chainable on the results of 
 
 When you're testing a widget, you need to simulate the [funcunit.actions actions] that a user takes.  FuncUnit uses the
 [syn] library to accurately simulate the correct low level events like mouseup and keypress for high
-level actions like [click] and [type].  The following shows how to simulate common user actions.
+level actions like [FuncUnit.prototype.click] and [FuncUnit.prototype.type].  The following shows how to simulate common user actions.
 
 __Click__
 
@@ -158,7 +160,7 @@ The same tests can be run via browser automation tools: [funcunit.selenium Selen
 
 These tools are driven via commandline.
 
-    js funcunit/run phantomjs path/to/funcunit.html
+    js funcunit/open/phantomjs path/to/funcunit.html
 
 Results are reported on the commandline.  Failed tests can be made to fail your build via [funcunit.maven Maven]
 or integrated with CI tools like [funcunit.jenkins Jenkins].

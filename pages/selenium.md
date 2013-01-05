@@ -11,29 +11,23 @@ There is no installation step with Selenium. The jar files come prepackaged with
 1. Write a functional test
 1. Run with Selenium
 
-@codestart
-./js funcunit/run selenium path/to/funcunit.html
-@codeend
+    ./js funcunit/open/selenium path/to/funcunit.html
 
-## Configuration
+## Other browsers
 
-The settings.js file is used to configure Selenium. Adding this file is described in [funcunit.integrations Integrations].
+By default, selenium will try to open firefox if your system has it installed.
 
-### Setting browsers
+To run your tests in another browser, supply a commandline parameter like:
 
-FuncUnit.browsers is an array that defines which browsers Selenium opens and runs your tests in.  
-This is defined in settings.js.  If this null it will default to a standard set of browsers for your OS 
-(FF and IE on Windows, FF on everything else).
+    ./js funcunit/open/selenium http://localhost/funcunit.html 
+      -browser *safari
 
-@codestart
-browsers: ["*firefox", "*iexplore", "*safari", "*googlechrome"]
-@codeend
+Other browsers include: *firefox, *iexploreproxy, *safari, *googlechrome.
 
 To define a custom path to a browser, put this in the string following the browser name.
 
-@codestart
-browsers: ["*custom /path/to/my/browser"]
-@codeend
+    ./js funcunit/open/selenium http://localhost/funcunit.html 
+      -browser "*custom /path/to/my/browser"
 
 See the [http://release.seleniumhq.org/selenium-remote-control/0.9.0/doc/java/com/thoughtworks/selenium/DefaultSelenium.html#DefaultSelenium Selenium docs] 
 for more information on customizing browsers.
@@ -43,13 +37,13 @@ for more information on customizing browsers.
 ### 64-bit Java
 
 Some users will find Selenium has trouble opening while using 64 bit java (on Windows).  You will see an error like  
-Could not start Selenium session: Failed to start new browser session.  This is because Selenium 
-looks in the 64-bit Program Files directory, and there is no Firefox there.  To fix this, change 
-browsers to include the path like this:
 
-@codestart
-FuncUnit.browsers = ["*firefox C:\\PROGRA~2\\MOZILL~1\\firefox.exe", "*iexplore"]
-@codeend
+Could not start Selenium session: Failed to start new browser session.  
+
+This is because Selenium looks in the 64-bit Program Files directory, and there is no Firefox there.  To fix this, change browsers to include the path like this:
+
+    ./js funcunit/open/selenium http://localhost/funcunit.html 
+      -browser "*firefox C:\\PROGRA~2\\MOZILL~1\\firefox.exe"
 
 ### Running From Safari and Chrome
 
@@ -58,9 +52,7 @@ of security resrictions.  You must run pages from a server.
 
 To run Safari 5 in Windows, you should use the safariproxy browser string.
 
-@codestart
-browsers: ["*safariproxy"]
-@codeend
+    -browser *safariproxy
 
 Mac Safari is just "*safari".
 
@@ -77,9 +69,9 @@ If IE isn't running test pages from filesystem, disable security settings for pa
 1. Open the Internet Options in IE and select the "Advanced" tab
 1. Enable the option to "Allow active content to run in files on My Computer."
 
-@image jmvc/images/iesecurity.png
+@image site/images/iesecurity.png
 
 
 If you're getting an IE popup blocker error, you may need to disable "Protected Mode"
 
-@image jmvc/images/iepopups.png
+@image site/images/iepopups.png
