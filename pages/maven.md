@@ -17,7 +17,7 @@ run from maven as part of the build, using the
          &lt;tasks>
             &lt;echo>Running funcunit tests&lt;/echo>
             &lt;exec dir="src/main/webapp/ui" executable="src/main/webapp/ui/js"
-                  resolveexecutable="true" failonerror="true">
+                  resolveexecutable="true">
               &lt;arg value="-e" />
               &lt;arg value="funcunit/run" />
               &lt;arg value="phantomjs" />
