@@ -48,7 +48,7 @@ To run any test via PhantomJS:
 
 ## NodeJS Mode
 
-The advantage to NodeJS mode is Node is faster than Rhino and can integrate with [funcunit.grunt GruntJS].
+The advantage to NodeJS mode is Node is faster than Rhino and can integrate with [funcunit.grunt GruntJS.
 
 The disadvantage to NodeJS mode is you have to install and setup Node and NPM.
 
