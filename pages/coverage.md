@@ -10,7 +10,7 @@ To turn on code coverage for any funcunit or qunit test, add the following snipp
 
 	steal('steal/instrument', function(instrument){
 		instrument({
-			ignores: ["/jquery","/can","/funcunit","/steal",
+			ignores: ["jquery","can","funcunit","steal",
 			  "*/test","*_test.js","*funcunit.js"]
 		})
 	})
