@@ -45,7 +45,7 @@ steal("funcunit/qunit/qunit-1.10.js", function(){
 			return elem.currentStyle;
 		}
 	}
-	var startFile = steal.config("startFile"),
+	var startFile = steal.config("startId"),
 		title = document.title || (startFile ? startFile.replace(/\/.*/,"") +" tests": "")
 	// set up page if it hasn't been
 	steal("funcunit/qunit/qunit.css")

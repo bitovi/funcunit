@@ -4,7 +4,7 @@ var phantom = require('node-phantom'),
 promise = require('promised-io/promise');
 
 exports.run = function(url) {
-	url += '?steal[browser]=phantomjs&steal[startFiles]=funcunit/node/client.js';
+	url += '?steal[browser]=phantomjs&steal[startIds]=funcunit/node/client.js';
 
 	var deferred = new promise.Deferred();
 
