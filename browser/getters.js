@@ -162,6 +162,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * returns the funcUnit selector for chaining, otherwise returns the css of the selector.
 	 */
 	'css': 1, 
+	'prop': 1, 
 	/**
 	 * @function offset
 	 * Gets an element's [http://api.jquery.com/offset/ offset] or waits until 
