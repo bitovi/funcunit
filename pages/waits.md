@@ -49,7 +49,6 @@ Some jQuery methods accept 2 parameters.  Similarly, those wait methods accept t
 
 <code>wait( keyVal, checkVal, [timeout], [callback], [message] )</code>
 
-- [FuncUnit.prototype.data data]
 - [FuncUnit.prototype.attr attr]
 - [FuncUnit.prototype.hasClass hasClass]
 - [FuncUnit.prototype.css css]

@@ -18,12 +18,12 @@ To turn on code coverage for any funcunit or qunit test, add the following snipp
 
 After the test completes, a coverage report will be shown:
 
-@image ../jmvc/site/images/coverage_report.png
+@image ../site/images/coverage_report.png
 
 
 To see which blocks of a file are covered and which are not, click a file's name:
 
-@image ../jmvc/site/images/coverage_file.png
+@image ../site/images/coverage_file.png
 
 
 The numbers on the left are how many times each line has been run.
