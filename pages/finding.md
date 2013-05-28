@@ -1,6 +1,7 @@
-@page FuncUnit.finding Finding Elements
-@parent FuncUnit 1
+@page funcunit.finding Finding Elements
+@parent FuncUnit.pages 1
 
+@body
 ## The S Method
 
 S is a copy of the $ method.  It is used to find elements in the page you're testing.  It works 

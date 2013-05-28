@@ -1,6 +1,7 @@
 @page funcunit.getters Getters & Assertions
-@parent FuncUnit 4
+@parent FuncUnit.pages 4
 
+@body
 Getter commands are jQuery getter methods. At certain points throughout a test, it's necessary
 to gather information about the page and perform assertions.  Unlike FuncUnit API methods, getters  
 work synchronously.

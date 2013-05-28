@@ -1,6 +1,7 @@
 @page funcunit.remote Targeting Remote Sites
-@parent FuncUnit 7
+@parent FuncUnit.pages 7
 
+@body
 FuncUnit provides the ability to run tests against any site on any domain.
 
 ## Proxy setup
