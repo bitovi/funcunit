@@ -1,4 +1,4 @@
-@page funcunit.finding Finding Elements
+@page FuncUnit.finding Finding Elements
 @parent FuncUnit 1
 
 ## The S Method
@@ -107,7 +107,7 @@ test("contacts test", function(){
 })
 @codeend
 
-Beware that you MUST put any synchronous getters inside a callback or at before any actions or waits.
+Beware that you MUST put any synchronous getters inside a callback or before any actions or waits.
 
 @codestart
 test("contacts test", function(){

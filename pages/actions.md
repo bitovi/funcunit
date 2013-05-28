@@ -1,4 +1,4 @@
-@page funcunit.actions Actions
+@page FuncUnit.actions Actions
 @parent FuncUnit 2
 
 Actions are used to simulate user behavior such as clicking, typing, moving the mouse.

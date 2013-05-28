@@ -4,6 +4,9 @@ steal('jquery', './core.js', function($, FuncUnit) {
  */
 FuncUnit.
 /**
+ * @parent FuncUnit.static
+ * @function FuncUnit.wait wait
+ * @signature `wait(time, success)`
  * Waits a timeout before running the next command.  Wait is an action and gets 
  * added to the queue.
  * @codestart
@@ -77,7 +80,9 @@ branch = function(check1, success1, check2, success2, timeout){
 }
 
 /**
- * @function repeat
+ * @parent FuncUnit.static
+ * @function FuncUnit.repeat repeat
+ * @signature `repeat()`
  * Takes a function that will be called over and over until it is successful.
  * method : function(){},
 	success : success,
@@ -135,6 +140,9 @@ FuncUnit.repeat = function(options){
 
 
 /**
+ * @parent FuncUnit.static
+ * @function FuncUnit.animationsDone animationsDone
+ * @signature `animationsDone()`
  * Waits until all animations in the page have completed.  Only works
  * if the tested page has jQuery present.
  */
@@ -149,6 +157,9 @@ FuncUnit.animationsDone = function(){
  */
 $.extend(FuncUnit.prototype, {
 	/**
+     * @function FuncUnit.prototype.exists exists
+     * @parent FuncUnit.prototype
+     * @signature `exists(timeout, success, message)`
 	 * Waits until an element exists before running the next action.
 	 * @codestart
 	 * //waits until #foo exists before clicking it.
@@ -176,6 +187,9 @@ $.extend(FuncUnit.prototype, {
 		})
 	},
 	/**
+     * @function FuncUnit.prototype.missing missing
+     * @parent FuncUnit.prototype
+     * @signature `missing(timeout, success, message)`
 	 * Waits until no elements are matched by the selector.  Missing is equivalent to calling
 	 * <code>.size(0, success);</code>
 	 * @codestart
@@ -191,6 +205,9 @@ $.extend(FuncUnit.prototype, {
 		return this.size(0, timeout, success, message)
 	},
 	/**
+     * @function FuncUnit.prototype.visible visible
+     * @parent FuncUnit.prototype
+     * @signature `visible(timeout, success, message)`
 	 * Waits until the funcUnit selector is visible.  
 	 * @codestart
 	 * //waits until #foo is visible.
@@ -210,6 +227,9 @@ $.extend(FuncUnit.prototype, {
 		}, timeout, success, message)
 	},
 	/**
+     * @function FuncUnit.prototype.invisible invisible
+     * @parent FuncUnit.prototype
+     * @signature `invisible(timeout, success, message)`
 	 * Waits until the selector is invisible.  
 	 * @codestart
 	 * //waits until #foo is invisible.
@@ -229,10 +249,13 @@ $.extend(FuncUnit.prototype, {
 		}, timeout, success, message)
 	},
 	/**
+     * @function FuncUnit.prototype.wait wait
+     * @parent FuncUnit.prototype
+     * @signature `wait(checker, timeout, ,success, message)`
+     *
 	 * Waits until some condition is true before calling the next action.  Or if no checker function is provided, waits a 
 	 * timeout before calling the next queued method.  This can be used as a flexible wait condition to check various things in the tested page:
 	 * @codestart
-	 * 
 	 * S('#testData').wait(function(){
 	 * 	 return S.win.$(this).data('idval') === 1000;
 	 * }, "Data value matched");
@@ -253,9 +276,12 @@ $.extend(FuncUnit.prototype, {
 		}
 	},
 	/**
+     * @function FuncUnit.prototype.then then
+     * @parent FuncUnit.prototype
+     * @signature `then(success)`
 	 * Calls the success function after all previous asynchronous actions have completed.  Then
 	 * is called with the funcunit object.
-	 * @param {Object} success
+	 * @param {Function} success
 	 */
 	then : function(success){
 		var self = this;

@@ -1,7 +1,7 @@
 @page funcunit.getters Getters & Assertions
 @parent FuncUnit 4
 
-Getter commands are jQuery getter methods. At certain points throughout a test, its necessary 
+Getter commands are jQuery getter methods. At certain points throughout a test, it's necessary
 to gather information about the page and perform assertions.  Unlike FuncUnit API methods, getters  
 work synchronously.
 
@@ -39,10 +39,10 @@ S(".foo").visible(function(){
 
 ## Tests without assertions
 
-Its worth noting that its possible to write entire tests without using any getters or assertions. 
+It's worth noting that it is possible to write entire tests without using any getters or assertions.
 Any wait condition will fail an assertion if they reach the timeout before succeeding. 
 
-Therefore, entire tests can be written with just action and wait methods. If the tests succeeds, it will finish 
+Therefore, entire tests can be written with just action and wait methods. If the test succeeds, it will finish
 without any assertions.  If it fails, it will throw a failed assertion.
 
 @codestart

@@ -10,7 +10,9 @@ steal('jquery', './core.js', function($, FuncUnit){
 //do traversers
 var traversers = [
 	/**
-	 * @function closest
+     * @function FuncUnit.prototype.closest closest
+     * @parent FuncUnit.prototype
+     * @signature `closest()`
 	 * Asynchronous version of jQuery's closest.  Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
 	 * 
@@ -18,10 +20,13 @@ var traversers = [
 	 * // after the click, filter the collection, then wait for result to be visible
 	 * S(".foo").click().closest(".bar").visible();
 	 * @codeend
+     * @param {string} selector
 	 */
 	"closest",
 	/**
-	 * @function next
+	 * @function FuncUnit.prototype.next next
+     * @parent FuncUnit.prototype
+     * @signature `next()`
 	 * Asynchronous version of next. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
 	 * 
@@ -32,7 +37,9 @@ var traversers = [
 	 */
 	"next",
 	/**
-	 * @function prev
+     * @function FuncUnit.prototype.prev prev
+     * @parent FuncUnit.prototype
+     * @signature `prev()`
 	 * Asynchronous version of prev. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
 	 * 
@@ -43,7 +50,9 @@ var traversers = [
 	 */
 	"prev",
 	/**
-	 * @function siblings
+     * @function FuncUnit.prototype.siblings siblings
+     * @parent FuncUnit.prototype
+     * @signature `siblings()`
 	 * Asynchronous version of siblings. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
 	 * 
@@ -54,7 +63,9 @@ var traversers = [
 	 */
 	"siblings",
 	/**
-	 * @function last
+     * @function FuncUnit.prototype.last last
+     * @parent FuncUnit.prototype
+     * @signature `last()`
 	 * Asynchronous version of last. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
 	 * 
@@ -65,7 +76,9 @@ var traversers = [
 	 */
 	"last",
 	/**
-	 * @function first
+     * @function FuncUnit.prototype.first first
+     * @parent FuncUnit.prototype
+     * @signature `first()`
 	 * Asynchronous version of first. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
 	 * 
@@ -76,7 +89,9 @@ var traversers = [
 	 */
 	"first", 
 	/**
-	 * @function find
+     * @function FuncUnit.prototype.find find
+     * @parent FuncUnit.prototype
+     * @signature `find()`
 	 * Asynchronous version of find. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
 	 * 
@@ -84,6 +99,7 @@ var traversers = [
 	 * // after the click, filter the collection, then wait for result to be visible
 	 * S(".foo").click().find(".bar").visible();
 	 * @codeend
+     * @param {string} selector
 	 */
 	"find"
 ],
