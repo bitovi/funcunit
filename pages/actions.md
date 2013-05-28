@@ -1,6 +1,7 @@
 @page funcunit.actions Actions
 @parent FuncUnit.pages 2
 
+@body
 Actions are used to simulate user behavior such as clicking, typing, moving the mouse.
 
 ## Commands
