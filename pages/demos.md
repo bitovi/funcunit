@@ -1,6 +1,7 @@
 @page funcunit.demos Demos
-@parent FuncUnit 8
+@parent FuncUnit.pages 8
 
+@body
 This page contains examples of tests that solve common problems.
 
 ## Login

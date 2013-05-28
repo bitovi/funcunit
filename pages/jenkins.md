@@ -1,6 +1,7 @@
 @page funcunit.jenkins Jenkins
 @parent funcunit.integrations 3
 
+@body
 [http://jenkins-ci.org/ Jenkins] is a continuous integration tool. It is used to run builds and 
 continuously check the health of the project.  If a test fails or the build breaks, it sends 
 emails to the dev team to immediately alert everyone of regressions.

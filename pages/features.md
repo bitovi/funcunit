@@ -1,6 +1,7 @@
 @page funcunit.features Features
-@parent FuncUnit 9
+@parent FuncUnit.pages 9
 
+@body
 ## Why FuncUnit
 
 TESTING IS PAINFUL.  Everyone hates testing, and most front end developers simply don't test.  There 

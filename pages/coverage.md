@@ -1,6 +1,7 @@
 @page funcunit.coverage Code Coverage
-@parent FuncUnit 6
+@parent FuncUnit.pages 6
 
+@body
 This guide will show you how to determine the code coverage of your FuncUnit tests.  Code 
 coverage is tracked and calculated by [steal.instrument].
 
@@ -17,12 +18,12 @@ To turn on code coverage for any funcunit or qunit test, add the following snipp
 
 After the test completes, a coverage report will be shown:
 
-@image site/images/coverage_report.png
+@image ../jmvc/site/images/coverage_report.png
 
 
 To see which blocks of a file are covered and which are not, click a file's name:
 
-@image site/images/coverage_file.png
+@image ../jmvc/site/images/coverage_file.png
 
 
 The numbers on the left are how many times each line has been run.

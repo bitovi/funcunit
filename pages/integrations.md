@@ -1,6 +1,7 @@
 @page funcunit.integrations Integrations
-@parent FuncUnit 5
+@parent FuncUnit.pages 5
 
+@body
 FuncUnit integrates with third party browser automation and build tools.
 
 ## Browser automation

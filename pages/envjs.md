@@ -1,6 +1,7 @@
 @page funcunit.envjs EnvJS
 @parent funcunit.integrations 1
 
+@body
 [http://www.envjs.com/ EnvJS] is a simulated browser environment. It can be used for running FuncUnit  
 unit tests. EnvJS can't be used for functional tests because it doesn't accurately implement event 
 simulation.

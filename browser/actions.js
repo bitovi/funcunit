@@ -9,7 +9,11 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	 */
 	// methods
 	/**
-	 * @function click
+     *
+	 * @function FuncUnit.prototype.click click
+     * @parent FuncUnit.prototype
+     * @signature `click(options [,success])`
+     *
 	 * Clicks an element.  This uses [Syn.prototype.click] to issue a:
 	 * <ul>
 	 * 	<li><code>mousedown</code></li>
@@ -33,12 +37,16 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	 * You can pass it any of the serializable parameters you'd send to 
 	 * [http://developer.mozilla.org/en/DOM/event.initMouseEvent initMouseEvent], but command keys are 
 	 * controlled by [FuncUnit.prototype.type].
+     *
 	 * @param {Function} [success] a callback that runs after the click, but before the next action.
 	 * @return {funcUnit} returns the funcunit object for chaining.
 	 */
 	'click',
 	/**
-	 * @function dblclick
+     * @function FuncUnit.prototype.dblclick dblclick
+     * @parent FuncUnit.prototype
+     * @signature `dblclick(options [,success])`
+     *
 	 * Double clicks an element by [FuncUnit.prototype.click clicking] it twice and triggering a dblclick event.
 	 * @param {Object} options options to add to the mouse events.  This works
 	 * the same as [FuncUnit.prototype.click]'s options.
@@ -47,7 +55,9 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	 */
 	'dblclick',
 	/**
-	 * @function rightClick
+     * @function FuncUnit.prototype.rightClick rightClick
+     * @parent FuncUnit.prototype
+     * @signature `rightClick(options [,success])`
 	 * Right clicks an element.  This typically results in a contextmenu event for browsers that
 	 * support it.
 	 * @param {Object} options options to add to the mouse events.  This works
@@ -89,6 +99,10 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			this.exists(false);
 		},
 		/**
+         * @function FuncUnit.prototype.type type
+         * @parent FuncUnit.prototype
+         * @signature `type(text [,success])`
+         *
 		 * Types text into an element.  This makes use of [Syn.type] and works in 
 		 * a very similar way.
 		 * <h3>Quick Examples</h3>
@@ -160,6 +174,9 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			return this;
 		},
 		/**
+         * @function FuncUnit.prototype.drag drag
+         * @parent FuncUnit.prototype
+         * @signature `drag(options [,success])`
 		 * Drags an element into another element or coordinates.  
 		 * This takes the same paramameters as [Syn.prototype.move move].
 		 * @param {String|Object} options A selector or coordinates describing the motion of the drag.
@@ -214,6 +231,9 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			return this;
 		},
 		/**
+         * @function FuncUnit.prototype.move move
+         * @parent FuncUnit.prototype
+         * @signature `move(options [,success])`
 		 * Moves an element into another element or coordinates.  This will trigger mouseover
 		 * mouseouts accordingly.
 		 * This takes the same paramameters as [Syn.prototype.move move].
@@ -269,6 +289,9 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			return this;
 		},
 		/**
+         * @function FuncUnit.prototype.scroll scroll
+         * @parent FuncUnit.prototype
+         * @signature `scroll(direction, amount, success)`
 		 * Scrolls an element in a particular direction by setting the scrollTop or srollLeft.
 		 * @param {String} direction "left" or "top"
 		 * @param {Number} amount number of pixels to scroll
