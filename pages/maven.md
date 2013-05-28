@@ -1,6 +1,7 @@
 @page funcunit.maven Maven
 @parent funcunit.integrations 4
 
+@body
 [http://maven.apache.org/ Maven] is a build tool, usually used for Java projects. FuncUnit can be 
 run from maven as part of the build, using the 
 [http://maven.apache.org/plugins/maven-antrun-plugin/ maven antrun plugin].

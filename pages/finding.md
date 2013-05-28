@@ -1,6 +1,7 @@
 @page funcunit.finding Finding Elements
-@parent FuncUnit 1
+@parent FuncUnit.pages 1
 
+@body
 ## The S Method
 
 S is a copy of the $ method.  It is used to find elements in the page you're testing.  It works 
@@ -107,7 +108,7 @@ test("contacts test", function(){
 })
 @codeend
 
-Beware that you MUST put any synchronous getters inside a callback or at before any actions or waits.
+Beware that you MUST put any synchronous getters inside a callback or before any actions or waits.
 
 @codestart
 test("contacts test", function(){

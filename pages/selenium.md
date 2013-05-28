@@ -1,6 +1,7 @@
 @page funcunit.selenium Selenium
 @parent funcunit.integrations 0
 
+@body
 [http://seleniumhq.org/ Selenium] is a browser automation tool. FuncUnit integrates with Selenium, 
 using it to open several browsers and report results.
 
@@ -71,9 +72,9 @@ If IE isn't running test pages from filesystem, disable security settings for pa
 1. Open the Internet Options in IE and select the "Advanced" tab
 1. Enable the option to "Allow active content to run in files on My Computer."
 
-@image site/images/iesecurity.png
+@image ../jmvc/site/images/iesecurity.png
 
 
 If you're getting an IE popup blocker error, you may need to disable "Protected Mode"
 
-@image site/images/iepopups.png
+@image ../jmvc/site/images/iepopups.png

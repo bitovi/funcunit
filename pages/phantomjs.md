@@ -1,6 +1,7 @@
 @page funcunit.phantomjs PhantomJS
 @parent funcunit.integrations 2
 
+@body
 [http://www.phantomjs.org/ PhantomJS] is a headless WebKit. FuncUnit integrates with Phantom to run 
 tests from the commandline.  This has large performance benefits, enough that it makes it much more 
 feasible to integrate FuncUnit tests into your build process without significantly slowing it down.
