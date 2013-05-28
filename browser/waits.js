@@ -4,8 +4,9 @@ steal('jquery', './core.js', function($, FuncUnit) {
  */
 FuncUnit.
 /**
- * @parent FuncUnit.static
+ *
  * @function FuncUnit.wait wait
+ * @parent FuncUnit.static
  * @signature `wait(time, success)`
  * Waits a timeout before running the next command.  Wait is an action and gets 
  * added to the queue.
@@ -39,26 +40,31 @@ wait = function(time, success){
 
 FuncUnit.
 /**
-Uses 2 checker methods to see which success function to call.  This is a way to conditionally 
-run one method if you're unsure about the conditions of your page, without causing a test 
-failure.  For example, this is useful for login steps, if you're not sure whether the app 
-is logged in.
-
-    S.branch(function(){
-    	return (S("#exists").size() > 0);
-    }, function(){
-    	ok(true, "found exists")
-    }, function(){
-    	return (S("#notexists").size() > 0);
-    }, function(){
-    	ok(false, "found notexists")
-    });
-    
-@param check1 {Function} a checker function that, if it returns true, causes success1 to be called
-@param success1 {Function} a function that runs when check1 returns true
-@param check2 {Function} a checker function that, if it returns true, causes success2 to be called
-@param success2 {Function} a function that runs when check2 returns true 
-@param timeout {Number} if neither checker returns true before this timeout, the test fails
+ * @function FuncUnit.branch branch
+ * @parent FuncUnit.static
+ * @signature `branch(check1, success1, check2, success2)`
+ * Uses 2 checker methods to see which success function to call.  This is a way to conditionally
+ * run one method if you're unsure about the conditions of your page, without causing a test
+ * failure.  For example, this is useful for login steps, if you're not sure whether the app
+ * is logged in.
+ *
+ * @codestart
+ *   S.branch(function(){
+ *    	return (S("#exists").size() > 0);
+ *    }, function(){
+ *    	ok(true, "found exists")
+ *    }, function(){
+ *    	return (S("#notexists").size() > 0);
+ *    }, function(){
+ *    	ok(false, "found notexists")
+ *    });
+ * @codeend
+ *
+ * @param {Function} check1 a checker function that, if it returns true, causes success1 to be called
+ * @param {Function} success1 a function that runs when check1 returns true
+ * @param {Function} check2 a checker function that, if it returns true, causes success2 to be called
+ * @param {Function} success2 a function that runs when check2 returns true
+ * @param {Number} timeout if neither checker returns true before this timeout, the test fails
  */
 branch = function(check1, success1, check2, success2, timeout){
 	FuncUnit.repeat({
@@ -80,8 +86,9 @@ branch = function(check1, success1, check2, success2, timeout){
 }
 
 /**
- * @parent FuncUnit.static
+ *
  * @function FuncUnit.repeat repeat
+ * @parent FuncUnit.static
  * @signature `repeat()`
  * Takes a function that will be called over and over until it is successful.
  * method : function(){},
@@ -140,8 +147,9 @@ FuncUnit.repeat = function(options){
 
 
 /**
- * @parent FuncUnit.static
+ *
  * @function FuncUnit.animationsDone animationsDone
+ * @parent FuncUnit.static
  * @signature `animationsDone()`
  * Waits until all animations in the page have completed.  Only works
  * if the tested page has jQuery present.
@@ -159,7 +167,7 @@ $.extend(FuncUnit.prototype, {
 	/**
      * @function FuncUnit.prototype.exists exists
      * @parent FuncUnit.prototype
-     * @signature `exists(timeout, success, message)`
+     * @signature `exists([timeout] [,success] [,message])`
 	 * Waits until an element exists before running the next action.
 	 * @codestart
 	 * //waits until #foo exists before clicking it.
@@ -189,7 +197,7 @@ $.extend(FuncUnit.prototype, {
 	/**
      * @function FuncUnit.prototype.missing missing
      * @parent FuncUnit.prototype
-     * @signature `missing(timeout, success, message)`
+     * @signature `missing([timeout] [,success] [,message])`
 	 * Waits until no elements are matched by the selector.  Missing is equivalent to calling
 	 * <code>.size(0, success);</code>
 	 * @codestart
@@ -207,7 +215,7 @@ $.extend(FuncUnit.prototype, {
 	/**
      * @function FuncUnit.prototype.visible visible
      * @parent FuncUnit.prototype
-     * @signature `visible(timeout, success, message)`
+     * @signature `visible([timeout] [,success] [,message])`
 	 * Waits until the funcUnit selector is visible.  
 	 * @codestart
 	 * //waits until #foo is visible.
@@ -229,7 +237,7 @@ $.extend(FuncUnit.prototype, {
 	/**
      * @function FuncUnit.prototype.invisible invisible
      * @parent FuncUnit.prototype
-     * @signature `invisible(timeout, success, message)`
+     * @signature `invisible([timeout] [,success] [,message])`
 	 * Waits until the selector is invisible.  
 	 * @codestart
 	 * //waits until #foo is invisible.
@@ -251,7 +259,7 @@ $.extend(FuncUnit.prototype, {
 	/**
      * @function FuncUnit.prototype.wait wait
      * @parent FuncUnit.prototype
-     * @signature `wait(checker, timeout, ,success, message)`
+     * @signature `wait([checker] [,timeout] [,success] [,message])`
      *
 	 * Waits until some condition is true before calling the next action.  Or if no checker function is provided, waits a 
 	 * timeout before calling the next queued method.  This can be used as a flexible wait condition to check various things in the tested page:
