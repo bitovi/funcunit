@@ -254,7 +254,9 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 		 * S('#foo').move('100X200') 
 		 * @codeend
 		 * Or relative to the start position
+         * @codestart
 		 * S('#foo').move('+10 +20')
+         * @codeend
 		 * <h5>Options as an Object</h5>
 		 * You can configure the duration, start, and end point of a move by passing in a json object.
 		 * @codestart

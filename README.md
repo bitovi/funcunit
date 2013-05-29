@@ -75,7 +75,7 @@ the application page.  Like $, FuncUnit methods are chainable on the results of 
 ## Simulate user actions
 
 When you're testing a widget, you need to simulate the [funcunit.actions actions] that a user takes.  FuncUnit uses the
-[syn] library to accurately simulate the correct low level events like mouseup and keypress for high
+[http://github.com/bitovi/syn Syn] library to accurately simulate the correct low level events like mouseup and keypress for high
 level actions like [FuncUnit.prototype.click] and [FuncUnit.prototype.type].  The following shows how to simulate common user actions.
 
 __Click__
