@@ -18,6 +18,7 @@ steal('./core.js', function(FuncUnit) {
 	 */
 	FuncUnit.timeout = 10000;
 	/**
+     * @hide
 	 * A queue of methods.  Each method in the queue are run in order.  After the method is complete, it 
 	 * calls FuncUnit._done, which pops the next method off the queue and runs it.
 	 */
