@@ -1,5 +1,5 @@
 @constructor FuncUnit
-@parent index 3
+@parent javascriptmvc 3
 @group FuncUnit.pages Pages
 
 FuncUnit tests web applications with a simple jQuery-like syntax. Via integration with
