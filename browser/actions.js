@@ -14,7 +14,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
      * @parent FuncUnit.prototype
      * @signature `click(options [,success])`
      *
-	 * Clicks an element.  This uses [Syn.prototype.click] to issue a:
+	 * Clicks an element.  This issues a:
 	 * <ul>
 	 * 	<li><code>mousedown</code></li>
 	 *  <li><code>focus</code> - if the element is focusable</li>
@@ -177,8 +177,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
          * @function FuncUnit.prototype.drag drag
          * @parent FuncUnit.prototype
          * @signature `drag(options [,success])`
-		 * Drags an element into another element or coordinates.  
-		 * This takes the same paramameters as [Syn.prototype.move move].
+		 * Drags an element into another element or coordinates.
 		 * @param {String|Object} options A selector or coordinates describing the motion of the drag.
 		 * <h5>Options as a Selector</h5>
 		 * Passing a string selector to drag the mouse.  The drag runs to the center of the element
@@ -196,7 +195,9 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 		 * S('#foo').drag('100X200') 
 		 * @codeend
 		 * Or relative to the start position
+         * @codestart
 		 * S('#foo').drag('+10 +20')
+         * @codeend
 		 * <h5>Options as an Object</h5>
 		 * You can configure the duration, start, and end point of a drag by passing in a json object.
 		 * @codestart
