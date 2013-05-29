@@ -20,7 +20,7 @@ var traversers = [
 	 * // after the click, filter the collection, then wait for result to be visible
 	 * S(".foo").click().closest(".bar").visible();
 	 * @codeend
-     * @param {string} selector
+     * @param {String} selector
 	 */
 	"closest",
 	/**
@@ -99,7 +99,7 @@ var traversers = [
 	 * // after the click, filter the collection, then wait for result to be visible
 	 * S(".foo").click().find(".bar").visible();
 	 * @codeend
-     * @param {string} selector
+     * @param {String} selector
 	 */
 	"find"
 ],

@@ -72,9 +72,9 @@ If IE isn't running test pages from filesystem, disable security settings for pa
 1. Open the Internet Options in IE and select the "Advanced" tab
 1. Enable the option to "Allow active content to run in files on My Computer."
 
-@image ../jmvc/site/images/iesecurity.png
+@image ../site/images/iesecurity.png
 
 
 If you're getting an IE popup blocker error, you may need to disable "Protected Mode"
 
-@image ../jmvc/site/images/iepopups.png
+@image ../site/images/iepopups.png
