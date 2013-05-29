@@ -31,7 +31,8 @@ var traversers = [
 	 * but adds itself to the queue.
 	 * 
 	 * @codestart
-	 * // after the click, filter the collection, then wait for result to be visible
+	 * // after the click, filter the collection,
+     * // then wait for result to be visible
 	 * S(".foo").click().next().visible();
 	 * @codeend
 	 */
@@ -44,7 +45,8 @@ var traversers = [
 	 * but adds itself to the queue.
 	 * 
 	 * @codestart
-	 * // after the click, filter the collection, then wait for result to be visible
+	 * // after the click, filter the collection,
+     * // then wait for result to be visible
 	 * S(".foo").click().prev().visible();
 	 * @codeend
 	 */
@@ -57,7 +59,8 @@ var traversers = [
 	 * but adds itself to the queue.
 	 * 
 	 * @codestart
-	 * // after the click, filter the collection, then wait for result to be visible
+	 * // after the click, filter the collection,
+     * // then wait for result to be visible
 	 * S(".foo").click().siblings().visible();
 	 * @codeend
 	 */
@@ -70,7 +73,8 @@ var traversers = [
 	 * but adds itself to the queue.
 	 * 
 	 * @codestart
-	 * // after the click, filter the collection, then wait for result to be visible
+	 * // after the click, filter the collection,
+     * // then wait for result to be visible
 	 * S(".foo").click().last().visible();
 	 * @codeend
 	 */
@@ -83,7 +87,8 @@ var traversers = [
 	 * but adds itself to the queue.
 	 * 
 	 * @codestart
-	 * // after the click, filter the collection, then wait for result to be visible
+	 * // after the click, filter the collection,
+     * // then wait for result to be visible
 	 * S(".foo").click().first().visible();
 	 * @codeend
 	 */
@@ -96,7 +101,8 @@ var traversers = [
 	 * but adds itself to the queue.
 	 * 
 	 * @codestart
-	 * // after the click, filter the collection, then wait for result to be visible
+	 * // after the click, filter the collection,
+     * // then wait for result to be visible
 	 * S(".foo").click().find(".bar").visible();
 	 * @codeend
      * @param {String} selector
