@@ -1,6 +1,10 @@
+<!--
+
 @constructor FuncUnit
 @parent javascriptmvc 3
 @group FuncUnit.pages Pages
+
+-->
 
 FuncUnit tests web applications with a simple jQuery-like syntax. Via integration with
 [funcunit.selenium Selenium] and [funcunit.phantomjs PhantomJS], you can run the same tests automated.
