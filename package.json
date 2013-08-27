@@ -1,6 +1,6 @@
 {
 	"name": "FuncUnit",
-	"version": "3.2.3",
+	"version": "3.3.0",
 	"author": {
 		"name": "Bitovi",
 		"email": "contact@bitovi.com",
@@ -21,10 +21,12 @@
 		"bitovi-tools": "https://github.com/bitovi/bitovi-tools/tarball/master",
 		"steal": "https://github.com/bitovi/steal-build/tarball/master",
 		"grunt-contrib-uglify": "~0.2.1",
-		"testee": "0.0.4"
+		"testee": "0.0.4",
+		"bower": "~1.2.4"
 	},
 	"scripts": {
-		"test": "grunt test"
+		"test": "grunt test",
+		"postinstall": "bower install"
 	},
 	"licenses": [
 		{

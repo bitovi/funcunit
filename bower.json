@@ -1,0 +1,24 @@
+{
+	"name": "FuncUnit",
+	"version": "3.3.0",
+	"author": {
+		"name": "Bitovi",
+		"email": "contact@bitovi.com",
+		"web": "http://bitovi.com/"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:bitovi/funcunit.js.git",
+		"github": "https://github.com/bitovi/funcunit.js"
+	},
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://opensource.org/licenses/mit-license.php"
+		}
+	],
+	"dependencies": {
+		"jasmine": "~1.3.1",
+		"jquery": "~2.0.3"
+	}
+}

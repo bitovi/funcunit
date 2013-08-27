@@ -9,7 +9,7 @@ steal('funcunit/syn',
 	'./browser/queue.js', 
 	'./browser/waits.js',
 function(Syn, FuncUnit) {
-	window.FuncUnit = window.S = FuncUnit;
+	window.FuncUnit = window.S = window.F = FuncUnit;
 	
 	return FuncUnit;
 });
