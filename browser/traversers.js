@@ -15,7 +15,7 @@ var traversers = [
 	 * 
 	 * @codestart
 	 * // after the click, filter the collection, then wait for result to be visible
-	 * S(".foo").click().closest(".bar").visible();
+	 *F(".foo").click().closest(".bar").visible();
 	 * @codeend
      * @param {string} selector
 	 */
@@ -29,7 +29,7 @@ var traversers = [
 	 * 
 	 * @codestart
 	 * // after the click, filter the collection, then wait for result to be visible
-	 * S(".foo").click().next().visible();
+	 *F(".foo").click().next().visible();
 	 * @codeend
 	 */
 	"next",
@@ -42,7 +42,7 @@ var traversers = [
 	 * 
 	 * @codestart
 	 * // after the click, filter the collection, then wait for result to be visible
-	 * S(".foo").click().prev().visible();
+	 *F(".foo").click().prev().visible();
 	 * @codeend
 	 */
 	"prev",
@@ -55,7 +55,7 @@ var traversers = [
 	 * 
 	 * @codestart
 	 * // after the click, filter the collection, then wait for result to be visible
-	 * S(".foo").click().siblings().visible();
+	 *F(".foo").click().siblings().visible();
 	 * @codeend
 	 */
 	"siblings",
@@ -68,7 +68,7 @@ var traversers = [
 	 * 
 	 * @codestart
 	 * // after the click, filter the collection, then wait for result to be visible
-	 * S(".foo").click().last().visible();
+	 *F(".foo").click().last().visible();
 	 * @codeend
 	 */
 	"last",
@@ -81,7 +81,7 @@ var traversers = [
 	 * 
 	 * @codestart
 	 * // after the click, filter the collection, then wait for result to be visible
-	 * S(".foo").click().first().visible();
+	 *F(".foo").click().first().visible();
 	 * @codeend
 	 */
 	"first", 
@@ -94,7 +94,7 @@ var traversers = [
 	 * 
 	 * @codestart
 	 * // after the click, filter the collection, then wait for result to be visible
-	 * S(".foo").click().find(".bar").visible();
+	 *F(".foo").click().find(".bar").visible();
 	 * @codeend
      * @param {string} selector
 	 */

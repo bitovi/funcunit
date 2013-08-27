@@ -11,8 +11,8 @@ FuncUnit.
  * Waits a timeout before running the next command.  Wait is an action and gets 
  * added to the queue.
  * @codestart
- * S.wait(100, function(){
- *   equals( S('#foo').innerWidth(), 100, "innerWidth is 100");
+ * F.wait(100, function(){
+ *   equals(F('#foo').innerWidth(), 100, "innerWidth is 100");
  * })
  * @codeend
  * @param {Number} [time] The timeout in milliseconds.  Defaults to 5000.
@@ -49,12 +49,12 @@ FuncUnit.
  * is logged in.
  *
  * @codestart
- *   S.branch(function(){
- *    	return (S("#exists").size() > 0);
+ *   F.branch(function(){
+ *    	return (F("#exists").size() > 0);
  *    }, function(){
  *    	ok(true, "found exists")
  *    }, function(){
- *    	return (S("#notexists").size() > 0);
+ *    	return (F("#notexists").size() > 0);
  *    }, function(){
  *    	ok(false, "found notexists")
  *    });
@@ -155,8 +155,8 @@ FuncUnit.repeat = function(options){
  * if the tested page has jQuery present.
  */
 FuncUnit.animationsDone = function(){
-	S("body").wait(200).size(function(){
-		return S.win.$(':animated').length === 0;
+F("body").wait(200).size(function(){
+		return F.win.$(':animated').length === 0;
 	});
 };
 
@@ -168,7 +168,7 @@ $.extend(FuncUnit.prototype, {
 	 * Waits until an element exists before running the next action.
 	 * @codestart
 	 * //waits until #foo exists before clicking it.
-	 * S("#foo").exists().click()
+	 *F("#foo").exists().click()
 	 * @codeend
 	 * @param {Number} [timeout] overrides FuncUnit.timeout.  If provided, the wait will fail if not completed before this timeout.
 	 * @param {Function} [success] a success that is run after the selector exists, but before the next action.
@@ -199,7 +199,7 @@ $.extend(FuncUnit.prototype, {
 	 * <code>.size(0, success);</code>
 	 * @codestart
 	 * //waits until #foo leaves before continuing to the next action.
-	 * S("#foo").missing()
+	 *F("#foo").missing()
 	 * @codeend
 	 * @param {Number} [timeout] overrides FuncUnit.timeout.  If provided, the wait will fail if not completed before this timeout.
 	 * @param {Function} [success] a callback that is run after the selector exists, but before the next action
@@ -216,7 +216,7 @@ $.extend(FuncUnit.prototype, {
 	 * Waits until the funcUnit selector is visible.  
 	 * @codestart
 	 * //waits until #foo is visible.
-	 * S("#foo").visible()
+	 *F("#foo").visible()
 	 * @codeend
 	 * @param {Number} [timeout] overrides FuncUnit.timeout.  If provided, the wait will fail if not completed before this timeout.
 	 * @param {Function} [success] a callback that runs after the funcUnit is visible, but before the next action.
@@ -238,7 +238,7 @@ $.extend(FuncUnit.prototype, {
 	 * Waits until the selector is invisible.  
 	 * @codestart
 	 * //waits until #foo is invisible.
-	 * S("#foo").invisible()
+	 *F("#foo").invisible()
 	 * @codeend
 	 * @param {Number} [timeout] overrides FuncUnit.timeout.  If provided, the wait will fail if not completed before this timeout.
 	 * @param {Function} [success] a callback that runs after the selector is invisible, but before the next action.
@@ -261,8 +261,8 @@ $.extend(FuncUnit.prototype, {
 	 * Waits until some condition is true before calling the next action.  Or if no checker function is provided, waits a 
 	 * timeout before calling the next queued method.  This can be used as a flexible wait condition to check various things in the tested page:
 	 * @codestart
-	 * S('#testData').wait(function(){
-	 * 	 return S.win.$(this).data('idval') === 1000;
+	 *F('#testData').wait(function(){
+	 * 	 return F.win.$(this).data('idval') === 1000;
 	 * }, "Data value matched");
 	 * @codeend
 	 * @param {Number|Function} [checker] a checking function.  It runs repeatedly until the condition becomes true or the timeout period passes.  

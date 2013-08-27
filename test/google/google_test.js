@@ -1,22 +1,22 @@
 steal('funcunit', function(){
 	module('google test', {
 		setup: function(){
-			S.open("/")
+			F.open("/")
 		}
 	})
 	
 	test('autocomplete', function(){
-		S('#lst-ib').type('Angry');
-		S('.gssb_e .gsq_a tr').size(4);
-		S('#rso a:first').text("Angry Birds - Rovio", "Angry birds is the first link")
-		S('.vspii:first').click();
-		S('#nycp').visible("Preview shows up")
+		F('#lst-ib').type('Angry');
+		F('.gssb_e .gsq_a tr').size(4);
+		F('#rso a:first').text("Angry Birds - Rovio", "Angry birds is the first link")
+		F('.vspii:first').click();
+		F('#nycp').visible("Preview shows up")
 	})
 	
 	test('image search', function(){
-		S('#lst-ib').type('Angry');
-		S('.gssb_e .gsq_a tr').size(4);
-		S(".mitem:contains('Images') a").click();
-		S('#rg_hi').visible("First image shows up")
+		F('#lst-ib').type('Angry');
+		F('.gssb_e .gsq_a tr').size(4);
+		F(".mitem:contains('Images') a").click();
+		F('#rg_hi').visible("First image shows up")
 	})
 })

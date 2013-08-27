@@ -16,12 +16,12 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * provide a function that continues to the next action when
 	 * it returns true.
 	 * @codestart
-	 * S(".recipe").size() //gets the number of recipes
+	 *F(".recipe").size() //gets the number of recipes
 	 * 
-	 * S(".recipe").size(2) //waits until there are 2 recipes
+	 *F(".recipe").size(2) //waits until there are 2 recipes
 	 * 
 	 * //waits until size is count
-	 * S(".recipe").size(function(size){
+	 *F(".recipe").size(function(size){
 	 *   return size == count;
 	 * })
 	 * @codeend
@@ -41,7 +41,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * equals the attr param.
 	 * @codestart
 	 * //waits until the abc attribute == some
-	 * S("#something").attr("abc","some") 
+	 *F("#something").attr("abc","some") 
 	 * @codeend
 	 * @param {String} data The attribute to get, or wait for.
 	 * @param {String|Function} value If provided uses this as a check before continuing to the next action
@@ -59,13 +59,13 @@ steal('jquery', './core.js', function($, FuncUnit) {
      * @signature `hasClass(className [,value] [,timeout] [,success] [,message])`
 	 * @codestart
 	 * //returns if the element has the class in its className
-	 * S("#something").hasClass("selected");
+	 *F("#something").hasClass("selected");
 	 *
 	 * //waits until #something has selected in its className
-	 * S("#something").hasClass("selected",true);
+	 *F("#something").hasClass("selected",true);
 	 * 
 	 * //waits until #something does not have selected in its className
-	 * S("#something").hasClass("selected",false);
+	 *F("#something").hasClass("selected",false);
 	 * @codeend
 	 * @param {String} className The part of the className to search for.
 	 * @param {Boolean|Function} [value] If provided uses this as a check before continuing to the next action.
@@ -83,13 +83,13 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * Gets the [http://api.jquery.com/html/ html] from an element or waits until the html is a certain value.
 	 * @codestart
 	 * //checks foo's html has "JupiterJS"
-	 * ok( /JupiterJS/.test( S('#foo').html() ) )
+	 * ok( /JupiterJS/.test(F('#foo').html() ) )
 	 * 
 	 * //waits until foo's html has JupiterJS
-	 * S('#foo').html(/JupiterJS/)
+	 *F('#foo').html(/JupiterJS/)
 	 * 
 	 * //waits until foo's html is JupiterJS
-	 * S('#foo').html("JupiterJS")
+	 *F('#foo').html("JupiterJS")
 	 * @codeend
 	 * 
 	 * @param {String|Function} [html] If provided uses this as a check before continuing to the next action.
@@ -107,13 +107,13 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * Gets the [http://api.jquery.com/text/ text] from an element or waits until the text is a certain value.
 	 * @codestart
 	 * //checks foo's text has "JupiterJS"
-	 * ok( /JupiterJS/.test( S('#foo').text() ) )
+	 * ok( /JupiterJS/.test(F('#foo').text() ) )
 	 * 
 	 * //waits until bar's text has JupiterJS
-	 * S('#foo').text(/JupiterJS/)
+	 *F('#foo').text(/JupiterJS/)
 	 * 
 	 * //waits until bar's text is JupiterJS
-	 * S('#foo').text("JupiterJS")
+	 *F('#foo').text("JupiterJS")
 	 * @codeend
 	 * 
 	 * @param {String|Function} [text] If provided uses this as a check before continuing to the next action.
@@ -131,13 +131,13 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * Gets the [http://api.jquery.com/val/ val] from an element or waits until the val is a certain value.
 	 * @codestart
 	 * //checks foo's val has "JupiterJS"
-	 * ok( /JupiterJS/.test( S('input#foo').val() ) )
+	 * ok( /JupiterJS/.test(F('input#foo').val() ) )
 	 * 
 	 * //waits until bar's val has JupiterJS
-	 * S('input#foo').val(/JupiterJS/)
+	 *F('input#foo').val(/JupiterJS/)
 	 * 
 	 * //waits until bar's val is JupiterJS
-	 * S('input#foo').val("JupiterJS")
+	 *F('input#foo').val("JupiterJS")
 	 * @codeend
 	 * 
 	 * @param {String|Function} [val] If provided uses this as a check before continuing to the next action.
@@ -156,10 +156,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * a specified value.
 	 * @codestart
 	 * // gets the color
-	 * S("#foo").css("color")
+	 *F("#foo").css("color")
 	 * 
 	 * // waits until the color is red
-	 * S("#foo").css("color","red") 
+	 *F("#foo").css("color","red") 
 	 * @codeend
 	 * 
 	 * @param {String} prop A css property to get or wait until it is a specified value.
@@ -180,10 +180,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * the offset is a specified value.
 	 * @codestart
 	 * // gets the offset
-	 * S("#foo").offset();
+	 *F("#foo").offset();
 	 * 
 	 * // waits until the offset is 100, 200
-	 * S("#foo").offset({top: 100, left: 200}) 
+	 *F("#foo").offset({top: 100, left: 200}) 
 	 * @codeend
 	 * 
 	 * @param {Object|Function} [offset] If provided uses this as a check before continuing to the next action.  Or you can 
@@ -203,10 +203,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * the position is a specified value.
 	 * @codestart
 	 * // gets the position
-	 * S("#foo").position();
+	 *F("#foo").position();
 	 * 
 	 * // waits until the position is 100, 200
-	 * S("#foo").position({top: 100, left: 200}) 
+	 *F("#foo").position({top: 100, left: 200}) 
 	 * @codeend
 	 * 
 	 * @param {Object|Function} [position] If provided uses this as a check before continuing to the next action.  Or you can 
@@ -226,10 +226,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * it equals a specified value.
 	 * @codestart
 	 * // gets the scrollTop
-	 * S("#foo").scrollTop();
+	 *F("#foo").scrollTop();
 	 * 
 	 * // waits until the scrollTop is 100
-	 * S("#foo").scrollTop(100) 
+	 *F("#foo").scrollTop(100) 
 	 * @codeend
 	 * 
 	 * @param {Number|Function} [scrollTop] If provided uses this as a check before continuing to the next action.  Or you can 
@@ -249,10 +249,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * it equals a specified value.
 	 * @codestart
 	 * // gets the scrollLeft
-	 * S("#foo").scrollLeft();
+	 *F("#foo").scrollLeft();
 	 * 
 	 * // waits until the scrollLeft is 100
-	 * S("#foo").scrollLeft(100) 
+	 *F("#foo").scrollLeft(100) 
 	 * @codeend
 	 * 
 	 * @param {Number|Function} [scrollLeft] If provided uses this as a check before continuing to the next action.  Or you can 
@@ -272,10 +272,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * it equals a specified value.
 	 * @codestart
 	 * // gets the height
-	 * S("#foo").height();
+	 *F("#foo").height();
 	 * 
 	 * // waits until the height is 100
-	 * S("#foo").height(100) 
+	 *F("#foo").height(100) 
 	 * @codeend
 	 * 
 	 * @param {Number|Function} [height] If provided uses this as a check before continuing to the next action.  Or you can 
@@ -295,10 +295,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * it equals a specified value.
 	 * @codestart
 	 * // gets the width
-	 * S("#foo").width();
+	 *F("#foo").width();
 	 * 
 	 * // waits until the width is 100
-	 * S("#foo").width(100) 
+	 *F("#foo").width(100) 
 	 * @codeend
 	 * 
 	 * @param {Number|Function} [width] If provided uses this as a check before continuing to the next action.  Or you can 
@@ -318,10 +318,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * it equals a specified value.
 	 * @codestart
 	 * // gets the innerHeight
-	 * S("#foo").innerHeight();
+	 *F("#foo").innerHeight();
 	 * 
 	 * // waits until the innerHeight is 100
-	 * S("#foo").innerHeight(100) 
+	 *F("#foo").innerHeight(100) 
 	 * @codeend
 	 * 
 	 * @param {Number|Function} [innerHeight] If provided uses this as a check before continuing to the next action.  Or you can 
@@ -341,10 +341,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * it equals a specified value.
 	 * @codestart
 	 * // gets the innerWidth
-	 * S("#foo").innerWidth();
+	 *F("#foo").innerWidth();
 	 * 
 	 * // waits until the innerWidth is 100
-	 * S("#foo").innerWidth(100) 
+	 *F("#foo").innerWidth(100) 
 	 * @codeend
 	 * 
 	 * @param {Number|Function} [innerWidth] If provided uses this as a check before continuing to the next action.  Or you can 
@@ -364,10 +364,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * it equals a specified value.
 	 * @codestart
 	 * // gets the outerHeight
-	 * S("#foo").outerHeight();
+	 *F("#foo").outerHeight();
 	 * 
 	 * // waits until the outerHeight is 100
-	 * S("#foo").outerHeight(100) 
+	 *F("#foo").outerHeight(100) 
 	 * @codeend
 	 * 
 	 * @param {Number|Function} [outerHeight] If provided uses this as a check before continuing to the next action.  Or you can 
@@ -387,10 +387,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	 * it equals a specified value.
 	 * @codestart
 	 * // gets the outerWidth
-	 * S("#foo").outerWidth();
+	 *F("#foo").outerWidth();
 	 * 
 	 * // waits until the outerWidth is 100
-	 * S("#foo").outerWidth(100) 
+	 *F("#foo").outerWidth(100) 
 	 * @codeend
 	 * 
 	 * @param {Number|Function} [outerWidth] If provided uses this as a check before continuing to the next action.  Or you can 
@@ -476,7 +476,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 							this.bind.prevTraverserSelector = prev.prevTraverserSelector;
 						} else {
 							// pass false so it will only do one synchronous request
-							this.bind = S(this.selector, {
+							this.bind =F(this.selector, {
 								frame: frame, 
 								forceSync: true
 							})

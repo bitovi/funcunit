@@ -1,4 +1,4 @@
-steal("funcunit/browser/resources/jquery.js")
+steal("jquery")
 .then("./js/jquery-ui-1.9.1.custom.js", function(){
 	var availableTags = [
 		"ActionScript",

@@ -1,5 +1,5 @@
 //load a lot of stuff ...
-steal('funcunit/browser/resources/jquery.js')
+steal('jquery')
 	.then('funcunit/test/dragdrop.js', function(){
 	
 	var hoveredOnce = false;

@@ -58,7 +58,7 @@ $.extend(FuncUnit,{
 	 * ### Example
      *
      * @codestart
-     * S.open("//app/app.html")
+     * F.open("//app/app.html")
      * @codeend
 	 * 
 	 * @param {String} path a full or partial url to open.
@@ -151,7 +151,7 @@ $.extend(FuncUnit,{
 	 * clicking OK or Cancel.  Alerts are repressed by default in FuncUnit application windows.
      *
 	 * @codestart
-	 * S.confirm(true);
+	 * F.confirm(true);
 	 * @codeend
      *
 	 * @param {Boolean} answer true if you want to click OK, false otherwise
@@ -168,7 +168,7 @@ $.extend(FuncUnit,{
 	 * When a browser's native prompt dialog is used, this method is used to repress the dialog and simulate 
 	 * clicking typing something into the dialog.
 	 * @codestart
-	 * S.prompt("Harry Potter");
+	 * F.prompt("Harry Potter");
 	 * @codeend
 	 * @param {String} answer Whatever you want to simulate a user typing in the prompt box
      * @return {undefined}
@@ -239,7 +239,6 @@ $.extend(FuncUnit,{
 		if ( /^\/\//.test(path) ){
 			path = path.substr(2);
 		}
-		debugger;
 		return steal.config().root.mapJoin(path)+''
 	},
 	/**
@@ -247,7 +246,7 @@ $.extend(FuncUnit,{
 	 * @property {window} FuncUnit.win win
 	 * Use this to refer to the window of the application page.
 	 * @codestart
-	 * S(S.window).innerWidth(function(w){
+	 *F(F.window).innerWidth(function(w){
 	 *   ok(w > 1000, "window is more than 1000 px wide")
 	 * })
 	 * @codeend

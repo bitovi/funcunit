@@ -1,43 +1,43 @@
 module("funcunit find closest",{
 	setup: function() {
-		S.open("//test/findclosest.html")
+		F.open("//test/findclosest.html")
 	}
 });
 
 test("closest", function(){
-	S("a:contains('Holler')").closest("#foo").click(function(){
+	F("a:contains('Holler')").closest("#foo").click(function(){
 		ok(this.hasClass("iWasClicked"),"we clicked #foo")
 	})
-	S("a:contains('Holler')").closest(".baz").click(function(){
+	F("a:contains('Holler')").closest(".baz").click(function(){
 		ok(this.hasClass("iWasClicked"),"we clicked .baz")
 	})
 	
 })
 
 test("find with traversers", function(){
-	S(":contains('Holler')")
+	F(":contains('Holler')")
 		.closest("#foo")
 		.find(".combo")
 		.hasClass("combo", true)
 		.click();
 		
-	S(".combo:eq(0)").hasClass("iWasClicked", true, "we clicked the first combo")
-	S(".combo:eq(1)").hasClass("iWasClicked", false, "we did not click the 2nd combo")
+	F(".combo:eq(0)").hasClass("iWasClicked", true, "we clicked the first combo")
+	F(".combo:eq(1)").hasClass("iWasClicked", false, "we did not click the 2nd combo")
 })
 
 test("find this", function(){
-	S("#foo").visible(function(){
+	F("#foo").visible(function(){
 		// this does a sync and async query
-		var foo = S('#drag').text();
+		var foo = F('#drag').text();
 		// this does an async query, but the selector is now #drag
 		// have to wrap it with S to force another async query
-		S(this).find(".combo").exists("Combo exists");
+		F(this).find(".combo").exists("Combo exists");
 	})
 })
 
 test("nested find", 2, function(){
-	S(".baz").exists(function() { 
-		S(this).find("#foo").exists(".foo found");
-		S(this).find(".another").exists(".another found"); 
+	F(".baz").exists(function() { 
+		F(this).find("#foo").exists(".foo found");
+		F(this).find(".another").exists(".another found"); 
 	})
 })

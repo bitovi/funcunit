@@ -1,40 +1,40 @@
 module("funcunit-open")
 
-test('S.open accepts a window', function() {
-	S.open(window);
-	S('#tester').click();
-	S("#tester").text("Changed", "Changed link")
+test('F.open accepts a window', function() {
+	F.open(window);
+	F('#tester').click();
+	F("#tester").text("Changed", "Changed link")
 	
-	S.open(frames["myapp"]);
-	S("#typehere").type("").type("javascriptmvc")
-	S("#seewhatyoutyped").text("typed javascriptmvc","typing");
+	F.open(frames["myapp"]);
+	F("#typehere").type("").type("javascriptmvc")
+	F("#seewhatyoutyped").text("typed javascriptmvc","typing");
 })
 
 
 
 test("Back to back opens", function(){
-	S.open("//test/myotherapp.html");
-	S.open("//test/myapp.html");
+	F.open("//test/myotherapp.html");
+	F.open("//test/myapp.html");
 
-	S("#changelink").click()
-	S("#changelink").text("Changed","href javascript run")
+	F("#changelink").click()
+	F("#changelink").text("Changed","href javascript run")
 })
 
 
 test("Back to back opens with hash", function(){
-	S.open("//test/myapp.html?bar#foo");
-	S("#changelink").click();
-	S("#changelink").text("Changed","href javascript run");
+	F.open("//test/myapp.html?bar#foo");
+	F("#changelink").click();
+	F("#changelink").text("Changed","href javascript run");
 	
-	S.open("//test/myapp.html?bar#foo2");
-	S("#changelink").text("Change", "reload with hash works");
+	F.open("//test/myapp.html?bar#foo2");
+	F("#changelink").text("Change", "reload with hash works");
 })
 
 test('Testing win.confirm in multiple pages', function() {
-	S.open('//test/open/first.html');
-	S('.next').click();
+	F.open('//test/open/first.html');
+	F('.next').click();
 
-	S('.show-confirm').click();
-	S.confirm(true);
-	S('.results').text('confirmed!', "Confirm worked!");
+	F('.show-confirm').click();
+	F.confirm(true);
+	F('.results').text('confirmed!', "Confirm worked!");
 })

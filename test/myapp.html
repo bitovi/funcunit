@@ -49,7 +49,7 @@
 		<div id="testData"></div>
 		<script type='text/javascript' src='../steal/steal.js'></script>
 		<script type='text/javascript'>
-		steal('funcunit/browser/resources/jquery.js')
+		steal('jquery')
 			.then('funcunit/test/jquery.event.drag.js')
 			.then( 'funcunit/test/jquery.event.drop.js', function(){
 				$('#testData').data('idval', 1000);
@@ -114,14 +114,14 @@
 	                $('#changelink').text('Changed')
 	            }
 				
-				$('#drag').live("draginit", function(){})
-					.live("dragover", function(){
+				$('#drag').on("draginit", function(){})
+					.on("dragover", function(){
 						$(this).css('background-color', 'black').addClass("dragover")
 					})
-				$('#drop').live("dropover", function(){ 
+				$('#drop').on("dropover", function(){ 
 					$(this).css('background-color', 'blue').addClass("dropover")
 				})
-				$('#drop').live("dropout", function(){ 
+				$('#drop').on("dropout", function(){ 
 					$(this).css('background-color', 'green').addClass("dropout")
 				})
 			})

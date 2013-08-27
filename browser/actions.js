@@ -25,7 +25,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	 * <h3>Example</h3>
 	 * @codestart
 	 * //clicks the bar element
-	 * S("#bar").click()
+	 *F("#bar").click()
 	 * @codeend
 	 * @param {Object} [options] options to pass to the click event.  Typically, this is clientX/Y or pageX/Y:
 	 * @codestart
@@ -105,21 +105,21 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 		 * <h3>Quick Examples</h3>
 		 * @codestart
 		 * //types hello world
-		 * S('#bar').type('hello world')
+		 *F('#bar').type('hello world')
 		 * 
 		 * //submits a form by typing \r
-		 * S("input[name=age]").type("27\r")
+		 *F("input[name=age]").type("27\r")
 		 * 
 		 * //types FuncUnit, then deletes the Unit
-		 * S('#foo').type("FuncUnit\b\b\b\b")
+		 *F('#foo').type("FuncUnit\b\b\b\b")
 		 * 
 		 * //types JavaScriptMVC, then removes the MVC
-		 * S('#zar').type("JavaScriptMVC[left][left][left]"+
+		 *F('#zar').type("JavaScriptMVC[left][left][left]"+
 		 *                      "[delete][delete][delete]")
 		 *          
 		 * //types JavaScriptMVC, then selects the MVC and
 		 * //deletes it
-		 * S('#zar').type("JavaScriptMVC[shift]"+
+		 *F('#zar').type("JavaScriptMVC[shift]"+
 		 *                "[left][left][left]"+
 		 *                "[shift-up][delete]")
 		 * @codeend
@@ -181,24 +181,24 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 		 * Passing a string selector to drag the mouse.  The drag runs to the center of the element
 		 * matched by the selector.  The following drags from the center of #foo to the center of #bar.
 		 * @codestart
-		 * S('#foo').drag('#bar') 
+		 *F('#foo').drag('#bar') 
 		 * @codeend
 		 * <h5>Options as Coordinates</h5>
 		 * You can pass in coordinates as clientX and clientY:
 		 * @codestart
-		 * S('#foo').drag('100x200') 
+		 *F('#foo').drag('100x200') 
 		 * @codeend
 		 * Or as pageX and pageY
 		 * @codestart
-		 * S('#foo').drag('100X200') 
+		 *F('#foo').drag('100X200') 
 		 * @codeend
 		 * Or relative to the start position
-		 * S('#foo').drag('+10 +20')
+		 *F('#foo').drag('+10 +20')
 		 * <h5>Options as an Object</h5>
 		 * You can configure the duration, start, and end point of a drag by passing in a json object.
 		 * @codestart
 		 * //drags from 0x0 to 100x100 in 2 seconds
-		 * S('#foo').drag({
+		 *F('#foo').drag({
 		 *   from: "0x0",
 		 *   to: "100x100",
 		 *   duration: 2000
@@ -239,24 +239,24 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 		 * Passing a string selector to move the mouse.  The move runs to the center of the element
 		 * matched by the selector.  The following moves from the center of #foo to the center of #bar.
 		 * @codestart
-		 * S('#foo').move('#bar') 
+		 *F('#foo').move('#bar') 
 		 * @codeend
 		 * <h5>Options as Coordinates</h5>
 		 * You can pass in coordinates as clientX and clientY:
 		 * @codestart
-		 * S('#foo').move('100x200') 
+		 *F('#foo').move('100x200') 
 		 * @codeend
 		 * Or as pageX and pageY
 		 * @codestart
-		 * S('#foo').move('100X200') 
+		 *F('#foo').move('100X200') 
 		 * @codeend
 		 * Or relative to the start position
-		 * S('#foo').move('+10 +20')
+		 *F('#foo').move('+10 +20')
 		 * <h5>Options as an Object</h5>
 		 * You can configure the duration, start, and end point of a move by passing in a json object.
 		 * @codestart
 		 * //drags from 0x0 to 100x100 in 2 seconds
-		 * S('#foo').move({
+		 *F('#foo').move({
 		 *   from: "0x0",
 		 *   to: "100x100",
 		 *   duration: 2000

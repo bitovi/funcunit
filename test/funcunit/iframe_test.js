@@ -1,17 +1,17 @@
 module("Iframe Test")
 
 test("iframe that doesn't exist", function(){
-	S.open("//test/iframe/haveframe.html")
-	S("#open").click();
-	S("#title", "my frame").visible("Added frame query works");
+	F.open("//test/iframe/haveframe.html")
+	F("#open").click();
+	F("#title", "my frame").visible("Added frame query works");
 })
 
 test('replacing an iframe', function() {
-	S.open("//test/iframe/replaceframe.html");
+	F.open("//test/iframe/replaceframe.html");
 	//check for h1 in current iframe
-	S('#title', 'my frame').exists();
-	S('div').click();
+	F('#title', 'my frame').exists();
+	F('div').click();
 
 	//check for h2 in new iframe
-	S('#new-title', 'my frame').exists("Replaced frame query works");
+	F('#new-title', 'my frame').exists("Replaced frame query works");
 })
