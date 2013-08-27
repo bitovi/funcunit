@@ -6,13 +6,10 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	//list of jQuery functions we want, number is argument index
 	//for wait instead of getting value
 	FuncUnit.funcs = {
-	/**
-	 * @Prototype
-	 */
 	// methods
 	/**
      * @function FuncUnit.prototype.size size
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `size([size] [,timeout] [,success] [,message])`
 	 * Gets the number of elements matched by the selector or
 	 * waits until the the selector is size.  You can also 
@@ -38,7 +35,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'size' : 0,
 	/**
      * @function FuncUnit.prototype.attr attr
-     * @parent FuncUnit.prototype
+     * @parent manipulation
      * @signature `attr(data, value [,timeout] [,success] [,message])`
 	 * Gets the value of an attribute from an element or waits until the attribute
 	 * equals the attr param.
@@ -58,7 +55,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'attr' : 1, 
 	/**
      * @function FuncUnit.prototype.hasClass hasClass
-     * @parent FuncUnit.prototype
+     * @parent css
      * @signature `hasClass(className [,value] [,timeout] [,success] [,message])`
 	 * @codestart
 	 * //returns if the element has the class in its className
@@ -81,7 +78,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'hasClass' : 1, //makes wait
 	/**
      * @function FuncUnit.prototype.html html
-     * @parent FuncUnit.prototype
+     * @parent manipulation
      * @signature `html([html] [,timeout] [,success] [,message])`
 	 * Gets the [http://api.jquery.com/html/ html] from an element or waits until the html is a certain value.
 	 * @codestart
@@ -105,7 +102,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'html' : 0, 
 	/**
      * @function FuncUnit.prototype.text text
-     * @parent FuncUnit.prototype
+     * @parent manipulation
      * @signature `text([text] [,timeout] [,success] [,message])`
 	 * Gets the [http://api.jquery.com/text/ text] from an element or waits until the text is a certain value.
 	 * @codestart
@@ -129,7 +126,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'text' : 0, 
 	/**
      * @function FuncUnit.prototype.val val
-     * @parent FuncUnit.prototype
+     * @parent manipulation
      * @signature `val([val] [,timeout] [,success] [,message])`
 	 * Gets the [http://api.jquery.com/val/ val] from an element or waits until the val is a certain value.
 	 * @codestart
@@ -153,7 +150,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'val' : 0, 
 	/**
      * @function FuncUnit.prototype.css css
-     * @parent FuncUnit.prototype
+     * @parent css
      * @signature `css(prop [,val] [,timeout] [,success] [,message])`
 	 * Gets a [http://api.jquery.com/css/ css] property from an element or waits until the property is 
 	 * a specified value.
@@ -177,7 +174,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'prop': 1, 
 	/**
      * @function FuncUnit.prototype.offset offset
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `offset([offset] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/offset/ offset] or waits until 
 	 * the offset is a specified value.
@@ -200,7 +197,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'offset' : 0,
 	/**
      * @function FuncUnit.prototype.position position
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `position([position] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/position/ position] or waits until 
 	 * the position is a specified value.
@@ -223,7 +220,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'position' : 0,
 	/**
      * @function FuncUnit.prototype.scrollTop scrollTop
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `scrollTop([scrollTop] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/scrollTop/ scrollTop] or waits until 
 	 * it equals a specified value.
@@ -246,7 +243,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'scrollTop' : 0, 
 	/**
      * @function FuncUnit.prototype.scrollLeft scrollLeft
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `scrollLeft([scrollLeft] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/scrollLeft/ scrollLeft] or waits until 
 	 * it equals a specified value.
@@ -269,7 +266,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'scrollLeft' : 0, 
 	/**
      * @function FuncUnit.prototype.height height
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `height([height] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/height/ height] or waits until 
 	 * it equals a specified value.
@@ -292,7 +289,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'height' : 0, 
 	/**
      * @function FuncUnit.prototype.width width
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `width([width] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/width/ width] or waits until 
 	 * it equals a specified value.
@@ -315,7 +312,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'width' : 0, 
 	/**
      * @function FuncUnit.prototype.innerHeight innerHeight
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `innerHeight([innerHeight] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/innerHeight/ innerHeight] or waits until 
 	 * it equals a specified value.
@@ -338,7 +335,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'innerHeight' : 0, 
 	/**
      * @function FuncUnit.prototype.innerWidth innerWidth
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `innerWidth([innerWidth] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/innerWidth/ innerWidth] or waits until 
 	 * it equals a specified value.
@@ -361,7 +358,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'innerWidth' : 0, 
 	/**
      * @function FuncUnit.prototype.outerHeight outerHeight
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `outerHeight([outerHeight] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/outerHeight/ outerHeight] or waits until 
 	 * it equals a specified value.
@@ -384,7 +381,7 @@ steal('jquery', './core.js', function($, FuncUnit) {
 	'outerHeight' : 0, 
 	/**
      * @function FuncUnit.prototype.outerWidth outerWidth
-     * @parent FuncUnit.prototype
+     * @parent dimensions
      * @signature `outerWidth([outerWidth] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/outerWidth/ outerWidth] or waits until 
 	 * it equals a specified value.

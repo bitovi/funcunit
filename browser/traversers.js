@@ -4,14 +4,11 @@ steal('jquery', './core.js', function($, FuncUnit){
  * @add FuncUnit
  */
 // prototype
-/**
- * @Prototype
- */
 //do traversers
 var traversers = [
 	/**
      * @function FuncUnit.prototype.closest closest
-     * @parent FuncUnit.prototype
+     * @parent traversal
      * @signature `closest()`
 	 * Asynchronous version of jQuery's closest.  Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
@@ -25,7 +22,7 @@ var traversers = [
 	"closest",
 	/**
 	 * @function FuncUnit.prototype.next next
-     * @parent FuncUnit.prototype
+     * @parent traversal
      * @signature `next()`
 	 * Asynchronous version of next. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
@@ -38,7 +35,7 @@ var traversers = [
 	"next",
 	/**
      * @function FuncUnit.prototype.prev prev
-     * @parent FuncUnit.prototype
+     * @parent traversal
      * @signature `prev()`
 	 * Asynchronous version of prev. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
@@ -51,7 +48,7 @@ var traversers = [
 	"prev",
 	/**
      * @function FuncUnit.prototype.siblings siblings
-     * @parent FuncUnit.prototype
+     * @parent traversal
      * @signature `siblings()`
 	 * Asynchronous version of siblings. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
@@ -64,7 +61,7 @@ var traversers = [
 	"siblings",
 	/**
      * @function FuncUnit.prototype.last last
-     * @parent FuncUnit.prototype
+     * @parent traversal
      * @signature `last()`
 	 * Asynchronous version of last. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
@@ -77,7 +74,7 @@ var traversers = [
 	"last",
 	/**
      * @function FuncUnit.prototype.first first
-     * @parent FuncUnit.prototype
+     * @parent traversal
      * @signature `first()`
 	 * Asynchronous version of first. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.
@@ -90,7 +87,7 @@ var traversers = [
 	"first", 
 	/**
      * @function FuncUnit.prototype.find find
-     * @parent FuncUnit.prototype
+     * @parent traversal
      * @signature `find()`
 	 * Asynchronous version of find. Performs the exact same functionality as the jQuery method 
 	 * but adds itself to the queue.

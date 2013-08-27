@@ -6,7 +6,7 @@ FuncUnit.
 /**
  *
  * @function FuncUnit.wait wait
- * @parent FuncUnit.static
+ * @parent waits
  * @signature `wait(time, success)`
  * Waits a timeout before running the next command.  Wait is an action and gets 
  * added to the queue.
@@ -41,7 +41,7 @@ wait = function(time, success){
 FuncUnit.
 /**
  * @function FuncUnit.branch branch
- * @parent FuncUnit.static
+ * @parent waits
  * @signature `branch(check1, success1, check2, success2)`
  * Uses 2 checker methods to see which success function to call.  This is a way to conditionally
  * run one method if you're unsure about the conditions of your page, without causing a test
@@ -88,7 +88,7 @@ branch = function(check1, success1, check2, success2, timeout){
 /**
  *
  * @function FuncUnit.repeat repeat
- * @parent FuncUnit.static
+ * @parent waits
  * @signature `repeat()`
  * Takes a function that will be called over and over until it is successful.
  * method : function(){},
@@ -149,7 +149,7 @@ FuncUnit.repeat = function(options){
 /**
  *
  * @function FuncUnit.animationsDone animationsDone
- * @parent FuncUnit.static
+ * @parent waits
  * @signature `animationsDone()`
  * Waits until all animations in the page have completed.  Only works
  * if the tested page has jQuery present.
@@ -160,13 +160,10 @@ FuncUnit.animationsDone = function(){
 	});
 };
 
-/**
- * @Prototype
- */
 $.extend(FuncUnit.prototype, {
 	/**
      * @function FuncUnit.prototype.exists exists
-     * @parent FuncUnit.prototype
+     * @parent waits
      * @signature `exists([timeout] [,success] [,message])`
 	 * Waits until an element exists before running the next action.
 	 * @codestart
@@ -196,7 +193,7 @@ $.extend(FuncUnit.prototype, {
 	},
 	/**
      * @function FuncUnit.prototype.missing missing
-     * @parent FuncUnit.prototype
+     * @parent waits
      * @signature `missing([timeout] [,success] [,message])`
 	 * Waits until no elements are matched by the selector.  Missing is equivalent to calling
 	 * <code>.size(0, success);</code>
@@ -214,7 +211,7 @@ $.extend(FuncUnit.prototype, {
 	},
 	/**
      * @function FuncUnit.prototype.visible visible
-     * @parent FuncUnit.prototype
+     * @parent waits
      * @signature `visible([timeout] [,success] [,message])`
 	 * Waits until the funcUnit selector is visible.  
 	 * @codestart
@@ -236,7 +233,7 @@ $.extend(FuncUnit.prototype, {
 	},
 	/**
      * @function FuncUnit.prototype.invisible invisible
-     * @parent FuncUnit.prototype
+     * @parent waits
      * @signature `invisible([timeout] [,success] [,message])`
 	 * Waits until the selector is invisible.  
 	 * @codestart
@@ -258,7 +255,7 @@ $.extend(FuncUnit.prototype, {
 	},
 	/**
      * @function FuncUnit.prototype.wait wait
-     * @parent FuncUnit.prototype
+     * @parent waits
      * @signature `wait([checker] [,timeout] [,success] [,message])`
      *
 	 * Waits until some condition is true before calling the next action.  Or if no checker function is provided, waits a 
@@ -285,7 +282,7 @@ $.extend(FuncUnit.prototype, {
 	},
 	/**
      * @function FuncUnit.prototype.then then
-     * @parent FuncUnit.prototype
+     * @parent waits
      * @signature `then(success)`
 	 * Calls the success function after all previous asynchronous actions have completed.  Then
 	 * is called with the funcunit object.

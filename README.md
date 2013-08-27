@@ -1,8 +1,13 @@
 <!--
 
 @constructor FuncUnit
-@parent javascriptmvc 3
-@group FuncUnit.pages Pages
+@group actions Actions
+@group css CSS
+@group dimensions Dimensions
+@group manipulation Manipulation
+@group traversal Traversal
+@group waits Waits
+@group static static
 
 -->
 

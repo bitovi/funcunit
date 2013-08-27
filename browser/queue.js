@@ -13,11 +13,14 @@ steal('./core.js', function(FuncUnit) {
 		
 	/**
      * @property FuncUnit.timeout timeout
-     * @parent FuncUnit.static
+     * @parent static
 	 * A global timeout value for wait commands.  Defaults to 10 seconds.
 	 */
 	FuncUnit.timeout = 10000;
 	/**
+	 * @hide
+	 * @property FuncUnit._queue _queue
+   * @parent static
 	 * A queue of methods.  Each method in the queue are run in order.  After the method is complete, it 
 	 * calls FuncUnit._done, which pops the next method off the queue and runs it.
 	 */
@@ -65,7 +68,7 @@ steal('./core.js', function(FuncUnit) {
 	}
 	FuncUnit.
 	/**
-     * @parent FuncUnit.static
+     * @parent static
      * @function FuncUnit.add add
      * @signature `add(handler)`
 	 * Adds a function to the queue.
@@ -99,7 +102,7 @@ steal('./core.js', function(FuncUnit) {
 	var currentEl;
 	/**
      * @hide
-     * @parent FuncUnit.static
+     * @parent static
      * @function FuncUnit._done _done
      * @signature `_done(handler)`
      *

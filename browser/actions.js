@@ -4,14 +4,11 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	 * @add FuncUnit
 	 */
 	var clicks = [
-	/**
-	 * @Prototype
-	 */
 	// methods
 	/**
      *
 	 * @function FuncUnit.prototype.click click
-     * @parent FuncUnit.prototype
+     * @parent actions
      * @signature `click(options [,success])`
      *
 	 * Clicks an element.  This uses [Syn.prototype.click] to issue a:
@@ -44,7 +41,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	'click',
 	/**
      * @function FuncUnit.prototype.dblclick dblclick
-     * @parent FuncUnit.prototype
+     * @parent actions
      * @signature `dblclick(options [,success])`
      *
 	 * Double clicks an element by [FuncUnit.prototype.click clicking] it twice and triggering a dblclick event.
@@ -56,7 +53,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	'dblclick',
 	/**
      * @function FuncUnit.prototype.rightClick rightClick
-     * @parent FuncUnit.prototype
+     * @parent actions
      * @signature `rightClick(options [,success])`
 	 * Right clicks an element.  This typically results in a contextmenu event for browsers that
 	 * support it.
@@ -100,7 +97,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 		},
 		/**
          * @function FuncUnit.prototype.type type
-         * @parent FuncUnit.prototype
+         * @parent actions
          * @signature `type(text [,success])`
          *
 		 * Types text into an element.  This makes use of [Syn.type] and works in 
@@ -175,7 +172,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 		},
 		/**
          * @function FuncUnit.prototype.drag drag
-         * @parent FuncUnit.prototype
+         * @parent actions
          * @signature `drag(options [,success])`
 		 * Drags an element into another element or coordinates.  
 		 * This takes the same paramameters as [Syn.prototype.move move].
@@ -232,7 +229,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 		},
 		/**
          * @function FuncUnit.prototype.move move
-         * @parent FuncUnit.prototype
+         * @parent actions
          * @signature `move(options [,success])`
 		 * Moves an element into another element or coordinates.  This will trigger mouseover
 		 * mouseouts accordingly.
@@ -290,7 +287,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 		},
 		/**
          * @function FuncUnit.prototype.scroll scroll
-         * @parent FuncUnit.prototype
+         * @parent actions
          * @signature `scroll(direction, amount, success)`
 		 * Scrolls an element in a particular direction by setting the scrollTop or srollLeft.
 		 * @param {String} direction "left" or "top"
