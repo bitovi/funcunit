@@ -1,6 +1,6 @@
 module("funcunit - jQuery API",{
 	setup: function() {
-		F.open("//funcunit/test/confirm.html")
+		F.open("//test/confirm.html")
 	}
 })
 

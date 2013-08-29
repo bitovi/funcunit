@@ -12,10 +12,10 @@ steal('jquery')
 	})
 	
 	$('#drag')
-		.live("draginit", function(){})
+		.on("draginit", function(){})
 		
 	$('#drop')
-		.live("dropover", function(){
+		.on("dropover", function(){
 			$(document.body).append("<a href='#' id='clicker'>click</a>")
 			$("#clicker").click(function(){
 				$(".status").html("dragged")
