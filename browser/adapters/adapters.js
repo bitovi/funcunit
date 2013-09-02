@@ -1,5 +1,1 @@
-if (window.jasmine){
-	steal('funcunit/browser/adapters/jasmine.js')
-} else {
-	steal('funcunit/browser/adapters/qunit.js')
-}
+steal('funcunit/browser/adapters/jasmine.js', 'funcunit/browser/adapters/qunit.js', function() {});

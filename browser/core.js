@@ -1,9 +1,4 @@
 steal('jquery', './init', function(jQuery, oldFuncUnit) {
-	
-	if(!window.QUnit && !window.jasmine){
-		steal('funcunit/qunit')
-	}
-
 	var FuncUnit = oldFuncUnit.jQuery.sub();
 	var origFuncUnit = FuncUnit;
 	// override the subbed init method
