@@ -1,7 +1,7 @@
 !function(window) {
 
 // ## syn/synthetic.js
-var __m3 = (function() {
+var __m3 = (function(){
 	var extend = function( d, s ) {
 		var p;
 		for (p in s) {
@@ -2650,7 +2650,6 @@ var __m8 = (function(jQuery, oldFuncUnit) {
 	
 	oldFuncUnit.jQuery.extend(FuncUnit, oldFuncUnit, origFuncUnit)
 	FuncUnit.prototype = origFuncUnit.prototype;
-
 	return FuncUnit;
 })(jQuery, __m10);
 

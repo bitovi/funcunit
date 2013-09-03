@@ -80,4 +80,4 @@ steal('jquery', './init', function(jQuery, oldFuncUnit) {
 	oldFuncUnit.jQuery.extend(FuncUnit, oldFuncUnit, origFuncUnit)
 	FuncUnit.prototype = origFuncUnit.prototype;
 	return FuncUnit;
-})()
+});

@@ -14,11 +14,12 @@ pluginify('funcunit.js', {
 			}
 		},
 		shim: {
-			'jquery/jquery.js': {
+			'jquery': {
 				'exports': 'jQuery'
 			}
-		},
-	}
+		}
+	},
+	shim: { 'jquery/jquery.js': 'jQuery' }
 }, function(error, content) {
 	fs.exists('dist', function(exists) {
 		if(!exists) {
