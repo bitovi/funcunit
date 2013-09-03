@@ -12,24 +12,11 @@
 -->
 
 FuncUnit tests web applications with a simple jQuery-like syntax. Via integration with
-[funcunit.selenium Selenium] and [funcunit.phantomjs PhantomJS], you can run the same tests automated.
+[Selenium](../guides/funcunit.selenium) and [PhantomJS](../guides/funcunit.phantomjs), you can run the same tests automated.
 
-FuncUnit uses [http://docs.jquery.com/Qunit QUnit] for organizing tests and assertions.  But FuncUnit extends QUnit so you can:
+The [FuncUnit Getting Started](../guides/started) guide is a quick walkthrough of creating and running a test.
 
- - [FuncUnit.open Open] a web page
- - [funcunit.finding Query] for elements
- - [funcunit.actions Simulate] a user action
- - [funcunit.waits Wait] for a condition to be true
- - [funcunit.getters Get] information about your page and run assertions
-
-Then, you can:
-
- - Run tests in the browser
- - [funcunit.integrations Integrate] with browser automation and build tools
-
-The [funcunit.getstarted FuncUnit Getting Started] guide is a quick walkthrough of creating and running a test.
-
-## Set up a test
+<h2 id="setup">Set up a test</h2>
 
 [http://docs.jquery.com/Qunit QUnit] provides the basic structure needed to write unit or functional tests.
 
@@ -61,7 +48,7 @@ __Assertions__
       equal(Contacts.counter(), 5, "there are 5 contacts");
     });
 
-## Open a page
+<h2 id="open">Open a page</h2>
 
 The following uses <code>F.open( URL )</code> to open autocomplete.html before every test.
 
@@ -73,7 +60,8 @@ The following uses <code>F.open( URL )</code> to open autocomplete.html before e
 
 Calling open on window will cause FuncUnit commands to operate on the current window.  This is also the default if you don't open any page.
 
-## Query for elements
+
+<h2 id="query">Query for elements</h2>
 
 FuncUnit tests are written just like jQuery.  The [funcunit.finding S method] is a copy of jQuery, which queries for elements in
 the application page.  Like $, FuncUnit methods are chainable on the results of F.
@@ -81,7 +69,7 @@ the application page.  Like $, FuncUnit methods are chainable on the results of 
     // grab the #description element, wait for it to be visible, type in it
     F("#description").visible().type("Test Framework")
 
-## Simulate user actions
+<h2 id="simulate">Simulate user actions</h2>
 
 When you're testing a widget, you need to simulate the [funcunit.actions actions] that a user takes.  FuncUnit uses the
 [syn] library to accurately simulate the correct low level events like mouseup and keypress for high
@@ -102,7 +90,7 @@ __Drag__
     // drag a task item to the trash area
     F('.task').drag(".trash");
 
-## Wait for page conditions
+<h2 id="wait">Wait for page conditions</h2>
 
 After a user action, your test page's event handlers run and the page is changed.
 Wait commands are used to wait for some page condition before continuing.
@@ -136,7 +124,7 @@ __Size__
 There are many more [funcunit.waits waits] possible.
 
 
-## Get information and run assertions
+<h2 id="get">Get information and run assertions</h2>
 
 After simulating an action and waiting for the page to change, you often want to get information
 about an element and run assertions.  You can use jQuery getter methods in combination with QUnit assertions.
@@ -148,7 +136,7 @@ These methods (which return synchronous results) are used in callbacks that run 
       equal( F('.autocomplete_item').size(), 5, "there are 5 results")
     })
 
-## Running in browser
+<h2 id="browser">Running in browser</h2>
 
 These tests can be loaded in any browser.  The app page opens in a separate window and results show up in the QUnit page.
 
