@@ -11,9 +11,6 @@
 
 -->
 
-FuncUnit tests web applications with a simple jQuery-like syntax. Via integration with
-[Selenium](../guides/funcunit.selenium) and [PhantomJS](../guides/funcunit.phantomjs), you can run the same tests automated.
-
 The [FuncUnit Getting Started](../guides/started) guide is a quick walkthrough of creating and running a test.
 
 <h2 id="setup">Set up a test</h2>
