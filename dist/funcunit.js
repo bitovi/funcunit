@@ -2,7 +2,7 @@
  * FuncUnit - 2.0.0
  * http://funcunit.com
  * Copyright (c) 2013 Bitovi
- * Fri, 13 Sep 2013 20:13:52 GMT
+ * Fri, 13 Sep 2013 23:31:54 GMT
  * Licensed MIT */
 
 var steal = { dev: { log: function() {} }, config: function() { return {} } };
@@ -2751,7 +2751,7 @@ var confirms = [],
 //
 $.extend(FuncUnit,{
 	/**
-     * @parent Utilities
+     * @parent utilities
      *
      *
 	 * @property FuncUnit.browsers browsers
@@ -2762,7 +2762,7 @@ $.extend(FuncUnit,{
 	// open is a method
 
 	/**
-     * @parent Utilities
+     * @parent utilities
      * @function FuncUnit.open open
      * @signature `open(path, success, timeout)`
      *
@@ -2856,7 +2856,7 @@ $.extend(FuncUnit,{
 		lookingForNewDocument = true;
 	},
 	/**
-	 * @parent Utilities
+	 * @parent utilities
      * @function FuncUnit.confirm confirm
      * @signature `confirm(answer)`
      *
@@ -2874,7 +2874,7 @@ $.extend(FuncUnit,{
 		confirms.push(!!answer)
 	},
 	/**
-	 * @parent Utilities
+	 * @parent utilities
      * @function FuncUnit.prompt prompt
      * @signature `prompt(answer)`
      *
@@ -2944,7 +2944,7 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @hide
-	 * @parent Utilities
+	 * @parent utilities
 	 * Gets a path, will use steal if present
 	 * @param {String} path
 	 */
@@ -2955,7 +2955,7 @@ $.extend(FuncUnit,{
 		return steal.config().root.mapJoin(path)+''
 	},
 	/**
-	 * @parent Utilities
+	 * @parent utilities
 	 * @property {window} FuncUnit.win win
 	 * Use this to refer to the window of the application page.
 	 * @codestart
@@ -2970,7 +2970,7 @@ $.extend(FuncUnit,{
 		readystate: "readyState" in document
 	},
 	/**
-	 * @parent Utilities
+	 * @parent utilities
      * @function FuncUnit.eval eval
      * @signature `eval(str)`
      *
@@ -4118,20 +4118,20 @@ var __m18 = (function(FuncUnit) {
 
 	/**
      * @property FuncUnit.speed speed
-     * @parent Utilities
+     * @parent utilities
 	 * A global speed setting for actions. Defaults to 0 milliseconds.
 	 */
 	FuncUnit.speed = 0;
 	/**
      * @property FuncUnit.timeout timeout
-     * @parent Utilities
+     * @parent utilities
 	 * A global timeout value for wait commands.  Defaults to 10 seconds.
 	 */
 	FuncUnit.timeout = 10000;
 	/**
 	 * @hide
 	 * @property FuncUnit._queue _queue
-   * @parent Utilities
+   * @parent utilities
 	 * A queue of methods.  Each method in the queue are run in order.  After the method is complete, it 
 	 * calls FuncUnit._done, which pops the next method off the queue and runs it.
 	 */
@@ -4179,7 +4179,7 @@ var __m18 = (function(FuncUnit) {
 	}
 	FuncUnit.
 	/**
-     * @parent Utilities
+     * @parent utilities
      * @function FuncUnit.add add
      * @signature `add(handler)`
 	 * Adds a function to the queue.
@@ -4213,7 +4213,7 @@ var __m18 = (function(FuncUnit) {
 	var currentEl;
 	/**
      * @hide
-     * @parent Utilities
+     * @parent utilities
      * @function FuncUnit._done _done
      * @signature `_done(handler)`
      *

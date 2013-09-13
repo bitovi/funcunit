@@ -38,7 +38,7 @@ var confirms = [],
 //
 $.extend(FuncUnit,{
 	/**
-     * @parent Utilities
+     * @parent utilities
      *
      *
 	 * @property FuncUnit.browsers browsers
@@ -49,7 +49,7 @@ $.extend(FuncUnit,{
 	// open is a method
 
 	/**
-     * @parent Utilities
+     * @parent utilities
      * @function FuncUnit.open open
      * @signature `open(path, success, timeout)`
      *
@@ -143,7 +143,7 @@ $.extend(FuncUnit,{
 		lookingForNewDocument = true;
 	},
 	/**
-	 * @parent Utilities
+	 * @parent utilities
      * @function FuncUnit.confirm confirm
      * @signature `confirm(answer)`
      *
@@ -161,7 +161,7 @@ $.extend(FuncUnit,{
 		confirms.push(!!answer)
 	},
 	/**
-	 * @parent Utilities
+	 * @parent utilities
      * @function FuncUnit.prompt prompt
      * @signature `prompt(answer)`
      *
@@ -231,7 +231,7 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @hide
-	 * @parent Utilities
+	 * @parent utilities
 	 * Gets a path, will use steal if present
 	 * @param {String} path
 	 */
@@ -242,7 +242,7 @@ $.extend(FuncUnit,{
 		return steal.config().root.mapJoin(path)+''
 	},
 	/**
-	 * @parent Utilities
+	 * @parent utilities
 	 * @property {window} FuncUnit.win win
 	 * Use this to refer to the window of the application page.
 	 * @codestart
@@ -257,7 +257,7 @@ $.extend(FuncUnit,{
 		readystate: "readyState" in document
 	},
 	/**
-	 * @parent Utilities
+	 * @parent utilities
      * @function FuncUnit.eval eval
      * @signature `eval(str)`
      *

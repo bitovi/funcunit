@@ -7,7 +7,7 @@
 @group manipulation Manipulation
 @group traversal Traversal
 @group waits Waits
-@group static static
+@group utilities Utilities
 
 -->
 
