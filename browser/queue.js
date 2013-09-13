@@ -9,18 +9,23 @@ steal('./core.js', function(FuncUnit) {
 	//where we should add things in a callback
 	var currentPosition = 0,
 		startedQueue = false;
-		
-		
+
+	/**
+     * @property FuncUnit.speed speed
+     * @parent Utilities
+	 * A global speed setting for actions. Defaults to 0 milliseconds.
+	 */
+	FuncUnit.speed = 0;
 	/**
      * @property FuncUnit.timeout timeout
-     * @parent static
+     * @parent Utilities
 	 * A global timeout value for wait commands.  Defaults to 10 seconds.
 	 */
 	FuncUnit.timeout = 10000;
 	/**
 	 * @hide
 	 * @property FuncUnit._queue _queue
-   * @parent static
+   * @parent Utilities
 	 * A queue of methods.  Each method in the queue are run in order.  After the method is complete, it 
 	 * calls FuncUnit._done, which pops the next method off the queue and runs it.
 	 */
@@ -68,7 +73,7 @@ steal('./core.js', function(FuncUnit) {
 	}
 	FuncUnit.
 	/**
-     * @parent static
+     * @parent Utilities
      * @function FuncUnit.add add
      * @signature `add(handler)`
 	 * Adds a function to the queue.
@@ -102,7 +107,7 @@ steal('./core.js', function(FuncUnit) {
 	var currentEl;
 	/**
      * @hide
-     * @parent static
+     * @parent Utilities
      * @function FuncUnit._done _done
      * @signature `_done(handler)`
      *
@@ -113,9 +118,10 @@ steal('./core.js', function(FuncUnit) {
 	FuncUnit._done = function(el, selector){
 		var next, 
 			timer,
-			speed = 0;
-			
-		if(FuncUnit.speed == "slow"){
+			speed = FuncUnit.speed || 0;
+
+		// TODO: we need to clarify the easing api
+		if(FuncUnit.speed === 'slow'){
 			speed = 500;
 		}
 		if (FuncUnit._queue.length > 0) {

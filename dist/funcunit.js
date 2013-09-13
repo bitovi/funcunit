@@ -1,3 +1,12 @@
+/*!
+ * FuncUnit - 2.0.0
+ * http://funcunit.com
+ * Copyright (c) 2013 Bitovi
+ * Fri, 13 Sep 2013 20:13:52 GMT
+ * Licensed MIT */
+
+var steal = { dev: { log: function() {} }, config: function() { return {} } };
+
 !function(window) {
 
 // ## syn/synthetic.js
@@ -2662,7 +2671,7 @@ var __m12 = (function(FuncUnit) {
 				paused = true;
 				waitsFor(function(){
 					return paused === false;
-				})
+				}, 60000)
 			},
 			resumeTest: function(){
 				paused = false;
@@ -2703,6 +2712,11 @@ var __m11 = (function() {})(__m12, __m13);
 
 // ## browser/open.js
 var __m14 = (function($, FuncUnit) {
+	
+	if(steal.config().browser === "phantomjs"){
+		FuncUnit.frameMode = true;
+	}
+	
 	if(FuncUnit.frameMode){
 		var ifrm = document.createElement("iframe");
 		ifrm.id = 'funcunit_app';
@@ -2737,7 +2751,7 @@ var confirms = [],
 //
 $.extend(FuncUnit,{
 	/**
-     * @parent static
+     * @parent Utilities
      *
      *
 	 * @property FuncUnit.browsers browsers
@@ -2748,7 +2762,7 @@ $.extend(FuncUnit,{
 	// open is a method
 
 	/**
-     * @parent static
+     * @parent Utilities
      * @function FuncUnit.open open
      * @signature `open(path, success, timeout)`
      *
@@ -2774,6 +2788,7 @@ $.extend(FuncUnit,{
 			method: function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
 				if(typeof path === "string"){
 					var fullPath = FuncUnit.getAbsolutePath(path);
+					steal.dev.log("Opening " + path)
 					FuncUnit._open(fullPath, error);
 					FuncUnit._onload(function(){
 						success()
@@ -2841,7 +2856,7 @@ $.extend(FuncUnit,{
 		lookingForNewDocument = true;
 	},
 	/**
-	 * @parent static
+	 * @parent Utilities
      * @function FuncUnit.confirm confirm
      * @signature `confirm(answer)`
      *
@@ -2859,7 +2874,7 @@ $.extend(FuncUnit,{
 		confirms.push(!!answer)
 	},
 	/**
-	 * @parent static
+	 * @parent Utilities
      * @function FuncUnit.prompt prompt
      * @signature `prompt(answer)`
      *
@@ -2929,7 +2944,7 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @hide
-	 * @parent static
+	 * @parent Utilities
 	 * Gets a path, will use steal if present
 	 * @param {String} path
 	 */
@@ -2940,7 +2955,7 @@ $.extend(FuncUnit,{
 		return steal.config().root.mapJoin(path)+''
 	},
 	/**
-	 * @parent static
+	 * @parent Utilities
 	 * @property {window} FuncUnit.win win
 	 * Use this to refer to the window of the application page.
 	 * @codestart
@@ -2955,7 +2970,7 @@ $.extend(FuncUnit,{
 		readystate: "readyState" in document
 	},
 	/**
-	 * @parent static
+	 * @parent Utilities
      * @function FuncUnit.eval eval
      * @signature `eval(str)`
      *
@@ -3152,6 +3167,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 				FuncUnit.add({
 					method: function(success, error){
 						options = options || {}
+						steal.dev.log("Clicking " + selector)
 						Syn("_" + name, options, this.bind[0],success);
 					},
 					success: success,
@@ -3220,6 +3236,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 			}
 			FuncUnit.add({
 				method : function(success, error){
+					steal.dev.log("Typing "+text+" on "+selector);
 					Syn("_type", text, this.bind[0], success);
 					
 				},
@@ -3234,6 +3251,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 			this._addExists();
 			FuncUnit.add({
 				method : function(success, error){
+					steal.dev.log("Triggering "+evName+" on "+this.bind.selector)
 					// need to use the page's jquery to trigger events
 					FuncUnit.win.jQuery(this.bind.selector).trigger(evName)
 					success()
@@ -3292,6 +3310,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 			var selector = this.selector;
 			FuncUnit.add({
 				method: function(success, error){
+					steal.dev.log("dragging " + selector);
 					Syn("_drag", options, this.bind[0],success);
 				},
 				success: success,
@@ -3349,6 +3368,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 			var selector = this.selector;
 			FuncUnit.add({
 				method: function(success, error){
+					steal.dev.log("moving " + selector);
 					Syn("_move", options, this.bind[0], success);
 				},
 				success: success,
@@ -3378,6 +3398,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 			}
 			FuncUnit.add({
 				method: function(success, error){
+					steal.dev.log("setting " + selector + " scroll" + direction + " " + amount + " pixels")
 					this.bind.each(function(i, el){
 						this["scroll" + direction] = amount;
 					})
@@ -4094,18 +4115,23 @@ var __m18 = (function(FuncUnit) {
 	//where we should add things in a callback
 	var currentPosition = 0,
 		startedQueue = false;
-		
-		
+
+	/**
+     * @property FuncUnit.speed speed
+     * @parent Utilities
+	 * A global speed setting for actions. Defaults to 0 milliseconds.
+	 */
+	FuncUnit.speed = 0;
 	/**
      * @property FuncUnit.timeout timeout
-     * @parent static
+     * @parent Utilities
 	 * A global timeout value for wait commands.  Defaults to 10 seconds.
 	 */
 	FuncUnit.timeout = 10000;
 	/**
 	 * @hide
 	 * @property FuncUnit._queue _queue
-   * @parent static
+   * @parent Utilities
 	 * A queue of methods.  Each method in the queue are run in order.  After the method is complete, it 
 	 * calls FuncUnit._done, which pops the next method off the queue and runs it.
 	 */
@@ -4153,7 +4179,7 @@ var __m18 = (function(FuncUnit) {
 	}
 	FuncUnit.
 	/**
-     * @parent static
+     * @parent Utilities
      * @function FuncUnit.add add
      * @signature `add(handler)`
 	 * Adds a function to the queue.
@@ -4187,7 +4213,7 @@ var __m18 = (function(FuncUnit) {
 	var currentEl;
 	/**
      * @hide
-     * @parent static
+     * @parent Utilities
      * @function FuncUnit._done _done
      * @signature `_done(handler)`
      *
@@ -4198,9 +4224,10 @@ var __m18 = (function(FuncUnit) {
 	FuncUnit._done = function(el, selector){
 		var next, 
 			timer,
-			speed = 0;
-			
-		if(FuncUnit.speed == "slow"){
+			speed = FuncUnit.speed || 0;
+
+		// TODO: we need to clarify the easing api
+		if(FuncUnit.speed === 'slow'){
 			speed = 500;
 		}
 		if (FuncUnit._queue.length > 0) {
@@ -4298,6 +4325,7 @@ wait = function(time, success){
 	time = time != null ? time : 5000
 	FuncUnit.add({
 		method : function(success, error){
+			steal.dev.log("Waiting "+time)
 			setTimeout(success, time)
 		},
 		success : success,
@@ -4381,6 +4409,7 @@ FuncUnit.repeat = function(options){
 			var printed = false,
 				print = function(msg){
 					if(!printed){
+						steal.dev.log(msg);
 						printed = true;
 					}
 				}

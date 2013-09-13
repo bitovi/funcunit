@@ -21,11 +21,13 @@ pluginify('funcunit.js', {
 	},
 	shim: { 'jquery/jquery.js': 'jQuery' }
 }, function(error, content) {
-	fs.exists('dist', function(exists) {
+	fs.exists('build', function(exists) {
 		if(!exists) {
-			fs.mkdir('dist');
+			fs.mkdir('build');
 		};
 
-		fs.writeFile(__dirname + '/dist/funcunit.js', content);
+		content = '\nvar steal = { dev: { log: function() {} }, config: function() { return {} } };\n\n' + content;
+
+		fs.writeFile(__dirname + '/build/funcunit.js', content);
 	});
 });

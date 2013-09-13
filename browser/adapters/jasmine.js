@@ -6,7 +6,7 @@ steal('../core.js', function(FuncUnit) {
 				paused = true;
 				waitsFor(function(){
 					return paused === false;
-				})
+				}, 60000)
 			},
 			resumeTest: function(){
 				paused = false;
