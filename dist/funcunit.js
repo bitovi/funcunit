@@ -1,8 +1,8 @@
 /*!
- * FuncUnit - 2.0.0
+ * FuncUnit - 2.0.1
  * http://funcunit.com
  * Copyright (c) 2013 Bitovi
- * Thu, 19 Sep 2013 02:45:23 GMT
+ * Thu, 19 Sep 2013 02:53:10 GMT
  * Licensed MIT */
 
 var steal = { dev: { log: function() {} }, config: function() { return {} } };
