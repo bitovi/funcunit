@@ -2,7 +2,7 @@
  * FuncUnit - 2.0.0
  * http://funcunit.com
  * Copyright (c) 2013 Bitovi
- * Fri, 13 Sep 2013 23:31:54 GMT
+ * Thu, 19 Sep 2013 02:45:23 GMT
  * Licensed MIT */
 
 var steal = { dev: { log: function() {} }, config: function() { return {} } };
@@ -2750,20 +2750,11 @@ var confirms = [],
  */
 //
 $.extend(FuncUnit,{
-	/**
-     * @parent utilities
-     *
-     *
-	 * @property FuncUnit.browsers browsers
-	 * Used to configure the browsers selenium uses to run FuncUnit tests.  See the 
-	 * [funcunit.selenium Selenium] page for more information.
-	 */
-
 	// open is a method
 
 	/**
      * @parent utilities
-     * @function FuncUnit.open open
+     * @function FuncUnit.open F.open()
      * @signature `open(path, success, timeout)`
      *
 	 * Opens a page.  It will error if the page can't be opened before timeout. If a URL begins with "//", pages are opened 
@@ -2857,7 +2848,7 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @parent utilities
-     * @function FuncUnit.confirm confirm
+     * @function FuncUnit.confirm F.confirm()
      * @signature `confirm(answer)`
      *
 	 * When a browser's native confirm dialog is used, this method is used to repress the dialog and simulate
@@ -2875,7 +2866,7 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @parent utilities
-     * @function FuncUnit.prompt prompt
+     * @function FuncUnit.prompt F.prompt()
      * @signature `prompt(answer)`
      *
 	 * When a browser's native prompt dialog is used, this method is used to repress the dialog and simulate 
@@ -2952,12 +2943,11 @@ $.extend(FuncUnit,{
 		if ( /^\/\//.test(path) ){
 			path = path.substr(2);
 		}
-
 		return path;
 	},
 	/**
 	 * @parent utilities
-	 * @property {window} FuncUnit.win win
+	 * @property {window} FuncUnit.win F.win()
 	 * Use this to refer to the window of the application page.
 	 * @codestart
 	 *F(F.window).innerWidth(function(w){
@@ -2972,7 +2962,7 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @parent utilities
-     * @function FuncUnit.eval eval
+     * @function FuncUnit.eval F.eval()
      * @signature `eval(str)`
      *
 	 * Used to evaluate code in the application page.
@@ -3101,7 +3091,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 	// methods
 	/**
      *
-	 * @function FuncUnit.prototype.click click
+	 * @function FuncUnit.prototype.click .click()
      * @parent actions
      * @signature `click(options [,success])`
      *
@@ -3134,7 +3124,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 	 */
 	'click',
 	/**
-     * @function FuncUnit.prototype.dblclick dblclick
+     * @function FuncUnit.prototype.dblclick .dblclick()
      * @parent actions
      * @signature `dblclick(options [,success])`
      *
@@ -3146,7 +3136,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 	 */
 	'dblclick',
 	/**
-     * @function FuncUnit.prototype.rightClick rightClick
+     * @function FuncUnit.prototype.rightClick .rightClick()
      * @parent actions
      * @signature `rightClick(options [,success])`
 	 * Right clicks an element.  This typically results in a contextmenu event for browsers that
@@ -3190,7 +3180,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 			this.exists(false);
 		},
 		/**
-         * @function FuncUnit.prototype.type type
+         * @function FuncUnit.prototype.type .type()
          * @parent actions
          * @signature `type(text [,success])`
          *
@@ -3265,7 +3255,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 			return this;
 		},
 		/**
-         * @function FuncUnit.prototype.drag drag
+         * @function FuncUnit.prototype.drag .drag()
          * @parent actions
          * @signature `drag(options [,success])`
 		 * Drags an element into another element or coordinates.  
@@ -3322,7 +3312,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 			return this;
 		},
 		/**
-         * @function FuncUnit.prototype.move move
+         * @function FuncUnit.prototype.move .move()
          * @parent actions
          * @signature `move(options [,success])`
 		 * Moves an element into another element or coordinates.  This will trigger mouseover
@@ -3380,7 +3370,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 			return this;
 		},
 		/**
-         * @function FuncUnit.prototype.scroll scroll
+         * @function FuncUnit.prototype.scroll .scroll()
          * @parent actions
          * @signature `scroll(direction, amount, success)`
 		 * Scrolls an element in a particular direction by setting the scrollTop or srollLeft.
@@ -3427,7 +3417,7 @@ var __m16 = (function($, FuncUnit) {
 	FuncUnit.funcs = {
 	// methods
 	/**
-     * @function FuncUnit.prototype.size size
+     * @function FuncUnit.prototype.size .size()
      * @parent dimensions
      * @signature `size([size] [,timeout] [,success] [,message])`
 	 * Gets the number of elements matched by the selector or
@@ -3453,7 +3443,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'size' : 0,
 	/**
-     * @function FuncUnit.prototype.attr attr
+     * @function FuncUnit.prototype.attr .attr()
      * @parent manipulation
      * @signature `attr(data, value [,timeout] [,success] [,message])`
 	 * Gets the value of an attribute from an element or waits until the attribute
@@ -3473,7 +3463,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'attr' : 1, 
 	/**
-     * @function FuncUnit.prototype.hasClass hasClass
+     * @function FuncUnit.prototype.hasClass .hasClass()
      * @parent css
      * @signature `hasClass(className [,value] [,timeout] [,success] [,message])`
 	 * @codestart
@@ -3496,7 +3486,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'hasClass' : 1, //makes wait
 	/**
-     * @function FuncUnit.prototype.html html
+     * @function FuncUnit.prototype.html .html()
      * @parent manipulation
      * @signature `html([html] [,timeout] [,success] [,message])`
 	 * Gets the [http://api.jquery.com/html/ html] from an element or waits until the html is a certain value.
@@ -3520,7 +3510,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'html' : 0, 
 	/**
-     * @function FuncUnit.prototype.text text
+     * @function FuncUnit.prototype.text .text()
      * @parent manipulation
      * @signature `text([text] [,timeout] [,success] [,message])`
 	 * Gets the [http://api.jquery.com/text/ text] from an element or waits until the text is a certain value.
@@ -3544,7 +3534,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'text' : 0, 
 	/**
-     * @function FuncUnit.prototype.val val
+     * @function FuncUnit.prototype.val .val()
      * @parent manipulation
      * @signature `val([val] [,timeout] [,success] [,message])`
 	 * Gets the [http://api.jquery.com/val/ val] from an element or waits until the val is a certain value.
@@ -3568,7 +3558,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'val' : 0, 
 	/**
-     * @function FuncUnit.prototype.css css
+     * @function FuncUnit.prototype.css .css()
      * @parent css
      * @signature `css(prop [,val] [,timeout] [,success] [,message])`
 	 * Gets a [http://api.jquery.com/css/ css] property from an element or waits until the property is 
@@ -3592,7 +3582,7 @@ var __m16 = (function($, FuncUnit) {
 	'css': 1, 
 	'prop': 1, 
 	/**
-     * @function FuncUnit.prototype.offset offset
+     * @function FuncUnit.prototype.offset .offset()
      * @parent dimensions
      * @signature `offset([offset] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/offset/ offset] or waits until 
@@ -3615,7 +3605,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'offset' : 0,
 	/**
-     * @function FuncUnit.prototype.position position
+     * @function FuncUnit.prototype.position .position()
      * @parent dimensions
      * @signature `position([position] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/position/ position] or waits until 
@@ -3638,7 +3628,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'position' : 0,
 	/**
-     * @function FuncUnit.prototype.scrollTop scrollTop
+     * @function FuncUnit.prototype.scrollTop .scrollTop()
      * @parent dimensions
      * @signature `scrollTop([scrollTop] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/scrollTop/ scrollTop] or waits until 
@@ -3661,7 +3651,7 @@ var __m16 = (function($, FuncUnit) {
 	 */ 
 	'scrollTop' : 0, 
 	/**
-     * @function FuncUnit.prototype.scrollLeft scrollLeft
+     * @function FuncUnit.prototype.scrollLeft .scrollLeft()
      * @parent dimensions
      * @signature `scrollLeft([scrollLeft] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/scrollLeft/ scrollLeft] or waits until 
@@ -3684,7 +3674,7 @@ var __m16 = (function($, FuncUnit) {
 	 */ 
 	'scrollLeft' : 0, 
 	/**
-     * @function FuncUnit.prototype.height height
+     * @function FuncUnit.prototype.height .height()
      * @parent dimensions
      * @signature `height([height] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/height/ height] or waits until 
@@ -3707,7 +3697,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'height' : 0, 
 	/**
-     * @function FuncUnit.prototype.width width
+     * @function FuncUnit.prototype.width .width()
      * @parent dimensions
      * @signature `width([width] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/width/ width] or waits until 
@@ -3730,7 +3720,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'width' : 0, 
 	/**
-     * @function FuncUnit.prototype.innerHeight innerHeight
+     * @function FuncUnit.prototype.innerHeight .innerHeight()
      * @parent dimensions
      * @signature `innerHeight([innerHeight] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/innerHeight/ innerHeight] or waits until 
@@ -3753,7 +3743,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'innerHeight' : 0, 
 	/**
-     * @function FuncUnit.prototype.innerWidth innerWidth
+     * @function FuncUnit.prototype.innerWidth .innerWidth()
      * @parent dimensions
      * @signature `innerWidth([innerWidth] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/innerWidth/ innerWidth] or waits until 
@@ -3776,7 +3766,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'innerWidth' : 0, 
 	/**
-     * @function FuncUnit.prototype.outerHeight outerHeight
+     * @function FuncUnit.prototype.outerHeight .outerHeight()
      * @parent dimensions
      * @signature `outerHeight([outerHeight] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/outerHeight/ outerHeight] or waits until 
@@ -3799,7 +3789,7 @@ var __m16 = (function($, FuncUnit) {
 	 */
 	'outerHeight' : 0, 
 	/**
-     * @function FuncUnit.prototype.outerWidth outerWidth
+     * @function FuncUnit.prototype.outerWidth .outerWidth()
      * @parent dimensions
      * @signature `outerWidth([outerWidth] [,timeout] [,success] [,message])`
 	 * Gets an element's [http://api.jquery.com/outerWidth/ outerWidth] or waits until 
@@ -3983,7 +3973,7 @@ var __m17 = (function($, FuncUnit){
 //do traversers
 var traversers = [
 	/**
-     * @function FuncUnit.prototype.closest closest
+     * @function FuncUnit.prototype.closest .closest()
      * @parent traversal
      * @signature `closest()`
 	 * Asynchronous version of jQuery's closest.  Performs the exact same functionality as the jQuery method 
@@ -3997,7 +3987,7 @@ var traversers = [
 	 */
 	"closest",
 	/**
-	 * @function FuncUnit.prototype.next next
+	 * @function FuncUnit.prototype.next .next()
      * @parent traversal
      * @signature `next()`
 	 * Asynchronous version of next. Performs the exact same functionality as the jQuery method 
@@ -4010,7 +4000,7 @@ var traversers = [
 	 */
 	"next",
 	/**
-     * @function FuncUnit.prototype.prev prev
+     * @function FuncUnit.prototype.prev .prev()
      * @parent traversal
      * @signature `prev()`
 	 * Asynchronous version of prev. Performs the exact same functionality as the jQuery method 
@@ -4023,7 +4013,7 @@ var traversers = [
 	 */
 	"prev",
 	/**
-     * @function FuncUnit.prototype.siblings siblings
+     * @function FuncUnit.prototype.siblings .siblings()
      * @parent traversal
      * @signature `siblings()`
 	 * Asynchronous version of siblings. Performs the exact same functionality as the jQuery method 
@@ -4036,7 +4026,7 @@ var traversers = [
 	 */
 	"siblings",
 	/**
-     * @function FuncUnit.prototype.last last
+     * @function FuncUnit.prototype.last .last()
      * @parent traversal
      * @signature `last()`
 	 * Asynchronous version of last. Performs the exact same functionality as the jQuery method 
@@ -4049,7 +4039,7 @@ var traversers = [
 	 */
 	"last",
 	/**
-     * @function FuncUnit.prototype.first first
+     * @function FuncUnit.prototype.first .first()
      * @parent traversal
      * @signature `first()`
 	 * Asynchronous version of first. Performs the exact same functionality as the jQuery method 
@@ -4062,7 +4052,7 @@ var traversers = [
 	 */
 	"first", 
 	/**
-     * @function FuncUnit.prototype.find find
+     * @function FuncUnit.prototype.find .find()
      * @parent traversal
      * @signature `find()`
 	 * Asynchronous version of find. Performs the exact same functionality as the jQuery method 
@@ -4118,13 +4108,13 @@ var __m18 = (function(FuncUnit) {
 		startedQueue = false;
 
 	/**
-     * @property FuncUnit.speed speed
+     * @property FuncUnit.speed F.speed()
      * @parent utilities
 	 * A global speed setting for actions. Defaults to 0 milliseconds.
 	 */
 	FuncUnit.speed = 0;
 	/**
-     * @property FuncUnit.timeout timeout
+     * @property FuncUnit.timeout F.timeout()
      * @parent utilities
 	 * A global timeout value for wait commands.  Defaults to 10 seconds.
 	 */
@@ -4181,7 +4171,7 @@ var __m18 = (function(FuncUnit) {
 	FuncUnit.
 	/**
      * @parent utilities
-     * @function FuncUnit.add add
+     * @function FuncUnit.add F.add()
      * @signature `add(handler)`
 	 * Adds a function to the queue.
 	 * @param {Object} handler An object that contains the method to run along with other properties:
@@ -4303,7 +4293,7 @@ var __m19 = (function($, FuncUnit) {
 FuncUnit.
 /**
  *
- * @function FuncUnit.wait wait
+ * @function FuncUnit.wait F.wait()
  * @parent waits
  * @signature `wait(time, success)`
  * Waits a timeout before running the next command.  Wait is an action and gets 
@@ -4338,7 +4328,7 @@ wait = function(time, success){
 
 FuncUnit.
 /**
- * @function FuncUnit.branch branch
+ * @function FuncUnit.branch F.branch()
  * @parent waits
  * @signature `branch(check1, success1, check2, success2)`
  * Uses 2 checker methods to see which success function to call.  This is a way to conditionally
@@ -4385,7 +4375,7 @@ branch = function(check1, success1, check2, success2, timeout){
 
 /**
  *
- * @function FuncUnit.repeat repeat
+ * @function FuncUnit.repeat F.repeat()
  * @parent waits
  * @signature `repeat()`
  * Takes a function that will be called over and over until it is successful.
@@ -4446,21 +4436,23 @@ FuncUnit.repeat = function(options){
 
 /**
  *
- * @function FuncUnit.animationsDone animationsDone
+ * @function FuncUnit.animationEnd F.animationEnd()
  * @parent waits
- * @signature `animationsDone()`
+ * @signature `animationEnd()`
  * Waits until all animations in the page have completed.  Only works
  * if the tested page has jQuery present.
  */
-FuncUnit.animationsDone = function(){
+FuncUnit.animationEnd = function(){
 F("body").wait(200).size(function(){
 		return F.win.$(':animated').length === 0;
 	});
 };
 
+FuncUnit.animationsDone = FuncUnit.animationEnd;
+
 $.extend(FuncUnit.prototype, {
 	/**
-     * @function FuncUnit.prototype.exists exists
+     * @function FuncUnit.prototype.exists .exists()
      * @parent waits
      * @signature `exists([timeout] [,success] [,message])`
 	 * Waits until an element exists before running the next action.
@@ -4490,7 +4482,7 @@ $.extend(FuncUnit.prototype, {
 		})
 	},
 	/**
-     * @function FuncUnit.prototype.missing missing
+     * @function FuncUnit.prototype.missing .missing()
      * @parent waits
      * @signature `missing([timeout] [,success] [,message])`
 	 * Waits until no elements are matched by the selector.  Missing is equivalent to calling
@@ -4508,7 +4500,7 @@ $.extend(FuncUnit.prototype, {
 		return this.size(0, timeout, success, message)
 	},
 	/**
-     * @function FuncUnit.prototype.visible visible
+     * @function FuncUnit.prototype.visible .visible()
      * @parent waits
      * @signature `visible([timeout] [,success] [,message])`
 	 * Waits until the funcUnit selector is visible.  
@@ -4530,7 +4522,7 @@ $.extend(FuncUnit.prototype, {
 		}, timeout, success, message)
 	},
 	/**
-     * @function FuncUnit.prototype.invisible invisible
+     * @function FuncUnit.prototype.invisible .invisible()
      * @parent waits
      * @signature `invisible([timeout] [,success] [,message])`
 	 * Waits until the selector is invisible.  
@@ -4552,7 +4544,7 @@ $.extend(FuncUnit.prototype, {
 		}, timeout, success, message)
 	},
 	/**
-     * @function FuncUnit.prototype.wait wait
+     * @function FuncUnit.prototype.wait .wait()
      * @parent waits
      * @signature `wait([checker] [,timeout] [,success] [,message])`
      *
@@ -4579,7 +4571,7 @@ $.extend(FuncUnit.prototype, {
 		}
 	},
 	/**
-     * @function FuncUnit.prototype.then then
+     * @function FuncUnit.prototype.then .then()
      * @parent waits
      * @signature `then(success)`
 	 * Calls the success function after all previous asynchronous actions have completed.  Then

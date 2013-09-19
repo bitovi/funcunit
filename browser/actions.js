@@ -7,7 +7,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	// methods
 	/**
      *
-	 * @function FuncUnit.prototype.click click
+	 * @function FuncUnit.prototype.click .click()
      * @parent actions
      * @signature `click(options [,success])`
      *
@@ -40,7 +40,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	 */
 	'click',
 	/**
-     * @function FuncUnit.prototype.dblclick dblclick
+     * @function FuncUnit.prototype.dblclick .dblclick()
      * @parent actions
      * @signature `dblclick(options [,success])`
      *
@@ -52,7 +52,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 	 */
 	'dblclick',
 	/**
-     * @function FuncUnit.prototype.rightClick rightClick
+     * @function FuncUnit.prototype.rightClick .rightClick()
      * @parent actions
      * @signature `rightClick(options [,success])`
 	 * Right clicks an element.  This typically results in a contextmenu event for browsers that
@@ -96,7 +96,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			this.exists(false);
 		},
 		/**
-         * @function FuncUnit.prototype.type type
+         * @function FuncUnit.prototype.type .type()
          * @parent actions
          * @signature `type(text [,success])`
          *
@@ -171,7 +171,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			return this;
 		},
 		/**
-         * @function FuncUnit.prototype.drag drag
+         * @function FuncUnit.prototype.drag .drag()
          * @parent actions
          * @signature `drag(options [,success])`
 		 * Drags an element into another element or coordinates.  
@@ -228,7 +228,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			return this;
 		},
 		/**
-         * @function FuncUnit.prototype.move move
+         * @function FuncUnit.prototype.move .move()
          * @parent actions
          * @signature `move(options [,success])`
 		 * Moves an element into another element or coordinates.  This will trigger mouseover
@@ -286,7 +286,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			return this;
 		},
 		/**
-         * @function FuncUnit.prototype.scroll scroll
+         * @function FuncUnit.prototype.scroll .scroll()
          * @parent actions
          * @signature `scroll(direction, amount, success)`
 		 * Scrolls an element in a particular direction by setting the scrollTop or srollLeft.

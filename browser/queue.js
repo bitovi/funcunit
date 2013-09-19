@@ -11,13 +11,13 @@ steal('./core.js', function(FuncUnit) {
 		startedQueue = false;
 
 	/**
-     * @property FuncUnit.speed speed
+     * @property FuncUnit.speed F.speed()
      * @parent utilities
 	 * A global speed setting for actions. Defaults to 0 milliseconds.
 	 */
 	FuncUnit.speed = 0;
 	/**
-     * @property FuncUnit.timeout timeout
+     * @property FuncUnit.timeout F.timeout()
      * @parent utilities
 	 * A global timeout value for wait commands.  Defaults to 10 seconds.
 	 */
@@ -74,7 +74,7 @@ steal('./core.js', function(FuncUnit) {
 	FuncUnit.
 	/**
      * @parent utilities
-     * @function FuncUnit.add add
+     * @function FuncUnit.add F.add()
      * @signature `add(handler)`
 	 * Adds a function to the queue.
 	 * @param {Object} handler An object that contains the method to run along with other properties:

@@ -37,20 +37,11 @@ var confirms = [],
  */
 //
 $.extend(FuncUnit,{
-	/**
-     * @parent utilities
-     *
-     *
-	 * @property FuncUnit.browsers browsers
-	 * Used to configure the browsers selenium uses to run FuncUnit tests.  See the 
-	 * [funcunit.selenium Selenium] page for more information.
-	 */
-
 	// open is a method
 
 	/**
      * @parent utilities
-     * @function FuncUnit.open open
+     * @function FuncUnit.open F.open()
      * @signature `open(path, success, timeout)`
      *
 	 * Opens a page.  It will error if the page can't be opened before timeout. If a URL begins with "//", pages are opened 
@@ -144,7 +135,7 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @parent utilities
-     * @function FuncUnit.confirm confirm
+     * @function FuncUnit.confirm F.confirm()
      * @signature `confirm(answer)`
      *
 	 * When a browser's native confirm dialog is used, this method is used to repress the dialog and simulate
@@ -162,7 +153,7 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @parent utilities
-     * @function FuncUnit.prompt prompt
+     * @function FuncUnit.prompt F.prompt()
      * @signature `prompt(answer)`
      *
 	 * When a browser's native prompt dialog is used, this method is used to repress the dialog and simulate 
@@ -243,7 +234,7 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @parent utilities
-	 * @property {window} FuncUnit.win win
+	 * @property {window} FuncUnit.win F.win()
 	 * Use this to refer to the window of the application page.
 	 * @codestart
 	 *F(F.window).innerWidth(function(w){
@@ -258,7 +249,7 @@ $.extend(FuncUnit,{
 	},
 	/**
 	 * @parent utilities
-     * @function FuncUnit.eval eval
+     * @function FuncUnit.eval F.eval()
      * @signature `eval(str)`
      *
 	 * Used to evaluate code in the application page.

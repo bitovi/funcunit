@@ -27,7 +27,8 @@
 		"qunit",
 		"steal",
 		"test",
-		"./*.html",
-		"./*.js"
+		"funcunit.html",
+		"funcunit.js",
+		"!dist/funcunit.js"
 	]
 }
