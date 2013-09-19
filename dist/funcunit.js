@@ -2945,14 +2945,15 @@ $.extend(FuncUnit,{
 	/**
 	 * @hide
 	 * @parent utilities
-	 * Gets a path, will use steal if present
+	 * Gets a path
 	 * @param {String} path
 	 */
 	getAbsolutePath: function( path ) {
 		if ( /^\/\//.test(path) ){
 			path = path.substr(2);
 		}
-		return steal.config().root.mapJoin(path)+''
+
+		return path;
 	},
 	/**
 	 * @parent utilities
