@@ -2,7 +2,7 @@
  * FuncUnit - 2.0.2
  * http://funcunit.com
  * Copyright (c) 2013 Bitovi
- * Fri, 20 Sep 2013 03:56:15 GMT
+ * Fri, 20 Sep 2013 04:09:13 GMT
  * Licensed MIT */
 
 !function(window) {
@@ -2709,17 +2709,11 @@ var __m11 = (function() {})(__m12, __m13);
 
 // ## browser/open.js
 var __m14 = (function($, FuncUnit) {
-
-	if(steal && steal.config().browser === "phantomjs"){
-		FuncUnit.frameMode = true;
-	}
-
 	if(FuncUnit.frameMode){
 		var ifrm = document.createElement("iframe");
 		ifrm.id = 'funcunit_app';
 		document.body.insertBefore(ifrm, document.body.firstChild);
 	}
-
 
 var confirms = [], 
 	prompts = [], 
