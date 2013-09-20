@@ -1,22 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-      <link rel="stylesheet" type="text/css" href="qunit/qunit.css" />
-      <title>QUnit Test</title>
-    </head>
-    <body>
-		<script type='text/javascript' src='steal/steal.js?funcunit/test/funcunit'></script>
-		<a id='tester' href='#'>Click Me</a>
-		<script type='text/javascript'>
+	<head>
+		<link rel="stylesheet" type="text/css" href="lib/qunit/qunit/qunit.css" />
+		<title>QUnit Test</title>
+	</head>
+	<body>
+		<div id="qunit"></div>
+		<div id="qunit-fixture"></div>
+		<script src="lib/qunit/qunit/qunit.js"></script>
+		<script src="steal/steal.js?funcunit/test/funcunit"></script>
+		<a id="tester" href="#">Click Me</a>
+		<script type="text/javascript">
 			steal("jquery", function($) {
 				$(document).ready(function(){
-					$('#tester').click(function(ev){
+					$("#tester").click(function(ev){
 						ev.preventDefault();
 						$(ev.target).text("Changed");
 					})
 				})
 			})
 		</script>
-		<iframe src='test/myapp.html' name='myapp'></iframe>
-    </body>
+		<iframe src="test/myapp.html" name="myapp"></iframe>
+	</body>
 </html>

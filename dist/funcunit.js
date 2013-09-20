@@ -1,11 +1,9 @@
-/*!
- * FuncUnit - 2.0.1
+/*
+ * FuncUnit - 2.0.2
  * http://funcunit.com
  * Copyright (c) 2013 Bitovi
- * Thu, 19 Sep 2013 02:53:10 GMT
+ * Fri, 20 Sep 2013 03:56:15 GMT
  * Licensed MIT */
-
-var steal = { dev: { log: function() {} }, config: function() { return {} } };
 
 !function(window) {
 
@@ -2571,9 +2569,8 @@ var __m10 = (function(jQuery) {
 		var rootjQuerySub = jQuerySub(document);
 		return jQuerySub;
 	};
-	
-	// TODO: if FuncUnit needs its own jQuery, add a steal.config here to make that happen.
-	FuncUnit.jQuery = jQuery//.noConflict(true);
+
+	FuncUnit.jQuery = jQuery;
 	return FuncUnit;
 })(jQuery);
 
@@ -2712,11 +2709,11 @@ var __m11 = (function() {})(__m12, __m13);
 
 // ## browser/open.js
 var __m14 = (function($, FuncUnit) {
-	
-	if(steal.config().browser === "phantomjs"){
+
+	if(steal && steal.config().browser === "phantomjs"){
 		FuncUnit.frameMode = true;
 	}
-	
+
 	if(FuncUnit.frameMode){
 		var ifrm = document.createElement("iframe");
 		ifrm.id = 'funcunit_app';
@@ -2779,7 +2776,6 @@ $.extend(FuncUnit,{
 			method: function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
 				if(typeof path === "string"){
 					var fullPath = FuncUnit.getAbsolutePath(path);
-					steal.dev.log("Opening " + path)
 					FuncUnit._open(fullPath, error);
 					FuncUnit._onload(function(){
 						success()
@@ -3157,8 +3153,7 @@ var __m15 = (function($, FuncUnit, Syn) {
 				var selector = this.selector;
 				FuncUnit.add({
 					method: function(success, error){
-						options = options || {}
-						steal.dev.log("Clicking " + selector)
+						options = options || {};
 						Syn("_" + name, options, this.bind[0],success);
 					},
 					success: success,
@@ -3227,7 +3222,6 @@ var __m15 = (function($, FuncUnit, Syn) {
 			}
 			FuncUnit.add({
 				method : function(success, error){
-					steal.dev.log("Typing "+text+" on "+selector);
 					Syn("_type", text, this.bind[0], success);
 					
 				},
@@ -3242,7 +3236,6 @@ var __m15 = (function($, FuncUnit, Syn) {
 			this._addExists();
 			FuncUnit.add({
 				method : function(success, error){
-					steal.dev.log("Triggering "+evName+" on "+this.bind.selector)
 					// need to use the page's jquery to trigger events
 					FuncUnit.win.jQuery(this.bind.selector).trigger(evName)
 					success()
@@ -3301,7 +3294,6 @@ var __m15 = (function($, FuncUnit, Syn) {
 			var selector = this.selector;
 			FuncUnit.add({
 				method: function(success, error){
-					steal.dev.log("dragging " + selector);
 					Syn("_drag", options, this.bind[0],success);
 				},
 				success: success,
@@ -3359,7 +3351,6 @@ var __m15 = (function($, FuncUnit, Syn) {
 			var selector = this.selector;
 			FuncUnit.add({
 				method: function(success, error){
-					steal.dev.log("moving " + selector);
 					Syn("_move", options, this.bind[0], success);
 				},
 				success: success,
@@ -3389,7 +3380,6 @@ var __m15 = (function($, FuncUnit, Syn) {
 			}
 			FuncUnit.add({
 				method: function(success, error){
-					steal.dev.log("setting " + selector + " scroll" + direction + " " + amount + " pixels")
 					this.bind.each(function(i, el){
 						this["scroll" + direction] = amount;
 					})
@@ -4316,7 +4306,6 @@ wait = function(time, success){
 	time = time != null ? time : 5000
 	FuncUnit.add({
 		method : function(success, error){
-			steal.dev.log("Waiting "+time)
 			setTimeout(success, time)
 		},
 		success : success,
@@ -4400,7 +4389,6 @@ FuncUnit.repeat = function(options){
 			var printed = false,
 				print = function(msg){
 					if(!printed){
-						steal.dev.log(msg);
 						printed = true;
 					}
 				}

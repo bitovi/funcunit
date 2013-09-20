@@ -1,6 +1,6 @@
 {
 	"name": "FuncUnit",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"author": {
 		"name": "Bitovi",
 		"email": "contact@bitovi.com",
@@ -24,11 +24,10 @@
 	},
 	"ignore": [
 		"browser",
-		"qunit",
-		"steal",
-		"test",
-		"funcunit.html",
-		"funcunit.js",
-		"!dist/funcunit.js"
+		"syn",
+		"/build.js",
+		"stealconfig.js",
+		"/funcunit.html",
+		"/funcunit.js"
 	]
 }

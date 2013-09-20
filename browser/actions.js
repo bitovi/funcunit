@@ -73,8 +73,7 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 				var selector = this.selector;
 				FuncUnit.add({
 					method: function(success, error){
-						options = options || {}
-						steal.dev.log("Clicking " + selector)
+						options = options || {};
 						Syn("_" + name, options, this.bind[0],success);
 					},
 					success: success,
@@ -143,7 +142,6 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			}
 			FuncUnit.add({
 				method : function(success, error){
-					steal.dev.log("Typing "+text+" on "+selector);
 					Syn("_type", text, this.bind[0], success);
 					
 				},
@@ -158,7 +156,6 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			this._addExists();
 			FuncUnit.add({
 				method : function(success, error){
-					steal.dev.log("Triggering "+evName+" on "+this.bind.selector)
 					// need to use the page's jquery to trigger events
 					FuncUnit.win.jQuery(this.bind.selector).trigger(evName)
 					success()
@@ -217,7 +214,6 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			var selector = this.selector;
 			FuncUnit.add({
 				method: function(success, error){
-					steal.dev.log("dragging " + selector);
 					Syn("_drag", options, this.bind[0],success);
 				},
 				success: success,
@@ -275,7 +271,6 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			var selector = this.selector;
 			FuncUnit.add({
 				method: function(success, error){
-					steal.dev.log("moving " + selector);
 					Syn("_move", options, this.bind[0], success);
 				},
 				success: success,
@@ -305,7 +300,6 @@ steal('jquery', './core.js', 'funcunit/syn', function($, FuncUnit, Syn) {
 			}
 			FuncUnit.add({
 				method: function(success, error){
-					steal.dev.log("setting " + selector + " scroll" + direction + " " + amount + " pixels")
 					this.bind.each(function(i, el){
 						this["scroll" + direction] = amount;
 					})

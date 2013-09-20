@@ -1,9 +1,9 @@
 steal('jquery', './core.js', function($, FuncUnit) {
-	
-	if(steal.config().browser === "phantomjs"){
+
+	if(steal && steal.config().browser === "phantomjs"){
 		FuncUnit.frameMode = true;
 	}
-	
+
 	if(FuncUnit.frameMode){
 		var ifrm = document.createElement("iframe");
 		ifrm.id = 'funcunit_app';
@@ -66,7 +66,6 @@ $.extend(FuncUnit,{
 			method: function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
 				if(typeof path === "string"){
 					var fullPath = FuncUnit.getAbsolutePath(path);
-					steal.dev.log("Opening " + path)
 					FuncUnit._open(fullPath, error);
 					FuncUnit._onload(function(){
 						success()

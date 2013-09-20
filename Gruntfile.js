@@ -17,7 +17,7 @@ module.exports = function (grunt) {
 		},
 		concat: {
 			options: {
-				banner: '/*!\n * <%= pkg.title || pkg.name %> - <%= pkg.version %>\n * <%= pkg.homepage %>\n * Copyright (c) <%= new Date().getFullYear() %> <%= pkg.author.name %>\n * <%= new Date().toUTCString() %>\n * Licensed <%= pkg.licenses[0].type %><% if(typeof url !== \"undefined\") { %>\n * Download from: <%= pkg.homepage %>\n<% } %> */\n'
+				banner: '/*\n * <%= pkg.title || pkg.name %> - <%= pkg.version %>\n * <%= pkg.homepage %>\n * Copyright (c) <%= new Date().getFullYear() %> <%= pkg.author.name %>\n * <%= new Date().toUTCString() %>\n * Licensed <%= pkg.licenses[0].type %> */\n\n'
 			},
 
 			dist: {
@@ -29,27 +29,13 @@ module.exports = function (grunt) {
 				}]
 			}
 		},
-		qunit: {
-			all: {
+		testee: {
+			src: {
 				options: {
-					urls: [
-						'http://localhost:8000/test/dist/dojo.html',
-						'http://localhost:8000/test/dist/jquery.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/dist/mootools.html',
-						'http://localhost:8000/test/dist/yui.html',
-
-						'http://localhost:8000/test/dojo.html',
-						'http://localhost:8000/test/jquery.html',
-						//'http://localhost:8000/can/test/zepto.html',
-						'http://localhost:8000/test/mootools.html',
-						'http://localhost:8000/test/yui.html'
-					]
+					urls: ['http://localhost:8000/funcunit.html'],
+					browsers: ['phantom']
 				}
 			}
-		},
-		testee: {
-			files: ['funcunit.html']
 		}
 	});
 

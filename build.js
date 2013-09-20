@@ -26,8 +26,6 @@ pluginify('funcunit.js', {
 			fs.mkdir('build');
 		};
 
-		content = '\nvar steal = { dev: { log: function() {} }, config: function() { return {} } };\n\n' + content;
-
 		fs.writeFile(__dirname + '/build/funcunit.js', content);
 	});
 });

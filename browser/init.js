@@ -21,8 +21,7 @@ steal('jquery', function(jQuery) {
 		var rootjQuerySub = jQuerySub(document);
 		return jQuerySub;
 	};
-	
-	// TODO: if FuncUnit needs its own jQuery, add a steal.config here to make that happen.
-	FuncUnit.jQuery = jQuery//.noConflict(true);
+
+	FuncUnit.jQuery = jQuery;
 	return FuncUnit;
 });

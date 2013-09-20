@@ -28,7 +28,6 @@ wait = function(time, success){
 	time = time != null ? time : 5000
 	FuncUnit.add({
 		method : function(success, error){
-			steal.dev.log("Waiting "+time)
 			setTimeout(success, time)
 		},
 		success : success,
@@ -112,7 +111,6 @@ FuncUnit.repeat = function(options){
 			var printed = false,
 				print = function(msg){
 					if(!printed){
-						steal.dev.log(msg);
 						printed = true;
 					}
 				}
