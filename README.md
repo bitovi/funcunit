@@ -11,7 +11,7 @@
 
 -->
 
-_Note: [FuncUnit Roadmap](http://forum.javascriptmvc.com/#Topic/32525000001436023)
+_Note: [FuncUnit Roadmap](http://forum.javascriptmvc.com/#Topic/32525000001436023)_
 
 The [FuncUnit Getting Started](../guides/started) guide is a quick walkthrough of creating and running a test.
 
