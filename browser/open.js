@@ -355,7 +355,9 @@ $.extend(FuncUnit,{
 	// All browsers except Opera close the app window on a reload.  This is to fix the case the URL to be opened 
 	// has a hash.  In this case, window.open doesn't cause a reload if you reuse an existing popup, so we need to close.
 	$(window).unload(function(){
-		FuncUnit.win && FuncUnit.win.close();
+		if(FuncUnit.win && FuncUnit.win !== window.top) {
+			FuncUnit.win.close();
+		}
 	});
 
 	return FuncUnit;

@@ -2,7 +2,7 @@
  * FuncUnit - 2.0.2
  * http://funcunit.com
  * Copyright (c) 2013 Bitovi
- * Fri, 20 Sep 2013 04:09:13 GMT
+ * Tue, 01 Oct 2013 18:16:09 GMT
  * Licensed MIT */
 
 !function(window) {
@@ -3065,7 +3065,9 @@ $.extend(FuncUnit,{
 	// All browsers except Opera close the app window on a reload.  This is to fix the case the URL to be opened 
 	// has a hash.  In this case, window.open doesn't cause a reload if you reuse an existing popup, so we need to close.
 	$(window).unload(function(){
-		FuncUnit.win && FuncUnit.win.close();
+		if(FuncUnit.win && FuncUnit.win !== window.top) {
+			FuncUnit.win.close();
+		}
 	});
 
 	return FuncUnit;
