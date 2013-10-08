@@ -58,6 +58,7 @@ $.extend(FuncUnit,{
 		}
 		FuncUnit.add({
 			method: function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
+				console.log('opening...', path)
 				if(typeof path === "string"){
 					var fullPath = FuncUnit.getAbsolutePath(path);
 					FuncUnit._open(fullPath, error);
@@ -75,12 +76,13 @@ $.extend(FuncUnit,{
 		});
 	},
 	_open: function(url){
+		console.log('open', url)
 		FuncUnit.win = appWin;
 		hasSteal = false;
 		// this will determine if this is supposed to open within a frame
 		FuncUnit.frame =  $('#funcunit_app').length? $('#funcunit_app')[0]: null;
 	
-		
+		console.log(newPage)
 		// if the first time ..
 		if (newPage) {
 			if(FuncUnit.frame){
@@ -94,7 +96,8 @@ $.extend(FuncUnit,{
 				// This is mainly for opera. Other browsers will hit the unload event and close the popup.
 				// This block breaks in IE (which never reaches it) because after closing a window, it throws access 
 				// denied any time you try to access it, even after reopening.
-				if(FuncUnit.win.___FUNCUNIT_OPENED){
+				console.log(FuncUnit.win.___FUNCUNIT_OPENED)
+				if(FuncUnit.win.___FUNCUNIT_OPENED) {
 					FuncUnit.win.close();
 					FuncUnit.win = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
 				}
@@ -355,8 +358,9 @@ $.extend(FuncUnit,{
 	// All browsers except Opera close the app window on a reload.  This is to fix the case the URL to be opened 
 	// has a hash.  In this case, window.open doesn't cause a reload if you reuse an existing popup, so we need to close.
 	$(window).unload(function(){
+		FuncUnit.win.close();
 		if(FuncUnit.win && FuncUnit.win !== window.top) {
-			FuncUnit.win.close();
+			// FuncUnit.win.close();
 		}
 	});
 

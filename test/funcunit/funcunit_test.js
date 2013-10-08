@@ -1,7 +1,7 @@
 module("funcunit - jQuery API",{
 	setup: function() {
 		var self = this;
-		F.open("//test/myapp.html", function(){
+		F.open("test/myapp.html", function(){
 			self.pageIsLoaded = true;
 		})
 	}
@@ -87,13 +87,7 @@ test("Trigger", function(){
 	F("#trigger p").text("I was triggered");
 	F("#trigger p").text(/^I\s\w+/, "regex works");
 })
-test("Confirm", function(){
-	F("#confirm").click();
-	F.confirm(true);
-	F("#confirm p").text("I was confirmed");
-	F("#confirm").click();
-	F.confirm(false);
-})
+
 test("Accessing the window", function(){
 	ok(F(F.win).width()> 20, "I can get the window's width")
 })
@@ -143,8 +137,8 @@ test("invisible", function(){
 	F(".hidden").invisible("Invisible works");
 })
 
-test("offset", function(){
-	F("#drag").offset(function(offset){
-		return offset.left < 50;
-	})
-})
+// test("offset", function(){
+// 	F("#drag").offset(function(offset){
+// 		return offset.left < 50;
+// 	})
+// })

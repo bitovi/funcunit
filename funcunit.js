@@ -1,5 +1,5 @@
 //what we need from javascriptmvc or other places
-steal('funcunit/syn',
+steal('syn',
 	'./browser/core.js', 
 	'./browser/adapters/adapters.js',
 	'./browser/open.js', 

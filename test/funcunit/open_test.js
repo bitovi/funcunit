@@ -22,11 +22,11 @@ test("Back to back opens", function(){
 
 
 test("Back to back opens with hash", function(){
-	F.open("//test/myapp.html?bar#foo");
+	F.open("test/myapp.html?bar#foo");
 	F("#changelink").click();
-	F("#changelink").text("Changed","href javascript run");
+	F("#changelink").text("Changed", "href javascript run");
 	
-	F.open("//test/myapp.html?bar#foo2");
+	F.open("test/myapp.html?bar#foo2");
 	F("#changelink").text("Change", "reload with hash works");
 })
 

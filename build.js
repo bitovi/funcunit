@@ -10,16 +10,20 @@ pluginify('funcunit.js', {
 		map: {
 			'*': {
 				'jquery/jquery.js' : 'lib/jquery/jquery.js',
-				'funcunit/': ''
+				'funcunit/': '',
+				'syn/syn.js': 'lib/syn/dist/syn.js'
 			}
 		},
 		shim: {
 			'jquery': {
 				'exports': 'jQuery'
+			},
+			'syn': {
+				'exports': 'Syn'
 			}
 		}
 	},
-	shim: { 'jquery/jquery.js': 'jQuery' }
+	shim: { 'jquery/jquery.js': 'jQuery', 'syn/syn.js': 'Syn' }
 }, function(error, content) {
 	fs.exists('build', function(exists) {
 		if(!exists) {

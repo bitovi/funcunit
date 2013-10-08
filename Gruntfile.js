@@ -22,10 +22,8 @@ module.exports = function (grunt) {
 
 			dist: {
 				files: [{
-					expand: true,
-					cwd: 'build/',
-					src: ['*'],
-					dest: 'dist/'
+					src: ['lib/syn/dist/syn.js', 'build/funcunit.js'],
+					dest: 'dist/funcunit.js'
 				}]
 			}
 		},

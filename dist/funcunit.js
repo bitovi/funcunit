@@ -2,13 +2,23 @@
  * FuncUnit - 2.0.2
  * http://funcunit.com
  * Copyright (c) 2013 Bitovi
- * Tue, 01 Oct 2013 18:16:09 GMT
+ * Tue, 08 Oct 2013 00:55:14 GMT
+ * Licensed MIT */
+
+/*
+ * Syn - 3.3.1
+ * 
+ * Copyright (c) 2013 Bitovi
+ * Tue, 08 Oct 2013 00:20:41 GMT
  * Licensed MIT */
 
 !function(window) {
 
-// ## syn/synthetic.js
-var __m3 = (function(){
+// ## synthetic.js
+var __m2 = (function(){
+	//allow for configuration of Syn
+	var opts = window.Syn ? window.Syn : {};
+
 	var extend = function( d, s ) {
 		var p;
 		for (p in s) {
@@ -158,6 +168,8 @@ var __m3 = (function(){
 		Syn = function( type, options, element, callback ) {
 			return (new Syn.init(type, options, element, callback));
 		};
+
+		Syn.config = opts;
 
 	bind = function( el, ev, f ) {
 		return el.addEventListener ? el.addEventListener(ev, f, false) : el.attachEvent("on" + ev, f);
@@ -841,8 +853,8 @@ var __m3 = (function(){
 	return Syn;
 })();
 
-// ## syn/mouse.js
-var __m4 = (function(Syn) {
+// ## mouse.js
+var __m3 = (function(Syn) {
 //handles mosue events
 
 	var h = Syn.helpers,
@@ -1127,10 +1139,10 @@ var __m4 = (function(Syn) {
 		Syn.support.ready++;
 	})();
 	return Syn;
-})(__m3);
+})(__m2);
 
-// ## syn/browsers.js
-var __m5 = (function(Syn) {
+// ## browsers.js
+var __m4 = (function(Syn) {
 	Syn.key.browsers = {
 		webkit : {
 			'prevent':
@@ -1280,10 +1292,10 @@ var __m5 = (function(Syn) {
 		return Syn.mouse.browsers.gecko;
 	})();
 	return Syn;
-})(__m3, __m4);
+})(__m2, __m3);
 
-// ## syn/key.js
-var __m6 = (function(Syn) {
+// ## key.js
+var __m5 = (function(Syn) {
 	var h = Syn.helpers,
 
 		// gets the selection of an input or textarea
@@ -2136,88 +2148,92 @@ var __m6 = (function(Syn) {
 		}
 	});
 
+	if(!Syn.config.support) {
+		//do support code
+		!function() {
+			if (!document.body ) {
+				setTimeout(arguments.callee, 1)
+				return;
+			}
 
-	//do support code
-	(function() {
-		if (!document.body ) {
-			setTimeout(arguments.callee, 1)
-			return;
-		}
+			var div = document.createElement("div"),
+				checkbox, submit, form, input, submitted = false,
+				anchor, textarea, inputter;
 
-		var div = document.createElement("div"),
-			checkbox, submit, form, input, submitted = false,
-			anchor, textarea, inputter;
+			div.innerHTML = "<form id='outer'>" + 
+							"<input name='checkbox' type='checkbox'/>" + 
+							"<input name='radio' type='radio' />" + 
+							"<input type='submit' name='submitter'/>" + 
+							"<input type='input' name='inputter'/>" + 
+							"<input name='one'>" + 
+							"<input name='two'/>" + 
+							"<a href='#abc'></a>" + 
+							"<textarea>1\n2</textarea>" +
+							"</form>";
 
-		div.innerHTML = "<form id='outer'>" + 
-						"<input name='checkbox' type='checkbox'/>" + 
-						"<input name='radio' type='radio' />" + 
-						"<input type='submit' name='submitter'/>" + 
-						"<input type='input' name='inputter'/>" + 
-						"<input name='one'>" + 
-						"<input name='two'/>" + 
-						"<a href='#abc'></a>" + 
-						"<textarea>1\n2</textarea>" +
-						"</form>";
+			document.documentElement.appendChild(div);
+			form = div.firstChild;
+			checkbox = form.childNodes[0];
+			submit = form.childNodes[2];
+			anchor = form.getElementsByTagName("a")[0];
+			textarea = form.getElementsByTagName("textarea")[0];
+			inputter = form.childNodes[3];
 
-		document.documentElement.appendChild(div);
-		form = div.firstChild;
-		checkbox = form.childNodes[0];
-		submit = form.childNodes[2];
-		anchor = form.getElementsByTagName("a")[0];
-		textarea = form.getElementsByTagName("textarea")[0];
-		inputter = form.childNodes[3];
-
-		form.onsubmit = function( ev ) {
-			if ( ev.preventDefault ) ev.preventDefault();
-			Syn.support.keypressSubmits = true;
-			ev.returnValue = false;
-			return false;
-		};
-		// Firefox 4 won't write key events if the element isn't focused
-		inputter.focus();
-		Syn.trigger("keypress", "\r", inputter);
-
-
-		Syn.trigger("keypress", "a", inputter);
-		Syn.support.keyCharacters = inputter.value == "a";
+			form.onsubmit = function( ev ) {
+				if ( ev.preventDefault ) ev.preventDefault();
+				Syn.support.keypressSubmits = true;
+				ev.returnValue = false;
+				return false;
+			};
+			// Firefox 4 won't write key events if the element isn't focused
+			inputter.focus();
+			Syn.trigger("keypress", "\r", inputter);
 
 
-		inputter.value = "a";
-		Syn.trigger("keypress", "\b", inputter);
-		Syn.support.backspaceWorks = inputter.value == "";
+			Syn.trigger("keypress", "a", inputter);
+			Syn.support.keyCharacters = inputter.value == "a";
+
+
+			inputter.value = "a";
+			Syn.trigger("keypress", "\b", inputter);
+			Syn.support.backspaceWorks = inputter.value == "";
 
 
 
-		inputter.onchange = function() {
-			Syn.support.focusChanges = true;
-		}
-		inputter.focus();
-		Syn.trigger("keypress", "a", inputter);
-		form.childNodes[5].focus(); // this will throw a change event
-		Syn.trigger("keypress", "b", inputter);
-		Syn.support.keysOnNotFocused = inputter.value == "ab";
+			inputter.onchange = function() {
+				Syn.support.focusChanges = true;
+			}
+			inputter.focus();
+			Syn.trigger("keypress", "a", inputter);
+			form.childNodes[5].focus(); // this will throw a change event
+			Syn.trigger("keypress", "b", inputter);
+			Syn.support.keysOnNotFocused = inputter.value == "ab";
 
-		//test keypress \r on anchor submits
-		Syn.bind(anchor, "click", function( ev ) {
-			if ( ev.preventDefault ) ev.preventDefault();
-			Syn.support.keypressOnAnchorClicks = true;
-			ev.returnValue = false;
-			return false;
-		})
-		Syn.trigger("keypress", "\r", anchor);
+			//test keypress \r on anchor submits
+			Syn.bind(anchor, "click", function( ev ) {
+				if ( ev.preventDefault ) ev.preventDefault();
+				Syn.support.keypressOnAnchorClicks = true;
+				ev.returnValue = false;
+				return false;
+			})
+			Syn.trigger("keypress", "\r", anchor);
 
-		Syn.support.textareaCarriage = textarea.value.length == 4;
-		
-		document.documentElement.removeChild(div);
+			Syn.support.textareaCarriage = textarea.value.length == 4;
+			
+			document.documentElement.removeChild(div);
 
-		Syn.support.ready++;
-	})();
+			Syn.support.ready++;
+		}();
+	}
+	else {
+		Syn.helpers.extend(Syn.support, Syn.config.support);
+	}
+
 	return Syn;
-	
-})(__m3, __m5);
+})(__m2, __m4);
 
-// ## syn/drag/drag.js
-var __m7 = (function(Syn) {
+// ## drag/drag.js
+var __m6 = (function(Syn) {
 	
 	// check if elementFromPageExists
 	(function() {
@@ -2538,15 +2554,20 @@ var __m7 = (function(Syn) {
 			}
 		})
 	return Syn;
-})(__m3);
+})(__m2);
 
-// ## syn/syn.js
-var __m2 = (function(Syn){
+// ## syn.js
+var __m1 = (function(Syn){
+	window.Syn = Syn;
+
 	return Syn;
-})(__m3, __m4, __m5, __m6, __m7);
+})(__m2, __m3, __m4, __m5, __m6);
+
+}(window);
+!function(window) {
 
 // ## browser/init.js
-var __m10 = (function(jQuery) {
+var __m5 = (function(jQuery) {
 	var FuncUnit = window.FuncUnit || {};
 
 	jQuery.sub = function() {
@@ -2575,7 +2596,7 @@ var __m10 = (function(jQuery) {
 })(jQuery);
 
 // ## browser/core.js
-var __m8 = (function(jQuery, oldFuncUnit) {
+var __m3 = (function(jQuery, oldFuncUnit) {
 	var FuncUnit = oldFuncUnit.jQuery.sub();
 	var origFuncUnit = FuncUnit;
 	// override the subbed init method
@@ -2657,10 +2678,10 @@ var __m8 = (function(jQuery, oldFuncUnit) {
 	oldFuncUnit.jQuery.extend(FuncUnit, oldFuncUnit, origFuncUnit)
 	FuncUnit.prototype = origFuncUnit.prototype;
 	return FuncUnit;
-})(jQuery, __m10);
+})(jQuery, __m5);
 
 // ## browser/adapters/jasmine.js
-var __m12 = (function(FuncUnit) {
+var __m7 = (function(FuncUnit) {
 	if(window.jasmine) {
 		var paused = false;
 		FuncUnit.unit = {
@@ -2682,10 +2703,10 @@ var __m12 = (function(FuncUnit) {
 		}
 		return FuncUnit;
 	}
-})(__m8);
+})(__m3);
 
 // ## browser/adapters/qunit.js
-var __m13 = (function(FuncUnit) {
+var __m8 = (function(FuncUnit) {
 	if(window.QUnit) {
 		FuncUnit.unit = {
 		pauseTest:function(){
@@ -2702,13 +2723,13 @@ var __m13 = (function(FuncUnit) {
 		}
 	}
 	}
-})(__m8);
+})(__m3);
 
 // ## browser/adapters/adapters.js
-var __m11 = (function() {})(__m12, __m13);
+var __m6 = (function() {})(__m7, __m8);
 
 // ## browser/open.js
-var __m14 = (function($, FuncUnit) {
+var __m9 = (function($, FuncUnit) {
 	if(FuncUnit.frameMode){
 		var ifrm = document.createElement("iframe");
 		ifrm.id = 'funcunit_app';
@@ -2768,6 +2789,7 @@ $.extend(FuncUnit,{
 		}
 		FuncUnit.add({
 			method: function(success, error){ //function that actually does stuff, if this doesn't call success by timeout, error will be called, or can call error itself
+				console.log('opening...', path)
 				if(typeof path === "string"){
 					var fullPath = FuncUnit.getAbsolutePath(path);
 					FuncUnit._open(fullPath, error);
@@ -2785,12 +2807,13 @@ $.extend(FuncUnit,{
 		});
 	},
 	_open: function(url){
+		console.log('open', url)
 		FuncUnit.win = appWin;
 		hasSteal = false;
 		// this will determine if this is supposed to open within a frame
 		FuncUnit.frame =  $('#funcunit_app').length? $('#funcunit_app')[0]: null;
 	
-		
+		console.log(newPage)
 		// if the first time ..
 		if (newPage) {
 			if(FuncUnit.frame){
@@ -2804,7 +2827,8 @@ $.extend(FuncUnit,{
 				// This is mainly for opera. Other browsers will hit the unload event and close the popup.
 				// This block breaks in IE (which never reaches it) because after closing a window, it throws access 
 				// denied any time you try to access it, even after reopening.
-				if(FuncUnit.win.___FUNCUNIT_OPENED){
+				console.log(FuncUnit.win.___FUNCUNIT_OPENED)
+				if(FuncUnit.win.___FUNCUNIT_OPENED) {
 					FuncUnit.win.close();
 					FuncUnit.win = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
 				}
@@ -3065,16 +3089,17 @@ $.extend(FuncUnit,{
 	// All browsers except Opera close the app window on a reload.  This is to fix the case the URL to be opened 
 	// has a hash.  In this case, window.open doesn't cause a reload if you reuse an existing popup, so we need to close.
 	$(window).unload(function(){
+		FuncUnit.win.close();
 		if(FuncUnit.win && FuncUnit.win !== window.top) {
-			FuncUnit.win.close();
+			// FuncUnit.win.close();
 		}
 	});
 
 	return FuncUnit;
-})(jQuery, __m8);
+})(jQuery, __m3);
 
 // ## browser/actions.js
-var __m15 = (function($, FuncUnit, Syn) {
+var __m10 = (function($, FuncUnit, Syn) {
 	window.Syn = Syn;
 	/**
 	 * @add FuncUnit
@@ -3390,10 +3415,10 @@ var __m15 = (function($, FuncUnit, Syn) {
 		}
 	})
 	return FuncUnit;
-})(jQuery, __m8, __m2);
+})(jQuery, __m3, Syn);
 
 // ## browser/getters.js
-var __m16 = (function($, FuncUnit) {
+var __m11 = (function($, FuncUnit) {
 	
 	/**
 	 * @add FuncUnit
@@ -3947,10 +3972,10 @@ var __m16 = (function($, FuncUnit) {
 	}
 
 	return FuncUnit;
-})(jQuery, __m8);
+})(jQuery, __m3);
 
 // ## browser/traversers.js
-var __m17 = (function($, FuncUnit){
+var __m12 = (function($, FuncUnit){
 
 /**
  * @add FuncUnit
@@ -4078,10 +4103,10 @@ for(var i  =0; i < traversers.length; i++){
 }
 
 return FuncUnit;
-})(jQuery, __m8);
+})(jQuery, __m3);
 
 // ## browser/queue.js
-var __m18 = (function(FuncUnit) {
+var __m13 = (function(FuncUnit) {
 	/**
 	 * @add FuncUnit
 	 */
@@ -4269,10 +4294,10 @@ var __m18 = (function(FuncUnit) {
 	}
 
 	return FuncUnit;
-})(__m8);
+})(__m3);
 
 // ## browser/waits.js
-var __m19 = (function($, FuncUnit) {
+var __m14 = (function($, FuncUnit) {
 /**
  * @add FuncUnit
  */
@@ -4571,13 +4596,13 @@ $.extend(FuncUnit.prototype, {
 	}
 })
 return FuncUnit;
-})(jQuery, __m8);
+})(jQuery, __m3);
 
 // ## funcunit.js
 var __m1 = (function(Syn, FuncUnit) {
 	window.FuncUnit = window.S = window.F = FuncUnit;
 	
 	return FuncUnit;
-})(__m2, __m8, __m11, __m14, __m15, __m16, __m17, __m18, __m19);
+})(Syn, __m3, __m6, __m9, __m10, __m11, __m12, __m13, __m14);
 
 }(window);
