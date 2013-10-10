@@ -1,0 +1,7 @@
+coverage/coverage.json
+.tmp*
+*.log
+docs/*
+dist
+synthetic/dist
+node_modules

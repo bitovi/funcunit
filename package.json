@@ -1,0 +1,9 @@
+{
+	"name": "FuncUnit",
+	"version": "3.2.3",
+
+	"dependencies": {
+		"node-phantom": "0.1.2",
+		"promised-io": "0.3.3"
+	}
+}
