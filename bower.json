@@ -9,8 +9,8 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:bitovi/funcunit.js.git",
-		"github": "https://github.com/bitovi/funcunit.js"
+		"url": "git@github.com:bitovi/funcunit.git",
+		"github": "https://github.com/bitovi/funcunit"
 	},
 	"licenses": [
 		{
