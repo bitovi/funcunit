@@ -1,3 +1,18 @@
+module('funcunit - selectors');
+
+test('cached selector queries DOM', function() {
+	var fixture = $('#qunit-fixture');
+	fixture.append($('<span>'));
+
+	var fdiv = F('#qunit-fixture span'); //span exists on page
+
+	F('#qunit-fixture').click(function() { //app removes span from page on click
+		$('#qunit-fixture span').remove();
+	});
+
+	fdiv.missing('div should not exist');
+});
+
 module("funcunit - jQuery API",{
 	setup: function() {
 		var self = this;
