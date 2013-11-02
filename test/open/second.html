@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 	<body>
-		<script type='text/javascript' src='../../../steal/steal.js'></script>
-		<script type='text/javascript'>
-			steal('jquery', function() {
-				$("body").append("<a href='javascript://' class='show-confirm'>Show confirm</a><div class='results'></div>")
+		<script src="../../steal/steal.js"></script>
+		<script type="text/javascript">
+			steal('jquery', function(){
+				$("body").append("<a href='javascript://' class='show-confirm'>Show confirm</a><div class='results'></div>");
 				$('.show-confirm').click(function() {
 					if(window.confirm('confirm?')) {
 						$('.results').text('confirmed!');
 					}
-				})
+				});
 			});
 		</script>
 	</body>

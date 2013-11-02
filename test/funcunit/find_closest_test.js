@@ -1,6 +1,6 @@
 module("funcunit find closest",{
 	setup: function() {
-		F.open("//test/findclosest.html")
+		F.open("test/findclosest.html")
 	}
 });
 

@@ -1,6 +1,5 @@
 //load a lot of stuff ...
-steal('jquery')
-	.then('funcunit/test/dragdrop.js', function(){
+steal('jquery', 'test/jquerypp.js', function(){
 	
 	var hoveredOnce = false;
 	$(".over").bind('mouseover',function(){

@@ -14,14 +14,14 @@ test("Type and slow Click", function(){
 test("ctrl test", function(){
 	F.open("//test/myapp.html");
 	F("#typehere").type("abc[ctrl]ac[ctrl-up]", function(){
-		equals(F("#typehere").val(), "abc");
+		equal(F("#typehere").val(), "abc");
 	})
 })
 
 test("clipboard", function(){
 	F.open("//test/myapp.html");
 	F("#typehere").type("abc[ctrl]ac[ctrl-up][right][ctrl]v[ctrl-up]", function(){
-		equals(F("#typehere").val(), "abcabc");
+		equal(F("#typehere").val(), "abcabc");
 	})
 })
 
@@ -51,12 +51,11 @@ test("Move To", function(){
 })
 
 test("Drag To", function(){
-	F.open("//test/drag/drag.html");
-	F("#drag").drag("#drop")
+	F.open("test/drag/drag.html");
+	F("#drag").drag("#drop");
 	F("#clicker").click();
-	F(".status").text("dragged", 'drag worked correctly')
-
-})
+	F(".status").text("dragged", 'drag worked correctly');
+});
 
 test("RightClick", function(){
 	if(/Opera/.test(navigator.userAgent)){

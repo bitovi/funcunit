@@ -1,7 +1,6 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!doctype html>
 <html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 		<title>Untitled Document</title>
 		<style>
 			#drag, #drop {
@@ -49,9 +48,7 @@
 		<div id="testData"></div>
 		<script type='text/javascript' src='../steal/steal.js'></script>
 		<script type='text/javascript'>
-		steal('jquery')
-			.then('funcunit/test/jquery.event.drag.js')
-			.then( 'funcunit/test/jquery.event.drop.js', function(){
+		steal('jquery', function(){
 				$('#testData').data('idval', 1000);
 				
 				$("#rightclick").bind("contextmenu", function(){

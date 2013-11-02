@@ -5,5 +5,4 @@ steal('funcunit')
 	.then('./find_closest_test.js')
 	.then('./open_test.js')
 	.then('./syn_test.js')
-	.then('./protodrag_test.js')
 	.then('./confirm_test.js');

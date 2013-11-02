@@ -11,18 +11,18 @@
 		"github": "https://github.com/bitovi/funcunit"
 	},
 	"devDependencies": {
-		"grunt": "0.4.0",
+		"grunt": "0.4.x",
 		"grunt-contrib-connect": "0.3.0",
 		"grunt-contrib-concat": "0.3.0",
 		"grunt-exec": "0.4.2",
 		"bitovi-tools": "https://github.com/bitovi/bitovi-tools/tarball/master",
 		"steal": "https://github.com/bitovi/steal-build/tarball/master",
-		"testee": "0.0.5",
+		"testee": "0.0.8",
 		"bower": "~1.2.4"
 	},
 	"scripts": {
 		"test": "grunt test",
-		"postinstall": "bower install"
+		"postinstall": "node_modules/bower/bin/bower install"
 	},
 	"licenses": [
 		{
@@ -30,7 +30,5 @@
 			"url": "http://opensource.org/licenses/mit-license.php"
 		}
 	],
-	"dependencies": {
-		"grunt-cli": "~0.1.7"
-	}
+	"dependencies": {}
 }
