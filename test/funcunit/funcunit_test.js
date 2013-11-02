@@ -136,3 +136,9 @@ test("branch", function(){
 test("invisible", function(){
 	F(".hidden").invisible("Invisible works");
 })
+
+test("offset", function(){
+	F("#drag").offset(function(offset){
+		return offset.left < 50;
+	})
+})
