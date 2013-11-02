@@ -29,3 +29,12 @@ test('Testing win.confirm in multiple pages', function() {
 	F.confirm(true);
 	F('.results').text('confirmed!', "Confirm worked!");
 })
+
+test("Back to back opens with hash", function(){
+	F.open("test/myapp.html?bar#foo");
+	F("#changelink").click();
+	F("#changelink").text("Changed", "href javascript run");
+	
+	F.open("test/myapp.html?bar#foo2");
+	F("#changelink").text("Change", "reload with hash works");
+})
