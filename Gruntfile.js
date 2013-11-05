@@ -28,9 +28,21 @@ module.exports = function (grunt) {
 			}
 		},
 		testee: {
-			src: {
+			core: {
 				options: {
 					urls: ['http://localhost:8000/funcunit.html'],
+					browsers: ['phantom']
+				}
+			},
+			jasmine: {
+				options: {
+					urls: ['http://localhost:8000/browser/adapters/test/jasmine.html'],
+					browsers: ['phantom']
+				}
+			},
+			qunit: {
+				options: {
+					urls: ['http://localhost:8000/browser/adapters/test/qunit.html'],
 					browsers: ['phantom']
 				}
 			}
