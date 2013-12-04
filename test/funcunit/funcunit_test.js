@@ -135,4 +135,12 @@ test("branch", function(){
 
 test("invisible", function(){
 	F(".hidden").invisible("Invisible works");
-})
+});
+
+test('F().size() API', function() {
+	expect(2);
+
+	F('#testData').size(1, function() {
+		ok(true, 'success cb');
+	}, 'test message')
+});

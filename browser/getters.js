@@ -442,8 +442,8 @@ steal('jquery', './core.js', function($, FuncUnit) {
 					tester = tester.condition;
 				}
 				if(typeof timeout == 'function'){
-					success = timeout;
 					message = success;
+					success = timeout;
 					timeout = undefined;
 				}
 				if(typeof timeout == 'string'){
