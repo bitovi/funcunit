@@ -4,6 +4,8 @@ steal('../core.js', function(FuncUnit) {
 	};
 
 	if(window.mocha) {
+		FuncUnit.timeout = 1900;
+
 		FuncUnit.unit = {
 			pauseTest: function() {},
 			resumeTest: function() {},
@@ -16,6 +18,6 @@ steal('../core.js', function(FuncUnit) {
 				//should this be === for tighter asserts?
 				return expected == actual;
 			}
-		}
+		};
 	}
 });
