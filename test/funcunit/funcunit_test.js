@@ -144,3 +144,19 @@ test('F().size() API', function() {
 		ok(true, 'success cb');
 	}, 'test message')
 });
+
+test('F().wait() API', function() {
+	expect(3);
+
+	F('#testData').wait(100, 200, function() {
+		ok(true);
+	}, 'all params');
+
+	F('#testData').wait(100, function() {
+		ok(true);
+	}, 'skip checker params');
+
+	F('#testData').wait(100, function() {
+		ok(true);
+	});
+});
