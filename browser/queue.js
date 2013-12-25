@@ -75,9 +75,11 @@ steal('./core.js', function(FuncUnit) {
 	/**
      * @parent utilities
      * @function FuncUnit.add F.add()
-     * @signature `add(handler)`
+     * @signature `add(handler[, error][, context])`
 	 * Adds a function to the queue.
-	 * @param {Object} handler An object that contains the method to run along with other properties:
+	 * @param {Object|Function} handler An object or function to define a step in the queue
+	 * <h5>Handler as an Object</h5>
+	 * An object that contains the method to run along with other properties:
 
  - method : the method to be called.  It will be provided a success and error function to call
  - success : an optional callback to be called after the function is done
@@ -86,8 +88,32 @@ steal('./core.js', function(FuncUnit) {
  - bind : an object that will be 'this' of the success
  - type: the type of method (optional)
 
+	 * <h5>Handler as a Function</h5>
+	 * Similar to an Object, however the handler passed acts as the success function
+	 * @param {String} error An optional error message if handler is passed as a function
+	 * @param {Object} context An optional object to specify "this" inside handler. Enabled if handler is passed as a function
+
 	 */
-	add = function(handler){
+	add = function(handler, error, context) {
+		if(handler instanceof Function) {
+			if(typeof error === 'object') {
+				context = error;
+				delete error;
+			}
+
+			error = (error && error.toString()) || 'Custom method has failed.';
+			var cb = handler;
+
+			handler = {
+				method: function(success, error) {
+					success();
+				},
+				success: cb,
+				error: error,
+				bind: context
+			};
+		}
+
 		//if we are in a callback, add to the current position
 		if (FuncUnit._incallback) {
 			FuncUnit._queue.splice(currentPosition, 0, handler);
@@ -99,10 +125,10 @@ steal('./core.js', function(FuncUnit) {
 		}
 		//if our queue has just started, stop qunit
 		//call done to call the next command
-        if (FuncUnit._queue.length == 1 && ! FuncUnit._incallback) {
+		if (FuncUnit._queue.length == 1 && ! FuncUnit._incallback) {
 			FuncUnit.unit.pauseTest();
-    		setTimeout(FuncUnit._done, 13)
-        }
+			setTimeout(FuncUnit._done, 13)
+		}
 	}
 	var currentEl;
 	/**
