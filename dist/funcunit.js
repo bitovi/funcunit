@@ -1,20 +1,20 @@
 /*
  * FuncUnit - 2.0.4
  * http://funcunit.com
- * Copyright (c) 2013 Bitovi
- * Tue, 19 Nov 2013 20:58:56 GMT
+ * Copyright (c) 2014 Bitovi
+ * Wed, 29 Jan 2014 18:21:35 GMT
  * Licensed MIT */
 
 /*
- * Syn - 3.3.1
+ * Syn - 0.0.2
  * 
- * Copyright (c) 2013 Bitovi
- * Tue, 08 Oct 2013 00:20:41 GMT
+ * Copyright (c) 2014 Bitovi
+ * Fri, 24 Jan 2014 00:49:17 GMT
  * Licensed MIT */
 
 !function(window) {
 
-// ## synthetic.js
+// ## src/synthetic.js
 var __m2 = (function(){
 	//allow for configuration of Syn
 	var opts = window.Syn ? window.Syn : {};
@@ -853,7 +853,7 @@ var __m2 = (function(){
 	return Syn;
 })();
 
-// ## mouse.js
+// ## src/mouse.js
 var __m3 = (function(Syn) {
 //handles mosue events
 
@@ -1068,6 +1068,7 @@ var __m3 = (function(Syn) {
 		window.__synthTest = function() {
 			Syn.support.linkHrefJS = true;
 		}
+
 		var div = document.createElement("div"),
 			checkbox, submit, form, input, select;
 
@@ -1077,6 +1078,9 @@ var __m3 = (function(Syn) {
 		checkbox = form.childNodes[0];
 		submit = form.childNodes[2];
 		select = form.getElementsByTagName('select')[0]
+
+		//trigger click for linkHrefJS support, childNodes[6] === anchor
+		Syn.trigger('click', {}, form.childNodes[6]);
 
 		checkbox.checked = false;
 		checkbox.onchange = function() {
@@ -1141,7 +1145,7 @@ var __m3 = (function(Syn) {
 	return Syn;
 })(__m2);
 
-// ## browsers.js
+// ## src/browsers.js
 var __m4 = (function(Syn) {
 	Syn.key.browsers = {
 		webkit : {
@@ -1294,7 +1298,63 @@ var __m4 = (function(Syn) {
 	return Syn;
 })(__m2, __m3);
 
-// ## key.js
+// ## src/typeable.js
+var __m6 = (function(Syn){
+	// Holds functions that test for typeability
+	var typeables = [];
+
+	/*
+	 * @function typeable
+	 * Registers a function that is used to determine if an
+	 * element can be typed into. The user can define as many
+	 * test functions as needed. By default there are 2 typeable
+	 * functions, one for inputs and textareas, and another
+	 * for contenteditable elements.
+	 *
+	 * @param {Function} fn Function to register.
+	 */
+	Syn.typeable = function(fn){
+		if(typeables.indexOf(fn) == -1) {
+			typeables.push(fn);
+		}
+	};
+
+	/*
+	 * @function test
+	 * Tests whether an element can be typed into using the test
+	 * functions registered by [Syn.typeable typeable]. If any of the
+	 * test functions returns true, `test` will return true and allow
+	 * the element to be typed into.
+	 *
+	 * @param {HTMLElement} el the element to test.
+	 * @return {Boolean} true if the element can be typed into.
+	 */
+	Syn.typeable.test = function(el){
+		for(var i = 0, len = typeables.length; i < len; i++) {
+			if(typeables[i](el)) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	var type = Syn.typeable;
+
+	// Inputs and textareas
+	var typeableExp = /input|textarea/i;
+	type(function(el){
+		return typeableExp.test(el.nodeName);
+	});
+
+	// Content editable
+	type(function(el){
+		return ["", "true"].indexOf(el.getAttribute("contenteditable")) != -1;
+	});
+
+	return Syn;
+})(__m2);
+
+// ## src/key.js
 var __m5 = (function(Syn) {
 	var h = Syn.helpers,
 
@@ -1356,9 +1416,11 @@ var __m5 = (function(Syn) {
 						}
 					}
 				} catch (e) {
+					var prop = formElExp.test(el.nodeName) ? "value" : "textContent";
+
 					return {
-						start: el.value.length,
-						end: el.value.length
+						start: el[prop].length,
+						end: el[prop].length
 					};
 				}
 			}
@@ -1375,9 +1437,26 @@ var __m5 = (function(Syn) {
 				Syn.isFocusable(els[i]) && els[i] != document.documentElement && res.push(els[i])
 			}
 			return res;
-
-
+		},
+		formElExp = /input|textarea/i,
+		// Get the text from an element.
+		getText = function(el){
+			if(formElExp.test(el.nodeName)) {
+				return el.value;
+			}
+			return el.textContent || el.innerText;
+		},
+		// Set the text of an element.
+		setText = function(el, value){
+			if(formElExp.test(el.nodeName)){
+				el.value = value;
+			} else if(el.textContent) {
+				el.textContent = value;
+			} else {
+				el.innerText = value;
+			}
 		};
+    
 	/**
 	 * @add Syn static
 	 */
@@ -1420,6 +1499,12 @@ var __m5 = (function(Syn) {
 		 * escape    - escape button
 		 * num-lock  - allows numbers on keypad
 		 * print     - screen capture
+		 * subtract  - subtract (keypad) -
+		 * dash      - dash -
+		 * divide    - divide (keypad) /
+		 * forward-slash - forward slash /
+		 * decimal   - decimal (keypad) .
+		 * period    - period .
 		 * @codeend
 		 */
 		keycodes: {
@@ -1508,15 +1593,18 @@ var __m5 = (function(Syn) {
 			'num9': 105,
 			'*': 106,
 			'+': 107,
-			'-': 109,
-			'.': 110,
+			'subtract': 109,
+			'decimal': 110,
 			//normal-characters, others
-			'/': 111,
+			'divide': 111,
 			';': 186,
 			'=': 187,
 			',': 188,
+			'dash': 189,
 			'-': 189,
+			'period': 190,
 			'.': 190,
+			'forward-slash': 191,
 			'/': 191,
 			'`': 192,
 			'[': 219,
@@ -1544,9 +1632,6 @@ var __m5 = (function(Syn) {
 			'f12': 123
 		},
 
-		// what we can type in
-		typeable: /input|textarea/i,
-
 		// selects text on an element
 		selectText: function( el, start, end ) {
 			if ( el.setSelectionRange ) {
@@ -1569,7 +1654,7 @@ var __m5 = (function(Syn) {
 		},
 		getText: function( el ) {
 			//first check if the el has anything selected ..
-			if ( Syn.typeable.test(el.nodeName) ) {
+			if ( Syn.typeable.test(el) ) {
 				var sel = getSelection(el);
 				return el.value.substring(sel.start, sel.end)
 			}
@@ -1683,13 +1768,13 @@ var __m5 = (function(Syn) {
 					key = key.match(/\d+/)[0]
 				}
 
-				if ( force || (!Syn.support.keyCharacters && Syn.typeable.test(this.nodeName)) ) {
-					var current = this.value,
+				if ( force || (!Syn.support.keyCharacters && Syn.typeable.test(this)) ) {
+					var current = getText(this),
 						before = current.substr(0, sel.start),
 						after = current.substr(sel.end),
 						character = key;
 
-					this.value = before + character + after;
+					setText(this, before + character + after);
 					//handle IE inserting \r\n
 					var charLength = character == "\n" && Syn.support.textareaCarriage ? 2 : character.length;
 					Syn.selectText(this, before.length + charLength)
@@ -1711,7 +1796,7 @@ var __m5 = (function(Syn) {
 			},
 			'a': function( options, scope, key, force, sel ) {
 				if ( Syn.key.ctrlKey ) {
-					Syn.selectText(this, 0, this.value.length)
+					Syn.selectText(this, 0, getText(this).length)
 				} else {
 					Syn.key.defaults.character.apply(this, arguments);
 				}
@@ -1753,35 +1838,34 @@ var __m5 = (function(Syn) {
 			},
 			'\b': function( options, scope, key, force, sel ) {
 				//this assumes we are deleting from the end
-				if (!Syn.support.backspaceWorks && Syn.typeable.test(this.nodeName) ) {
-					var current = this.value,
+				if (!Syn.support.backspaceWorks && Syn.typeable.test(this) ) {
+					var current = getText(this),
 						before = current.substr(0, sel.start),
 						after = current.substr(sel.end);
 
 					if ( sel.start == sel.end && sel.start > 0 ) {
 						//remove a character
-						this.value = before.substring(0, before.length - 1) + after
-						Syn.selectText(this, sel.start - 1)
+						setText(this, before.substring(0, before.length - 1) + after);
+						Syn.selectText(this, sel.start - 1);
 					} else {
-						this.value = before + after;
-						Syn.selectText(this, sel.start)
+						setText(this, before + after);
+						Syn.selectText(this, sel.start);
 					}
 
 					//set back the selection
 				}
 			},
 			'delete': function( options, scope, key, force, sel ) {
-				if (!Syn.support.backspaceWorks && Syn.typeable.test(this.nodeName) ) {
-					var current = this.value,
+				if (!Syn.support.backspaceWorks && Syn.typeable.test(this) ) {
+					var current = getText(this),
 						before = current.substr(0, sel.start),
 						after = current.substr(sel.end);
-					if ( sel.start == sel.end && sel.start <= this.value.length - 1 ) {
-						this.value = before + after.substring(1)
+					if ( sel.start == sel.end && sel.start <= getText(this).length - 1 ) {
+						setText(this, before + after.substring(1));
 					} else {
-						this.value = before + after;
-
+						setText(this, before + after);
 					}
-					Syn.selectText(this, sel.start)
+					Syn.selectText(this, sel.start);
 				}
 			},
 			'\r': function( options, scope, key, force, sel ) {
@@ -1880,7 +1964,7 @@ var __m5 = (function(Syn) {
 				return current;
 			},
 			'left': function( options, scope, key, force, sel ) {
-				if ( Syn.typeable.test(this.nodeName) ) {
+				if ( Syn.typeable.test(this) ) {
 					if ( Syn.key.shiftKey ) {
 						Syn.selectText(this, sel.start == 0 ? 0 : sel.start - 1, sel.end)
 					} else {
@@ -1889,11 +1973,11 @@ var __m5 = (function(Syn) {
 				}
 			},
 			'right': function( options, scope, key, force, sel ) {
-				if ( Syn.typeable.test(this.nodeName) ) {
+				if ( Syn.typeable.test(this) ) {
 					if ( Syn.key.shiftKey ) {
-						Syn.selectText(this, sel.start, sel.end + 1 > this.value.length ? this.value.length : sel.end + 1)
+						Syn.selectText(this, sel.start, sel.end + 1 > getText(this).length ? getText(this).length : sel.end + 1)
 					} else {
-						Syn.selectText(this, sel.end + 1 > this.value.length ? this.value.length : sel.end + 1)
+						Syn.selectText(this, sel.end + 1 > getText(this).length ? getText(this).length : sel.end + 1)
 					}
 				}
 			},
@@ -1919,7 +2003,6 @@ var __m5 = (function(Syn) {
 			}
 		}
 	});
-
 
 	h.extend(Syn.create, {
 		keydown: {
@@ -2025,7 +2108,7 @@ var __m5 = (function(Syn) {
 		 * @codeend
 		 * For each character, a keydown, keypress, and keyup is triggered if
 		 * appropriate.
-		 * @param {String} options
+		 * @param {String|Number} options
 		 * @param {HTMLElement} [element]
 		 * @param {Function} [callback]
 		 * @return {HTMLElement} the element currently focused.
@@ -2040,7 +2123,7 @@ var __m5 = (function(Syn) {
 
 			// keep reference to current activeElement
 			var activeElement = h.getWindow(element).document.activeElement,			
-				caret = Syn.typeable.test(element.nodeName) && getSelection(element),
+				caret = Syn.typeable.test(element) && getSelection(element),
 				key = convert[options] || options,
 				// should we run default events
 				runDefaults = Syn.trigger('keydown', key, element),
@@ -2090,6 +2173,9 @@ var __m5 = (function(Syn) {
 
 				if ( defaultResult !== null ) {
 					setTimeout(function() {
+						if(Syn.support.oninput) {
+							Syn.trigger('input', Syn.key.options(key, 'input'), element);
+						}
 						Syn.trigger('keyup', Syn.key.options(key, 'keyup'), element)
 						callback(runDefaults, element)
 					}, 1)
@@ -2128,7 +2214,7 @@ var __m5 = (function(Syn) {
 		_type: function( options, element, callback ) {
 			//break it up into parts ...
 			//go through each type and run
-			var parts = options.match(/(\[[^\]]+\])|([^\[])/g),
+			var parts = (options+"").match(/(\[[^\]]+\])|([^\[])/g),
 				self = this,
 				runNextPart = function( runDefaults, el ) {
 					var part = parts.shift();
@@ -2158,7 +2244,7 @@ var __m5 = (function(Syn) {
 
 			var div = document.createElement("div"),
 				checkbox, submit, form, input, submitted = false,
-				anchor, textarea, inputter;
+				anchor, textarea, inputter, one;
 
 			div.innerHTML = "<form id='outer'>" + 
 							"<input name='checkbox' type='checkbox'/>" + 
@@ -2178,6 +2264,7 @@ var __m5 = (function(Syn) {
 			anchor = form.getElementsByTagName("a")[0];
 			textarea = form.getElementsByTagName("textarea")[0];
 			inputter = form.childNodes[3];
+			one = form.childNodes[4];
 
 			form.onsubmit = function( ev ) {
 				if ( ev.preventDefault ) ev.preventDefault();
@@ -2219,6 +2306,9 @@ var __m5 = (function(Syn) {
 			Syn.trigger("keypress", "\r", anchor);
 
 			Syn.support.textareaCarriage = textarea.value.length == 4;
+
+			// IE only, oninput event.
+			Syn.support.oninput = 'oninput' in one;
 			
 			document.documentElement.removeChild(div);
 
@@ -2230,10 +2320,10 @@ var __m5 = (function(Syn) {
 	}
 
 	return Syn;
-})(__m2, __m4);
+})(__m2, __m6, __m4);
 
-// ## drag/drag.js
-var __m6 = (function(Syn) {
+// ## src/drag/drag.js
+var __m7 = (function(Syn) {
 	
 	// check if elementFromPageExists
 	(function() {
@@ -2556,12 +2646,12 @@ var __m6 = (function(Syn) {
 	return Syn;
 })(__m2);
 
-// ## syn.js
-var __m1 = (function(Syn){
+// ## src/syn.js
+var __m1 = (function(Syn) {
 	window.Syn = Syn;
 
 	return Syn;
-})(__m2, __m3, __m4, __m5, __m6);
+})(__m2, __m3, __m4, __m5, __m7);
 
 }(window);
 !function(window) {
@@ -2725,11 +2815,36 @@ var __m8 = (function(FuncUnit) {
 	}
 })(__m3);
 
+// ## browser/adapters/mocha.js
+var __m9 = (function(FuncUnit) {
+	var ok = function(expr, msg) {
+		if(!expr) throw new Error(msg);
+	};
+
+	if(window.mocha) {
+		FuncUnit.timeout = 1900;
+
+		FuncUnit.unit = {
+			pauseTest: function() {},
+			resumeTest: function() {},
+
+			assertOK: function(assertion, message) {
+				ok(assertion, message)
+			},
+
+			equiv: function(expected, actual) {
+				//should this be === for tighter asserts?
+				return expected == actual;
+			}
+		};
+	}
+})(__m3);
+
 // ## browser/adapters/adapters.js
-var __m6 = (function() {})(__m7, __m8);
+var __m6 = (function() {})(__m7, __m8, __m9);
 
 // ## browser/open.js
-var __m9 = (function($, FuncUnit) {
+var __m10 = (function($, FuncUnit) {
 	if(FuncUnit.frameMode){
 		var ifrm = document.createElement("iframe");
 		ifrm.id = 'funcunit_app';
@@ -3094,7 +3209,7 @@ $.extend(FuncUnit,{
 })(jQuery, __m3);
 
 // ## browser/actions.js
-var __m10 = (function($, FuncUnit, Syn) {
+var __m11 = (function($, FuncUnit, Syn) {
 	window.Syn = Syn;
 	/**
 	 * @add FuncUnit
@@ -3413,7 +3528,7 @@ var __m10 = (function($, FuncUnit, Syn) {
 })(jQuery, __m3, Syn);
 
 // ## browser/getters.js
-var __m11 = (function($, FuncUnit) {
+var __m12 = (function($, FuncUnit) {
 	
 	/**
 	 * @add FuncUnit
@@ -3857,8 +3972,8 @@ var __m11 = (function($, FuncUnit) {
 					tester = tester.condition;
 				}
 				if(typeof timeout == 'function'){
-					success = timeout;
 					message = success;
+					success = timeout;
 					timeout = undefined;
 				}
 				if(typeof timeout == 'string'){
@@ -3970,7 +4085,7 @@ var __m11 = (function($, FuncUnit) {
 })(jQuery, __m3);
 
 // ## browser/traversers.js
-var __m12 = (function($, FuncUnit){
+var __m13 = (function($, FuncUnit){
 
 /**
  * @add FuncUnit
@@ -4101,7 +4216,7 @@ return FuncUnit;
 })(jQuery, __m3);
 
 // ## browser/queue.js
-var __m13 = (function(FuncUnit) {
+var __m14 = (function(FuncUnit) {
 	/**
 	 * @add FuncUnit
 	 */
@@ -4178,9 +4293,11 @@ var __m13 = (function(FuncUnit) {
 	/**
      * @parent utilities
      * @function FuncUnit.add F.add()
-     * @signature `add(handler)`
+     * @signature `add(handler[, error][, context])`
 	 * Adds a function to the queue.
-	 * @param {Object} handler An object that contains the method to run along with other properties:
+	 * @param {Object|Function} handler An object or function to define a step in the queue
+	 * <h5>Handler as an Object</h5>
+	 * An object that contains the method to run along with other properties:
 
  - method : the method to be called.  It will be provided a success and error function to call
  - success : an optional callback to be called after the function is done
@@ -4189,8 +4306,32 @@ var __m13 = (function(FuncUnit) {
  - bind : an object that will be 'this' of the success
  - type: the type of method (optional)
 
+	 * <h5>Handler as a Function</h5>
+	 * Similar to an Object, however the handler passed acts as the success function
+	 * @param {String} error An optional error message if handler is passed as a function
+	 * @param {Object} context An optional object to specify "this" inside handler. Enabled if handler is passed as a function
+
 	 */
-	add = function(handler){
+	add = function(handler, error, context) {
+		if(handler instanceof Function) {
+			if(typeof error === 'object') {
+				context = error;
+				delete error;
+			}
+
+			error = (error && error.toString()) || 'Custom method has failed.';
+			var cb = handler;
+
+			handler = {
+				method: function(success, error) {
+					success();
+				},
+				success: cb,
+				error: error,
+				bind: context
+			};
+		}
+
 		//if we are in a callback, add to the current position
 		if (FuncUnit._incallback) {
 			FuncUnit._queue.splice(currentPosition, 0, handler);
@@ -4202,10 +4343,10 @@ var __m13 = (function(FuncUnit) {
 		}
 		//if our queue has just started, stop qunit
 		//call done to call the next command
-        if (FuncUnit._queue.length == 1 && ! FuncUnit._incallback) {
+		if (FuncUnit._queue.length == 1 && ! FuncUnit._incallback) {
 			FuncUnit.unit.pauseTest();
-    		setTimeout(FuncUnit._done, 13)
-        }
+			setTimeout(FuncUnit._done, 13)
+		}
 	}
 	var currentEl;
 	/**
@@ -4292,7 +4433,7 @@ var __m13 = (function(FuncUnit) {
 })(__m3);
 
 // ## browser/waits.js
-var __m14 = (function($, FuncUnit) {
+var __m15 = (function($, FuncUnit) {
 /**
  * @add FuncUnit
  */
@@ -4598,6 +4739,6 @@ var __m1 = (function(Syn, FuncUnit) {
 	window.FuncUnit = window.S = window.F = FuncUnit;
 	
 	return FuncUnit;
-})(Syn, __m3, __m6, __m9, __m10, __m11, __m12, __m13, __m14);
+})(Syn, __m3, __m6, __m10, __m11, __m12, __m13, __m14, __m15);
 
 }(window);
