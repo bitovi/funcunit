@@ -5,21 +5,18 @@ steal.config({
 			"jquery/": "jquerypp/",
 			"funcunit/": "",
 			"jasmine/jasmine.js": "jasmine",
-			"syn/syn.js": "syn"
+			"src/": "syn/"
 		}
 	},
 	paths: {
 		"jquery/": "jquerypp/",
 		"jquery": "lib/jquery/jquery.js",
 		"jasmine": "lib/jasmine/lib/jasmine-core/jasmine.js",
-		"syn": "lib/syn/dist/syn.js"
+		"syn/": "lib/syn/src/"
 	},
 	shim : {
 		jquery: {
 			exports: "jQuery"
-		},
-		syn: {
-			exports: "Syn"
 		}
 	},
 	ext: {
