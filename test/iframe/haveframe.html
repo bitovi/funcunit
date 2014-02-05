@@ -5,7 +5,7 @@
 
 		<script src="../../steal/steal.js"></script>
 		<script type="text/javascript">
-			steal('jquery', function() {
+			steal('jquery', function($) {
 				$(document).ready(function() {
 					$('#open').click(function(ev) {
 						$('<iframe src="iframe.html" name="my frame"></iframe>').appendTo(document.body);

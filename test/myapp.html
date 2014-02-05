@@ -48,7 +48,9 @@
 		<div id="testData"></div>
 		<script type='text/javascript' src='../steal/steal.js'></script>
 		<script type='text/javascript'>
-		steal('jquery', function(){
+		steal('jquery', function($){
+                window.jQuery = $;
+
 				$('#testData').data('idval', 1000);
 				
 				$("#rightclick").bind("contextmenu", function(){

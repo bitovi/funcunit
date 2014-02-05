@@ -9,22 +9,16 @@ pluginify('funcunit.js', {
 		root: __dirname,
 		map: {
 			'*': {
-				'jquery/jquery.js' : 'lib/jquery/jquery.js',
+                "jquery/jquery.js": "jquery",
+                "basejquery/basejquery.js": "basejquery",
 				'funcunit/': '',
 				'src/': 'lib/syn/src/',
-				'syn/': 'lib/syn/src/'
-			}
-		},
-		shim: {
-			'jquery': {
-				'exports': 'jQuery'
-			},
-			'syn': {
-				'exports': 'Syn'
+				'syn/': 'lib/syn/src/',
+                "basejquery": "lib/jquery/jquery.js",
+                "jquery": "browser/jquery.js"
 			}
 		}
 	}
-	, shim: { 'jquery/jquery.js': 'jQuery' }
 }, function(error, content) {
 	fs.exists('build', function(exists) {
 		if(!exists) {

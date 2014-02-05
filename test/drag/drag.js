@@ -1,6 +1,6 @@
 //load a lot of stuff ...
-steal('jquery', 'test/jquerypp.js', function(){
-	
+steal(function(){
+
 	var hoveredOnce = false;
 	$(".over").bind('mouseover',function(){
 		if (!hoveredOnce) {
@@ -9,10 +9,10 @@ steal('jquery', 'test/jquerypp.js', function(){
 			hoveredOnce = true;
 		}
 	})
-	
+
 	$('#drag')
 		.on("draginit", function(){})
-		
+
 	$('#drop')
 		.on("dropover", function(){
 			$(document.body).append("<a href='#' id='clicker'>click</a>")
@@ -20,5 +20,5 @@ steal('jquery', 'test/jquerypp.js', function(){
 				$(".status").html("dragged")
 			})
 		})
-	
+
 })

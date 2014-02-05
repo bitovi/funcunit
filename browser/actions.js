@@ -152,11 +152,16 @@ steal('jquery', './core.js', 'syn', function($, FuncUnit, Syn) {
 			});
 			return this;
 		},
+    // TODO (DL) this needs to be deprecated this advertises .trigger() functionality
+    // but expects that the target page will have jQuery which could not be the case.
 		trigger: function(evName, success){
 			this._addExists();
 			FuncUnit.add({
 				method : function(success, error){
 					// need to use the page's jquery to trigger events
+          if(!FuncUnit.win.jQuery) {
+            throw 'Can not trigger custom event, no jQuery found on target page.';
+          }
 					FuncUnit.win.jQuery(this.bind.selector).trigger(evName)
 					success()
 				},
