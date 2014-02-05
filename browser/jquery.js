@@ -1,3 +1,3 @@
-steal('basejquery', function() {
-  return jQuery.noConflict(true);
+steal('basejquery', function($) {
+  return $.noConflict(true);
 });
