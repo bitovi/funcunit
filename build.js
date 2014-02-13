@@ -17,7 +17,12 @@ pluginify('funcunit.js', {
                 "basejquery": "lib/jquery/jquery.js",
                 "jquery": "browser/jquery.js"
 			}
-		}
+		},
+        shim: {
+            basejquery: {
+                exports: "jQuery"
+            }
+        }
 	}
 }, function(error, content) {
 	fs.exists('build', function(exists) {
