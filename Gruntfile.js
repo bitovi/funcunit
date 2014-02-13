@@ -22,7 +22,7 @@ module.exports = function (grunt) {
 
 			dist: {
 				files: [{
-					src: ['lib/syn/dist/syn.js', 'build/funcunit.js'],
+					src: ['build/funcunit.js'], //'lib/syn/dist/syn.js', 
 					dest: 'dist/funcunit.js'
 				}]
 			}

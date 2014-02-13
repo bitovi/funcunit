@@ -19,13 +19,14 @@
 		}
 	],
 	"dependencies": {
-		"jquery": "~2.0.3"
+		"jquery": "1.10.2"
 	},
 	"devDependencies": {
 		"qunit": "1.10.x",
 		"jasmine": "1.3.x",
 		"mocha": "1.15.x",
-		"syn": "0.x"
+		"syn": "0.0.2",
+		"jquerypp": "1.0.x"
 	},
 	"ignore": [
 		"browser",

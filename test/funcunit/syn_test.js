@@ -72,6 +72,6 @@ test('Data',function(){
 	F.open("//test/myapp.html");
 	
 	F('#testData').wait(function(){
-		return F.win.$(this).data('idval') === 1000;
+		return F.win.jQuery(this).data('idval') === 1000;
 	}, "Data value matched");
 })

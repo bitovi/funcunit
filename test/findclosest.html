@@ -16,7 +16,7 @@
 
 		<script src="../steal/steal.js"></script>
 		<script type="text/javascript">
-			steal('jquery', function() {
+			steal('jquery', function($) {
 				$(document.documentElement).click(function(ev) {
 					$(ev.target).addClass("iWasClicked");
 				});

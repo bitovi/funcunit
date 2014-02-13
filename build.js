@@ -2,28 +2,28 @@ var pluginify = require('steal').build.pluginify;
 var fs = require('fs');
 
 pluginify('funcunit.js', {
-	ignore: [/lib/],
+	// ignore: [/lib/],
 	wrapper: '!function(window) {\n<%= content %>\n\n' +
 		'}(window);',
 	steal: {
 		root: __dirname,
 		map: {
 			'*': {
-				'jquery/jquery.js' : 'lib/jquery/jquery.js',
+                "jquery/jquery.js": "jquery",
+                "basejquery/basejquery.js": "basejquery",
 				'funcunit/': '',
-				'syn/syn.js': 'lib/syn/dist/syn.js'
+				'src/': 'lib/syn/src/',
+				'syn/': 'lib/syn/src/',
+                "basejquery": "lib/jquery/jquery.js",
+                "jquery": "browser/jquery.js"
 			}
 		},
-		shim: {
-			'jquery': {
-				'exports': 'jQuery'
-			},
-			'syn': {
-				'exports': 'Syn'
-			}
-		}
-	},
-	shim: { 'jquery/jquery.js': 'jQuery', 'syn/syn.js': 'Syn' }
+        shim: {
+            basejquery: {
+                exports: "jQuery"
+            }
+        }
+	}
 }, function(error, content) {
 	fs.exists('build', function(exists) {
 		if(!exists) {

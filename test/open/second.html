@@ -3,7 +3,7 @@
 	<body>
 		<script src="../../steal/steal.js"></script>
 		<script type="text/javascript">
-			steal('jquery', function(){
+			steal('jquery', function($){
 				$("body").append("<a href='javascript://' class='show-confirm'>Show confirm</a><div class='results'></div>");
 				$('.show-confirm').click(function() {
 					if(window.confirm('confirm?')) {
