@@ -1,25 +1,34 @@
 <!doctype html>
 <html>
 	<head>
-		<link rel="stylesheet" type="text/css" href="lib/qunit/qunit/qunit.css" />
+		<link rel="stylesheet" href="lib/qunit/qunit/qunit.css"/>
 		<title>QUnit Test</title>
 	</head>
 	<body>
 		<div id="qunit"></div>
 		<div id="qunit-fixture"></div>
 		<script src="lib/qunit/qunit/qunit.js"></script>
-		<script src="steal/steal.js?funcunit/test/funcunit"></script>
+		<script src="lib/jquery/jquery.js"></script>
+		<script src="dist/funcunit.js"></script>
+
 		<a id="tester" href="#">Click Me</a>
 		<script type="text/javascript">
-			steal("jquery", function($) {
-				$(document).ready(function(){
-					$("#tester").click(function(ev){
-						ev.preventDefault();
-						$(ev.target).text("Changed");
-					})
+			$(document).ready(function(){
+				$("#tester").click(function(ev){
+					ev.preventDefault();
+					$(ev.target).text("Changed");
 				})
 			})
 		</script>
+
+		<script src="test/funcunit/actions_test.js"></script>
+		<script src="test/funcunit/funcunit_test.js"></script>
+		<script src="test/funcunit/iframe_test.js"></script>
+		<script src="test/funcunit/find_closest_test.js"></script>
+		<script src="test/funcunit/open_test.js"></script>
+		<script src="test/funcunit/syn_test.js"></script>
+		<script src="test/funcunit/confirm_test.js"></script>
+
 		<iframe src="test/myapp.html" name="myapp"></iframe>
 	</body>
 </html>
