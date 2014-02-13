@@ -19,7 +19,7 @@
 		}
 	],
 	"dependencies": {
-		"jquery": "1.10.2"
+		"jquery": "1.11.0"
 	},
 	"devDependencies": {
 		"qunit": "1.10.x",
