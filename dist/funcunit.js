@@ -1,8 +1,8 @@
 /*
- * FuncUnit - 2.1-pre
+ * FuncUnit - 2.1.0-pre
  * http://funcunit.com
  * Copyright (c) 2014 Bitovi
- * Mon, 17 Feb 2014 17:04:02 GMT
+ * Tue, 18 Feb 2014 21:52:30 GMT
  * Licensed MIT */
 
 !function(window) {
