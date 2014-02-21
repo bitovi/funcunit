@@ -14,7 +14,7 @@ pluginify('funcunit.js', {
 				'funcunit/': '',
 				'src/': 'lib/syn/src/',
 				'syn/': 'lib/syn/src/',
-                "basejquery": "lib/jquery/jquery.js",
+				"basejquery": "lib/jquery/dist/jquery.js",
                 "jquery": "browser/jquery.js"
 			}
 		},
