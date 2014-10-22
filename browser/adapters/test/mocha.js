@@ -1,4 +1,5 @@
 steal('funcunit', function(F) {
+	var $ = F.jQuery;
 
 	describe('funcunit', function() {
 		beforeEach(function() {
@@ -24,6 +25,14 @@ steal('funcunit', function(F) {
 			F('.clickresult').text('clickedz', 'clicked the link');
 
 			F.add(done);
+		});
+
+		it('passes after failing', function(done) {
+			F('.clickme').click();
+			F('.clickresult').text('clicked', 'clicked the link');
+
+			F.add(done);
+		
 		});
 	});
 

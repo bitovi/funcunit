@@ -9,7 +9,7 @@ steal.config({
         }
     },
     paths: {
-        "basejquery": "lib/jquery/jquery.js",
+        "basejquery": "lib/jquery/dist/jquery.js",
         "jquery": "browser/jquery.js",
         "jasmine": "lib/jasmine/lib/jasmine-core/jasmine.js",
         "syn/": "lib/syn/src/"
