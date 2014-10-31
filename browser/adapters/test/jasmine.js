@@ -1,4 +1,4 @@
-steal('funcunit', function() {
+steal('jquery', 'funcunit', function($) {
 	describe('Adapters', function() {
 		beforeEach(function() {
 			$('body').append('<a class=\'clickme\' href=\'javascript://\'>clickme</a><div class=\'clickresult\'></div>');
