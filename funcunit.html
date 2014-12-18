@@ -8,11 +8,11 @@
 		<div id="qunit"></div>
 		<div id="qunit-fixture"></div>
 		<script src="lib/qunit/qunit/qunit.js"></script>
-		<script src="lib/jquery/jquery.js"></script>
 		<script src="dist/funcunit.js"></script>
 
 		<a id="tester" href="#">Click Me</a>
 		<script type="text/javascript">
+			var $ = FuncUnit.jQuery;
 			$(document).ready(function(){
 				$("#tester").click(function(ev){
 					ev.preventDefault();

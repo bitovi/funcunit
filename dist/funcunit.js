@@ -2,7 +2,7 @@
  * FuncUnit - 2.1-pre
  * http://funcunit.com
  * Copyright (c) 2014 Bitovi
- * Mon, 17 Feb 2014 17:04:02 GMT
+ * Fri, 21 Feb 2014 16:15:52 GMT
  * Licensed MIT */
 
 !function(window) {
@@ -2646,7 +2646,7 @@ var __m2 = (function(Syn) {
 	return Syn;
 })(__m3, __m4, __m5, __m6, __m8);
 
-// ## lib/jquery/jquery.js
+// ## lib/jquery/dist/jquery.js
 var __m11 = (function() {
 /*!
  * jQuery JavaScript Library v1.11.0
