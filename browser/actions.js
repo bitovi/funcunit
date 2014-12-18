@@ -289,7 +289,7 @@ steal('jquery', './core.js', 'syn', function($, FuncUnit, Syn) {
          * @function FuncUnit.prototype.scroll .scroll()
          * @parent actions
          * @signature `scroll(direction, amount, success)`
-		 * Scrolls an element in a particular direction by setting the scrollTop or srollLeft.
+		 * Scrolls an element in a particular direction by setting the scrollTop or scrollLeft.
 		 * @param {String} direction "left" or "top"
 		 * @param {Number} amount number of pixels to scroll
 		 * @param {Function} success
