@@ -17,7 +17,7 @@
 
 The [FuncUnit Getting Started](http://funcunit.com/guides/started.html) guide is a quick walkthrough of creating and running a test.
 
-<h2 id="setup">Set up a test</h2>
+## Set up a test
 
 [QUnit](http://docs.jquery.com/Qunit) provides the basic structure needed to write unit or functional tests.
 
@@ -55,7 +55,7 @@ test("counter", function() {
 });
 ```
 
-<h2 id="open">Open a page</h2>
+## Open a page
 
 The following uses `F.open( URL )` to open autocomplete.html before every test.
 
@@ -70,21 +70,20 @@ module("autosuggest", {
 Calling open on window will cause FuncUnit commands to operate on the current window.  This is also the default if you don't open any page.
 
 
-<h2 id="query">Query for elements</h2>
+## Query for elements
 
-FuncUnit tests are written just like jQuery.  The [funcunit.finding S method] is a copy of jQuery, which queries for elements in
-the application page.  Like $, FuncUnit methods are chainable on the results of F.
+FuncUnit tests are written just like jQuery. [`F`](http://funcunit.com/guides/funcunit.finding.html) is a copy of the `$` method. It is used to find elements in the page you're testing. Like `$`, FuncUnit methods are chainable on the results of `F`.
 
 ```js
 // grab the #description element, wait for it to be visible, type in it
 F("#description").visible().type("Test Framework");
 ```
 
-<h2 id="simulate">Simulate user actions</h2>
+## Simulate user actions
 
-When you're testing a widget, you need to simulate the [funcunit.actions actions] that a user takes.  FuncUnit uses the
-[syn] library to accurately simulate the correct low level events like mouseup and keypress for high
-level actions like [FuncUnit.prototype.click] and [FuncUnit.prototype.type].  The following shows how to simulate common user actions.
+When you're testing a widget, you need to simulate the [actions](http://funcunit.com/guides/funcunit.actions.html) that user takes.  FuncUnit uses the
+[syn library](https://github.com/bitovi/syn) to accurately simulate the correct low level events like _mouseup_ and _keypress_ for high
+level actions like [click()](http://funcunit.com/docs/FuncUnit.prototype.click.html) and [type()](http://funcunit.com/docs/FuncUnit.prototype.type.html).  The following shows how to simulate common user actions.
 
 ### Click
 
@@ -107,13 +106,13 @@ F('#task_name').type("Learn FuncUnit");
 F('.task').drag(".trash");
 ```
 
-<h2 id="wait">Wait for page conditions</h2>
+## Wait for page conditions
 
 After a user action, your test page's event handlers run and the page is changed.
 Wait commands are used to wait for some page condition before continuing.
 
 Waits are overloaded jQuery getter methods.  `F.fn.text( textVal, callback )`
-waits for an element's $.fn.text to match the textVal.
+waits for an element's `$.fn.text` to match the `textVal`.
 
 ```js
 // wait for result to show "task complete"
@@ -148,7 +147,7 @@ F('#language_input').val("JavaScript");
 F('.contact').size(5);
 ```
 
-There are many more [funcunit.waits waits] possible.
+There are many more [waits](http://funcunit.com/guides/funcunit.waits.html) possible.
 
 
 <h2 id="get">Get information and run assertions</h2>
