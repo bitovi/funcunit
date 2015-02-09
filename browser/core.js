@@ -8,17 +8,17 @@ steal('jquery', './init', function(jQuery, oldFuncUnit) {
 	FuncUnit = function( selector, frame ) {
 		// if you pass true as context, this will avoid doing a synchronous query
 		var frame,
-			forceSync, 
+			forceSync,
 			isSyncOnly = false;
-		
+
 		if(frame && frame.forceSync){
 			forceSync = frame.forceSync;
 		}
-		
+
 		if(frame && typeof frame.frame !== "undefined"){ // its passed as an object
 			frame = frame.frame;
 		}
-		
+
 		isSyncOnly = typeof forceSync === "boolean"? forceSync: isSyncOnly;
 		// if its a function, just run it in the queue
 		if(typeof selector == "function"){
@@ -26,26 +26,30 @@ steal('jquery', './init', function(jQuery, oldFuncUnit) {
 		}
 		// if the app window already exists, adjust the params (for the sync return value)
 		this.selector = selector;
+
 		// run this method in the queue also
-		if(isSyncOnly === true){
-			var collection = performSyncQuery(selector, frame);
-			return collection;
-		} else { // do both
+		if(isSyncOnly !== true) {
 			performAsyncQuery(selector, frame, this);
-			var collection = performSyncQuery(selector, frame);
-			return collection;
 		}
+
+		var collection = performSyncQuery(selector, frame);
+		collection.selectorObject = new F.Selector({
+			action: '$',
+			selector: selector
+		});
+
+		return collection;
 	}
 
 
-	
+
 	var getContext = function(context){
 			if (typeof context === "number" || typeof context === "string") {
 				// try to get the context from an iframe in the funcunit document
 				var sel = (typeof context === "number" ? "iframe:eq(" + context + ")" : "iframe[name='" + context + "']"),
 					frames = new origFuncUnit.fn.init(sel, FuncUnit.win.document.documentElement, true);
 				var frame = (frames.length ? frames.get(0).contentWindow : FuncUnit.win).document.documentElement;
-				
+
 			} else {
 				frame = FuncUnit.win.document.documentElement;
 			}
@@ -76,7 +80,7 @@ steal('jquery', './init', function(jQuery, oldFuncUnit) {
 			obj.frame = origFrame;
 			return obj;
 		}
-	
+
 	oldFuncUnit.jQuery.extend(FuncUnit, oldFuncUnit, origFuncUnit)
 	FuncUnit.prototype = origFuncUnit.prototype;
 	return FuncUnit;
