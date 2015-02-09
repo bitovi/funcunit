@@ -21,7 +21,14 @@ steal('jquery', './core.js', './traversers-types.js', function($, FuncUnit, trav
 					bind: this
 				});
 			}
-			return orig.apply(this, arguments);
+
+			var resultOfTheTraverse = orig.apply(this, arguments);
+
+			if (this.selectorObject) {
+				resultOfTheTraverse.selectorObject = this.selectorObject[name](selector);
+			}
+
+			return resultOfTheTraverse;
 		}
 	};
 

@@ -27,20 +27,18 @@ steal('jquery', './init', function(jQuery, oldFuncUnit) {
 		// if the app window already exists, adjust the params (for the sync return value)
 		this.selector = selector;
 
-		this.selectorObject = new F.Selector({
+		// run this method in the queue also
+		if(isSyncOnly !== true) {
+			performAsyncQuery(selector, frame, this);
+		}
+
+		var collection = performSyncQuery(selector, frame);
+		collection.selectorObject = new F.Selector({
 			action: '$',
 			selector: selector
 		});
 
-		// run this method in the queue also
-		if(isSyncOnly === true){
-			var collection = performSyncQuery(selector, frame);
-			return collection;
-		} else { // do both
-			performAsyncQuery(selector, frame, this);
-			var collection = performSyncQuery(selector, frame);
-			return collection;
-		}
+		return collection;
 	}
 
 
