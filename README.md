@@ -11,6 +11,8 @@
 
 -->
 # FuncUnit
+
+[![Join the chat at https://gitter.im/bitovi/funcunit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bitovi/funcunit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 > Write better tests, faster.
 
 *Note:* [FuncUnit Roadmap](http://forum.javascriptmvc.com/#Topic/32525000001436023)
