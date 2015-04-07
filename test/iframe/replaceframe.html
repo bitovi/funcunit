@@ -5,9 +5,8 @@
 			<iframe id="myframe" name="my frame" src="iframe.html"></iframe>
 		</div>
 
-		<script src="../../steal/steal.js"></script>
-		<script type="text/javascript">
-			steal('jquery', function($) {
+		<script src="../../node_modules/steal/steal.js">
+      var $ = require("funcunit/browser/jquery");
 				$('div').click(function() {
 					var div = $(this),
 							iframe = $('<iframe/>');
@@ -20,7 +19,6 @@
 
 					div.html(iframe);
 				});
-			});
 		</script>
 	</body>
 </html>

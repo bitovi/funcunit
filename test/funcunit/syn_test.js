@@ -1,8 +1,10 @@
-module("funcunit-syn integration")
+var QUnit = require("steal-qunit");
+var F = require("funcunit");
 
+QUnit.module("funcunit-syn integration");
 
-test("Type and slow Click", function(){
-	F.open("//test/myapp.html");
+QUnit.test("Type and slow Click", function(){
+	F.open("test/myapp.html");
 	F("#typehere").type("javascriptmvc")
 	F("#seewhatyoutyped").text("typed javascriptmvc","typing");
 	
@@ -11,27 +13,28 @@ test("Type and slow Click", function(){
 	F("#seewhatyouchanged").text("changed javascriptmvc","change");
 })
 
-test("ctrl test", function(){
+
+QUnit.test("ctrl test", function(){
 	F.open("//test/myapp.html");
 	F("#typehere").type("abc[ctrl]ac[ctrl-up]", function(){
 		equal(F("#typehere").val(), "abc");
 	})
 })
 
-test("clipboard", function(){
+QUnit.test("clipboard", function(){
 	F.open("//test/myapp.html");
 	F("#typehere").type("abc[ctrl]ac[ctrl-up][right][ctrl]v[ctrl-up]", function(){
 		equal(F("#typehere").val(), "abcabc");
 	})
 })
 
-test("Type and clear", function(){
-	F.open("//test/myapp.html");
+QUnit.test("Type and clear", function(){
+	F.open("test/myapp.html");
 	F("#typehere").type("javascriptmvc").type("")
 	F("#seewhatyoutyped").text("typed ","clear works");
 })
 
-test("Nested actions", function(){
+QUnit.test("Nested actions", function(){
 	F.open("//test/myapp.html");
 	
 	F("#typehere").exists(function(){
@@ -42,7 +45,7 @@ test("Nested actions", function(){
 	})
 })
 
-test("Move To", function(){
+QUnit.test("Move To", function(){
 	F.open("//test/drag/drag.html");
 	F("#start").move("#end")
 	F("#typer").type("javascriptmvc")
@@ -50,14 +53,14 @@ test("Move To", function(){
 
 })
 
-test("Drag To", function(){
+QUnit.test("Drag To", function(){
 	F.open("test/drag/drag.html");
 	F("#drag").drag("#drop");
 	F("#clicker").click();
 	F(".status").text("dragged", 'drag worked correctly');
 });
 
-test("RightClick", function(){
+QUnit.test("RightClick", function(){
 	if(/Opera/.test(navigator.userAgent)){
 		return;
 	}
@@ -67,11 +70,10 @@ test("RightClick", function(){
 
 })
 
-
-test('Data',function(){
+QUnit.test('Data',function(){
 	F.open("//test/myapp.html");
 	
 	F('#testData').wait(function(){
 		return F.win.jQuery(this).data('idval') === 1000;
 	}, "Data value matched");
-})
+});

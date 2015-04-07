@@ -1,23 +1,23 @@
-steal('../core.js', function(FuncUnit) {
-	var ok = function(expr, msg) {
-		if(!expr) throw new Error(msg);
-	};
+var FuncUnit = require("funcunit/browser/core");
 
-	if(window.mocha) {
-		FuncUnit.timeout = 1900;
+var ok = function(expr, msg) {
+  if(!expr) throw new Error(msg);
+};
 
-		FuncUnit.unit = {
-			pauseTest: function() {},
-			resumeTest: function() {},
+if(window.mocha) {
+  FuncUnit.timeout = 1900;
 
-			assertOK: function(assertion, message) {
-				ok(assertion, message)
-			},
+  FuncUnit.unit = {
+    pauseTest: function() {},
+    resumeTest: function() {},
 
-			equiv: function(expected, actual) {
-				//should this be === for tighter asserts?
-				return expected == actual;
-			}
-		};
-	}
-});
+    assertOK: function(assertion, message) {
+      ok(assertion, message)
+    },
+
+    equiv: function(expected, actual) {
+      //should this be === for tighter asserts?
+      return expected == actual;
+    }
+  };
+}

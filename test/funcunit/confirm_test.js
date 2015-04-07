@@ -1,4 +1,7 @@
-module("funcunit - jQuery API",{
+var QUnit = require("steal-qunit");
+var F = require("funcunit");
+
+QUnit.module("funcunit - jQuery API",{
 	setup: function() {
 		F.open("test/confirm.html")
 	}

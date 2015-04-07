@@ -1,4 +1,5 @@
-steal('jquery', './core.js', function($, FuncUnit){
+var $ = require("funcunit/browser/jquery");
+var FuncUnit = require("funcunit/browser/core");
 
 /**
  * @add FuncUnit
@@ -125,5 +126,4 @@ for(var i  =0; i < traversers.length; i++){
 	makeTraverser(traversers[i]);
 }
 
-return FuncUnit;
-});
+module.exports = FuncUnit;

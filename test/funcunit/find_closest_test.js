@@ -1,4 +1,7 @@
-module("funcunit find closest",{
+var QUnit = require("steal-qunit");
+var F = require("funcunit");
+
+QUnit.module("funcunit find closest",{
 	setup: function() {
 		F.open("test/findclosest.html")
 	}

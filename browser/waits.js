@@ -1,4 +1,6 @@
-steal('jquery', './core.js', function($, FuncUnit) {
+var $ = require("funcunit/browser/jquery");
+var FuncUnit = require("funcunit/browser/core");
+
 /**
  * @add FuncUnit
  */
@@ -296,5 +298,4 @@ $.extend(FuncUnit.prototype, {
 		return this;
 	}
 })
-return FuncUnit;
-});
+module.exports = FuncUnit;

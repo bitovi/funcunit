@@ -1,25 +1,4 @@
-<html>
-	<head>
-		<title>Mocha Tests</title>
-		<link rel="stylesheet" href="../../../lib/mocha/mocha.css"/>
-	</head>
-
-	<body>
-		<div id="mocha"></div>
-		<div id="testarea"></div>
-
-		<script src="../../../lib/mocha/mocha.js"></script>
-		<script src="../../../steal/steal.js"></script>
-		<script>
-			// mocha.setup('qunit');
-			mocha.setup('bdd');
-
-			steal('browser/adapters/test/mocha.js', function() {
-				// mocha.checkLeaks();
-				mocha.globals(['jQuery']);
-				mocha.globals(['F']);
-				mocha.run();
-			});
-		</script>
-	</body>
-</html>
+<script src="../../../node_modules/steal/steal.js"
+				main="funcunit/browser/adapters/test/mocha"
+				mocha="bdd"></script>
+<div id="testarea"></div>

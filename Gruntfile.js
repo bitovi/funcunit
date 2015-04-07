@@ -1,3 +1,7 @@
+var npmUtils =require("steal/ext/npm-utils");
+var isNpm = npmUtils.moduleName.isNpm;
+var parseModuleName = npmUtils.moduleName.parse;
+
 module.exports = function (grunt) {
 
 	grunt.initConfig({
@@ -10,11 +14,6 @@ module.exports = function (grunt) {
 				}
 			}
 		},
-		exec: {
-			pluginify: {
-				command: 'node build.js'
-			}
-		},
 		concat: {
 			options: {
 				banner: '/*\n * <%= pkg.title || pkg.name %> - <%= pkg.version %>\n * <%= pkg.homepage %>\n * Copyright (c) <%= new Date().getFullYear() %> <%= pkg.author.name %>\n * <%= new Date().toUTCString() %>\n * Licensed <%= pkg.licenses[0].type %> */\n\n'
@@ -22,9 +21,41 @@ module.exports = function (grunt) {
 
 			dist: {
 				files: [{
-					src: ['build/funcunit.js'], //'lib/syn/dist/syn.js', 
+					src: ['dist/funcunit.js'], 
 					dest: 'dist/funcunit.js'
 				}]
+			}
+		},
+		"steal-export": {
+			dist: {
+				system: {
+					config: "package.json!npm"
+				},
+				options: {},
+				outputs: {
+					"+amd": {},
+					"+cjs": {},
+					"global": {
+						modules: ["funcunit"],
+						dest: __dirname + "/dist/funcunit.js",
+						format: "global",
+						normalize: function(depName) {
+							if(isNpm(depName)) {
+								var parsed = parseModuleName(depName);
+								if(parsed.packageName === "jquery") {
+									depName = parsed.packageName;
+								} else {
+									depName = parsed.packageName + "/" + parsed.modulePath;
+								}
+							}
+							return depName;
+						},
+						ignore: ["jquery"],
+						exports: {
+							"jquery": "jQuery"
+						}
+					}
+				}
 			}
 		},
 		testee: {
@@ -51,10 +82,10 @@ module.exports = function (grunt) {
 
 	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-exec');
 	grunt.loadNpmTasks('testee');
+	grunt.loadNpmTasks("steal-tools");
 
-	grunt.registerTask('build', ['exec:pluginify', 'concat']);
+	grunt.registerTask('build', ['steal-export', 'concat']);
 	grunt.registerTask('test', ['connect', 'testee']);
 
 };

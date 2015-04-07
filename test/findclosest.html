@@ -14,13 +14,12 @@
 			<div class="another">another</div>
 		</div>
 
-		<script src="../steal/steal.js"></script>
-		<script type="text/javascript">
-			steal('jquery', function($) {
+		<script src="../node_modules/steal/steal.js">
+        var $ = require("funcunit/browser/jquery");
+
 				$(document.documentElement).click(function(ev) {
 					$(ev.target).addClass("iWasClicked");
 				});
-			});
 		</script>
 	</body>
 </html>
