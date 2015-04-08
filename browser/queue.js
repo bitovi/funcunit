@@ -160,7 +160,13 @@ steal('./core.js', function(FuncUnit) {
 				timer = setTimeout(function(){
 						next.stop && next.stop();
 						if(typeof next.error === "function"){
-							next.error();
+							try {
+								next.error();
+							} catch(err) {
+								FuncUnit._queue[0].success = false;
+								FuncUnit._done();
+								throw err;
+							}
 						} else {
 							FuncUnit.unit.assertOK(false, next.error);
 						}
