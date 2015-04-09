@@ -46,9 +46,9 @@
 		<div class='hidden' style='display:none;'></div>
 		
 		<div id="testData"></div>
-		<script type='text/javascript' src='../steal/steal.js'></script>
-		<script type='text/javascript'>
-		steal('jquery', function($){
+		<script type='text/javascript' src='../node_modules/steal/steal.js'>
+        var $ = require("funcunit/browser/jquery");
+
                 window.jQuery = $;
 
 				$('#testData').data('idval', 1000);
@@ -123,7 +123,6 @@
 				$('#drop').on("dropout", function(){ 
 					$(this).css('background-color', 'green').addClass("dropout")
 				})
-			})
 			
 			
 		</script>

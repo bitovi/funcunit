@@ -1,3 +1,3 @@
-steal('basejquery', function($) {
-  return $.noConflict(true);
-});
+var $ = require("jquery");
+
+module.exports = $.noConflict(true);

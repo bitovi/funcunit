@@ -1,4 +1,7 @@
-module("scroll", {
+var QUnit = require("steal-qunit");
+var F = require("funcunit");
+
+QUnit.module("scroll", {
    setup:function() {
       F.open("//test/scroll.html", null, 10000) ;
    }

@@ -1,18 +1,16 @@
-steal('../core.js', function(FuncUnit) {
-	if(window.QUnit) {
-		FuncUnit.unit = {
+module.exports = function(QUnit){
+	return {
 		pauseTest:function(){
-			stop();
+			QUnit.stop();
 		},
 		resumeTest: function(){
-			start();
+			QUnit.start();
 		},
 		assertOK: function(assertion, message){
-			ok(assertion, message)
+			QUnit.ok(assertion, message)
 		},
 		equiv: function(expected, actual){
 			return QUnit.equiv(expected, actual);
 		}
-	}
-	}
-});
+	};
+};

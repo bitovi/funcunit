@@ -1,4 +1,7 @@
-module("Iframe Test")
+var QUnit = require("steal-qunit");
+var F = require("funcunit");
+
+QUnit.module("Iframe Test")
 
 test("iframe that doesn't exist", function(){
 	F.open("//test/iframe/haveframe.html")

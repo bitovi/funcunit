@@ -1,4 +1,7 @@
-module("funcunit-open")
+var QUnit = require("steal-qunit");
+var F = require("funcunit");
+
+QUnit.module("funcunit-open")
 
 test('F.open accepts a window', function() {
 	F.open(window);
@@ -9,8 +12,6 @@ test('F.open accepts a window', function() {
 	F("#typehere").type("").type("javascriptmvc")
 	F("#seewhatyoutyped").text("typed javascriptmvc","typing");
 })
-
-
 
 test("Back to back opens", function(){
 	F.open("//test/myotherapp.html");

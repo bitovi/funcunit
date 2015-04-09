@@ -2,8 +2,6 @@ var QUnit = require("steal-qunit");
 var F = require("funcunit");
 var $ = require("jquery");
 
-F.attach(QUnit);
-
 QUnit.module('Adapters', {
 	setup: function() {
 		$('#qunit-fixture').append('<a class=\'clickme\' href=\'javascript://\'>clickme</a><div class=\'clickresult\'></div>');
@@ -14,6 +12,11 @@ QUnit.module('Adapters', {
 });
 
 test('QUnit adapter test', function() {
+	stop();
+
 	F('.clickme').click();
-	F('.clickresult').text('clicked', 'clicked the link');
+	F('.clickresult').text('clicked', function(){
+		ok("clicked the text");
+		start();
+	});
 });
