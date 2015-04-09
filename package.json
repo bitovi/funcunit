@@ -1,6 +1,6 @@
 {
   "name": "funcunit",
-  "main": "dist/funcunit.js",
+  "main": "dist/cjs/funcunit.js",
   "version": "0.0.1",
   "author": {
     "name": "Bitovi",
