@@ -1,3 +1,8 @@
+var QUnit = require("steal-qunit");
+var F = require("funcunit");
+
+F.attach(QUnit);
+
 require("test/funcunit/actions_test");
 require("test/funcunit/funcunit_test");
 require("test/funcunit/iframe_test");

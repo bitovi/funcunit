@@ -4,10 +4,10 @@ var ok = function(expr, msg) {
   if(!expr) throw new Error(msg);
 };
 
-if(window.mocha) {
+module.exports = function(mocha){
   FuncUnit.timeout = 1900;
 
-  FuncUnit.unit = {
+  return {
     pauseTest: function() {},
     resumeTest: function() {},
 
@@ -20,4 +20,4 @@ if(window.mocha) {
       return expected == actual;
     }
   };
-}
+};

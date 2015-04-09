@@ -1,6 +1,8 @@
-require("steal-mocha");
+var Mocha = require("steal-mocha");
 var F = require("funcunit");
 var $ = require("jquery");
+
+F.attach(Mocha);
 
 describe('funcunit', function() {
 	beforeEach(function() {

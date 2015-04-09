@@ -1,8 +1,6 @@
-var FuncUnit = require("funcunit/browser/core");
-
-if(window.jasmine) {
+module.exports = function(jasmine){
   var paused = false;
-  FuncUnit.unit = {
+  return {
     pauseTest:function(){
       paused = true;
       waitsFor(function(){
@@ -18,6 +16,5 @@ if(window.jasmine) {
     equiv: function(expected, actual){
       return jasmine.getEnv().equals_(expected, actual)
     }
-  }
-	module.exports = FuncUnit;
-}
+  };
+};

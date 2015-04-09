@@ -1,18 +1,16 @@
-var FuncUnit = require("funcunit/browser/core");
-
-if(window.QUnit) {
-  FuncUnit.unit = {
-    pauseTest:function(){
-      stop();
-    },
-    resumeTest: function(){
-      start();
-    },
-    assertOK: function(assertion, message){
-      ok(assertion, message)
-    },
-    equiv: function(expected, actual){
-      return QUnit.equiv(expected, actual);
-    }
-  }
-}
+module.exports = function(QUnit){
+	return {
+		pauseTest:function(){
+			QUnit.stop();
+		},
+		resumeTest: function(){
+			QUnit.start();
+		},
+		assertOK: function(assertion, message){
+			QUnit.ok(assertion, message)
+		},
+		equiv: function(expected, actual){
+			return QUnit.equiv(expected, actual);
+		}
+	};
+};
