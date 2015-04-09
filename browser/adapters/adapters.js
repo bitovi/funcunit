@@ -57,11 +57,7 @@ FuncUnit.unit = defaultAdapter;
 	* F.attach(QUnit);
 	*
 	* test("a test", function(){
-	*   stop();
-	*   F("#clickme").click(function(){
-	*			ok("You were clicked!"); 
-	*			start();
-	*   });
+	*   F("#clickme").click();
 	* });
 	* @codeend
 	*
