@@ -1,7 +1,7 @@
 {
 	"name": "funcunit",
 	"main": "dist/funcunit.js",
-	"version": "2.1-pre",
+	"version": "3.0.0",
 	"homepage": "http://funcunit.com",
 	"author": {
 		"name": "Bitovi",
