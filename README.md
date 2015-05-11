@@ -1,4 +1,5 @@
 <!--
+@hide title
 
 @constructor FuncUnit
 @group actions Actions

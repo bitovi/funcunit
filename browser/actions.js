@@ -20,7 +20,7 @@ var clicks = [
  *  <li><code>mouseup</code></li>
  *  <li><code>click</code></li>
  * </ul>
- * If no clientX/Y or pageX/Y is provided as options, the click happens at the 
+ * If no clientX/Y or pageX/Y is provided as options, the click happens at the
  * center of the element.
  * <p>For a right click or double click use [FuncUnit.prototype.rightClick] or
  *   [FuncUnit.prototype.dblclick].</p>
@@ -33,8 +33,8 @@ var clicks = [
  * @codestart
  * $('#foo').click({pageX: 200, pageY: 100});
  * @codeend
- * You can pass it any of the serializable parameters you'd send to 
- * [http://developer.mozilla.org/en/DOM/event.initMouseEvent initMouseEvent], but command keys are 
+ * You can pass it any of the serializable parameters you'd send to
+ * [http://developer.mozilla.org/en/DOM/event.initMouseEvent initMouseEvent], but command keys are
  * controlled by [FuncUnit.prototype.type].
    *
  * @param {Function} [success] a callback that runs after the click, but before the next action.
@@ -101,23 +101,23 @@ $.extend(FuncUnit.prototype, {
        * @parent actions
        * @signature `type(text [,success])`
        *
-   * Types text into an element.  This makes use of [syn.type] and works in 
+   * Types text into an element.  This makes use of [syn.type] and works in
    * a very similar way.
    * <h3>Quick Examples</h3>
    * @codestart
    * //types hello world
    *F('#bar').type('hello world')
-   * 
+   *
    * //submits a form by typing \r
    *F("input[name=age]").type("27\r")
-   * 
+   *
    * //types FuncUnit, then deletes the Unit
    *F('#foo').type("FuncUnit\b\b\b\b")
-   * 
+   *
    * //types JavaScriptMVC, then removes the MVC
    *F('#zar').type("JavaScriptMVC[left][left][left]"+
    *                      "[delete][delete][delete]")
-   *          
+   *
    * //types JavaScriptMVC, then selects the MVC and
    * //deletes it
    *F('#zar').type("JavaScriptMVC[shift]"+
@@ -126,9 +126,9 @@ $.extend(FuncUnit.prototype, {
    * @codeend
    *
    * <h2>Characters</h2>
-   * 
+   *
    * For a list of the characters you can type, check [syn.keycodes].
-   * 
+   *
    * @param {String} text the text you want to type
    * @param {Function} [success] a callback that is run after typing, but before the next action.
    * @return {FuncUnit} returns the funcUnit object for chaining.
@@ -145,7 +145,7 @@ $.extend(FuncUnit.prototype, {
     FuncUnit.add({
       method : function(success, error){
         syn("_type", this.bind[0], text, success);
-        
+
       },
       success : success,
       error : "Could not type " + text + " into " + this.selector,
@@ -178,23 +178,23 @@ $.extend(FuncUnit.prototype, {
        * @function FuncUnit.prototype.drag .drag()
        * @parent actions
        * @signature `drag(options [,success])`
-   * Drags an element into another element or coordinates.  
+   * Drags an element into another element or coordinates.
    * This takes the same paramameters as [syn.prototype.move move].
    * @param {String|Object} options A selector or coordinates describing the motion of the drag.
    * <h5>Options as a Selector</h5>
    * Passing a string selector to drag the mouse.  The drag runs to the center of the element
    * matched by the selector.  The following drags from the center of #foo to the center of #bar.
    * @codestart
-   *F('#foo').drag('#bar') 
+   *F('#foo').drag('#bar')
    * @codeend
    * <h5>Options as Coordinates</h5>
    * You can pass in coordinates as clientX and clientY:
    * @codestart
-   *F('#foo').drag('100x200') 
+   *F('#foo').drag('100x200')
    * @codeend
    * Or as pageX and pageY
    * @codestart
-   *F('#foo').drag('100X200') 
+   *F('#foo').drag('100X200')
    * @codeend
    * Or relative to the start position
    *F('#foo').drag('+10 +20')
@@ -206,7 +206,7 @@ $.extend(FuncUnit.prototype, {
    *   from: "0x0",
    *   to: "100x100",
    *   duration: 2000
-   * }) 
+   * })
    * @codeend
    * @param {Function} [success] a callback that runs after the drag, but before the next action.
    * @return {funcUnit} returns the funcunit object for chaining.
@@ -242,16 +242,16 @@ $.extend(FuncUnit.prototype, {
    * Passing a string selector to move the mouse.  The move runs to the center of the element
    * matched by the selector.  The following moves from the center of #foo to the center of #bar.
    * @codestart
-   *F('#foo').move('#bar') 
+   *F('#foo').move('#bar')
    * @codeend
    * <h5>Options as Coordinates</h5>
    * You can pass in coordinates as clientX and clientY:
    * @codestart
-   *F('#foo').move('100x200') 
+   *F('#foo').move('100x200')
    * @codeend
    * Or as pageX and pageY
    * @codestart
-   *F('#foo').move('100X200') 
+   *F('#foo').move('100X200')
    * @codeend
    * Or relative to the start position
    *F('#foo').move('+10 +20')
@@ -263,7 +263,7 @@ $.extend(FuncUnit.prototype, {
    *   from: "0x0",
    *   to: "100x100",
    *   duration: 2000
-   * }) 
+   * })
    * @codeend
    * @param {Function} [success] a callback that runs after the drag, but before the next action.
    * @return {funcUnit} returns the funcunit object for chaining.
