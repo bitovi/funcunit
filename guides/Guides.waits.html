@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8 lt-ie7" lang="en">
+<![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8" lang="en">
+<![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie lt-ie9" lang="en">
+<![endif]-->
+<!--[if IE 9]>
+<html class="no-js ie ie9" lang="en">
+<![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" type="image/png" href="img/funcunit-logo-32x32.png">
+
+	<link rel="stylesheet" type="text/css" href='./static/bundles/static.css'/>
+
+	<!--[if lt IE 9]>
+   <script type="text/javascript" src="../scripts/static/lib/html5shiv.js"></script>
+    <!--<![endif]-->
+</head>
+
+<body class="guides">
+	<header>
+		<nav class="container">
+
+			<div class="logo-menu">
+				<a class="brand funcunit" href="../index.html">FuncUnit</a>
+				<ul class="dropdown-menu">
+					<li><a href="http://javascriptmvc.com">JavaScriptMVC</a></li>
+					<li><a href="http://canjs.com">CanJS</a></li>
+					<li><a href="http://jquerypp.com">jQuery++</a></li>
+					<li><a href="http://stealjs.com">StealJS</a></li>
+					<li class="active"><a href="../index.html">FuncUnit</a></li>
+					<li><a href="http://documentjs.com">DocumentJS</a></li>
+				</ul>
+			</div>
+			<ul class="nav">
+				<li >
+        	<a href="../index.html">Home</a>
+        </li>
+				<li class="guides active"><a href="../guides/index.html">Guides</a></li>
+				<li class="api "><a href="../api/index.html">Api</a></li>
+				<li class="community"><a href="https://github.com/bitovi/funcunit" target="_blank">GitHub</a></li>
+				<li class="chat"><a href="https://gitter.im/bitovi/funcunit" target="_blank">Chat</a></li>
+			</ul>
+			<div class="pull-right">
+				<div class="bitovi-menu">
+					<a href="http://bitovi.com" class="bitovi icon-bits">Bitovi</a>
+					<ul class="dropdown-menu">
+						<li><a href="http://bitovi.com">Bitovi.com</a></li>
+						<li><a href="http://bitovi.com/blog/">Blog</a></li>
+						<li><a href="http://bitovi.com/consulting/">Consulting</a></li>
+						<li><a href="http://bitovi.com/training/">Training</a></li>
+						<li><a href="http://bitovi.com/open-source/">Open Source</a></li>
+						<li><a href="http://bitovi.com/people/">People</a></li>
+						<li><a href="http://bitovi.com/contact/">Contact Us</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	
+<div class="container api">
+
+	
+	<nav class="sidebar">
+		
+		<ul class="api cascading primary-grouping"> 
+	
+		
+		
+			<li class="search-container active">
+			<a class="sidebar-title" href="index.html" data-search="Guides">
+				Guides
+			</a>
+			
+	<ul>
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.guides.start.html" data-search="Getting Started">
+						Getting Started
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.actions.html" data-search="Actions">
+						Actions
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.getters.html" data-search="Getters &amp; Assertions">
+						Getters &amp; Assertions
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.finding.html" data-search="Finding Elements">
+						Finding Elements
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container active">
+					<a class="page" href="Guides.waits.html" data-search="Waits">
+						Waits
+					</a>
+				</li>
+				
+			
+			
+		
+	</ul>
+
+
+		</li>
+		
+	
+</ul>
+
+	</nav>
+	
+	
+	
+	<article class="content docs">
+	
+	
+		
+		<section class="title">
+			<div class="heading">
+<h1>Waits</h1>
+	<ul class="tags">
+		<li>page</li>
+	</ul>
+	
+	
+</div>
+
+<div class="sub-heading">
+	
+	
+		<span class="module">Guides.waits</span>
+	
+	
+	
+	<span class="inherits">&nbsp;</span>
+</div>
+
+<ul class="links">
+	
+	
+		<li><a href="git://github.com/bitovi/funcunit#documentjs-upgrade/guides/waits.md">source</a></li>
+	
+	
+	
+</ul>
+<br />
+		</section>
+		
+		
+		
+		<section class="contents">
+		</section>
+		
+		
+		
+
+		
+
+		
+			
+		
+		
+		
+		
+
+		
+		<section class="comment">
+			<p>Wait commands are used to check conditions of your page. The test checks a condition repeatedly
+until its either true or a timeout period is reached.</p>
+<h2>Wait commands</h2>
+<p>Wait commands are overloaded jQuery methods.  Just like jQuery methods are both setters and
+getters, depending on how many arguments are passed, FuncUnit wait commands are either waits or
+getters depending on arguments.</p>
+<h3>Single argument waits</h3>
+<p>Most wait commands only require a single argument.</p>
+<p><code>wait( checkVal, [timeout], [callback], [message] )</code></p>
+<ul>
+<li><a href="../docs/FuncUnit.prototype.size.html">FuncUnit.prototype.size size</a></li>
+<li><a href="../docs/FuncUnit.prototype.html.html">FuncUnit.prototype.html html</a></li>
+<li><a href="../docs/FuncUnit.prototype.text.html">FuncUnit.prototype.text text</a></li>
+<li><a href="../docs/FuncUnit.prototype.val.html">FuncUnit.prototype.val val</a></li>
+<li><a href="../docs/FuncUnit.prototype.offset.html">FuncUnit.prototype.offset offset</a></li>
+<li><a href="../docs/FuncUnit.prototype.position.html">FuncUnit.prototype.position position</a></li>
+<li><a href="../docs/FuncUnit.prototype.scrollTop.html">FuncUnit.prototype.scrollTop scrollTop</a></li>
+<li><a href="../docs/FuncUnit.prototype.scrollLeft.html">FuncUnit.prototype.scrollLeft scrollLeft</a></li>
+<li><a href="../docs/FuncUnit.prototype.height.html">FuncUnit.prototype.height height</a></li>
+<li><a href="../docs/FuncUnit.prototype.width.html">FuncUnit.prototype.width width</a></li>
+<li><a href="../docs/FuncUnit.prototype.innerWidth.html">FuncUnit.prototype.innerWidth innerWidth</a></li>
+<li><a href="../docs/FuncUnit.prototype.innerHeight.html">FuncUnit.prototype.innerHeight innerHeight</a></li>
+<li><a href="../docs/FuncUnit.prototype.outerWidth.html">FuncUnit.prototype.outerWidth outerWidth</a></li>
+<li><a href="../docs/FuncUnit.prototype.outerHeight.html">FuncUnit.prototype.outerHeight outerHeight</a></li>
+</ul>
+<h3>Two argument waits</h3>
+<p>Some jQuery methods accept 2 parameters.  Similarly, those wait methods accept two arguments.</p>
+<p><code>wait( keyVal, checkVal, [timeout], [callback], [message] )</code></p>
+<ul>
+<li><a href="../docs/FuncUnit.prototype.attr.html">FuncUnit.prototype.attr attr</a></li>
+<li><a href="../docs/FuncUnit.prototype.hasClass.html">FuncUnit.prototype.hasClass hasClass</a></li>
+<li><a href="../docs/FuncUnit.prototype.css.html">FuncUnit.prototype.css css</a></li>
+</ul>
+<h3>Zero argument waits</h3>
+<p>Several wait methods check for existence/visibility of elements. These require zero parameters.</p>
+<p><code>wait( [timeout], [callback], [message] )</code></p>
+<ul>
+<li><a href="../docs/FuncUnit.prototype.exists.html">FuncUnit.prototype.exists exists</a></li>
+<li><a href="../docs/FuncUnit.prototype.missing.html">FuncUnit.prototype.missing missing</a></li>
+<li><a href="../docs/FuncUnit.prototype.visible.html">FuncUnit.prototype.visible visibile</a></li>
+<li><a href="../docs/FuncUnit.prototype.invisible.html">FuncUnit.prototype.invisible invisible</a></li>
+</ul>
+<h2>Tester function</h2>
+<p>Instead of checking for a simple static value, tests can provide their own tester method. The tester
+method's arguments are whatever the wait normally accepts.  It returns true when the condition is met,
+after which the next wait or action begins.</p>
+<p>The tester method will be called repeatedly until it returns true, or the timeout is reached.</p>
+<h2>Timeout</h2>
+<p>By default, wait commands will wait a 10s timeout period.  If the condition isn't true after that time,
+the test will fail.</p>
+<p>You can provide your own (optional) timeout for each wait condition as the parameter after
+the wait condition.  For example, the following will check if &quot;#trigger&quot; contains &quot;I was triggered&quot; for
+5 seconds before failing the test.</p>
+<p>The [FuncUnit.timeout] property is a global timeout value.  Its value sets the default timeout if a value isn't
+provided.</p>
+<h2>Callback</h2>
+<p>Another optional parameter for each wait command is a callback method, which runs after the wait completes.</p>
+<p>Inside a callback is the place to get information about a page and perform assertions. Callbacks are
+also useful for debugging.</p>
+<h2>Message</h2>
+<p>The last (optional) parameter for each wait command is a message.  By default, wait conditions will pass silently (without a passed assertion).<br />
+If a user provides a message string, the wait condition will pass an assertion with the given message when the wait completes.  If the wait fails
+(the timeout is reached), this message will be provided to the failed assertion.</p>
+
+		</section>
+		
+		
+
+		
+	
+	
+	</article>
+	
+	
+
+</div>
+
+
+
+
+
+
+	<footer>
+		<nav class="container">
+			<a class="brand javascriptmvc" href="index.html"></a>
+			<ul class="nav">
+				<li class="guides"><a href="../guides/index.html">Guides</a></li>
+				<li class="docs"><a href="../docs/index.html">Api</a></li>
+				<li class="github"><a href="https://github.com/bitovi/funcunit">GitHub</a></li>
+			</ul>
+		</nav>
+	</footer>
+
+</body>
+
+</html>

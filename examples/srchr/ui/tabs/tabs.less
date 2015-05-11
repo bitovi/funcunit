@@ -1,0 +1,38 @@
+.tabs {
+	padding: 0px; margin: 12px 0 0 10px;
+	li { 
+	  float: left; 
+	  padding: 0px;
+	  list-style: none; 
+	  margin-left: 10px; 
+	  a { 
+		  color: #1C94C4; 
+		  font-weight: bold; 
+		  text-decoration: none; 
+		  padding: 5px;
+		  font-size: 13px;
+		}
+	}
+	li.disabled a {
+    color:#bbb!important;
+  }
+	li.active a { 
+	  color: white; 
+	  cursor: default; 
+	  background: #666;
+	  padding: 5px 13px;
+	  -webkit-border-radius: 30px;
+	  -moz-border-radius: 30px;
+	  border-radius: 30px;
+	  
+	}
+}
+
+/* clearfix from jQueryUI */
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+/* end clearfix */​
+​

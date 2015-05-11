@@ -1,0 +1,43 @@
+{
+  "name": "funcunit",
+  "main": "dist/cjs/funcunit.js",
+  "version": "3.0.0",
+  "author": {
+    "name": "Bitovi",
+    "email": "contact@bitovi.com",
+    "web": "http://bitovi.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:bitovi/funcunit.git",
+    "github": "https://github.com/bitovi/funcunit"
+  },
+  "devDependencies": {
+    "bower": "~1.2.4",
+    "grunt": "0.4.x",
+    "grunt-contrib-concat": "0.3.0",
+    "grunt-contrib-connect": "0.3.0",
+    "steal": "^0.8.0",
+    "steal-mocha": "0.0.1",
+    "steal-qunit": "0.0.3",
+    "steal-tools": "^0.8.1",
+    "testee": "0.0.8"
+  },
+  "scripts": {
+    "test": "grunt test",
+		"prepublish": "./node_modules/.bin/grunt build"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "dependencies": {
+    "jquery": "1.11.0",
+    "syn": "^0.1.2"
+  },
+  "system": {
+    "main": "funcunit"
+  }
+}

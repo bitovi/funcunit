@@ -1,0 +1,62 @@
+.srchr-history {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  li {
+    cursor: pointer;
+    padding: 10px 20px;
+    border-bottom: 1px solid #bbb;
+    font-size: 12px;
+    text-shadow: 0px 1px white;
+    background: #efefef; /* Old browsers */
+    background: -moz-linear-gradient(top, #efefef 0%, #dddddd 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#efefef), color-stop(100%,#dddddd)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #efefef 0%,#dddddd 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #efefef 0%,#dddddd 100%); /* Opera11.10+ */
+    background: -ms-linear-gradient(top, #efefef 0%,#dddddd 100%); /* IE10+ */
+    filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#efefef', endColorstr='#dddddd',GradientType=0 )"; /* IE6-9 */
+    background: linear-gradient(top, #efefef 0%,#dddddd 100%); /* W3C */
+    &:hover {
+      background: #eee;
+    }
+    &:active {
+      background: #cccccc; /* Old browsers */
+      background: -moz-linear-gradient(top, #cccccc 0%, #dddddd 20%, #dddddd 80%, #cccccc 100%); /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cccccc), color-stop(20%,#dddddd), color-stop(80%,#dddddd), color-stop(100%,#cccccc)); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(top, #cccccc 0%,#dddddd 20%,#dddddd 80%,#cccccc 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(top, #cccccc 0%,#dddddd 20%,#dddddd 80%,#cccccc 100%); /* Opera11.10+ */
+      background: -ms-linear-gradient(top, #cccccc 0%,#dddddd 20%,#dddddd 80%,#cccccc 100%); /* IE10+ */
+      filter: "progid:DXImageTransform.Microsoft.gradient( startColorstr='#cccccc', endColorstr='#cccccc',GradientType=0 )"; /* IE6-9 */
+      background: linear-gradient(top, #cccccc 0%,#dddddd 20%,#dddddd 80%,#cccccc 100%); /* W3C */
+    }
+    &.selected {
+      font-weight: bold;
+    }
+  }
+  .remove {
+    float: right;
+    margin: 0 -15px 0 0;
+    display: block;
+    color: #ccc;
+    background: #999;
+    text-decoration: none;
+    width: 15px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    font-size: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding-left: 1px;
+    text-shadow: none;
+    font-weight: bold;
+    -webkit-box-shadow: 0px 1px 0px rgba(255, 255, 255, 1);
+    -moz-box-shadow:    0px 1px 0px rgba(255, 255, 255, 1);
+    box-shadow:         0px 1px 0px rgba(255, 255, 255, 1);
+    &:hover {
+      background: #666;
+      color: white;
+    }
+  }
+}

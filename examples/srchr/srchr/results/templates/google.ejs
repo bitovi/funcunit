@@ -1,0 +1,8 @@
+<h2><%=title%></h2>
+<%if(this.cse_thumbnail && this.cse_thumbnail.length){%>
+	<img src='<%= this.cse_thumbnail[0].src%>' />
+<%}%>
+
+<%==snippet%>
+<a href='<%= formattedUrl %>'><%=displayLink%></a>
+<div class="clear"></div>

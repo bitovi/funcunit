@@ -1,0 +1,9 @@
+<h3>Results</h3>
+<ul class='resultsTab'>
+	<%$.each(models, function(modelName){%>
+		<li><a href="#<%= modelName %>"><%= modelName%></a></li>
+	<%})%>
+</ul>
+<%$.each(models, function(modelName){%>
+	<div <%= listFor(modelName)%>></div>
+<%})%>

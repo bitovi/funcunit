@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+	<head>
+		<title>srchr.tabs</title>
+		<style>
+			.tab { border: solid 1px black; }
+			ul.tabs { margin-bottom: 10px; }
+		</style>
+	</head>
+	<body>
+		<div id="demo-html">
+			<ul id="resultsTab">
+				<li><a href="#flickr">Flickr</a></li>
+				<li><a href="#yahoo">Yahoo</a></li>
+				<li><a href="#upcoming">Upcoming</a></li>
+			</ul>
+
+			<div id="flickr" class="tab">Flickr Stuff</div>
+			<div id="yahoo" class="tab">Yahoo Stuff</div>
+			<div id="upcoming" class="tab">Upcoming Stuff</div>
+
+			<button id="enable">Enable flickr and upcoming</button>
+		</div>
+
+		<script type="text/javascript" src="../../steal/steal.js"></script>
+		<script type="text/javascript">
+			steal('ui/tabs', function(Tabs) {
+				var enabled = can.compute(['flickr','yahoo']);
+
+				new Tabs('#resultsTab', {
+					enabled: enabled
+				});
+
+				$('#enable').click(function(){
+					enabled(['flickr','upcoming'])
+				});
+			});
+		</script>
+	</body>
+</html>

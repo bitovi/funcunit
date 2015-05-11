@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>Results</title>
+		<style>
+			.ui-list ul {height: 300px; overflow: auto}
+		</style>
+	</head>
+	<body>
+		<div id='results'></div>
+		<script src='../../steal/steal.js'></script>
+		<script>
+		steal('srchr/results',function(Results){
+			new Results('#results',{
+				currentSearch: can.compute({
+					query: "dog",
+					types: ["Twitter","Google","Reddit"]
+				})
+			});
+		});
+		</script>
+	</body>
+</html>

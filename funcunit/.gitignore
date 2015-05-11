@@ -1,0 +1,6 @@
+testee.log
+node_modules
+lib
+build
+*.orig
+.DS_Store
