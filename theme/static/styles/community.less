@@ -1,0 +1,162 @@
+.community {
+	.posts, .irc-chat-container {
+		float: left;
+		width: 640px;
+	}
+	.irc {
+		.irc-chat-container {
+			margin-top: 20px;
+			overflow: scroll;
+					
+			.username {
+				font-weight: bold;
+			}
+		}
+	}
+	.container.bithub {
+		text-align: right;
+		margin-top: -20px;
+		margin-bottom: 40px;
+	}
+	
+	.tab-description {
+		margin-top: -60px;
+		min-height: 360px;
+		text-align: left;
+		font-size: 14px;
+		line-height: 18px;
+		
+		&:before {  
+			left: 74px;
+		}
+		[class^="icon-"],
+		[class*=" icon-"] {
+			font-size: 25px;
+			.font-smoothing;
+			line-height: 10px;
+			margin-right: 5px;
+			
+			&:before {
+				position: relative;
+				top: -4px;
+			}
+		}
+		h1 {
+			padding: 0;
+			font-family: LatoLight, sans-serif;
+		}
+		.bithub-post {
+			float: left;
+			clear: both;
+			width: 100%;
+
+			h2 {
+				color: #000;
+				text-transform: none;
+				font-family: 'LatoBold', sans-serif;
+				font-weight: normal;
+				font-style: normal;
+				font-size: 14px;
+
+				a {
+					text-decoration: none;
+					color: inherit;
+					font-weight: inherit;
+					font-size: inherit;
+				}
+			}
+
+			&.tweet {
+				.handle {
+					color: #999;
+					text-decoration: none;
+					font-weight: normal;
+				}
+			}
+		}
+		
+	}
+	.forums {
+		form {
+			display: block;
+			margin-bottom: 20px;
+		}
+		input[type='search'] {
+			padding: 15px;
+			font-size: 20px;
+			width: 741px;
+			margin-right: 30px;
+		}
+		button {
+			width: 137px;
+			height: 50px;
+			font-size: 18px;
+			
+			&:before {
+				font-family: Bitstrap;
+				text-decoration: inherit;
+				display: inline-block;
+				speak: none;
+				font-size: 25px;
+				content: "\e012";
+				margin-right: 10px;
+			}
+		}
+		.posts {
+			width: 740px;
+		}
+		.categories {
+			width: 144px;
+		}
+		
+	}
+	.commits, .issues {
+
+		.bithub-post {
+			margin-bottom: 12px;
+		}
+	}
+	.categories {
+		width: 220px;
+		
+		.button {
+			text-align: center;
+			display: block;
+			margin-bottom: 16px;
+			.border-box;
+		}
+		
+		ul {
+			list-style-type: none;
+			padding: 0;
+			margin: 0 0 30px;
+			
+			li {
+				font-size: 16px;
+				line-height: 30px;
+			}
+		}
+	}
+	.follower-badges {
+		background-color: #eeeeee;
+		padding: 10px;
+		margin: 0;
+		
+		h4 {
+			font-size: 12px;
+			text-transform: uppercase;
+			margin: 0;
+			padding: 10px;
+		}
+		li {
+			font-size: 12px;
+			color: #666;
+			line-height: 13px;
+			padding-left: 40px;
+			min-height: 40px;
+		}
+	}
+}
+
+
+

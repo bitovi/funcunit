@@ -1,0 +1,39 @@
+{
+  "name": "stealjs.com",
+  "description": "Documentation for the FuncUnit testing framework.",
+  "version": "0.0.1",
+  "main": "app/app",
+  "maintainers": [
+    {
+      "name": "Bitovi",
+      "email": "contact@bitovi.com",
+      "web": "http://bitovi.com/"
+    }
+  ],
+  "dependencies": {
+    "can": "^2.3.0-pre.0",
+    "jquery": "^2.1.4"
+  },
+  "devDependencies": {
+    "documentjs": "^0.3.0-pre.1",
+    "grunt": "^0.4.5",
+    "steal": "^0.10.5",
+    "steal-tools": "^0.10.4"
+  },
+  "homepage": "http://funcunit.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bitovi/funcunit.git"
+  },
+  "system":{
+    "npmIgnore": ["documentjs"],
+    "bundlesPath":"static",
+    "bundleSteal":true
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/mit-license.php"
+    }
+  ]
+}
