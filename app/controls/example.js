@@ -56,11 +56,11 @@ export default can.Control({
 	},
 
 	qunit: function() {
-		this.content.html(can.view('docs/static/templates/example/qunit.mustache', {}));
+		this.content.html(can.view('static/templates/example/qunit.mustache', {}));
 	},
 
 	jasmine: function() {
-		this.content.html(can.view('docs/static/templates/example/jasmine.mustache', {}));
+		this.content.html(can.view('static/templates/example/jasmine.mustache', {}));
 	},
 
 	setHeight: function(el) {

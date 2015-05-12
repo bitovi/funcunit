@@ -1,7 +1,7 @@
 export default can.Control({}, {
 	init: function() {
 		this.state = new can.Observe({});
-		this.element.html(can.view('docs/static/templates/socialStats.mustache', this.state, {
+		this.element.html(can.view('static/templates/socialStats.mustache', this.state, {
 			plural: function(word, count) {
 				// if we ever get an irregular plural (like 'people') we'll have to special-case.
 				return count === 1 ? word : word + 's';
