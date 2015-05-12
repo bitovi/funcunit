@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>srchr.history</title>
+<style>
+	#list { width: 200px; }
+	#description.error { border-color: red;	}
+</style>
+</head>
+<body>
+	<ul id='list'></ul>
+	<p>Add to the list by entering a todo task:</p>
+	<form id='history' action=''>
+		<input type='text' id='name'>
+		<input type='submit' value='Create Search' />
+	</form>
+	<p>When you add it, it will appear above.  Refresh the page,
+	   and you should still see it.</p>
+		
+<script src='../../steal/steal.js'></script>
+<script id='demo-source'>
+steal('srchr/history', 
+  function(History){
+  	
+    var currentSearch = can.compute()
+  	
+    new History("#list", {
+      currentSearch: currentSearch
+    });
+	
+    $("#history").submit(function(ev){
+      ev.preventDefault();
+
+      // remove the error class
+      currentSearch({
+        query: $("#name").val(),
+        types: ["Flickr"]
+      });
+      $("#name").val("")[0].focus();
+    });
+})
+</script>
+<script> DEMO_HTML = "<ul id='list'></ul>" </script>
+	</body>
+</html>

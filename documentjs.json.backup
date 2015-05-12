@@ -1,0 +1,22 @@
+{
+	"versions": {
+     "3.0.0": "git://github.com/bitovi/funcunit#master"
+   },
+  "defaultVersion": "3.0.0",
+	"siteDefaults": {
+		"static":"theme/static",
+		"templates": "theme/templates"
+	},
+	"sites": {
+		"pages": {
+			"glob": "_pages/*.md",
+			"dest": "."
+		},
+		"docs": {
+			"parent": "FuncUnit",
+			"glob": {
+				"pattern": "{{docs, browser}/**/*.{js,md},README.md}"
+			}
+		}
+	}
+}

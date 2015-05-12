@@ -1,0 +1,17 @@
+<ul>
+<% if( searching() && params() ) { %>
+	<li>Searching for <%= params().query %></li>
+<% } else if(list.attr('length')) { %>
+	<%list.each(function(item){%>
+		<li class='result'>
+			<%== typeof resultTemplate == "string" ? 
+				can.view.render(resultTemplate,item) :
+				resultTemplate.render(item) %>
+		</li>
+	<%})%>
+<%} else if(params() && params().query){ %>
+	<li>No data found for <%= params().query %></li>
+<%} else {%>
+	<li>Please search above.</li>
+<% } %>
+</ul>

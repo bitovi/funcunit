@@ -1,0 +1,7 @@
+- [ ] Change templates to theme/templates
+    - [ ] Deal with helper errors
+    - [ ] If something requires config, remove and make a note
+- [ ] Add `static: theme/static` to siteDefaults
+    - [ ] Sort out bugs/build errors
+    - [ ] Probably copy over images and deal with paths
+- [ ] Put guides pages in a group

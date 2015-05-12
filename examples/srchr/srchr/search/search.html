@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>search</title>
+		<style>
+			#results {font-weight: bold;color: red;}
+			#search {position: static;}
+			#search #query {width: 200px;}
+		</style>
+	</head>
+	<body>
+        <div id='search'></div>
+		
+		<div id="results"></div>
+		
+		<a href='javascript://' id='set'>Set Search To Cats</a>
+		<script type='text/javascript' 
+                src='../../steal/steal.js'>   
+        </script>
+<script>
+	steal('srchr/search',  function(SearchControl){
+	 	var currentSearch = can.compute();
+	 	
+	 	new SearchControl('#search', {currentSearch: currentSearch});
+	
+		currentSearch.bind("change", function(ev, data){
+			$('#results').hide().html('Search Created '+data.query).fadeIn();
+		});
+
+		$("#set").click(function(){
+			currentSearch({
+				query: "Cats", 
+				types : ["Flickr"]
+			})
+		})
+	})
+	
+</script>
+	</body>
+</html>

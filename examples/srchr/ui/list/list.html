@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html lang="en">
+	<head>
+		<title>search_result</title>
+		<style>
+			#content {
+				border: solid 1px black;
+				padding: 20px;
+				position: static;
+			}
+
+			#searchNum {
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
+<div id='demo-html'>
+<form action='' id='searchForm'>
+  <input type='text' id='searchVal' 
+         placeholder="Enter Search Term"/>
+  <input type='submit' value='Search' />
+</form>
+<p>Search Results:</p>
+<div id='content'></div>
+<a href="javascript://" id='toggle'>
+  Toggle search results visibility.
+</a>
+<div id='count'>
+  Ajax Request Count: <span id='searchNum'>0</span>
+</div>
+</div>
+		
+        
+		
+		<script>
+			DEMO_HTML = document.getElementById('demo-html').innerHTML
+		</script>
+		<script type='text/javascript' 
+                src='../../steal/steal.js'>   
+        </script>
+<script type='text/javascript' id='demo-source'>
+steal('ui/list', 
+	'can/util/fixture',
+	function(List, fixture){
+
+// setup Google model
+var SEARCHNUM = 0;
+var Google = can.Model({
+	findAll: "/google"
+},{})
+
+fixture("/google",function(request){
+	var results = [];
+	var length = parseInt( Math.random()*5+1 );
+	for(var i =0; i < length; i++){
+		results.push({
+			title : i+"th search result for "+request.data.query,
+			text : "foo bar baz",
+			href : "http://blah.com/"+i
+		})
+	}
+	SEARCHNUM++;
+	$("#searchNum").text(SEARCHNUM)
+	return results;
+});
+
+var params = can.compute();
+
+new List("#content",{
+	modelType : Google,
+	params: params
+});
+
+// update currentSearch when
+// user searches
+$("#searchForm").submit(function(ev){
+	ev.preventDefault();
+	params({
+		query : $("#searchVal").val()
+	})
+});
+
+// toggle visiblity
+$("#toggle").click(function(){
+	var c =  $("#content")
+	if(c.is(":visible")){
+		c.hide()
+	}else{
+		c.show()
+		 .trigger("show")
+	}
+});
+	
+})
+	
+</script>
+	</body>
+</html>

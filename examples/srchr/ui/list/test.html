@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+	<title>Tabs Tests</title>
+	<link rel="stylesheet" href="../../../resources/qunit.css">
+</head>
+<body>
+	<div id="qunit"></div>
+	<div id="qunit-test-area"></div>
+
+	<script src="../../../resources/qunit.js"></script>
+	<script type="text/javascript">
+		QUnit.config.autostart = false;
+	</script>
+	<script src="../../steal/steal.js"></script>
+	<script type="text/javascript">
+		steal('ui/list/list_test.js', function() {
+			QUnit.start();
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<ul class="api">
+	<!-- First Level -->
+	{{#firstLevelChildren}}
+		<li class="search-container{{#hasOrIsActive}} active{{/hasOrIsActive}}{{#isGroup}} active{{/isGroup}}">
+			{{#isGroup}}
+				<span>{{getTitle}}</span>
+			{{/isGroup}}
+			{{^isGroup}}
+				<a href="{{makeHref name}}" data-search="{{#if title}}{{title}}{{else}}{{{name}}}{{/if}}">
+					{{getTitle}}
+				</a>
+			{{/isGroup}}
+
+			{{> active-menu.mustache}}
+		</li>
+	{{/firstLevelChildren}}
+</ul>

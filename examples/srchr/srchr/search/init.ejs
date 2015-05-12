@@ -1,0 +1,15 @@
+<form action=''>
+  <ul class='options'>
+  		<% can.each(modelNames, function(modelName){ %>
+		<li>
+			<input id="cb_<%= modelName%>" type='checkbox' name='types' value='<%= modelName%>' <%== checked(modelName) %>/>
+			<label for="cb_<%= modelName%>"> <%=modelName%> </label>
+		</li>
+		<%})%>
+	</ul>
+	
+	<input type='text' name='query' id="query"/>
+	<input type='submit' value='search' />
+	
+	
+</form>
