@@ -1,6 +1,6 @@
 {
 	"versions": {
-     "3.0.0": "git://github.com/bitovi/funcunit#documentjs-upgrade"
+     "3.0.0": "git://github.com/bitovi/funcunit#master"
    },
   "defaultVersion": "3.0.0",
 	"siteDefaults": {
