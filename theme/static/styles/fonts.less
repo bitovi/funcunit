@@ -1,51 +1,8 @@
-@font-face {
-    font-family: 'Lato';
-    src: url('../fonts/lato-regular.eot');
-    src: url('../fonts/lato-regular.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/lato-regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-
+* {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+  font-weight: 300;
 }
-@font-face {
-    font-family: 'LatoBold';
-    src: url('../fonts/lato-bold.eot');
-    src: url('../fonts/lato-bold.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/lato-bold.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-
-}
-@font-face {
-    font-family: 'LatoLight';
-    src: url('../fonts/lato-light.eot');
-    src: url('../fonts/lato-light.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/lato-light.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-
-}
-h1,h2,h3,h4,h5,h6,strong,b{
-	font-family: 'LatoBold', sans-serif;
-	font-weight: normal !important;
-	font-style: normal !important;
-}
+html { -webkit-font-smoothing: antialiased; }
 body {
-  font-family: 'Lato', sans-serif;
+  background: @pageBackground;
 }
-
-.content.docs {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.sidebar .api > li > a {
-    border: medium none;
-    color: #767676;
-    display: block;
-    font-size: 17px;
-    font-family: 'LatoBold', sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    line-height: 40px;
-}
-
