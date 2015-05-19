@@ -1,8 +1,8 @@
 {
 	"sites": {
-		"api": {
+		"docs": {
 			"parent": "FuncUnit",
-			"pageConfig": {"page":"api"},
+			"pageConfig": {"page":"docs"},
 			"glob": {
 				"pattern": "{browser/**/*.{js,md},README.md}"
 			}
