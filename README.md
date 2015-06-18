@@ -18,7 +18,7 @@
 
 *Note:* [FuncUnit Roadmap](http://forum.javascriptmvc.com/#Topic/32525000001436023)
 
-The [FuncUnit Getting Started](http://funcunit.com/guides/started.html) guide is a quick walkthrough of creating and running a test.
+The [FuncUnit Getting Started](http://funcunit.com/guides/Guides.guides.start.html) guide is a quick walkthrough of creating and running a test.
 
 ## Set up a test
 
@@ -84,7 +84,7 @@ F("#description").visible().type("Test Framework");
 
 ## Simulate user actions
 
-When you're testing a widget, you need to simulate the [actions](http://funcunit.com/guides/funcunit.actions.html) that user takes.  FuncUnit uses the
+When you're testing a widget, you need to simulate the [actions](http://funcunit.com/guides/Guides.actions.html) that user takes.  FuncUnit uses the
 [syn library](https://github.com/bitovi/syn) to accurately simulate the correct low level events like _mouseup_ and _keypress_ for high
 level actions like [click()](http://funcunit.com/docs/FuncUnit.prototype.click.html) and [type()](http://funcunit.com/docs/FuncUnit.prototype.type.html).  The following shows how to simulate common user actions.
 
@@ -150,7 +150,7 @@ F('#language_input').val("JavaScript");
 F('.contact').size(5);
 ```
 
-There are many more [waits](http://funcunit.com/guides/funcunit.waits.html) possible.
+There are many more [waits](http://funcunit.com/guides/Guides.waits.html) possible.
 
 
 <h2 id="get">Get information and run assertions</h2>
