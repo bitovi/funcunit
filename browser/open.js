@@ -227,12 +227,12 @@ getAbsolutePath: function( path ) {
 },
 /**
  * @parent utilities
- * @property {window} FuncUnit.win F.win()
+ * @property {window} FuncUnit.win F.win
  * Use this to refer to the window of the application page.
  * @codestart
- *F(F.window).innerWidth(function(w){
+ * F(F.window).innerWidth(function(w){
  *   ok(w > 1000, "window is more than 1000 px wide")
- * })
+ * });
  * @codeend
  */
 win: window,
