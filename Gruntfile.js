@@ -50,7 +50,6 @@ module.exports = function (grunt) {
 							}
 							return depName;
 						},
-						ignore: ["jquery"],
 						exports: {
 							"jquery": "jQuery"
 						}
