@@ -1,4 +1,4 @@
-/*funcunit@3.0.0#browser/init*/
+/*funcunit@3.1.0-pre.0#browser/init*/
 define(function (require, exports, module) {
     var jQuery = require('./jquery');
     var FuncUnit = window.FuncUnit || {};

@@ -1,4 +1,4 @@
-/*funcunit@3.0.0#browser/getters*/
+/*funcunit@3.1.0-pre.0#browser/getters*/
 var $ = require('./jquery.js');
 var FuncUnit = require('./core.js');
 FuncUnit.funcs = {

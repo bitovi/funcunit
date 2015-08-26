@@ -1,4 +1,4 @@
-/*funcunit@3.0.0#browser/adapters/jasmine2*/
+/*funcunit@3.1.0-pre.0#browser/adapters/jasmine2*/
 define(function (require, exports, module) {
     module.exports = function (jasmine) {
         FuncUnit.timeout = 4900;

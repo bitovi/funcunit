@@ -1,4 +1,4 @@
-/*funcunit@3.0.0#browser/init*/
+/*funcunit@3.1.0-pre.0#browser/init*/
 var jQuery = require('./jquery.js');
 var FuncUnit = window.FuncUnit || {};
 window.jQuery = jQuery;

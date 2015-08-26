@@ -1,4 +1,4 @@
-/*funcunit@3.0.0#browser/open*/
+/*funcunit@3.1.0-pre.0#browser/open*/
 var $ = require('./jquery.js');
 var FuncUnit = require('./core.js');
 var syn = require('syn');

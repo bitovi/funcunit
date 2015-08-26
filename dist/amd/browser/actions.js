@@ -1,4 +1,4 @@
-/*funcunit@3.0.0#browser/actions*/
+/*funcunit@3.1.0-pre.0#browser/actions*/
 define(function (require, exports, module) {
     var $ = require('./jquery');
     var FuncUnit = require('./core');

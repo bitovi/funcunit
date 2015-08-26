@@ -1,4 +1,4 @@
-/*funcunit@3.0.0#browser/queue*/
+/*funcunit@3.1.0-pre.0#browser/queue*/
 var FuncUnit = require('./core.js');
 FuncUnit._incallback = false;
 var currentPosition = 0, startedQueue = false;

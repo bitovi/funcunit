@@ -1,8 +1,8 @@
 /*
- * funcunit - 3.0.0
+ * funcunit - 3.1.0-pre.0
  * http://funcunit.com
  * Copyright (c) 2015 Bitovi
- * Tue, 11 Aug 2015 11:20:31 GMT
+ * Wed, 26 Aug 2015 00:00:13 GMT
  * Licensed MIT */
 
 /*[global-shim-start]*/
@@ -8604,12 +8604,12 @@ define('syn/syn', function (require, exports, module) {
     }
     return jQuery;
 }));
-/*funcunit@3.0.0#browser/jquery*/
+/*funcunit@3.1.0-pre.0#browser/jquery*/
 define('funcunit/browser/jquery', function (require, exports, module) {
     var $ = require('jquery');
     module.exports = $.noConflict(true);
 });
-/*funcunit@3.0.0#browser/init*/
+/*funcunit@3.1.0-pre.0#browser/init*/
 define('funcunit/browser/init', function (require, exports, module) {
     var jQuery = require('funcunit/browser/jquery');
     var FuncUnit = window.FuncUnit || {};
@@ -8636,7 +8636,7 @@ define('funcunit/browser/init', function (require, exports, module) {
     FuncUnit.jQuery = jQuery;
     module.exports = FuncUnit;
 });
-/*funcunit@3.0.0#browser/core*/
+/*funcunit@3.1.0-pre.0#browser/core*/
 define('funcunit/browser/core', function (require, exports, module) {
     var jQuery = require('funcunit/browser/jquery');
     var oldFuncUnit = require('funcunit/browser/init');
@@ -8700,7 +8700,7 @@ define('funcunit/browser/core', function (require, exports, module) {
     FuncUnit.prototype = origFuncUnit.prototype;
     module.exports = FuncUnit;
 });
-/*funcunit@3.0.0#browser/adapters/jasmine*/
+/*funcunit@3.1.0-pre.0#browser/adapters/jasmine*/
 define('funcunit/browser/adapters/jasmine', function (require, exports, module) {
     module.exports = function (jasmine) {
         var paused = false;
@@ -8723,7 +8723,7 @@ define('funcunit/browser/adapters/jasmine', function (require, exports, module) 
         };
     };
 });
-/*funcunit@3.0.0#browser/adapters/jasmine2*/
+/*funcunit@3.1.0-pre.0#browser/adapters/jasmine2*/
 define('funcunit/browser/adapters/jasmine2', function (require, exports, module) {
     module.exports = function (jasmine) {
         FuncUnit.timeout = 4900;
@@ -8742,7 +8742,7 @@ define('funcunit/browser/adapters/jasmine2', function (require, exports, module)
         };
     };
 });
-/*funcunit@3.0.0#browser/adapters/qunit*/
+/*funcunit@3.1.0-pre.0#browser/adapters/qunit*/
 define('funcunit/browser/adapters/qunit', function (require, exports, module) {
     module.exports = function (QUnit) {
         return {
@@ -8761,7 +8761,7 @@ define('funcunit/browser/adapters/qunit', function (require, exports, module) {
         };
     };
 });
-/*funcunit@3.0.0#browser/adapters/mocha*/
+/*funcunit@3.1.0-pre.0#browser/adapters/mocha*/
 define('funcunit/browser/adapters/mocha', function (require, exports, module) {
     var FuncUnit = require('funcunit/browser/core');
     var ok = function (expr, msg) {
@@ -8784,7 +8784,7 @@ define('funcunit/browser/adapters/mocha', function (require, exports, module) {
         };
     };
 });
-/*funcunit@3.0.0#browser/adapters/adapters*/
+/*funcunit@3.1.0-pre.0#browser/adapters/adapters*/
 define('funcunit/browser/adapters/adapters', function (require, exports, module) {
     var jasmineAdapter = require('funcunit/browser/adapters/jasmine');
     var jasmine2Adapter = require('funcunit/browser/adapters/jasmine2');
@@ -8833,7 +8833,7 @@ define('funcunit/browser/adapters/adapters', function (require, exports, module)
         FuncUnit.unit = defaultAdapter;
     };
 });
-/*funcunit@3.0.0#browser/open*/
+/*funcunit@3.1.0-pre.0#browser/open*/
 define('funcunit/browser/open', function (require, exports, module) {
     var $ = require('funcunit/browser/jquery');
     var FuncUnit = require('funcunit/browser/core');
@@ -9031,7 +9031,7 @@ define('funcunit/browser/open', function (require, exports, module) {
     });
     module.exports = FuncUnit;
 });
-/*funcunit@3.0.0#browser/actions*/
+/*funcunit@3.1.0-pre.0#browser/actions*/
 define('funcunit/browser/actions', function (require, exports, module) {
     var $ = require('funcunit/browser/jquery');
     var FuncUnit = require('funcunit/browser/core');
@@ -9164,7 +9164,7 @@ define('funcunit/browser/actions', function (require, exports, module) {
     });
     module.exports = FuncUnit;
 });
-/*funcunit@3.0.0#browser/getters*/
+/*funcunit@3.1.0-pre.0#browser/getters*/
 define('funcunit/browser/getters', function (require, exports, module) {
     var $ = require('funcunit/browser/jquery');
     var FuncUnit = require('funcunit/browser/core');
@@ -9301,7 +9301,7 @@ define('funcunit/browser/getters', function (require, exports, module) {
     }
     module.exports = FuncUnit;
 });
-/*funcunit@3.0.0#browser/traversers*/
+/*funcunit@3.1.0-pre.0#browser/traversers*/
 define('funcunit/browser/traversers', function (require, exports, module) {
     var $ = require('funcunit/browser/jquery');
     var FuncUnit = require('funcunit/browser/core');
@@ -9337,7 +9337,7 @@ define('funcunit/browser/traversers', function (require, exports, module) {
     }
     module.exports = FuncUnit;
 });
-/*funcunit@3.0.0#browser/queue*/
+/*funcunit@3.1.0-pre.0#browser/queue*/
 define('funcunit/browser/queue', function (require, exports, module) {
     var FuncUnit = require('funcunit/browser/core');
     FuncUnit._incallback = false;
@@ -9447,7 +9447,7 @@ define('funcunit/browser/queue', function (require, exports, module) {
     };
     module.exports = FuncUnit;
 });
-/*funcunit@3.0.0#browser/waits*/
+/*funcunit@3.1.0-pre.0#browser/waits*/
 define('funcunit/browser/waits', function (require, exports, module) {
     var $ = require('funcunit/browser/jquery');
     var FuncUnit = require('funcunit/browser/core');
@@ -9577,7 +9577,7 @@ define('funcunit/browser/waits', function (require, exports, module) {
     });
     module.exports = FuncUnit;
 });
-/*funcunit@3.0.0#funcunit*/
+/*funcunit@3.1.0-pre.0#funcunit*/
 define('funcunit/funcunit', function (require, exports, module) {
     var syn = require('syn/syn');
     var FuncUnit = require('funcunit/browser/core');
