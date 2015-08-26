@@ -1,4 +1,5 @@
 var jasmineAdapter = require("funcunit/browser/adapters/jasmine");
+var jasmine2Adapter = require("funcunit/browser/adapters/jasmine2");
 var qunitAdapter = require("funcunit/browser/adapters/qunit");
 var mochaAdapter = require("funcunit/browser/adapters/mocha");
 var FuncUnit = require("funcunit/browser/core");
@@ -71,6 +72,8 @@ FuncUnit.attach = function(runner){
 		unit = mochaAdapter(runner);
 	} else if(isJasmine(runner)) {
 		unit = jasmineAdapter(runner);
+	} else if(isJasmine2(runner)) {
+		unit = jasmine2Adapter(runner);
 	} else {
 		unit = defaultAdapter;
 	}
@@ -88,6 +91,10 @@ function isMocha(runner) {
 
 function isJasmine(runner) {
 	return !!(runner.getEnv && typeof window.waitsFor === "function");
+}
+
+function isJasmine2(runner) {
+	return !!(runner.getEnv && typeof runner.clock === "function" && !window.waitsFor);
 }
 
 /**

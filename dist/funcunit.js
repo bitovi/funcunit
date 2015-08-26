@@ -1,8 +1,8 @@
 /*
- * FuncUnit - 2.1-pre
+ * funcunit - 3.1.0-pre.0
  * http://funcunit.com
  * Copyright (c) 2015 Bitovi
- * Thu, 09 Apr 2015 01:33:40 GMT
+ * Wed, 26 Aug 2015 00:00:13 GMT
  * Licensed MIT */
 
 /*[global-shim-start]*/
@@ -66,9 +66,9 @@
 		},
 		orig: global.System
 	};
-})({},window)
+})({"jquery":"jQuery"},window)
 /*syn@0.1.2#synthetic*/
-define('syn@0.1.2#synthetic', function (require, exports, module) {
+define('syn/synthetic', function (require, exports, module) {
     var opts = window.syn ? window.syn : {};
     var extend = function (d, s) {
             var p;
@@ -533,8 +533,8 @@ define('syn@0.1.2#synthetic', function (require, exports, module) {
     module.exports = syn;
 });
 /*syn@0.1.2#mouse*/
-define('syn@0.1.2#mouse', function (require, exports, module) {
-    var syn = require('syn@0.1.2#synthetic');
+define('syn/mouse', function (require, exports, module) {
+    var syn = require('syn/synthetic');
     var h = syn.helpers, getWin = h.getWindow;
     syn.mouse = {};
     h.extend(syn.defaults, {
@@ -682,9 +682,9 @@ define('syn@0.1.2#mouse', function (require, exports, module) {
     });
 });
 /*syn@0.1.2#mouse.support*/
-define('syn@0.1.2#mouse.support', function (require, exports, module) {
-    var syn = require('syn@0.1.2#synthetic');
-    require('syn@0.1.2#mouse');
+define('syn/mouse.support', function (require, exports, module) {
+    var syn = require('syn/synthetic');
+    require('syn/mouse');
     if (!document.body) {
         syn.schedule(function () {
             checkSupport(syn);
@@ -738,9 +738,9 @@ define('syn@0.1.2#mouse.support', function (require, exports, module) {
     }
 });
 /*syn@0.1.2#browsers*/
-define('syn@0.1.2#browsers', function (require, exports, module) {
-    var syn = require('syn@0.1.2#synthetic');
-    require('syn@0.1.2#mouse');
+define('syn/browsers', function (require, exports, module) {
+    var syn = require('syn/synthetic');
+    require('syn/mouse');
     syn.key.browsers = {
         webkit: {
             'prevent': {
@@ -1514,8 +1514,8 @@ define('syn@0.1.2#browsers', function (require, exports, module) {
     }();
 });
 /*syn@0.1.2#typeable*/
-define('syn@0.1.2#typeable', function (require, exports, module) {
-    var syn = require('syn@0.1.2#synthetic');
+define('syn/typeable', function (require, exports, module) {
+    var syn = require('syn/synthetic');
     var typeables = [];
     var __indexOf = [].indexOf || function (item) {
             for (var i = 0, l = this.length; i < l; i++) {
@@ -1551,10 +1551,10 @@ define('syn@0.1.2#typeable', function (require, exports, module) {
     });
 });
 /*syn@0.1.2#key*/
-define('syn@0.1.2#key', function (require, exports, module) {
-    var syn = require('syn@0.1.2#synthetic');
-    require('syn@0.1.2#typeable');
-    require('syn@0.1.2#browsers');
+define('syn/key', function (require, exports, module) {
+    var syn = require('syn/synthetic');
+    require('syn/typeable');
+    require('syn/browsers');
     var h = syn.helpers, getSelection = function (el) {
             var real, r, start;
             if (el.selectionStart !== undefined) {
@@ -2182,9 +2182,9 @@ define('syn@0.1.2#key', function (require, exports, module) {
     });
 });
 /*syn@0.1.2#key.support*/
-define('syn@0.1.2#key.support', function (require, exports, module) {
-    var syn = require('syn@0.1.2#synthetic');
-    require('syn@0.1.2#key');
+define('syn/key.support', function (require, exports, module) {
+    var syn = require('syn/synthetic');
+    require('syn/key');
     if (!syn.config.support) {
         (function checkForSupport() {
             if (!document.body) {
@@ -2243,8 +2243,8 @@ define('syn@0.1.2#key.support', function (require, exports, module) {
     }
 });
 /*syn@0.1.2#drag*/
-define('syn@0.1.2#drag', function (require, exports, module) {
-    var syn = require('syn@0.1.2#synthetic');
+define('syn/drag', function (require, exports, module) {
+    var syn = require('syn/synthetic');
     (function dragSupport() {
         if (!document.body) {
             syn.schedule(dragSupport, 1);
@@ -2418,12 +2418,12 @@ define('syn@0.1.2#drag', function (require, exports, module) {
     });
 });
 /*syn@0.1.2#syn*/
-define('syn@0.1.2#syn', function (require, exports, module) {
-    var syn = require('syn@0.1.2#synthetic');
-    require('syn@0.1.2#mouse.support');
-    require('syn@0.1.2#browsers');
-    require('syn@0.1.2#key.support');
-    require('syn@0.1.2#drag');
+define('syn/syn', function (require, exports, module) {
+    var syn = require('syn/synthetic');
+    require('syn/mouse.support');
+    require('syn/browsers');
+    require('syn/key.support');
+    require('syn/drag');
     window.syn = syn;
     module.exports = syn;
 });
@@ -8604,14 +8604,14 @@ define('syn@0.1.2#syn', function (require, exports, module) {
     }
     return jQuery;
 }));
-/*funcunit@0.0.1#browser/jquery*/
-define('funcunit@0.0.1#browser/jquery', function (require, exports, module) {
-    var $ = require('jquery@1.11.0#dist/jquery');
+/*funcunit@3.1.0-pre.0#browser/jquery*/
+define('funcunit/browser/jquery', function (require, exports, module) {
+    var $ = require('jquery');
     module.exports = $.noConflict(true);
 });
-/*funcunit@0.0.1#browser/init*/
-define('funcunit@0.0.1#browser/init', function (require, exports, module) {
-    var jQuery = require('funcunit@0.0.1#browser/jquery');
+/*funcunit@3.1.0-pre.0#browser/init*/
+define('funcunit/browser/init', function (require, exports, module) {
+    var jQuery = require('funcunit/browser/jquery');
     var FuncUnit = window.FuncUnit || {};
     window.jQuery = jQuery;
     jQuery.sub = function () {
@@ -8636,10 +8636,10 @@ define('funcunit@0.0.1#browser/init', function (require, exports, module) {
     FuncUnit.jQuery = jQuery;
     module.exports = FuncUnit;
 });
-/*funcunit@0.0.1#browser/core*/
-define('funcunit@0.0.1#browser/core', function (require, exports, module) {
-    var jQuery = require('funcunit@0.0.1#browser/jquery');
-    var oldFuncUnit = require('funcunit@0.0.1#browser/init');
+/*funcunit@3.1.0-pre.0#browser/core*/
+define('funcunit/browser/core', function (require, exports, module) {
+    var jQuery = require('funcunit/browser/jquery');
+    var oldFuncUnit = require('funcunit/browser/init');
     var FuncUnit = oldFuncUnit.jQuery.sub();
     var origFuncUnit = FuncUnit;
     FuncUnit = function (selector, frame) {
@@ -8700,12 +8700,11 @@ define('funcunit@0.0.1#browser/core', function (require, exports, module) {
     FuncUnit.prototype = origFuncUnit.prototype;
     module.exports = FuncUnit;
 });
-/*funcunit@0.0.1#browser/adapters/jasmine*/
-define('funcunit@0.0.1#browser/adapters/jasmine', function (require, exports, module) {
-    var FuncUnit = require('funcunit@0.0.1#browser/core');
-    if (window.jasmine) {
+/*funcunit@3.1.0-pre.0#browser/adapters/jasmine*/
+define('funcunit/browser/adapters/jasmine', function (require, exports, module) {
+    module.exports = function (jasmine) {
         var paused = false;
-        FuncUnit.unit = {
+        return {
             pauseTest: function () {
                 paused = true;
                 waitsFor(function () {
@@ -8722,39 +8721,56 @@ define('funcunit@0.0.1#browser/adapters/jasmine', function (require, exports, mo
                 return jasmine.getEnv().equals_(expected, actual);
             }
         };
-        module.exports = FuncUnit;
-    }
+    };
 });
-/*funcunit@0.0.1#browser/adapters/qunit*/
-define('funcunit@0.0.1#browser/adapters/qunit', function (require, exports, module) {
-    var FuncUnit = require('funcunit@0.0.1#browser/core');
-    if (window.QUnit) {
-        FuncUnit.unit = {
+/*funcunit@3.1.0-pre.0#browser/adapters/jasmine2*/
+define('funcunit/browser/adapters/jasmine2', function (require, exports, module) {
+    module.exports = function (jasmine) {
+        FuncUnit.timeout = 4900;
+        return {
             pauseTest: function () {
-                stop();
             },
             resumeTest: function () {
-                start();
             },
             assertOK: function (assertion, message) {
-                ok(assertion, message);
+                expect(assertion).toBeTruthy();
+            },
+            equiv: function (expected, actual) {
+                expect(actual).toEqual(expected);
+                return expected === actual;
+            }
+        };
+    };
+});
+/*funcunit@3.1.0-pre.0#browser/adapters/qunit*/
+define('funcunit/browser/adapters/qunit', function (require, exports, module) {
+    module.exports = function (QUnit) {
+        return {
+            pauseTest: function () {
+                QUnit.stop();
+            },
+            resumeTest: function () {
+                QUnit.start();
+            },
+            assertOK: function (assertion, message) {
+                QUnit.ok(assertion, message);
             },
             equiv: function (expected, actual) {
                 return QUnit.equiv(expected, actual);
             }
         };
-    }
+    };
 });
-/*funcunit@0.0.1#browser/adapters/mocha*/
-define('funcunit@0.0.1#browser/adapters/mocha', function (require, exports, module) {
-    var FuncUnit = require('funcunit@0.0.1#funcunit');
+/*funcunit@3.1.0-pre.0#browser/adapters/mocha*/
+define('funcunit/browser/adapters/mocha', function (require, exports, module) {
+    var FuncUnit = require('funcunit/browser/core');
     var ok = function (expr, msg) {
         if (!expr)
             throw new Error(msg);
     };
-    if (window.mocha) {
+    module.exports = function (mocha) {
         FuncUnit.timeout = 1900;
-        FuncUnit.unit = {
+        return {
             pauseTest: function () {
             },
             resumeTest: function () {
@@ -8766,19 +8782,62 @@ define('funcunit@0.0.1#browser/adapters/mocha', function (require, exports, modu
                 return expected == actual;
             }
         };
+    };
+});
+/*funcunit@3.1.0-pre.0#browser/adapters/adapters*/
+define('funcunit/browser/adapters/adapters', function (require, exports, module) {
+    var jasmineAdapter = require('funcunit/browser/adapters/jasmine');
+    var jasmine2Adapter = require('funcunit/browser/adapters/jasmine2');
+    var qunitAdapter = require('funcunit/browser/adapters/qunit');
+    var mochaAdapter = require('funcunit/browser/adapters/mocha');
+    var FuncUnit = require('funcunit/browser/core');
+    var noop = function () {
+    };
+    var defaultAdapter = {
+            pauseTest: noop,
+            resumeTest: noop,
+            assertOK: noop,
+            equiv: function (expected, actual) {
+                return expected == actual;
+            }
+        };
+    FuncUnit.unit = defaultAdapter;
+    FuncUnit.attach = function (runner) {
+        var unit;
+        if (isQUnit(runner)) {
+            unit = qunitAdapter(runner);
+        } else if (isMocha(runner)) {
+            unit = mochaAdapter(runner);
+        } else if (isJasmine(runner)) {
+            unit = jasmineAdapter(runner);
+        } else if (isJasmine2(runner)) {
+            unit = jasmine2Adapter(runner);
+        } else {
+            unit = defaultAdapter;
+        }
+        FuncUnit.unit = unit;
+    };
+    function isQUnit(runner) {
+        return !!(runner.ok && runner.start && runner.stop);
     }
+    function isMocha(runner) {
+        return !!(runner.setup && runner.globals && runner.reporter);
+    }
+    function isJasmine(runner) {
+        return !!(runner.getEnv && typeof window.waitsFor === 'function');
+    }
+    function isJasmine2(runner) {
+        return !!(runner.getEnv && typeof runner.clock === 'function' && !window.waitsFor);
+    }
+    FuncUnit.detach = function () {
+        FuncUnit.unit = defaultAdapter;
+    };
 });
-/*funcunit@0.0.1#browser/adapters/adapters*/
-define('funcunit@0.0.1#browser/adapters/adapters', function (require, exports, module) {
-    require('funcunit@0.0.1#browser/adapters/jasmine');
-    require('funcunit@0.0.1#browser/adapters/qunit');
-    require('funcunit@0.0.1#browser/adapters/mocha');
-});
-/*funcunit@0.0.1#browser/open*/
-define('funcunit@0.0.1#browser/open', function (require, exports, module) {
-    var $ = require('funcunit@0.0.1#browser/jquery');
-    var FuncUnit = require('funcunit@0.0.1#browser/core');
-    var syn = require('syn@0.1.2#syn');
+/*funcunit@3.1.0-pre.0#browser/open*/
+define('funcunit/browser/open', function (require, exports, module) {
+    var $ = require('funcunit/browser/jquery');
+    var FuncUnit = require('funcunit/browser/core');
+    var syn = require('syn/syn');
     if (FuncUnit.frameMode) {
         var ifrm = document.createElement('iframe');
         ifrm.id = 'funcunit_app';
@@ -8972,11 +9031,11 @@ define('funcunit@0.0.1#browser/open', function (require, exports, module) {
     });
     module.exports = FuncUnit;
 });
-/*funcunit@0.0.1#browser/actions*/
-define('funcunit@0.0.1#browser/actions', function (require, exports, module) {
-    var $ = require('funcunit@0.0.1#browser/jquery');
-    var FuncUnit = require('funcunit@0.0.1#browser/core');
-    var syn = window.syn = require('syn@0.1.2#syn');
+/*funcunit@3.1.0-pre.0#browser/actions*/
+define('funcunit/browser/actions', function (require, exports, module) {
+    var $ = require('funcunit/browser/jquery');
+    var FuncUnit = require('funcunit/browser/core');
+    var syn = window.syn = require('syn/syn');
     var clicks = [
             'click',
             'dblclick',
@@ -9105,10 +9164,10 @@ define('funcunit@0.0.1#browser/actions', function (require, exports, module) {
     });
     module.exports = FuncUnit;
 });
-/*funcunit@0.0.1#browser/getters*/
-define('funcunit@0.0.1#browser/getters', function (require, exports, module) {
-    var $ = require('funcunit@0.0.1#browser/jquery');
-    var FuncUnit = require('funcunit@0.0.1#browser/core');
+/*funcunit@3.1.0-pre.0#browser/getters*/
+define('funcunit/browser/getters', function (require, exports, module) {
+    var $ = require('funcunit/browser/jquery');
+    var FuncUnit = require('funcunit/browser/core');
     FuncUnit.funcs = {
         'size': 0,
         'attr': 1,
@@ -9242,10 +9301,10 @@ define('funcunit@0.0.1#browser/getters', function (require, exports, module) {
     }
     module.exports = FuncUnit;
 });
-/*funcunit@0.0.1#browser/traversers*/
-define('funcunit@0.0.1#browser/traversers', function (require, exports, module) {
-    var $ = require('funcunit@0.0.1#browser/jquery');
-    var FuncUnit = require('funcunit@0.0.1#browser/core');
+/*funcunit@3.1.0-pre.0#browser/traversers*/
+define('funcunit/browser/traversers', function (require, exports, module) {
+    var $ = require('funcunit/browser/jquery');
+    var FuncUnit = require('funcunit/browser/core');
     var traversers = [
             'closest',
             'next',
@@ -9278,9 +9337,9 @@ define('funcunit@0.0.1#browser/traversers', function (require, exports, module) 
     }
     module.exports = FuncUnit;
 });
-/*funcunit@0.0.1#browser/queue*/
-define('funcunit@0.0.1#browser/queue', function (require, exports, module) {
-    var FuncUnit = require('funcunit@0.0.1#browser/core');
+/*funcunit@3.1.0-pre.0#browser/queue*/
+define('funcunit/browser/queue', function (require, exports, module) {
+    var FuncUnit = require('funcunit/browser/core');
     FuncUnit._incallback = false;
     var currentPosition = 0, startedQueue = false;
     FuncUnit.speed = 0;
@@ -9388,10 +9447,10 @@ define('funcunit@0.0.1#browser/queue', function (require, exports, module) {
     };
     module.exports = FuncUnit;
 });
-/*funcunit@0.0.1#browser/waits*/
-define('funcunit@0.0.1#browser/waits', function (require, exports, module) {
-    var $ = require('funcunit@0.0.1#browser/jquery');
-    var FuncUnit = require('funcunit@0.0.1#browser/core');
+/*funcunit@3.1.0-pre.0#browser/waits*/
+define('funcunit/browser/waits', function (require, exports, module) {
+    var $ = require('funcunit/browser/jquery');
+    var FuncUnit = require('funcunit/browser/core');
     FuncUnit.wait = function (time, success) {
         if (typeof time == 'function') {
             success = time;
@@ -9518,17 +9577,17 @@ define('funcunit@0.0.1#browser/waits', function (require, exports, module) {
     });
     module.exports = FuncUnit;
 });
-/*funcunit@0.0.1#funcunit*/
-define('funcunit@0.0.1#funcunit', function (require, exports, module) {
-    var syn = require('syn@0.1.2#syn');
-    var FuncUnit = require('funcunit@0.0.1#browser/core');
-    require('funcunit@0.0.1#browser/adapters/adapters');
-    require('funcunit@0.0.1#browser/open');
-    require('funcunit@0.0.1#browser/actions');
-    require('funcunit@0.0.1#browser/getters');
-    require('funcunit@0.0.1#browser/traversers');
-    require('funcunit@0.0.1#browser/queue');
-    require('funcunit@0.0.1#browser/waits');
+/*funcunit@3.1.0-pre.0#funcunit*/
+define('funcunit/funcunit', function (require, exports, module) {
+    var syn = require('syn/syn');
+    var FuncUnit = require('funcunit/browser/core');
+    require('funcunit/browser/adapters/adapters');
+    require('funcunit/browser/open');
+    require('funcunit/browser/actions');
+    require('funcunit/browser/getters');
+    require('funcunit/browser/traversers');
+    require('funcunit/browser/queue');
+    require('funcunit/browser/waits');
     window.FuncUnit = window.S = window.F = FuncUnit;
     module.exports = FuncUnit;
 });
