@@ -96,7 +96,7 @@ _open: function(url){
       // This is mainly for opera. Other browsers will hit the unload event and close the popup.
       // This block breaks in IE (which never reaches it) because after closing a window, it throws access 
       // denied any time you try to access it, even after reopening.
-      if(FuncUnit.win.___FUNCUNIT_OPENED) {
+      if(FuncUnit.win && FuncUnit.win.___FUNCUNIT_OPENED) {
         FuncUnit.win.close();
         FuncUnit.win = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
       }
