@@ -15,7 +15,7 @@
     "jquery": "^2.1.4"
   },
   "devDependencies": {
-    "documentjs": "^0.3.0-pre.1",
+    "documentjs": "0.3.0-pre.1",
     "grunt": "^0.4.5",
     "steal": "^0.10.5",
     "steal-tools": "^0.10.4"
