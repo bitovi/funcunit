@@ -1,4 +1,4 @@
-/*funcunit@3.1.0-pre.0#funcunit*/
+/*funcunit@3.1.0-pre.1#funcunit*/
 define(function (require, exports, module) {
     var syn = require('syn');
     var FuncUnit = require('./browser/core');

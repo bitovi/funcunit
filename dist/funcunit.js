@@ -1,8 +1,8 @@
 /*
  * funcunit - 3.1.0-pre.0
  * http://funcunit.com
- * Copyright (c) 2015 Bitovi
- * Wed, 26 Aug 2015 00:00:13 GMT
+ * Copyright (c) 2016 Bitovi
+ * Thu, 03 Mar 2016 15:04:34 GMT
  * Licensed MIT */
 
 /*[global-shim-start]*/
@@ -67,7 +67,7 @@
 		orig: global.System
 	};
 })({"jquery":"jQuery"},window)
-/*syn@0.1.2#synthetic*/
+/*syn@0.2.0#synthetic*/
 define('syn/synthetic', function (require, exports, module) {
     var opts = window.syn ? window.syn : {};
     var extend = function (d, s) {
@@ -532,7 +532,7 @@ define('syn/synthetic', function (require, exports, module) {
     }
     module.exports = syn;
 });
-/*syn@0.1.2#mouse*/
+/*syn@0.2.0#mouse*/
 define('syn/mouse', function (require, exports, module) {
     var syn = require('syn/synthetic');
     var h = syn.helpers, getWin = h.getWindow;
@@ -563,7 +563,7 @@ define('syn/mouse', function (require, exports, module) {
                     }
                 }
             }
-            if (!syn.support.clickSubmits && (nodeName === 'input' && type === 'submit') || nodeName === 'button') {
+            if (!syn.support.clickSubmits && ((nodeName === 'input' || nodeName === 'button') && type === 'submit')) {
                 var form = syn.closest(element, 'form');
                 if (form) {
                     syn.trigger(form, 'submit', {});
@@ -681,15 +681,14 @@ define('syn/mouse', function (require, exports, module) {
         }
     });
 });
-/*syn@0.1.2#mouse.support*/
+/*syn@0.2.0#mouse.support*/
 define('syn/mouse.support', function (require, exports, module) {
     var syn = require('syn/synthetic');
     require('syn/mouse');
-    if (!document.body) {
-        syn.schedule(function () {
-            checkSupport(syn);
-        }, 1);
-    } else {
+    (function checkSupport() {
+        if (!document.body) {
+            return syn.schedule(checkSupport, 1);
+        }
         window.__synthTest = function () {
             syn.support.linkHrefJS = true;
         };
@@ -735,9 +734,9 @@ define('syn/mouse.support', function (require, exports, module) {
         syn.trigger(div, 'mouseup', {});
         document.documentElement.removeChild(div);
         syn.support.ready++;
-    }
+    }());
 });
-/*syn@0.1.2#browsers*/
+/*syn@0.2.0#browsers*/
 define('syn/browsers', function (require, exports, module) {
     var syn = require('syn/synthetic');
     require('syn/mouse');
@@ -1513,7 +1512,7 @@ define('syn/browsers', function (require, exports, module) {
         return syn.mouse.browsers.gecko;
     }();
 });
-/*syn@0.1.2#typeable*/
+/*syn@0.2.0#typeable*/
 define('syn/typeable', function (require, exports, module) {
     var syn = require('syn/synthetic');
     var typeables = [];
@@ -1550,12 +1549,12 @@ define('syn/typeable', function (require, exports, module) {
         ], el.getAttribute('contenteditable')) !== -1;
     });
 });
-/*syn@0.1.2#key*/
+/*syn@0.2.0#key*/
 define('syn/key', function (require, exports, module) {
     var syn = require('syn/synthetic');
     require('syn/typeable');
     require('syn/browsers');
-    var h = syn.helpers, getSelection = function (el) {
+    var h = syn.helpers, formElExp = /input|textarea/i, getSelection = function (el) {
             var real, r, start;
             if (el.selectionStart !== undefined) {
                 if (document.activeElement && document.activeElement !== el && el.selectionStart === el.selectionEnd && el.selectionStart === 0) {
@@ -1619,7 +1618,7 @@ define('syn/key', function (require, exports, module) {
                 }
             }
             return res;
-        }, formElExp = /input|textarea/i, textProperty = function () {
+        }, textProperty = function () {
             var el = document.createElement('span');
             return el.textContent != null ? 'textContent' : 'innerText';
         }(), getText = function (el) {
@@ -2181,7 +2180,7 @@ define('syn/key', function (require, exports, module) {
         }
     });
 });
-/*syn@0.1.2#key.support*/
+/*syn@0.2.0#key.support*/
 define('syn/key.support', function (require, exports, module) {
     var syn = require('syn/synthetic');
     require('syn/key');
@@ -2242,7 +2241,7 @@ define('syn/key.support', function (require, exports, module) {
         syn.helpers.extend(syn.support, syn.config.support);
     }
 });
-/*syn@0.1.2#drag*/
+/*syn@0.2.0#drag*/
 define('syn/drag', function (require, exports, module) {
     var syn = require('syn/synthetic');
     (function dragSupport() {
@@ -2375,7 +2374,7 @@ define('syn/drag', function (require, exports, module) {
             if (option.nodeName) {
                 option = center(option);
             }
-            if (option.pageX) {
+            if (option.pageX != null) {
                 var off = syn.helpers.scrollOffset(win);
                 option = {
                     clientX: option.pageX - off.left,
@@ -2417,7 +2416,7 @@ define('syn/drag', function (require, exports, module) {
         }
     });
 });
-/*syn@0.1.2#syn*/
+/*syn@0.2.0#syn*/
 define('syn/syn', function (require, exports, module) {
     var syn = require('syn/synthetic');
     require('syn/mouse.support');
@@ -8604,12 +8603,12 @@ define('syn/syn', function (require, exports, module) {
     }
     return jQuery;
 }));
-/*funcunit@3.1.0-pre.0#browser/jquery*/
+/*funcunit@3.1.0-pre.1#browser/jquery*/
 define('funcunit/browser/jquery', function (require, exports, module) {
     var $ = require('jquery');
     module.exports = $.noConflict(true);
 });
-/*funcunit@3.1.0-pre.0#browser/init*/
+/*funcunit@3.1.0-pre.1#browser/init*/
 define('funcunit/browser/init', function (require, exports, module) {
     var jQuery = require('funcunit/browser/jquery');
     var FuncUnit = window.FuncUnit || {};
@@ -8636,7 +8635,7 @@ define('funcunit/browser/init', function (require, exports, module) {
     FuncUnit.jQuery = jQuery;
     module.exports = FuncUnit;
 });
-/*funcunit@3.1.0-pre.0#browser/core*/
+/*funcunit@3.1.0-pre.1#browser/core*/
 define('funcunit/browser/core', function (require, exports, module) {
     var jQuery = require('funcunit/browser/jquery');
     var oldFuncUnit = require('funcunit/browser/init');
@@ -8700,7 +8699,7 @@ define('funcunit/browser/core', function (require, exports, module) {
     FuncUnit.prototype = origFuncUnit.prototype;
     module.exports = FuncUnit;
 });
-/*funcunit@3.1.0-pre.0#browser/adapters/jasmine*/
+/*funcunit@3.1.0-pre.1#browser/adapters/jasmine*/
 define('funcunit/browser/adapters/jasmine', function (require, exports, module) {
     module.exports = function (jasmine) {
         var paused = false;
@@ -8723,7 +8722,7 @@ define('funcunit/browser/adapters/jasmine', function (require, exports, module) 
         };
     };
 });
-/*funcunit@3.1.0-pre.0#browser/adapters/jasmine2*/
+/*funcunit@3.1.0-pre.1#browser/adapters/jasmine2*/
 define('funcunit/browser/adapters/jasmine2', function (require, exports, module) {
     module.exports = function (jasmine) {
         FuncUnit.timeout = 4900;
@@ -8742,7 +8741,7 @@ define('funcunit/browser/adapters/jasmine2', function (require, exports, module)
         };
     };
 });
-/*funcunit@3.1.0-pre.0#browser/adapters/qunit*/
+/*funcunit@3.1.0-pre.1#browser/adapters/qunit*/
 define('funcunit/browser/adapters/qunit', function (require, exports, module) {
     module.exports = function (QUnit) {
         return {
@@ -8761,7 +8760,7 @@ define('funcunit/browser/adapters/qunit', function (require, exports, module) {
         };
     };
 });
-/*funcunit@3.1.0-pre.0#browser/adapters/mocha*/
+/*funcunit@3.1.0-pre.1#browser/adapters/mocha*/
 define('funcunit/browser/adapters/mocha', function (require, exports, module) {
     var FuncUnit = require('funcunit/browser/core');
     var ok = function (expr, msg) {
@@ -8784,7 +8783,7 @@ define('funcunit/browser/adapters/mocha', function (require, exports, module) {
         };
     };
 });
-/*funcunit@3.1.0-pre.0#browser/adapters/adapters*/
+/*funcunit@3.1.0-pre.1#browser/adapters/adapters*/
 define('funcunit/browser/adapters/adapters', function (require, exports, module) {
     var jasmineAdapter = require('funcunit/browser/adapters/jasmine');
     var jasmine2Adapter = require('funcunit/browser/adapters/jasmine2');
@@ -8833,7 +8832,7 @@ define('funcunit/browser/adapters/adapters', function (require, exports, module)
         FuncUnit.unit = defaultAdapter;
     };
 });
-/*funcunit@3.1.0-pre.0#browser/open*/
+/*funcunit@3.1.0-pre.1#browser/open*/
 define('funcunit/browser/open', function (require, exports, module) {
     var $ = require('funcunit/browser/jquery');
     var FuncUnit = require('funcunit/browser/core');
@@ -8887,7 +8886,7 @@ define('funcunit/browser/open', function (require, exports, module) {
                 } else {
                     var width = $(window).width();
                     FuncUnit.win = window.open(url, 'funcunit', 'height=1000,toolbar=yes,status=yes,width=' + width / 2 + ',left=' + width / 2);
-                    if (FuncUnit.win.___FUNCUNIT_OPENED) {
+                    if (FuncUnit.win && FuncUnit.win.___FUNCUNIT_OPENED) {
                         FuncUnit.win.close();
                         FuncUnit.win = window.open(url, 'funcunit', 'height=1000,toolbar=yes,status=yes,left=' + width / 2);
                     }
@@ -9031,7 +9030,7 @@ define('funcunit/browser/open', function (require, exports, module) {
     });
     module.exports = FuncUnit;
 });
-/*funcunit@3.1.0-pre.0#browser/actions*/
+/*funcunit@3.1.0-pre.1#browser/actions*/
 define('funcunit/browser/actions', function (require, exports, module) {
     var $ = require('funcunit/browser/jquery');
     var FuncUnit = require('funcunit/browser/core');
@@ -9164,7 +9163,7 @@ define('funcunit/browser/actions', function (require, exports, module) {
     });
     module.exports = FuncUnit;
 });
-/*funcunit@3.1.0-pre.0#browser/getters*/
+/*funcunit@3.1.0-pre.1#browser/getters*/
 define('funcunit/browser/getters', function (require, exports, module) {
     var $ = require('funcunit/browser/jquery');
     var FuncUnit = require('funcunit/browser/core');
@@ -9301,7 +9300,7 @@ define('funcunit/browser/getters', function (require, exports, module) {
     }
     module.exports = FuncUnit;
 });
-/*funcunit@3.1.0-pre.0#browser/traversers*/
+/*funcunit@3.1.0-pre.1#browser/traversers*/
 define('funcunit/browser/traversers', function (require, exports, module) {
     var $ = require('funcunit/browser/jquery');
     var FuncUnit = require('funcunit/browser/core');
@@ -9337,7 +9336,7 @@ define('funcunit/browser/traversers', function (require, exports, module) {
     }
     module.exports = FuncUnit;
 });
-/*funcunit@3.1.0-pre.0#browser/queue*/
+/*funcunit@3.1.0-pre.1#browser/queue*/
 define('funcunit/browser/queue', function (require, exports, module) {
     var FuncUnit = require('funcunit/browser/core');
     FuncUnit._incallback = false;
@@ -9447,7 +9446,7 @@ define('funcunit/browser/queue', function (require, exports, module) {
     };
     module.exports = FuncUnit;
 });
-/*funcunit@3.1.0-pre.0#browser/waits*/
+/*funcunit@3.1.0-pre.1#browser/waits*/
 define('funcunit/browser/waits', function (require, exports, module) {
     var $ = require('funcunit/browser/jquery');
     var FuncUnit = require('funcunit/browser/core');
@@ -9577,7 +9576,7 @@ define('funcunit/browser/waits', function (require, exports, module) {
     });
     module.exports = FuncUnit;
 });
-/*funcunit@3.1.0-pre.0#funcunit*/
+/*funcunit@3.1.0-pre.1#funcunit*/
 define('funcunit/funcunit', function (require, exports, module) {
     var syn = require('syn/syn');
     var FuncUnit = require('funcunit/browser/core');

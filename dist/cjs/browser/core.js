@@ -1,4 +1,4 @@
-/*funcunit@3.1.0-pre.0#browser/core*/
+/*funcunit@3.1.0-pre.1#browser/core*/
 var jQuery = require('./jquery.js');
 var oldFuncUnit = require('./init.js');
 var FuncUnit = oldFuncUnit.jQuery.sub();

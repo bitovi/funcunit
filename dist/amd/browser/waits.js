@@ -1,4 +1,4 @@
-/*funcunit@3.1.0-pre.0#browser/waits*/
+/*funcunit@3.1.0-pre.1#browser/waits*/
 define(function (require, exports, module) {
     var $ = require('./jquery');
     var FuncUnit = require('./core');
