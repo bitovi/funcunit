@@ -37,7 +37,7 @@
   ],
   "dependencies": {
     "jquery": "1.11.0",
-    "syn": "^0.1.2"
+    "syn": "^0.2.0"
   },
   "system": {
     "main": "funcunit",
