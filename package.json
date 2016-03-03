@@ -40,6 +40,17 @@
     "syn": "^0.1.2"
   },
   "system": {
-    "main": "funcunit"
+    "main": "funcunit",
+    "npmIgnore": [
+      "bower",
+      "documentjs",
+      "grunt",
+      "grunt-cli",
+      "grunt-contrib-concat",
+      "grunt-contrib-connect",
+      "steal",
+      "steal-tools",
+      "testee"
+    ]
   }
 }
