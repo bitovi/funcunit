@@ -1,4 +1,4 @@
-/*funcunit@3.1.0-pre.0#browser/adapters/adapters*/
+/*funcunit@3.1.0-pre.1#browser/adapters/adapters*/
 var jasmineAdapter = require('./jasmine.js');
 var jasmine2Adapter = require('./jasmine2.js');
 var qunitAdapter = require('./qunit.js');

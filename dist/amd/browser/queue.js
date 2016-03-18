@@ -1,4 +1,4 @@
-/*funcunit@3.1.0-pre.0#browser/queue*/
+/*funcunit@3.1.0-pre.1#browser/queue*/
 define(function (require, exports, module) {
     var FuncUnit = require('./core');
     FuncUnit._incallback = false;

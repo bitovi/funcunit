@@ -1,4 +1,4 @@
-/*funcunit@3.1.0-pre.0#browser/core*/
+/*funcunit@3.1.0-pre.1#browser/core*/
 define(function (require, exports, module) {
     var jQuery = require('./jquery');
     var oldFuncUnit = require('./init');
