@@ -1,4 +1,4 @@
-/*funcunit@3.1.0-pre.0#browser/adapters/mocha*/
+/*funcunit@3.1.0-pre.1#browser/adapters/mocha*/
 var FuncUnit = require('../core.js');
 var ok = function (expr, msg) {
     if (!expr)

@@ -1,4 +1,4 @@
-/*funcunit@3.1.0-pre.0#browser/traversers*/
+/*funcunit@3.1.0-pre.1#browser/traversers*/
 define(function (require, exports, module) {
     var $ = require('./jquery');
     var FuncUnit = require('./core');

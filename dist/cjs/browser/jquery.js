@@ -1,3 +1,3 @@
-/*funcunit@3.1.0-pre.0#browser/jquery*/
+/*funcunit@3.1.0-pre.1#browser/jquery*/
 var $ = require('jquery');
 module.exports = $.noConflict(true);

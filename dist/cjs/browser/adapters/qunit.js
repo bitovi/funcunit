@@ -1,4 +1,4 @@
-/*funcunit@3.1.0-pre.0#browser/adapters/qunit*/
+/*funcunit@3.1.0-pre.1#browser/adapters/qunit*/
 module.exports = function (QUnit) {
     return {
         pauseTest: function () {

@@ -1,4 +1,4 @@
-/*funcunit@3.1.0-pre.0#browser/open*/
+/*funcunit@3.1.0-pre.1#browser/open*/
 var $ = require('./jquery.js');
 var FuncUnit = require('./core.js');
 var syn = require('syn');
@@ -51,7 +51,7 @@ $.extend(FuncUnit, {
             } else {
                 var width = $(window).width();
                 FuncUnit.win = window.open(url, 'funcunit', 'height=1000,toolbar=yes,status=yes,width=' + width / 2 + ',left=' + width / 2);
-                if (FuncUnit.win.___FUNCUNIT_OPENED) {
+                if (FuncUnit.win && FuncUnit.win.___FUNCUNIT_OPENED) {
                     FuncUnit.win.close();
                     FuncUnit.win = window.open(url, 'funcunit', 'height=1000,toolbar=yes,status=yes,left=' + width / 2);
                 }
