@@ -18,15 +18,14 @@
     "grunt": "0.4.x",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-concat": "0.3.0",
-    "grunt-contrib-connect": "0.3.0",
     "steal": "^0.8.0",
     "steal-mocha": "0.0.1",
-    "steal-qunit": "0.0.3",
+    "steal-qunit": "^0.1.1",
     "steal-tools": "^0.8.1",
-    "testee": "0.0.8"
+    "testee": "^0.2.5"
   },
   "scripts": {
-    "test": "grunt test",
+    "test": "grunt testee",
     "prepublish": "./node_modules/.bin/grunt build"
   },
   "licenses": [

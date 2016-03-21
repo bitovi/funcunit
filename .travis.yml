@@ -1,3 +1,11 @@
 language: node_js
-node_js: 0.10
+node_js: 0.12.2
+before_install:
+  - ./firefox-allow-popups.sh
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+before_script:
+  - npm install -g bower
+  - bower install
 script: npm test
+sudo: false
