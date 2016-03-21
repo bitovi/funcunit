@@ -21,7 +21,7 @@ module.exports = function (grunt) {
 
 			dist: {
 				files: [{
-					src: ['dist/funcunit.js'], 
+					src: ['dist/funcunit.js'],
 					dest: 'dist/funcunit.js'
 				}]
 			}
@@ -60,31 +60,31 @@ module.exports = function (grunt) {
 		testee: {
 			core: {
 				options: {
-					urls: ['http://localhost:8000/funcunit.html'],
-					browsers: ['phantom']
-				}
+					reporter: 'Spec',
+					browsers: ['firefox']
+				},
+				src: ['funcunit.html']
 			},
 			jasmine: {
 				options: {
-					urls: ['http://localhost:8000/browser/adapters/test/jasmine.html'],
-					browsers: ['phantom']
-				}
+					reporter: 'Spec',
+					browsers: ['firefox']
+				},
+				src: ['browser/adapters/test/jasmine.html']
 			},
 			qunit: {
 				options: {
-					urls: ['http://localhost:8000/browser/adapters/test/qunit.html'],
-					browsers: ['phantom']
-				}
+					reporter: 'Spec',
+					browsers: ['firefox']
+				},
+				src: ['browser/adapters/test/qunit.html']
 			}
 		}
 	});
 
-	grunt.loadNpmTasks('grunt-contrib-connect');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('testee');
 	grunt.loadNpmTasks("steal-tools");
 
 	grunt.registerTask('build', ['steal-export', 'concat']);
-	grunt.registerTask('test', ['connect', 'testee']);
-
 };
