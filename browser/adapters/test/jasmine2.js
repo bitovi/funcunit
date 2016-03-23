@@ -1,14 +1,19 @@
-var F = require('funcunit');
 var $ = require('jquery');
-require('../../../lib/jasmine2/boot');
+var F = require('funcunit');
+
+require('steal-jasmine');
 
 F.attach(jasmine);
 
 describe('Adapters', function() {
 	beforeEach(function() {
-		$('body').append('<a class=\'clickme\' href=\'javascript://\'>clickme</a><div class=\'clickresult\'></div>');
+		$('body').append(
+			'<a class=\'clickme\' href=\'javascript://\'>clickme</a>' +
+			'<div class=\'clickresult\'></div>'
+		);
+
 		$('.clickme').click(function() {
-			$('.clickresult').text("clicked");
+			$('.clickresult').text('clicked');
 		});
 	});
 
@@ -20,8 +25,9 @@ describe('Adapters', function() {
 		F('.clickme').click();
 		F('.clickresult').text('clicked');
 
-		F.add(done);
+		F(function() {
+			expect($('.clickresult').text()).toBe('clicked');
+			done();
+		});
 	});
 });
-
-window.onload();

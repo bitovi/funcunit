@@ -58,27 +58,18 @@ module.exports = function (grunt) {
 			}
 		},
 		testee: {
-			core: {
-				options: {
-					reporter: 'Spec',
-					browsers: ['firefox']
-				},
-				src: ['funcunit.html']
+			options: {
+				reporter: 'Spec',
+				browsers: ['firefox']
 			},
-			jasmine: {
-				options: {
-					reporter: 'Spec',
-					browsers: ['firefox']
-				},
-				src: ['browser/adapters/test/jasmine.html']
-			},
-			qunit: {
-				options: {
-					reporter: 'Spec',
-					browsers: ['firefox']
-				},
-				src: ['browser/adapters/test/qunit.html']
-			}
+			src: [
+				'funcunit.html',
+				'browser/adapters/test/none.html',
+				'browser/adapters/test/qunit.html',
+				'browser/adapters/test/mocha.html',
+				'browser/adapters/test/jasmine.html',
+				'browser/adapters/test/jasmine2.html'
+			]
 		}
 	});
 

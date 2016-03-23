@@ -12,7 +12,7 @@ module.exports = function(mocha){
     resumeTest: function() {},
 
     assertOK: function(assertion, message) {
-      ok(assertion, message)
+      ok(assertion, message);
     },
 
     equiv: function(expected, actual) {
