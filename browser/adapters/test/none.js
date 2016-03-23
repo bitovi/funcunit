@@ -1,22 +1,26 @@
-var QUnit = require("steal-qunit");
-var F = require("funcunit");
-var $ = require("jquery");
+var $ = require('jquery');
+var F = require('funcunit');
+var QUnit = require('steal-qunit');
 
 QUnit.module('Adapters', {
 	setup: function() {
-		$('#qunit-fixture').append('<a class=\'clickme\' href=\'javascript://\'>clickme</a><div class=\'clickresult\'></div>');
+		$('#qunit-fixture').append(
+			'<a class=\'clickme\' href=\'javascript://\'>clickme</a>' +
+			'<div class=\'clickresult\'></div>'
+		);
+
 		$('.clickme').click(function() {
 			$('.clickresult').text("clicked");
 		});
 	}
 });
 
-test('QUnit adapter test', function() {
+test('QUnit with no adapter test', function() {
 	stop();
 
 	F('.clickme').click();
-	F('.clickresult').text('clicked', function(){
-		ok("clicked the text");
+	F('.clickresult').text('clicked', function() {
+		ok('clicked the text');
 		start();
 	});
 });

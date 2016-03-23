@@ -1,48 +1,50 @@
 {
-	"name": "funcunit",
-	"main": "dist/funcunit.js",
-	"version": "3.1.0-pre.0",
-	"homepage": "http://funcunit.com",
-	"author": {
-		"name": "Bitovi",
-		"email": "contact@bitovi.com",
-		"web": "http://bitovi.com/"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git@github.com:bitovi/funcunit.git",
-		"github": "https://github.com/bitovi/funcunit"
-	},
-	"licenses": [
-		{
-			"type": "MIT",
-			"url": "http://opensource.org/licenses/mit-license.php"
-		}
-	],
-	"dependencies": {
-		
-	},
-	"devDependencies": {
-		"jasmine": "1.3.x",
-		"jquerypp": "1.0.x",
-		"jquery": "1.11.0",
-		"syn": "^0.1.2"
-	},
-	"ignore": [
-		"browser",
-		"syn",
-		"/build.js",
-		"stealconfig.js",
-		"/funcunit.html",
-		"/funcunit.js"
-	],
-	"system": {
-		"main": "dist/funcunit",
-		"meta": {
-			"funcunit": {
-				"format": "global",
-				"exports": "F"
-			}
-		}
-	}
+  "name": "funcunit",
+  "main": "dist/funcunit.js",
+  "version": "3.1.0-pre.0",
+  "homepage": "http://funcunit.com",
+  "author": {
+    "name": "Bitovi",
+    "email": "contact@bitovi.com",
+    "web": "http://bitovi.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:bitovi/funcunit.git",
+    "github": "https://github.com/bitovi/funcunit"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine": "1.3.x",
+    "jquerypp": "1.0.x",
+    "jquery": "1.11.0",
+    "syn": "^0.1.2",
+    "jasmine2": "jasmine#^2.4.1"
+  },
+  "ignore": [
+    "browser",
+    "syn",
+    "/build.js",
+    "stealconfig.js",
+    "/funcunit.html",
+    "/funcunit.js"
+  ],
+  "system": {
+    "main": "dist/funcunit",
+    "meta": {
+      "funcunit": {
+        "format": "global",
+        "exports": "F"
+      }
+    }
+  },
+  "resolutions": {
+    "jasmine2": "^2.4.1"
+  }
 }

@@ -5,9 +5,13 @@ F.attach(jasmine);
 
 describe('Adapters', function() {
 	beforeEach(function() {
-		$('body').append('<a class=\'clickme\' href=\'javascript://\'>clickme</a><div class=\'clickresult\'></div>');
+		$('body').append(
+			'<a class=\'clickme\' href=\'javascript://\'>clickme</a>' +
+			'<div class=\'clickresult\'></div>'
+		);
+
 		$('.clickme').click(function() {
-			$('.clickresult').text("clicked");
+			$('.clickresult').text('clicked');
 		});
 	});
 
@@ -20,16 +24,3 @@ describe('Adapters', function() {
 		F('.clickresult').text('clicked');
 	});
 });
-
-var jasmineEnv = jasmine.getEnv();
-jasmineEnv.updateInterval = 1000;
-
-var htmlReporter = new jasmine.HtmlReporter();
-
-jasmineEnv.addReporter(htmlReporter);
-
-jasmineEnv.specFilter = function(spec) {
-	return htmlReporter.specFilter(spec);
-};
-
-jasmineEnv.execute();
