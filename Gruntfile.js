@@ -64,11 +64,11 @@ module.exports = function (grunt) {
 			},
 			src: [
 				'funcunit.html',
-				'browser/adapters/test/none.html',
-				'browser/adapters/test/qunit.html',
-				'browser/adapters/test/mocha.html',
-				'browser/adapters/test/jasmine.html',
-				'browser/adapters/test/jasmine2.html'
+				'test/adapters/none.html',
+				'test/adapters/qunit.html',
+				'test/adapters/mocha.html',
+				'test/adapters/jasmine.html',
+				'test/adapters/jasmine2.html'
 			]
 		}
 	});
