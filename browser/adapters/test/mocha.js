@@ -29,7 +29,7 @@ describe('funcunit', function() {
 		F.add(done);
 	});
 
-	it('should fail', function(done) {
+	it.skip('should fail', function(done) {
 		// override funcunit timeout so this test breaks fast.
 		F.timeout = 500;
 
