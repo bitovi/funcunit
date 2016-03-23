@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Jasmine Spec Runner</title>
+		<link rel="shortcut icon" type="image/png" href="../../lib/jasmine/images/jasmine_favicon.png">
+		<link rel="stylesheet" type="text/css" href="../../lib/jasmine/lib/jasmine-core/jasmine.css">
+	</head>
+
+	<body>
+		<script src="../../lib/jasmine/lib/jasmine-core/jasmine.js"></script>
+		<script src="../../lib/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+
+		<script src="../../node_modules/steal/steal.js"
+						main="funcunit/test/adapters/jasmine"></script>
+
+		<script>
+			steal.done().then(function() {
+				var jasmineEnv = jasmine.getEnv();
+				jasmineEnv.updateInterval = 1000;
+
+				var htmlReporter = new jasmine.HtmlReporter();
+				jasmineEnv.addReporter(htmlReporter);
+
+				jasmineEnv.specFilter = function(spec) {
+					return htmlReporter.specFilter(spec);
+				};
+
+   			jasmineEnv.execute();
+			});
+		</script>
+	</body>
+</html>
