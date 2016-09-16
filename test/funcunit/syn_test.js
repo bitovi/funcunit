@@ -34,6 +34,13 @@ QUnit.test("Type and clear", function(){
 	F("#seewhatyoutyped").text("typed ","clear works");
 })
 
+QUnit.test("SendKeys without click", function(){
+	F.open("test/myapp.html");
+	F("#typehereexpectnoclick").sendKeys("javascriptmvc");
+	// if this shows up it means that we definitely did not receive a click
+	F("#seewhatyoutyped").text("typed javascriptmvc","type still works");
+})
+
 QUnit.test("Nested actions", function(){
 	F.open("//test/myapp.html");
 	
