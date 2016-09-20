@@ -154,6 +154,38 @@ $.extend(FuncUnit.prototype, {
     });
     return this;
   },
+  /**
+       * @function FuncUnit.prototype.sendKeys .sendKeys()
+       * @parent actions
+       * @signature `sendKeys(keys [,success])`
+       *
+   * Sends keys into an element.  Only difference here from type is 
+   * that an implicit click is not performed
+   * @codeend
+   *
+   * @param {String} keys the keys you want to send
+   * @param {Function} [success] a callback that is run after typing, but before the next action.
+   * @return {FuncUnit} returns the funcUnit object for chaining.
+   */
+  sendKeys: function( keys, success ) {
+    this._addExists();
+    var selector = this.selector;
+    // sendKeys("") is a shortcut for clearing out a text input
+    if(keys === ""){
+      keys = "[ctrl]a[ctrl-up]\b"
+    }
+    FuncUnit.add({
+      method : function(success, error){
+        syn("_type", this.bind[0], keys, success);
+
+      },
+      success : success,
+      error : "Could not send the keys " + keys + " into " + this.selector,
+      bind : this,
+      type: "action"
+    });
+    return this;
+  },
   // TODO (DL) this needs to be deprecated this advertises .trigger() functionality
   // but expects that the target page will have jQuery which could not be the case.
   trigger: function(evName, success){

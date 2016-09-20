@@ -25,6 +25,7 @@
 	<body>
 		<h1>Hello World</h1>
 		<input id="typehere"/><input type='submit' value="Copy" id='copy'/>
+		<input id="typehereexpectnoclick"/>
 		<p id='seewhatyoutyped'></p>
 		<p id='seewhatyouchanged'></p>
 		<iframe src='myotherapp.html' name='a'></iframe>
@@ -64,6 +65,23 @@
 				})
 				.change(function(){
 					$("#seewhatyouchanged").html("changed "+this.value)
+				})
+				
+				// on key up, write the value, but if a click was found, then ignore the typed text
+				// this allows the test for sendKeys to be specific to detecting clicks
+				$("#typehereexpectnoclick")
+				.keyup(function(){
+				    if( $('#seewhatyoutyped').text().indexOf("whoops") !== -1) {
+					    $("#seewhatyoutyped").html("whoops, click was detected, so ignoring typed text!");
+					}
+					else {
+					    $("#seewhatyoutyped").html("typed "+this.value)
+					}
+				})
+				.change(function(){
+					$("#seewhatyouchanged").html("changed "+this.value)
+				}).click(function() {
+				    $("#seewhatyoutyped").html("whoops, click was detected, not expecting this!")
 				})
 				
 				//when copy is clicked, change the text
