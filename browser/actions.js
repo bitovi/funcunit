@@ -161,7 +161,6 @@ $.extend(FuncUnit.prototype, {
        *
    * Sends keys into an element.  Only difference here from type is 
    * that an implicit click is not performed
-   * @codeend
    *
    * @param {String} keys the keys you want to send
    * @param {Function} [success] a callback that is run after typing, but before the next action.
