@@ -16,5 +16,9 @@
 			"parent": "Guides",
 			"pageConfig": {"page":"guides"}
 		}
+	},
+	"siteDefaults": {
+		"static":"site/theme/static",
+		"templates": "site/theme/templates"
 	}
 }
