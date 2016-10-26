@@ -1,5 +1,5 @@
-//load a lot of stuff ...
-steal(function(){
+steal("../../browser/jquery", "../../node_modules/jquerypp/index", function($){
+	window.jQuery = $;
 
 	var hoveredOnce = false;
 	$(".over").bind('mouseover',function(){
