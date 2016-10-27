@@ -7,6 +7,7 @@ build
 dist
 docs/
 guides/
+!doc/guides/
 site/node_modules/
 !site/lib/
 !site/**/lib/
