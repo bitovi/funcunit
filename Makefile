@@ -1,5 +1,5 @@
 publish-docs:
-	git checkout -b gh-pages-test
+	git checkout -b gh-pages
 	$(MAKE) -C site build
 	npm install
 	./node_modules/.bin/documentjs -fd
@@ -9,6 +9,6 @@ publish-docs:
 	git add -f index.html
 	git add -f CNAME
 	git commit -m "Publish docs"
-	git push -f origin gh-pages-test
+	git push -f origin gh-pages
 	git checkout -
-	git branch -D gh-pages-test
+	git branch -D gh-pages
