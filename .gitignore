@@ -8,4 +8,5 @@ dist
 docs/
 guides/
 site/node_modules/
-!site/app/lib/
+!site/lib/
+!site/**/lib/
