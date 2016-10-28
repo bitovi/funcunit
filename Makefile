@@ -1,5 +1,9 @@
 publish-docs:
 	git checkout -b gh-pages
+	rm -rf node_modules
+	rm -rf site/node_modules
+	rm -rf docs
+	rm -rf guides
 	$(MAKE) -C site build
 	npm install
 	./node_modules/.bin/documentjs -fd
