@@ -6,6 +6,7 @@ publish-docs:
 	git add -f docs/
 	git add -f guides/
 	git add -f site/
+	git add -f examples/
 	git add -f index.html
 	git add -f CNAME
 	git commit -m "Publish docs"
