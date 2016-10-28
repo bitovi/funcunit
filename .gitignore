@@ -5,3 +5,8 @@ build
 *.orig
 .DS_Store
 dist
+docs/
+guides/
+site/node_modules/
+!site/lib/
+!site/**/lib/

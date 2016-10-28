@@ -34,7 +34,7 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "build": "node build.js",
-    "document": "bit-docs",
+    "document": "./node_modules/.bin/documentjs",
     "develop": "done-serve --static --develop --port 8080",
     "release:pre": "npm version prerelease && npm publish"
   },
@@ -45,7 +45,8 @@
     "syn": "^0.2.0"
   },
   "devDependencies": {
-    "bit-docs": "0.0.6",
+		"less": "^1.7.0",
+    "documentjs": "^0.3.0-pre.4",
     "can-define": "^0.8.0",
     "can-zone": "^0.4.4",
     "chai": "^3.5.0",
