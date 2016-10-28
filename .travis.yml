@@ -11,8 +11,5 @@ env:
   global:
     - secure: >-
         HSvi9oV6wtmfWtEYws8wA64+JTpjvXIWOeR1U5UBWDP6qoPAXGaqwQUS98QS+oimfdJoAzZ/RwBIyR8tUlgflZ1JhRZ8zmYrmodRs5Ytxf/crt9xgS+e8Aq9S7a5rWDJN49wV8C9jUIBjN1RQKwev5iW+y2RPQUacEAvPU6eAX0=
-after_success: >-
-  echo "$TRAVIS_BRANCH"
-  if [ [["$TRAVIS_BRANCH"] == ["master"]] -o [["$TRAVIS_BRANCH"] == ["gh-pages-deployment-test"]] ]; then
-    make
-  fi
+after_success:
+  - sh ./gh-pages-deploy.sh
