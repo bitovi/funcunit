@@ -309,6 +309,8 @@ Once the docs look right locally, commit your changes, then run:
 
 The make script will generate the documentation again and push out the `gh-pages` branch.
 
+*Note* This is done automatically when a branch is merged into master.
+
 
 ### Writing API documentation
 

@@ -1,5 +1,7 @@
 publish-docs:
 	git checkout -b gh-pages
+	git config --global user.email "travis@bitovi.com"
+	git config --global user.name "Travis CI"
 	rm -rf node_modules
 	rm -rf site/node_modules
 	rm -rf docs
