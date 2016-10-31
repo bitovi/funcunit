@@ -5,7 +5,7 @@ before_install:
   - 'export DISPLAY=:99.0'
   - sh -e /etc/init.d/xvfb start
 script: 
-  - echo "test"
+  - echo "npm test"
 sudo: false
 env:
   global:
