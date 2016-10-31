@@ -6,3 +6,14 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 script: npm test
 sudo: false
+env:
+  global:
+    - secure: >-
+        HSvi9oV6wtmfWtEYws8wA64+JTpjvXIWOeR1U5UBWDP6qoPAXGaqwQUS98QS+oimfdJoAzZ/RwBIyR8tUlgflZ1JhRZ8zmYrmodRs5Ytxf/crt9xgS+e8Aq9S7a5rWDJN49wV8C9jUIBjN1RQKwev5iW+y2RPQUacEAvPU6eAX0=
+deploy:
+  provider: script
+  script: gh-pages-deploy.sh
+  on:
+    branch:
+      - master
+      - gh-pages-deployment-test
