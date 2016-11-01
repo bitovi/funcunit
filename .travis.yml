@@ -6,3 +6,5 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 script: npm test
 sudo: false
+addons:
+  firefox: "49.0"
