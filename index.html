@@ -105,10 +105,10 @@
 
 			<a href="https://twitter.com/funcunit" class="twitter-follow-button" data-show-count="true" data-dnt="true">Follow @funcunit</a>
 
-			<iframe src="http://ghbtns.com/github-btn.html?user=bitovi&repo=funcunit&type=watch&count=true"
+			<iframe src="https://ghbtns.com/github-btn.html?user=bitovi&repo=funcunit&type=watch&count=true"
 							allowtransparency="true" frameborder="0" scrolling="0" width="110" height="20"></iframe>
 
-			<iframe src="http://ghbtns.com/github-btn.html?user=bitovi&repo=funcunit&type=fork&count=true"
+			<iframe src="https://ghbtns.com/github-btn.html?user=bitovi&repo=funcunit&type=fork&count=true"
 							allowtransparency="true" frameborder="0" scrolling="0" width="95" height="20"></iframe>
 
 		</div>
@@ -173,7 +173,11 @@
 			</ul>
 		</nav>
 	</footer>
-	<!-- <script src="./node_modules/steal/steal.production.js" data-main="app/app" bundles-path="static"></script> -->
+
+	<!-- Dev mode -->
+	<!-- <script src="/node_modules/steal/steal.js" config="site/package.json!npm"></script> -->
+
+	<!-- Production mode -->
 	<script src="./site/static/app/app.js" config="../../package.json!npm" base-url='../../'></script>
 
 </body>
