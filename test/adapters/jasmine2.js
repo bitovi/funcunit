@@ -22,6 +22,7 @@ describe('Adapters', function() {
 	});
 
 	it('should use the jasmine adapter', function(done) {
+		F.wait(1000);
 		F('.clickme').click();
 		F('.clickresult').text('clicked');
 

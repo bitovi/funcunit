@@ -14,6 +14,7 @@ QUnit.module('Adapters', {
 });
 
 test('QUnit adapter test', function() {
+	F.wait(1000);
 	F('.clickme').click();
 	F('.clickresult').text('clicked', 'clicked the link');
 });

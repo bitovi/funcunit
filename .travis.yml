@@ -1,8 +1,8 @@
+sudo: false
 language: node_js
-node_js: 0.12.2
+node_js: 'node'
 before_install:
   - ./bin/firefox-allow-popups.sh
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-script: npm test
-sudo: false
+script: npm run ci
