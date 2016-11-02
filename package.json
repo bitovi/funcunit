@@ -21,7 +21,7 @@
     "preversion": "npm test && npm run build",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
     "postversion": "git push --tags && git checkout master && git branch -D release && git push",
-    "testee": "npm run testee:funcunit && npm run testee:none && npm run testee:qunit && npm run testee:mocha && npm run testee:jasmine2 && npm run testee:jasmine",
+    "testee": "npm run testee:funcunit && npm run testee:qunit && npm run testee:mocha && npm run testee:jasmine && npm run testee:jasmine2 && npm run testee:none",
     "testee:funcunit": "testee test.html --browsers firefox",
     "testee:none": "testee test/adapters/none.html --browsers firefox",
     "testee:qunit": "testee test/adapters/qunit.html --browsers firefox",
