@@ -18,6 +18,7 @@ QUnit.module('Adapters', {
 test('QUnit with no adapter test', function() {
 	stop();
 
+	F.wait(1000);
 	F('.clickme').click();
 	F('.clickresult').text('clicked', function() {
 		ok('clicked the text');
