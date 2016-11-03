@@ -49,7 +49,7 @@ var initControls = function(mappings) {
 $(function() {
 	Bitovi.OSS.initTwitterWidgets();
 	initControls({
-		// TODO: re-add this and fix bithub (#109)
+		// TODO: re-add this and fix bithub
 		// '.social': 'SocialStats',
 		'.cdn': 'CDNChooser',
 		'.communityTabs': 'CommunityTabs',
