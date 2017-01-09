@@ -163,7 +163,7 @@ about an element and run assertions.  You can use jQuery getter methods in combi
 These methods (which return synchronous results) are used in callbacks that run after a wait method completes.
 
 ```js
-// wait until we have some results, then call the calback
+// wait until we have some results, then call the callback
 F('.autocomplete_item').visible(function(){
   equal( F('.autocomplete_item').size(), 5, "there are 5 results");
 });
