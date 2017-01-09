@@ -3268,7 +3268,7 @@ var __m10 = (function($, FuncUnit, Syn) {
          * @parent actions
          * @signature `drag(options [,success])`
 		 * Drags an element into another element or coordinates.  
-		 * This takes the same paramameters as [Syn.prototype.move move].
+		 * This takes the same parameters as [Syn.prototype.move move].
 		 * @param {String|Object} options A selector or coordinates describing the motion of the drag.
 		 * <h5>Options as a Selector</h5>
 		 * Passing a string selector to drag the mouse.  The drag runs to the center of the element
@@ -3325,7 +3325,7 @@ var __m10 = (function($, FuncUnit, Syn) {
          * @signature `move(options [,success])`
 		 * Moves an element into another element or coordinates.  This will trigger mouseover
 		 * mouseouts accordingly.
-		 * This takes the same paramameters as [Syn.prototype.move move].
+		 * This takes the same parameters as [Syn.prototype.move move].
 		 * @param {String|Object} options A selector or coordinates describing the motion of the move.
 		 * <h5>Options as a Selector</h5>
 		 * Passing a string selector to move the mouse.  The move runs to the center of the element

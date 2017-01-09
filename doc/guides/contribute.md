@@ -69,7 +69,7 @@ When creating an feature issue, it's very helpful to include:
  - Why the feature is important.
  - Any implementation details around the feature.
 
-Here's some example well written feature requests:
+Here are some examples of well-written feature requests:
 
  - [Make events fire asynchronously and dispatched during request animation frame or setImmediate](https://github.com/canjs/can-event/issues/11)
  - [Modify key -> argument behavior in stache](https://github.com/canjs/canjs/issues/1699)
@@ -193,7 +193,7 @@ __4.__ Make sure Firefox is closed and run the test suite with:
 > npm test
 ```
 
-If every test passed, __congrats__! You've got everything you need to
+If every test passed, __congrats__! You have everything you need to
 change code and send it back to us.
 
 ### File organization and responsibilities
@@ -261,7 +261,7 @@ consider joining our [Core team](https://donejs.com/About.html#section=section_C
 
 ## Documentation improvements
 
-The FuncUnit site is generated with [DocumentJS](http://documentjs.com).  It's
+The FuncUnit site is generated with [DocumentJS](http://documentjs.com).  Its
 content is hosted using Github pages publishing the [bitovi/funcunit#gh-pages](https://github.com/bitovi/funcunit/tree/gh-pages) repo.
 
 DocumentJS reads JavaScript comments and markdown files within the `funcunit`.
