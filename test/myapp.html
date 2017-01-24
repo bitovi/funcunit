@@ -24,8 +24,11 @@
 	</head>
 	<body>
 		<h1>Hello World</h1>
-		<input id="typehere"/><input type='submit' value="Copy" id='copy'/>
+		<input id="typehere"/>
+		<input type='submit' value="Copy" id='copy'/>
 		<input id="typehereexpectnoclick"/>
+		<input id="numberinput" type="number"/>
+		<p id='seewhatnumberyoutyped'></p>
 		<p id='seewhatyoutyped'></p>
 		<p id='seewhatyouchanged'></p>
 		<iframe src='myotherapp.html' name='a'></iframe>
@@ -65,6 +68,11 @@
 				})
 				.change(function(){
 					$("#seewhatyouchanged").html("changed "+this.value)
+				})
+
+				$("#numberinput")
+				.keyup(function(){
+					$("#seewhatnumberyoutyped").html("typed "+this.value)
 				})
 				
 				// on key up, write the value, but if a click was found, then ignore the typed text

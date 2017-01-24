@@ -34,6 +34,12 @@ QUnit.test("Type and clear", function(){
 	F("#seewhatyoutyped").text("typed ","clear works");
 })
 
+QUnit.test("Type in number field", function(){
+	F.open("test/myapp.html");
+	F("#numberinput").type(9000);
+	F("#seewhatnumberyoutyped").text("typed 9000","works");
+})
+
 QUnit.test("SendKeys without click", function(){
 	F.open("test/myapp.html");
 	F("#typehereexpectnoclick").sendKeys("javascriptmvc");
