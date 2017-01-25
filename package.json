@@ -43,7 +43,7 @@
   "dependencies": {
     "jquery": "1.11.0",
     "jquerypp": "^2.0.2",
-    "syn": "^0.2.0"
+    "syn": "^0.2.2"
   },
   "devDependencies": {
     "less": "^1.7.0",
