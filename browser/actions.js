@@ -25,11 +25,13 @@ var clicks = [
  * <p>For a right click or double click use [FuncUnit.prototype.rightClick] or
  *   [FuncUnit.prototype.dblclick].</p>
  * <h3>Example</h3>
+ * 
  * @codestart
  * //clicks the bar element
  *F("#bar").click()
  * @codeend
  * @param {Object} [options] options to pass to the click event.  Typically, this is clientX/Y or pageX/Y:
+ * 
  * @codestart
  * $('#foo').click({pageX: 200, pageY: 100});
  * @codeend
@@ -104,6 +106,7 @@ $.extend(FuncUnit.prototype, {
    * Types text into an element.  This makes use of [syn.type] and works in
    * a very similar way.
    * <h3>Quick Examples</h3>
+	 * 
    * @codestart
    * //types hello world
    *F('#bar').type('hello world')
@@ -215,22 +218,33 @@ $.extend(FuncUnit.prototype, {
    * <h5>Options as a Selector</h5>
    * Passing a string selector to drag the mouse.  The drag runs to the center of the element
    * matched by the selector.  The following drags from the center of #foo to the center of #bar.
+	 * 
    * @codestart
    *F('#foo').drag('#bar')
    * @codeend
+	 * 
    * <h5>Options as Coordinates</h5>
    * You can pass in coordinates as clientX and clientY:
+	 * 
    * @codestart
    *F('#foo').drag('100x200')
    * @codeend
+	 * 
    * Or as pageX and pageY
+	 * 
    * @codestart
    *F('#foo').drag('100X200')
    * @codeend
+	 * 
    * Or relative to the start position
+	 * 
+	 * @codestart
    *F('#foo').drag('+10 +20')
+	 * @codeend
+	 * 
    * <h5>Options as an Object</h5>
    * You can configure the duration, start, and end point of a drag by passing in a json object.
+	 * 
    * @codestart
    * //drags from 0x0 to 100x100 in 2 seconds
    *F('#foo').drag({
@@ -239,6 +253,7 @@ $.extend(FuncUnit.prototype, {
    *   duration: 2000
    * })
    * @codeend
+	 * 
    * @param {Function} [success] a callback that runs after the drag, but before the next action.
    * @return {funcUnit} returns the funcunit object for chaining.
    */
@@ -272,22 +287,32 @@ $.extend(FuncUnit.prototype, {
    * <h5>Options as a Selector</h5>
    * Passing a string selector to move the mouse.  The move runs to the center of the element
    * matched by the selector.  The following moves from the center of #foo to the center of #bar.
+	 * 
    * @codestart
    *F('#foo').move('#bar')
    * @codeend
+	 * 
    * <h5>Options as Coordinates</h5>
    * You can pass in coordinates as clientX and clientY:
+	 * 
    * @codestart
    *F('#foo').move('100x200')
    * @codeend
+	 * 
    * Or as pageX and pageY
+	 * 
    * @codestart
    *F('#foo').move('100X200')
    * @codeend
-   * Or relative to the start position
-   *F('#foo').move('+10 +20')
+	 * 
+   * Or relative to the start position 
+   * @codestart
+   *F('#foo').move('+10 +20') 
+   * @codeend
+	 * 
    * <h5>Options as an Object</h5>
    * You can configure the duration, start, and end point of a move by passing in a json object.
+	 * 
    * @codestart
    * //drags from 0x0 to 100x100 in 2 seconds
    *F('#foo').move({
@@ -296,6 +321,7 @@ $.extend(FuncUnit.prototype, {
    *   duration: 2000
    * })
    * @codeend
+	 * 
    * @param {Function} [success] a callback that runs after the drag, but before the next action.
    * @return {funcUnit} returns the funcunit object for chaining.
    */

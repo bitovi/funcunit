@@ -16,6 +16,7 @@ FuncUnit.funcs = {
    * waits until the the selector is size.  You can also 
    * provide a function that continues to the next action when
    * it returns true.
+	 * 
    * @codestart
    *F(".recipe").size() //gets the number of recipes
    * 
@@ -40,6 +41,7 @@ FuncUnit.funcs = {
    * @signature `attr(data, value [,timeout] [,success] [,message])`
    * Gets the value of an attribute from an element or waits until the attribute
    * equals the attr param.
+	 * 
    * @codestart
    * //waits until the abc attribute == some
    *F("#something").attr("abc","some") 
@@ -58,6 +60,7 @@ FuncUnit.funcs = {
    * @function FuncUnit.prototype.hasClass .hasClass()
    * @parent css
    * @signature `hasClass(className [,value] [,timeout] [,success] [,message])`
+	 * 
    * @codestart
    * //returns if the element has the class in its className
    *F("#something").hasClass("selected");
@@ -82,6 +85,7 @@ FuncUnit.funcs = {
      * @parent manipulation
      * @signature `html([html] [,timeout] [,success] [,message])`
    * Gets the [http://api.jquery.com/html/ html] from an element or waits until the html is a certain value.
+	 * 
    * @codestart
    * //checks foo's html has "JupiterJS"
    * ok( /JupiterJS/.test(F('#foo').html() ) )
@@ -106,6 +110,7 @@ FuncUnit.funcs = {
      * @parent manipulation
      * @signature `text([text] [,timeout] [,success] [,message])`
    * Gets the [http://api.jquery.com/text/ text] from an element or waits until the text is a certain value.
+	 * 
    * @codestart
    * //checks foo's text has "JupiterJS"
    * ok( /JupiterJS/.test(F('#foo').text() ) )
@@ -130,6 +135,7 @@ FuncUnit.funcs = {
      * @parent manipulation
      * @signature `val([val] [,timeout] [,success] [,message])`
    * Gets the [http://api.jquery.com/val/ val] from an element or waits until the val is a certain value.
+	 * 
    * @codestart
    * //checks foo's val has "JupiterJS"
    * ok( /JupiterJS/.test(F('input#foo').val() ) )
@@ -155,6 +161,7 @@ FuncUnit.funcs = {
      * @signature `css(prop [,val] [,timeout] [,success] [,message])`
    * Gets a [http://api.jquery.com/css/ css] property from an element or waits until the property is 
    * a specified value.
+	 * 
    * @codestart
    * // gets the color
    *F("#foo").css("color")
@@ -179,6 +186,7 @@ FuncUnit.funcs = {
      * @signature `offset([offset] [,timeout] [,success] [,message])`
    * Gets an element's [http://api.jquery.com/offset/ offset] or waits until 
    * the offset is a specified value.
+	 * 
    * @codestart
    * // gets the offset
    *F("#foo").offset();
@@ -202,6 +210,7 @@ FuncUnit.funcs = {
      * @signature `position([position] [,timeout] [,success] [,message])`
    * Gets an element's [http://api.jquery.com/position/ position] or waits until 
    * the position is a specified value.
+	 * 
    * @codestart
    * // gets the position
    *F("#foo").position();
@@ -225,6 +234,7 @@ FuncUnit.funcs = {
      * @signature `scrollTop([scrollTop] [,timeout] [,success] [,message])`
    * Gets an element's [http://api.jquery.com/scrollTop/ scrollTop] or waits until 
    * it equals a specified value.
+	 * 
    * @codestart
    * // gets the scrollTop
    *F("#foo").scrollTop();
@@ -248,6 +258,7 @@ FuncUnit.funcs = {
      * @signature `scrollLeft([scrollLeft] [,timeout] [,success] [,message])`
    * Gets an element's [http://api.jquery.com/scrollLeft/ scrollLeft] or waits until 
    * it equals a specified value.
+	 * 
    * @codestart
    * // gets the scrollLeft
    *F("#foo").scrollLeft();
@@ -271,6 +282,7 @@ FuncUnit.funcs = {
      * @signature `height([height] [,timeout] [,success] [,message])`
    * Gets an element's [http://api.jquery.com/height/ height] or waits until 
    * it equals a specified value.
+	 * 
    * @codestart
    * // gets the height
    *F("#foo").height();
@@ -294,6 +306,7 @@ FuncUnit.funcs = {
      * @signature `width([width] [,timeout] [,success] [,message])`
    * Gets an element's [http://api.jquery.com/width/ width] or waits until 
    * it equals a specified value.
+	 * 
    * @codestart
    * // gets the width
    *F("#foo").width();
@@ -317,6 +330,7 @@ FuncUnit.funcs = {
      * @signature `innerHeight([innerHeight] [,timeout] [,success] [,message])`
    * Gets an element's [http://api.jquery.com/innerHeight/ innerHeight] or waits until 
    * it equals a specified value.
+	 * 
    * @codestart
    * // gets the innerHeight
    *F("#foo").innerHeight();
@@ -340,6 +354,7 @@ FuncUnit.funcs = {
      * @signature `innerWidth([innerWidth] [,timeout] [,success] [,message])`
    * Gets an element's [http://api.jquery.com/innerWidth/ innerWidth] or waits until 
    * it equals a specified value.
+	 * 
    * @codestart
    * // gets the innerWidth
    *F("#foo").innerWidth();
@@ -363,6 +378,7 @@ FuncUnit.funcs = {
      * @signature `outerHeight([outerHeight] [,timeout] [,success] [,message])`
    * Gets an element's [http://api.jquery.com/outerHeight/ outerHeight] or waits until 
    * it equals a specified value.
+	 * 
    * @codestart
    * // gets the outerHeight
    *F("#foo").outerHeight();
@@ -386,6 +402,7 @@ FuncUnit.funcs = {
      * @signature `outerWidth([outerWidth] [,timeout] [,success] [,message])`
    * Gets an element's [http://api.jquery.com/outerWidth/ outerWidth] or waits until 
    * it equals a specified value.
+	 * 
    * @codestart
    * // gets the outerWidth
    *F("#foo").outerWidth();
