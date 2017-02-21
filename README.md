@@ -13,6 +13,8 @@
 -->
 # FuncUnit
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/bitovi/funcunit.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/bitovi/funcunit.svg?branch=master)](https://travis-ci.org/bitovi/funcunit)
 [![npm version](https://badge.fury.io/js/funcunit.svg)](https://badge.fury.io/js/funcunit)
 [![Join the chat at https://gitter.im/bitovi/funcunit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bitovi/funcunit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
