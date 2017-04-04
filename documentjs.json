@@ -15,6 +15,12 @@
 			},
 			"parent": "Guides",
 			"pageConfig": {"page":"guides"}
+		},
+		"funcunit": {
+			"glob": {
+				"pattern": "funcunit.md"
+			},
+			"templates": "main"
 		}
 	},
 	"siteDefaults": {
