@@ -9,7 +9,7 @@ publish-docs:
 	./node_modules/.bin/documentjs --f
 	git add -f docs/
 	git add -f guides/
-	git add -f site/
+	git add -f site/static/
 	git add -f examples/
 	git add -f index.html
 	git add -f CNAME
