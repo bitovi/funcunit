@@ -11,7 +11,7 @@ stealTools.export({
 		"+amd": {},
 		"+cjs": {},
 		"global": {
-			modules: ["funcunit"],
+			modules: ["global"],
 			dest: __dirname + "/dist/funcunit.js",
 			format: "global",
 			normalize: function(depName) {
