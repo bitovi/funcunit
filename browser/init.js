@@ -1,7 +1,6 @@
 var jQuery = require("funcunit/browser/jquery");
 
 var FuncUnit = window.FuncUnit || {};
-window.jQuery = jQuery;
 
 jQuery.sub = function() {
   function jQuerySub( selector, context ) {
