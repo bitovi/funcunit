@@ -64,7 +64,7 @@
     "testee": "^0.2.5"
   },
   "system": {
-    "main": "global",
+    "main": "funcunit",
     "map": {
       "chai": "chai/chai"
     },
