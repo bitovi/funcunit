@@ -1,6 +1,6 @@
 {
   "name": "funcunit",
-  "version": "3.2.2",
+  "version": "3.3.0",
   "author": {
     "name": "Bitovi",
     "email": "contact@bitovi.com",
@@ -20,8 +20,8 @@
   "scripts": {
     "preversion": "npm test && npm run build",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
-		"postpublish": "git push --tags && git checkout master && git branch -D release && git push",
-		"ci": "rm -rf ~/.mozilla && npm run testee:test && rm -rf ~/.mozilla && npm run testee:none && rm -rf ~/.mozilla && npm run testee:qunit && rm -rf ~/.mozilla && npm run testee:mocha && rm -rf ~/.mozilla && npm run testee:jasmine && rm -rf ~/.mozilla && npm run testee:jasmine2",
+    "postpublish": "git push --tags && git checkout master && git branch -D release && git push",
+    "ci": "rm -rf ~/.mozilla && npm run testee:test && rm -rf ~/.mozilla && npm run testee:none && rm -rf ~/.mozilla && npm run testee:qunit && rm -rf ~/.mozilla && npm run testee:mocha && rm -rf ~/.mozilla && npm run testee:jasmine && rm -rf ~/.mozilla && npm run testee:jasmine2",
     "testee": "npm run testee:test && npm run testee:none && npm run testee:qunit && npm run testee:mocha && npm run testee:jasmine && npm run testee:jasmine2",
     "testee:test": "testee test.html --browsers firefox",
     "testee:none": "testee test/adapters/none.html --browsers firefox",
