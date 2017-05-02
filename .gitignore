@@ -13,3 +13,4 @@ site/node_modules/
 !site/**/lib/
 static
 index.html
+.idea/
