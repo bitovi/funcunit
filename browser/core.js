@@ -22,6 +22,9 @@ FuncUnit = function( selector, frame ) {
   }
   
   isSyncOnly = typeof forceSync === "boolean"? forceSync: isSyncOnly;
+
+  assignQunit2Assert(FuncUnit);
+
   // if its a function, just run it in the queue
   if(typeof selector == "function"){
     return FuncUnit.wait(0, selector);
@@ -38,8 +41,6 @@ FuncUnit = function( selector, frame ) {
     return collection;
   }
 }
-
-
 
 var getContext = function(context){
     if (typeof context === "number" || typeof context === "string") {
@@ -78,6 +79,14 @@ var getContext = function(context){
     obj.frame = origFrame;
     return obj;
   }
+
+var assignQunit2Assert = function (func) {
+	var callerFirstArgument = func.caller.arguments[0];
+
+	if(callerFirstArgument && callerFirstArgument.test){
+		FuncUnit.qunit2Assert = callerFirstArgument;
+	}
+};
 
 oldFuncUnit.jQuery.extend(FuncUnit, oldFuncUnit, origFuncUnit)
 FuncUnit.prototype = origFuncUnit.prototype;

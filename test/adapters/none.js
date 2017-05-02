@@ -1,6 +1,6 @@
 var $ = require('jquery');
 var F = require('funcunit');
-var QUnit = require('steal-qunit');
+var QUnit = require('steal-qunit1');
 
 QUnit.module('Adapters', {
 	setup: function() {
