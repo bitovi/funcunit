@@ -1,4 +1,4 @@
-var QUnit = require("steal-qunit");
+var QUnit = require("steal-qunit1");
 var F = require("funcunit");
 
 QUnit.module("Iframe Test")
