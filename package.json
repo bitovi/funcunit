@@ -59,7 +59,7 @@
     "steal": "^0.16.35",
     "steal-jasmine": "0.0.3",
     "steal-mocha": "0.0.3",
-    "steal-qunit": "^0.1.1",
+    "steal-qunit1": "1.0.1",
     "steal-tools": "^0.16.0",
     "testee": "^0.2.5"
   },
