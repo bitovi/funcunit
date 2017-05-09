@@ -26,7 +26,7 @@ test("auto scrolldown", function(){
 
 test("blur element", function(assert){
 	var $input = F("#input2").click({}, function(){
-		F("#input1").blur(function(){
+		F("#input2").blur(function(){
 			assert.equal($input.is(':focus'), false);
 		});
 	});
