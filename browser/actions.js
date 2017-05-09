@@ -380,7 +380,7 @@ $.extend(FuncUnit.prototype, {
       * @function FuncUnit.prototype.blur .blur()
       * @parent actions
       * @signature `blur(options, success)`
-  * Scrolls an element in a particular direction by setting the scrollTop or scrollLeft.
+  * Emulates a user clicking away from a focused element to blur it.
   * @param {Function} [success] a callback that runs after the blur, but before the next action.
   */
   blur: function(success){
