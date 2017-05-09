@@ -375,6 +375,26 @@ $.extend(FuncUnit.prototype, {
       type: "action"
     });
     return this;
+  },
+  /**
+      * @function FuncUnit.prototype.blur .blur()
+      * @parent actions
+      * @signature `blur(options, success)`
+  * Scrolls an element in a particular direction by setting the scrollTop or scrollLeft.
+  * @param {Function} [success] a callback that runs after the blur, but before the next action.
+  */
+  blur: function(success){
+    this._addExists();
+    FuncUnit.add({
+      method: function(success, error){
+        syn.click(document.body, success);
+      },
+      success: success,
+      error: "Could not blur " + this.selector,
+      bind: this,
+      type: "action"
+    });
+    return this;
   }
 });
 
