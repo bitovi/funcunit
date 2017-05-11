@@ -1,6 +1,7 @@
 var jasmineAdapter = require("funcunit/browser/adapters/jasmine");
 var jasmine2Adapter = require("funcunit/browser/adapters/jasmine2");
 var qunitAdapter = require("funcunit/browser/adapters/qunit");
+var qunit2Adapter = require("funcunit/browser/adapters/qunit2");
 var mochaAdapter = require("funcunit/browser/adapters/mocha");
 var FuncUnit = require("funcunit/browser/core");
 
@@ -68,6 +69,8 @@ FuncUnit.attach = function(runner){
 	var unit;
 	if(isQUnit(runner)) {
 		unit = qunitAdapter(runner);
+	} else if(isQUnit2(runner)) {
+		unit = qunit2Adapter(runner);
 	} else if(isMocha(runner)) {
 		unit = mochaAdapter(runner);
 	} else if(isJasmine(runner)) {
@@ -83,6 +86,10 @@ FuncUnit.attach = function(runner){
 
 function isQUnit(runner) {
 	return !!(runner.ok && runner.start && runner.stop);
+}
+
+function isQUnit2(runner) {
+	return !!(runner.assert && runner.assert.ok && runner.assert.async);
 }
 
 function isMocha(runner) {

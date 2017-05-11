@@ -23,6 +23,7 @@ FuncUnit.
  * 		but before any more queued actions.
  */
 wait = function(time, success){
+	assignQunit2Assert(FuncUnit.wait);
 	if(typeof time == 'function'){
 		success = time;
 		time = undefined;
@@ -68,6 +69,7 @@ FuncUnit.
  * @param {Number} timeout if neither checker returns true before this timeout, the test fails
  */
 branch = function(check1, success1, check2, success2, timeout){
+	assignQunit2Assert(FuncUnit.branch);
 	FuncUnit.repeat({
 		method : function(print){
 			print("Running a branch statement")
@@ -99,7 +101,7 @@ branch = function(check1, success1, check2, success2, timeout){
 	bind: this
  */
 FuncUnit.repeat = function(options){
-	
+	assignQunit2Assert(FuncUnit.repeat);
 	var interval,
 		stopped = false	,
 		stop = function(){
@@ -155,12 +157,21 @@ FuncUnit.repeat = function(options){
  * if the tested page has jQuery present.
  */
 FuncUnit.animationEnd = function(){
+	assignQunit2Assert(FuncUnit.animationEnd);
 F("body").wait(200).size(function(){
 		return F.win.$(':animated').length === 0;
 	});
 };
 
 FuncUnit.animationsDone = FuncUnit.animationEnd;
+
+var assignQunit2Assert = function (func) {
+	var callerFirstArgument = func.caller.arguments[0];
+
+	if(callerFirstArgument && callerFirstArgument.test){
+		FuncUnit.qunit2Assert = callerFirstArgument;
+	}
+};
 
 $.extend(FuncUnit.prototype, {
 	/**
