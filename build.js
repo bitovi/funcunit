@@ -5,13 +5,14 @@ var parseModuleName = npmUtils.moduleName.parse;
 
 stealTools.export({
 	system: {
-		config: __dirname + "/package.json!npm"
+		config: __dirname + "/package.json!npm",
+		"main": "global"
 	},
 	outputs: {
 		"+amd": {},
 		"+cjs": {},
 		"global": {
-			modules: ["funcunit"],
+			modules: ["global"],
 			dest: __dirname + "/dist/funcunit.js",
 			format: "global",
 			normalize: function(depName) {

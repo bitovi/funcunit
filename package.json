@@ -1,6 +1,6 @@
 {
   "name": "funcunit",
-  "version": "3.1.0",
+  "version": "3.4.0",
   "author": {
     "name": "Bitovi",
     "email": "contact@bitovi.com",
@@ -20,12 +20,13 @@
   "scripts": {
     "preversion": "npm test && npm run build",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
-    "postversion": "git push --tags && git checkout master && git branch -D release && git push",
+    "postpublish": "git push --tags && git checkout master && git branch -D release && git push",
     "ci": "rm -rf ~/.mozilla && npm run testee:test && rm -rf ~/.mozilla && npm run testee:none && rm -rf ~/.mozilla && npm run testee:qunit && rm -rf ~/.mozilla && npm run testee:mocha && rm -rf ~/.mozilla && npm run testee:jasmine && rm -rf ~/.mozilla && npm run testee:jasmine2",
-    "testee": "npm run testee:test && npm run testee:none && npm run testee:qunit && npm run testee:mocha && npm run testee:jasmine && npm run testee:jasmine2",
+    "testee": "npm run testee:test && npm run testee:none && npm run testee:qunit && npm run testee:qunit2 && npm run testee:mocha && npm run testee:jasmine && npm run testee:jasmine2",
     "testee:test": "testee test.html --browsers firefox",
     "testee:none": "testee test/adapters/none.html --browsers firefox",
     "testee:qunit": "testee test/adapters/qunit.html --browsers firefox",
+    "testee:qunit2": "testee test/adapters/qunit2.html --browsers firefox",
     "testee:mocha": "testee test/adapters/mocha.html --browsers firefox",
     "testee:jasmine": "testee test/adapters/jasmine.html --browsers firefox",
     "testee:jasmine2": "testee test/adapters/jasmine2.html --browsers firefox",
@@ -43,7 +44,7 @@
   "dependencies": {
     "jquery": "3.1.1",
     "jquerypp": "^2.0.2",
-    "syn": "^0.4.0"
+    "syn": "^0.10.0"
   },
   "devDependencies": {
     "less": "^2.7.2",
@@ -57,11 +58,11 @@
     "jasmine": "^2.5.2",
     "jshint": "^2.9.1",
     "steal": "^1.2.5",
-    "steal-jasmine": "0.0.3",
-    "steal-mocha": "1.0.0",
+    "steal-jasmine": "^1.0.0",
+    "steal-mocha": "^1.0.0",
     "steal-qunit": "^1.0.1",
     "steal-tools": "^1.1.2",
-    "testee": "^0.3.1"
+    "testee": "^0.6.1"
   },
   "system": {
     "main": "funcunit",
