@@ -10,7 +10,7 @@ FuncUnit.
  * @function FuncUnit.wait F.wait()
  * @parent waits
  * @signature `wait(time, success)`
- * Waits a timeout before running the next command.  Wait is an action and gets 
+ * Waits a timeout before running the next command.  Wait is an action and gets
  * added to the queue.
  * @codestart
  * F.wait(100, function(){
@@ -18,12 +18,11 @@ FuncUnit.
  * })
  * @codeend
  * @param {Number} [time] The timeout in milliseconds.  Defaults to 5000.
- * @param {Function} [success] A callback that will run 
- * 		after the wait has completed, 
+ * @param {Function} [success] A callback that will run
+ * 		after the wait has completed,
  * 		but before any more queued actions.
  */
 wait = function(time, success){
-	assignQunit2Assert(FuncUnit.wait);
 	if(typeof time == 'function'){
 		success = time;
 		time = undefined;
@@ -69,7 +68,6 @@ FuncUnit.
  * @param {Number} timeout if neither checker returns true before this timeout, the test fails
  */
 branch = function(check1, success1, check2, success2, timeout){
-	assignQunit2Assert(FuncUnit.branch);
 	FuncUnit.repeat({
 		method : function(print){
 			print("Running a branch statement")
@@ -101,7 +99,6 @@ branch = function(check1, success1, check2, success2, timeout){
 	bind: this
  */
 FuncUnit.repeat = function(options){
-	assignQunit2Assert(FuncUnit.repeat);
 	var interval,
 		stopped = false	,
 		stop = function(){
@@ -122,20 +119,20 @@ FuncUnit.repeat = function(options){
 				var result = null;
 				try {
 					result = options.method(print)
-				} 
+				}
 				catch (e) {
 					//should we throw this too error?
 				}
-				
+
 				if (result) {
 					success(options.bind);
 				}else if(!stopped){
 					interval = setTimeout(arguments.callee, 10)
 				}
-				
+
 			}, 10);
-			
-			
+
+
 		},
 		success : options.success,
 		error : options.error,
@@ -144,7 +141,7 @@ FuncUnit.repeat = function(options){
 		bind : options.bind,
 		type: options.type
 	});
-	
+
 }
 
 
@@ -157,21 +154,12 @@ FuncUnit.repeat = function(options){
  * if the tested page has jQuery present.
  */
 FuncUnit.animationEnd = function(){
-	assignQunit2Assert(FuncUnit.animationEnd);
-F("body").wait(200).size(function(){
+	F("body").wait(200).size(function(){
 		return F.win.$(':animated').length === 0;
 	});
 };
 
 FuncUnit.animationsDone = FuncUnit.animationEnd;
-
-var assignQunit2Assert = function (func) {
-	var callerFirstArgument = func.caller.arguments[0];
-
-	if(callerFirstArgument && callerFirstArgument.test){
-		FuncUnit.qunit2Assert = callerFirstArgument;
-	}
-};
 
 $.extend(FuncUnit.prototype, {
 	/**
@@ -186,7 +174,7 @@ $.extend(FuncUnit.prototype, {
 	 * @param {Number} [timeout] overrides FuncUnit.timeout.  If provided, the wait will fail if not completed before this timeout.
 	 * @param {Function} [success] a success that is run after the selector exists, but before the next action.
 	 * @param {String} [message] if provided, an assertion will be passed when this wait condition completes successfully
-	 * @return {FuncUnit} returns the funcUnit for chaining. 
+	 * @return {FuncUnit} returns the funcUnit for chaining.
 	 */
 	exists: function( timeout, success, message ) {
 		var logMessage = "Waiting for '"+this.selector+"' to exist";
@@ -217,7 +205,7 @@ $.extend(FuncUnit.prototype, {
 	 * @param {Number} [timeout] overrides FuncUnit.timeout.  If provided, the wait will fail if not completed before this timeout.
 	 * @param {Function} [success] a callback that is run after the selector exists, but before the next action
 	 * @param {String} [message] if provided, an assertion will be passed when this wait condition completes successfully
-	 * @return {FuncUnit} returns the funcUnit for chaining. 
+	 * @return {FuncUnit} returns the funcUnit for chaining.
 	 */
 	missing: function( timeout,success, message ) {
 		return this.size(0, timeout, success, message)
@@ -226,7 +214,7 @@ $.extend(FuncUnit.prototype, {
      * @function FuncUnit.prototype.visible .visible()
      * @parent waits
      * @signature `visible([timeout] [,success] [,message])`
-	 * Waits until the funcUnit selector is visible.  
+	 * Waits until the funcUnit selector is visible.
 	 * @codestart
 	 * //waits until #foo is visible.
 	 *F("#foo").visible()
@@ -248,7 +236,7 @@ $.extend(FuncUnit.prototype, {
      * @function FuncUnit.prototype.invisible .invisible()
      * @parent waits
      * @signature `invisible([timeout] [,success] [,message])`
-	 * Waits until the selector is invisible.  
+	 * Waits until the selector is invisible.
 	 * @codestart
 	 * //waits until #foo is invisible.
 	 *F("#foo").invisible()
@@ -271,14 +259,14 @@ $.extend(FuncUnit.prototype, {
      * @parent waits
      * @signature `wait([checker] [,timeout] [,success] [,message])`
      *
-	 * Waits until some condition is true before calling the next action.  Or if no checker function is provided, waits a 
+	 * Waits until some condition is true before calling the next action.  Or if no checker function is provided, waits a
 	 * timeout before calling the next queued method.  This can be used as a flexible wait condition to check various things in the tested page:
 	 * @codestart
 	 *F('#testData').wait(function(){
 	 * 	 return F.win.$(this).data('idval') === 1000;
 	 * }, "Data value matched");
 	 * @codeend
-	 * @param {Number|Function} [checker] a checking function.  It runs repeatedly until the condition becomes true or the timeout period passes.  
+	 * @param {Number|Function} [checker] a checking function.  It runs repeatedly until the condition becomes true or the timeout period passes.
 	 * If a number is provided, a time in milliseconds to wait before running the next queued method.
 	 * @param {Number} [timeout] overrides FuncUnit.timeout.  If provided, the wait will fail if not completed before this timeout.
 	 * @param {Function} [success] a callback that will run after this action completes.
@@ -288,7 +276,7 @@ $.extend(FuncUnit.prototype, {
 		if(typeof checker === "number"){
 			timeout = checker;
 			FuncUnit.wait(timeout, success)
-			return this;	
+			return this;
 		} else {
 			return this.size(checker, timeout, success, message)
 		}
