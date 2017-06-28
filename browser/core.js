@@ -10,17 +10,17 @@ var origFuncUnit = FuncUnit;
 FuncUnit = function( selector, frame ) {
   // if you pass true as context, this will avoid doing a synchronous query
   var frame,
-    forceSync, 
+    forceSync,
     isSyncOnly = false;
-  
+
   if(frame && frame.forceSync){
     forceSync = frame.forceSync;
   }
-  
+
   if(frame && typeof frame.frame !== "undefined"){ // its passed as an object
     frame = frame.frame;
   }
-  
+
   isSyncOnly = typeof forceSync === "boolean"? forceSync: isSyncOnly;
 
   assignQunit2Assert(FuncUnit);
@@ -48,7 +48,7 @@ var getContext = function(context){
       var sel = (typeof context === "number" ? "iframe:eq(" + context + ")" : "iframe[name='" + context + "']"),
         frames = new origFuncUnit.fn.init(sel, FuncUnit.win.document.documentElement, true);
       var frame = (frames.length ? frames.get(0).contentWindow : FuncUnit.win).document.documentElement;
-      
+
     } else {
       frame = FuncUnit.win.document.documentElement;
     }
@@ -81,7 +81,7 @@ var getContext = function(context){
   }
 
 var assignQunit2Assert = function (func) {
-	var callerFirstArgument = func.caller.arguments[0];
+	var callerFirstArgument = func.caller && func.caller.arguments[0];
 
 	if(callerFirstArgument && callerFirstArgument.test){
 		FuncUnit.qunit2Assert = callerFirstArgument;
