@@ -60,7 +60,7 @@ a half day task.  `~34` might take a week of experimentation.
 
 ## Suggest a feature
 
-FuncUnit uses [Github Issues](https://github.com/bitovi/funcunit/issues/new) to track feature requests. 
+FuncUnit uses [Github Issues](https://github.com/bitovi/funcunit/issues/new) to track feature requests.
 
 When creating an feature issue, it's very helpful to include:
 
@@ -210,8 +210,8 @@ The following details the directory structure of FuncUnit:
 ├── .jshintrc               - Configures JSHint
 ├── .npmignore              - Tells npm publish to ignore certain files
 ├── .travis.yml             - Travis CI configuration
+├── publish-docs.js         - Publishes the documentation to gh-pages
 ├── readme.md               - Automatically generated readme
-├── Makefile                - Publishes the doumentation to gh-pages
 ├── test.html               - Main test page
 ├── test/                   - Test files
 |   ├── test.js 						- Main test file
@@ -303,11 +303,11 @@ The FuncUnit theme is in `funcunit/site/theme`
 
 Once the docs look right locally, commit your changes, then run:
 
-```
-> make
+```shell
+npm run document:publish
 ```
 
-The make script will generate the documentation again and push out the `gh-pages` branch.
+The `publish-docs.js` script will generate the documentation again and push out the `gh-pages` branch.
 
 
 ### Writing API documentation
@@ -414,7 +414,7 @@ use section because it's covered in [can-component].
 
 #### For individual modules
 
-FuncUnit has the same structure as all CanJS individual modules which allows making releases through NPM scripts. 
+FuncUnit has the same structure as all CanJS individual modules which allows making releases through NPM scripts.
 All versions should follow the [Semantic Versioning](http://semver.org/) guidelines in the form of `MAJOR.MINOR.PATCH` for
 
 - `MAJOR` version when you make incompatible API changes,
