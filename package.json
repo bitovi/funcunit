@@ -37,6 +37,8 @@
     "release:major": "npm version major && npm publish",
     "build": "node build.js",
     "document": "./node_modules/.bin/documentjs",
+    "document:force": "./node_modules/.bin/documentjs --f",
+    "document:publish": "node publish-docs.js",
     "develop": "done-serve --static --develop --port 8080",
     "release:pre": "npm version prerelease && npm publish"
   },
@@ -47,16 +49,17 @@
     "syn": "^0.10.0"
   },
   "devDependencies": {
-    "less": "^1.7.0",
-    "documentjs": "^0.3.0-pre.4",
     "can-define": "^0.8.0",
     "can-zone": "^0.4.4",
     "chai": "^3.5.0",
+    "documentjs": "^0.3.0-pre.4",
     "done-serve": "^0.2.5",
     "donejs-cli": "^0.9.5",
     "generator-donejs": "^0.9.0",
     "jasmine": "^2.5.2",
     "jshint": "^2.9.1",
+    "less": "^1.7.0",
+    "shelljs": "^0.7.8",
     "steal": "^0.16.35",
     "steal-jasmine": "0.0.3",
     "steal-mocha": "0.0.3",
