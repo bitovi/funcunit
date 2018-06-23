@@ -1,5 +1,3 @@
-var FuncUnit = require("funcunit/browser/core");
-
 module.exports = function(runner) {
 	var done;
 

@@ -1,5 +1,5 @@
-var syn = require("syn");
 var FuncUnit = require("funcunit/browser/core");
+
 require("funcunit/browser/adapters/");
 require("funcunit/browser/open");
 require("funcunit/browser/actions");
