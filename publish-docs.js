@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 var shell = require('shelljs');
 
 if (!shell.which('git')) {

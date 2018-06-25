@@ -4,7 +4,7 @@ var ok = function(expr, msg) {
   if(!expr) throw new Error(msg);
 };
 
-module.exports = function(mocha){
+module.exports = function(){
   FuncUnit.timeout = 1900;
 
   return {

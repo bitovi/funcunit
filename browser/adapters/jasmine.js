@@ -10,7 +10,7 @@ module.exports = function(jasmine){
     resumeTest: function(){
       paused = false;
     },
-    assertOK: function(assertion, message){
+    assertOK: function(assertion){
       expect(assertion).toBeTruthy();
     },
     equiv: function(expected, actual){
