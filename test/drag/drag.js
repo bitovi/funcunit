@@ -1,4 +1,4 @@
-steal("../../browser/jquery", "../../node_modules/jquerypp/index", function($){
+steal("../../browser/jquery", "jquerypp/index.js", function($){
 	window.jQuery = $;
 
 	var hoveredOnce = false;
