@@ -1,8 +1,10 @@
-var jQuery = require("funcunit/browser/jquery");
+var assign = require("./assign");
 var oldFuncUnit = require("funcunit/browser/init");
 
-var FuncUnit = oldFuncUnit.jQuery.sub();
+//var FuncUnit = oldFuncUnit.jQuery.sub();
+var FuncUnit = oldFuncUnit;
 var origFuncUnit = FuncUnit;
+
 // override the subbed init method
 // context can be an object with frame and forceSync:
 // - a number or string: this is a frame name/number, and means only do a sync query
@@ -44,7 +46,7 @@ var getContext = function(context){
     if (typeof context === "number" || typeof context === "string") {
       // try to get the context from an iframe in the funcunit document
       var sel = (typeof context === "number" ? "iframe:eq(" + context + ")" : "iframe[name='" + context + "']"),
-        frames = new origFuncUnit.fn.init(sel, FuncUnit.win.document.documentElement, true);
+        frames = new origFuncUnit.init(sel, FuncUnit.win.document.documentElement, true);
       var frame = (frames.length ? frames.get(0).contentWindow : FuncUnit.win).document.documentElement;
 
     } else {
@@ -60,7 +62,7 @@ var getContext = function(context){
           frame = getContext(frame);
         }
         this.selector = selector;
-        this.bind = new origFuncUnit.fn.init( selector, frame, true );
+        this.bind = new origFuncUnit.init( selector, frame, true );
         success();
         return this;
       },
@@ -73,11 +75,11 @@ var getContext = function(context){
     if (FuncUnit.win) {
       frame = getContext(frame);
     }
-    var obj = new origFuncUnit.fn.init( selector, frame, true );
+    var obj = new origFuncUnit.init( selector, frame, true );
     obj.frame = origFrame;
     return obj;
   }
 
-oldFuncUnit.jQuery.extend(FuncUnit, oldFuncUnit, origFuncUnit)
-FuncUnit.prototype = origFuncUnit.prototype;
+assign(FuncUnit, oldFuncUnit, origFuncUnit)
+FuncUnit.prototype = origFuncUnit.init.prototype;
 module.exports = FuncUnit;

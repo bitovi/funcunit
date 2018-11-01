@@ -10,4 +10,3 @@ require("test/funcunit/find_closest_test");
 require("test/funcunit/open_test");
 require("test/funcunit/syn_test");
 require("test/funcunit/confirm_test");
-require("test/jquery/conflict_test");

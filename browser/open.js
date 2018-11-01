@@ -1,5 +1,5 @@
-var $ = require("funcunit/browser/jquery");
 var FuncUnit = require("funcunit/browser/core");
+var assign = require("./assign");
 var syn = require("syn");
 
 if(FuncUnit.frameMode){
@@ -8,12 +8,12 @@ if(FuncUnit.frameMode){
   document.body.insertBefore(ifrm, document.body.firstChild);
 }
 
-var confirms = [], 
-  prompts = [], 
+var confirms = [],
+  prompts = [],
   currentDocument,
   currentHref,
   // pointer to the popup window
-  appWin, 
+  appWin,
   lookingForNewDocument = false,
   urlWithoutHash = function(url){
     return url.replace(/\#.*$/, "");
@@ -33,7 +33,7 @@ var confirms = [],
 * @add FuncUnit
 */
 //
-$.extend(FuncUnit,{
+assign(FuncUnit,{
 // open is a method
 
 /**
@@ -41,14 +41,14 @@ $.extend(FuncUnit,{
    * @function FuncUnit.open F.open()
    * @signature `open(path, success, timeout)`
    *
- * Opens a page.  It will error if the page can't be opened before timeout. If a URL begins with "//", pages are opened 
+ * Opens a page.  It will error if the page can't be opened before timeout. If a URL begins with "//", pages are opened
  * from the FuncUnit root (the root folder where funcunit is located)
  * ### Example
    *
    * @codestart
    * F.open("//app/app.html")
    * @codeend
- * 
+ *
  * @param {String} path a full or partial url to open.
  * @param {Function} success
  * @param {Number} timeout
@@ -81,7 +81,8 @@ _open: function(url){
   FuncUnit.win = appWin;
   hasSteal = false;
   // this will determine if this is supposed to open within a frame
-  FuncUnit.frame =  $('#funcunit_app').length? $('#funcunit_app')[0]: null;
+	var funcunitApp = document.getElementById("funcunit_app");
+  FuncUnit.frame = funcunitApp || null;
 
   // if the first time ..
   if (newPage) {
@@ -91,17 +92,17 @@ _open: function(url){
     }
     else{
       // giving a large height forces it to not open in a new tab and just opens to the window's height
-      var width = $(window).width();
+			var width = window.document.documentElement.clientWidth;
       FuncUnit.win = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,width="+width/2+",left="+width/2);
       // This is mainly for opera. Other browsers will hit the unload event and close the popup.
-      // This block breaks in IE (which never reaches it) because after closing a window, it throws access 
+      // This block breaks in IE (which never reaches it) because after closing a window, it throws access
       // denied any time you try to access it, even after reopening.
       if(FuncUnit.win && FuncUnit.win.___FUNCUNIT_OPENED) {
         FuncUnit.win.close();
         FuncUnit.win = window.open(url, "funcunit",  "height=1000,toolbar=yes,status=yes,left="+width/2);
       }
-      
-      
+
+
       if(!FuncUnit.win){
         throw "Could not open a popup window.  Your popup blocker is probably on.  Please turn it off and try again";
       }
@@ -151,7 +152,7 @@ confirm: function(answer){
    * @function FuncUnit.prompt F.prompt()
    * @signature `prompt(answer)`
    *
- * When a browser's native prompt dialog is used, this method is used to repress the dialog and simulate 
+ * When a browser's native prompt dialog is used, this method is used to repress the dialog and simulate
  * clicking typing something into the dialog.
  * @codestart
  * F.prompt("Harry Potter");
@@ -166,14 +167,14 @@ _opened: function(){
   if (!this._isOverridden("alert")) {
     FuncUnit.win.alert = function(){}
   }
-  
+
   if (!this._isOverridden("confirm")) {
     FuncUnit.win.confirm = function(){
       var res = confirms.shift();
       return res;
     }
   }
-  
+
   if (!this._isOverridden("prompt")) {
     FuncUnit.win.prompt = function(){
       return prompts.shift();
@@ -197,13 +198,13 @@ _onload: function(success, error){
     // Wait for steal to be done
     FuncUnit.win.steal.done().then(success);
   };
-  
+
   // we only need to do this setup stuff once ...
   if (!newPage) {
     return;
   }
   newPage = false;
-  
+
   if (FuncUnit.support.readystate)
   {
     poller();
@@ -211,7 +212,7 @@ _onload: function(success, error){
   else {
     unloadLoader();
   }
-  
+
 },
 /**
  * @hide
@@ -255,7 +256,7 @@ eval: function(str){
 // return true if document is currently loaded, false if its loading
 // actions check this
 documentLoaded: function(){
-  var loaded = FuncUnit.win.document.readyState === "complete" && 
+  var loaded = FuncUnit.win.document.readyState === "complete" &&
            FuncUnit.win.location.href != "about:blank" &&
            FuncUnit.win.document.body;
   return loaded;
@@ -266,10 +267,10 @@ checkForNewDocument: function(){
 
   // right after setting a new hash and reloading, IE barfs on this occassionally (only the first time)
   try {
-    documentFound = ((FuncUnit.win.document !== currentDocument && // new document 
+    documentFound = ((FuncUnit.win.document !== currentDocument && // new document
             !FuncUnit.win.___FUNCUNIT_OPENED) // hasn't already been marked loaded
             // covers opera case after you click a link, since document doesn't change in opera
-            || (currentHref != FuncUnit.win.location.href)) && // url is different 
+            || (currentHref != FuncUnit.win.location.href)) && // url is different
             FuncUnit.documentLoaded(); // fully loaded
   } catch(e){}
   if(documentFound){
@@ -277,21 +278,21 @@ checkForNewDocument: function(){
     lookingForNewDocument = false;
     currentDocument = FuncUnit.win.document;
     currentHref = FuncUnit.win.location.href;
-    
+
     // mark it as opened
     FuncUnit.win.___FUNCUNIT_OPENED = true;
     // reset confirm, prompt, alert
     FuncUnit._opened();
   }
-  
+
   return documentFound;
 }
 });
 
-var newPage = true, 
+var newPage = true,
   hasSteal = false,
-  unloadLoader, 
-  loadSuccess, 
+  unloadLoader,
+  loadSuccess,
   firstLoad = true,
   onload = function(){
     FuncUnit.win.document.documentElement.tabIndex = 0;
@@ -309,7 +310,7 @@ var newPage = true,
     FuncUnit.stop = true;
     removeListeners();
     setTimeout(unloadLoader, 0)
-    
+
   },
   removeListeners = function(){
     syn.unbind(FuncUnit.win, "unload", onunload);
@@ -318,37 +319,37 @@ var newPage = true,
 unloadLoader = function(){
   if(!firstLoad) // dont remove the first run, fixes issue in FF 3.6
     removeListeners();
-  
+
   syn.bind(FuncUnit.win, "load", onload);
-  
+
   //listen for unload to re-attach
   syn.bind(FuncUnit.win, "unload", onunload)
 }
 
 //check for window location change, documentChange, then readyState complete -> fire load if you have one
-var newDocument = false, 
+var newDocument = false,
   poller = function(){
     var ls;
-    
+
     if (lookingForNewDocument && FuncUnit.checkForNewDocument() ) {
-      
+
       ls = loadSuccess;
-      
+
       loadSuccess = null;
       if (ls) {
         FuncUnit.win.focus();
         FuncUnit.win.document.documentElement.tabIndex = 0;
-        
+
         ls();
       }
     }
-    
+
   setTimeout(arguments.callee, 500)
 }
 
-// All browsers except Opera close the app window on a reload.  This is to fix the case the URL to be opened 
+// All browsers except Opera close the app window on a reload.  This is to fix the case the URL to be opened
 // has a hash.  In this case, window.open doesn't cause a reload if you reuse an existing popup, so we need to close.
-$(window).unload(function(){
+window.addEventListener("unload", function(){
   if(FuncUnit.win && FuncUnit.win !== window.top) {
     FuncUnit.win.close();
   }
