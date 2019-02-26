@@ -2,19 +2,19 @@
 
 > CanJS is a MIT-licensed, client-side, JavaScript framework that makes building rich web applications easy.
 
-> _[CanJS - canjs.com](http://canjs.com)_
+> _[CanJS - canjs.com](https://canjs.com)_
 
 
 ## Learning CanJS
 
-The [CanJS website](http://canjs.com) is a great resource for getting started.
+The [CanJS website](https://canjs.com) is a great resource for getting started.
 
 Here are some links you may find helpful:
 
-* [Documentation](http://donejs.com/docs.html#!canjs)
-* [Why CanJS](http://canjs.com/#why_canjs)
-* [Applications built with CanJS](http://canjs.com/#examples)
-* [Blog](http://bitovi.com/blog/tag/canjs)
+* [Documentation](https://donejs.com/docs.html#!canjs)
+* [Why CanJS](https://canjs.com/#why_canjs)
+* [Applications built with CanJS](https://canjs.com/#examples)
+* [Blog](https://www.bitovi.com/blog/tag/canjs)
 * [Getting started video](http://www.youtube.com/watch?v=GdT4Oq6ZQ68)
 
 Articles and guides from the community:
@@ -40,8 +40,8 @@ JavaScriptMVC 3.3 uses CanJS for the MVC structure so this TodoMVC example appli
 
 Additionally, JavaScriptMVC contains:
 
-- [CanJS](http://canjs.com) - For the MVC parts
-- [jQuery++](http://jquerypp.com) - jQuery's missing utils and special events
+- [CanJS](https://canjs.com) - For the MVC parts
+- [jQuery++](https://jquerypp.com) - jQuery's missing utils and special events
 - [StealJS](http://javascriptmvc.com/docs.html#!stealjs) - A JavaScript package manager
 - [DocumentJS](http://javascriptmvc.com/docs.html#!DocumentJS) - A documentation engine
 - [FuncUnit](http://funcunit.com) - jQuery style functional unit testing

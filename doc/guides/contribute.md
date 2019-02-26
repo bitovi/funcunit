@@ -12,7 +12,7 @@ to an Open Source project can be an intimidating experience.  We're
 committed to making the experience as pleasant and rewarding as possible.  We're happy to setup a
 pairing session to show you how to fix a bug or write a feature.  
 
-If you have any questions, you can always reach us on [Gitter chat](https://gitter.im/canjs/canjs).
+If you have any questions, you can always reach us on [Slack](https://www.bitovi.com/community/slack).
 
 
 ## Report a bug
@@ -29,8 +29,8 @@ Also, please search for previous tickets.  If there's something similar, add to 
 give it a `+1`.
 
 Finally, if there are any questions, reach out to
-us on the [CanJS forums](http://forums.donejs.com/c/canjs) or talk to us on
-the [Gitter canjs/canjs channel](https://gitter.im/canjs/canjs).
+us on the [Bitovi forums](https://forums.bitovi.com/c/testing) or talk to us on
+[Slack](https://www.bitovi.com/community/slack).
 
 ### Priority, Tags, and Complexity
 
@@ -49,8 +49,8 @@ There are several ways to influence these priorities:
  - Write a good test.
  - Come to a DoneJS Contributors meeting and make your case.
  - Get others from other organizations to `+1` the issue.
- - Make your case on gitter with a contributor or in the issue.
- - You can always hire [Bitovi](http://bitovi.com) or a contributor to make the change.
+ - Make your case on [Slack](https://www.bitovi.com/community/slack) with a contributor or in the issue.
+ - You can always hire [Bitovi](https://www.bitovi.com) or a contributor to make the change.
 
 
 Also, the core team will often include a complexity indicator in the title that looks like
@@ -78,8 +78,8 @@ Also, please search for previous feature requests.  If there's something similar
 give it a `+1`.
 
 Finally, if there are any questions, reach out to
-us on the [CanJS forums](http://forums.donejs.com/c/canjs) or talk to us on
-the [Gitter canjs/canjs channel](https://gitter.im/canjs/canjs).
+us on the [Bitovi forums](https://forums.bitovi.com/c/testing) or talk to us on
+[Slack](https://www.bitovi.com/community/slack).
 
 ### Priority, Tags, and Complexity
 
@@ -98,8 +98,8 @@ There are several ways to influence these priorities:
  - Write a good test.
  - Come to a DoneJS Contributors meeting and make your case.
  - Get others from other organizations to `+1` the issue.
- - Make your case on gitter with a contributor or in the issue.
- - You can always hire [Bitovi](http://bitovi.com) or a contributor to make the change.
+ - Make your case on [Slack](https://www.bitovi.com/community/slack) with a contributor or in the issue.
+ - You can always hire [Bitovi](https://www.bitovi.com) or a contributor to make the change.
 
 
 Also, the core team will often include a complexity indicator in the title that looks like
@@ -113,7 +113,7 @@ Contributing to any Open Source project can be intimidating.  All contributions 
 committed to making the experience as pleasant and rewarding as possible.  We're happy to setup a
 pairing session to show you how to fix a bug or write a feature.  
 
-If you have any questions, you can always reach us on [Gitter chat](https://gitter.im/canjs/canjs).
+If you have any questions, you can always reach us on [Slack](https://www.bitovi.com/community/slack).
 
 
 ### Setting up your development environment.
@@ -261,7 +261,7 @@ consider joining our [Core team](https://donejs.com/About.html#section=section_C
 
 ## Documentation improvements
 
-The FuncUnit site is generated with [DocumentJS](http://documentjs.com).  Its
+The FuncUnit site is generated with [DocumentJS](https://documentjs.com).  Its
 content is hosted using Github pages publishing the [bitovi/funcunit#gh-pages](https://github.com/bitovi/funcunit/tree/gh-pages) repo.
 
 DocumentJS reads JavaScript comments and markdown files within the `funcunit`.
@@ -383,8 +383,8 @@ Signature titles should follow jQuery's conventions:
 	`typeAlias.method( arg1 [, arg2 ][, arg3 ] )`
 
 Make sure to fully document the a signature's parameters and return
-value.  There's a lot of flexibility in documenting the [type expression](http://documentjs.com/docs/documentjs.typeExpression.html) of
-a return value or parameters and the [name expression](http://documentjs.com/docs/documentjs.nameExpression.html) of
+value.  There's a lot of flexibility in documenting the [type expression](https://documentjs.com/docs/documentjs.typeExpression.html) of
+a return value or parameters and the [name expression](https://documentjs.com/docs/documentjs.nameExpression.html) of
 parameters.
 
  - Parameter and descriptions should start with a `Capital` and end with a period like:
@@ -414,7 +414,7 @@ use section because it's covered in [can-component].
 
 #### For individual modules
 
-FuncUnit has the same structure as all CanJS individual modules which allows making releases through NPM scripts.
+FuncUnit has the same structure as all CanJS individual modules which allows making releases through npm scripts.
 All versions should follow the [Semantic Versioning](http://semver.org/) guidelines in the form of `MAJOR.MINOR.PATCH` for
 
 - `MAJOR` version when you make incompatible API changes,

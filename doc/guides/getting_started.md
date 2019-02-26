@@ -28,7 +28,7 @@ or
 
     npm install funcunit --save-dev
 
-If using from NPM you can `require` FuncUnit in your application if you're using [StealJS](http://stealjs.com/) or Browserify.
+If using from npm you can `require` FuncUnit in your application if you're using [StealJS](https://stealjs.com/) or Browserify.
 
     var F = require("funcunit");
     var QUnit = require("qunit");
@@ -127,7 +127,7 @@ Mix or match your built in assertion library, as well as using FuncUnit's waits 
 
 Functional tests, for purposes of these guides, are defined as an application running in its true state. This is to say, not in an isolated fixture div or sandbox area. FuncUnit allows for opening a URL, then providing the same actions and waits to test the application.
 
-_Note: It is recommended for these types of tests to have a fixturized service layer such as [CanJS fixtures](http://canjs.com/docs/can.fixture.html) or use an isolated test database when service calls are present._
+_Note: It is recommended for these types of tests to have a fixturized service layer such as [CanJS fixtures](https://canjs.com/docs/can.fixture.html) or use an isolated test database when service calls are present._
 
 Using [F.open](/docs/FuncUnit.open.html), test a simple tabs widget in its own page.
 
