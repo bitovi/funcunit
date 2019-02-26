@@ -15,7 +15,7 @@
 
 [![Build Status](https://travis-ci.org/bitovi/funcunit.svg?branch=master)](https://travis-ci.org/bitovi/funcunit)
 [![npm version](https://badge.fury.io/js/funcunit.svg)](https://badge.fury.io/js/funcunit)
-[![Join the chat at https://gitter.im/bitovi/funcunit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bitovi/funcunit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join our Slack](https://img.shields.io/badge/slack-join%20chat-611f69.svg)](https://www.bitovi.com/community/slack?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 > Write better tests, faster.
 
 *Note:* [FuncUnit Roadmap](http://forum.javascriptmvc.com/#Topic/32525000001436023)
