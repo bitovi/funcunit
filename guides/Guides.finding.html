@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8 lt-ie7" lang="en">
+<![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8" lang="en">
+<![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie lt-ie9" lang="en">
+<![endif]-->
+<!--[if IE 9]>
+<html class="no-js ie ie9" lang="en">
+<![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>Guides - Finding Elements </title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" type="image/png" href="static/img/funcunit-logo-32x32.png">
+
+	<link rel="stylesheet" type="text/css" href='./static/bundles/static.css'/>
+
+	<!--[if lt IE 9]>
+   <script type="text/javascript" src="../scripts/static/lib/html5shiv.js"></script>
+    <!--<![endif]-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-2302003-26', 'auto');
+	  ga('send', 'pageview');
+	</script>
+</head>
+
+<body class="guides">
+	<header>
+		<nav class="container">
+
+			<div class="logo-menu">
+				<a class="brand funcunit" href="../index.html">FuncUnit</a>
+				<ul class="dropdown-menu">
+					<li><a href="https://donejs.com">DoneJS</a></li>
+					<li><a href="http://javascriptmvc.com">JavaScriptMVC</a></li>
+					<li><a href="https://canjs.com">CanJS</a></li>
+					<li><a href="https://jquerypp.com">jQuery++</a></li>
+					<li><a href="https://stealjs.com">StealJS</a></li>
+					<li class="active"><a href="../index.html">FuncUnit</a></li>
+					<li><a href="https://documentjs.com">DocumentJS</a></li>
+				</ul>
+			</div>
+			<ul class="nav">
+				<li >
+        	<a href="../index.html">Home</a>
+        </li>
+				<li class="guides active"><a href="../guides/index.html">Guides</a></li>
+				<li class="docs "><a href="../docs/index.html">API</a></li>
+				<li class="community"><a href="https://github.com/bitovi/funcunit" target="_blank">GitHub</a></li>
+				<li class="chat"><a href="https://www.bitovi.com/community/slack" target="_blank">Chat</a></li>
+				<li class="forum"><a href="https://forums.bitovi.com/c/testing" target="_blank">Forums</a></li>
+			</ul>
+			<div class="pull-right">
+				<div class="bitovi-menu">
+					<a href="https://www.bitovi.com" class="bitovi icon-bits">Bitovi</a>
+					<ul class="dropdown-menu">
+						<li><a href="https://www.bitovi.com">Bitovi.com</a></li>
+						<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+						<li><a href="https://www.bitovi.com/design">Design</a></li>
+						<li><a href="https://www.bitovi.com/development">Development</a></li>
+						<li><a href="https://www.bitovi.com/training">Training</a></li>
+						<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+						<li><a href="https://www.bitovi.com/about">About</a></li>
+						<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	
+<div class="container api">
+
+	
+	<nav class="sidebar">
+		
+		<ul class="api cascading primary-grouping"> 
+	
+		
+		
+			
+			<li class="search-container active">
+			<a class="sidebar-title" href="index.html" data-search="Guides">
+				Guides
+			</a>
+			
+	<ul>
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.guides.start.html" data-search="Getting Started">
+						Getting Started
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.actions.html" data-search="Actions">
+						Actions
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.getters.html" data-search="Getters &amp; Assertions">
+						Getters &amp; Assertions
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container active ">
+					<a class="page" href="Guides.finding.html" data-search="Finding Elements">
+						Finding Elements
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.waits.html" data-search="Waits">
+						Waits
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.contributing.html" data-search="Contributing">
+						Contributing
+					</a>
+				</li>
+				
+			
+			
+		
+	</ul>
+
+		</li>
+			
+		
+	
+</ul>
+	</nav>
+	
+	
+	
+	<article class="content docs">
+	
+	
+		
+		<section class="title">
+			<div class="heading">
+<h1>Finding Elements</h1>
+	<ul class="tags">
+		<li>page</li>
+	</ul>
+	
+	
+</div>
+
+<div class="sub-heading">
+	
+	
+		<span class="module">Guides.finding</span>
+	
+	
+	
+	<span class="inherits">&nbsp;</span>
+</div>
+
+<ul class="links">
+	
+	
+	
+	
+</ul>
+<br />
+		</section>
+		
+		
+		
+		<section class="contents">
+		</section>
+		
+		
+		
+
+		
+
+		
+			
+		
+		
+		
+		
+
+		
+		<section class="comment">
+			<h2>The F Method</h2>
+<p>F is a copy of the $ method.  It is used to find elements in the page you're testing.  It works
+slightly differently than $.</p>
+<pre><code class="language-js">F( selector, [context] )
+</code></pre>
+<h3>Params</h3>
+<p><strong>selector</strong> <code>{String|Function|Object}</code></p>
+<p><em>String</em></p>
+<p>The F method accepts any valid jQuery selector string, just like $.  One difference from $ is that this
+query will happen in the context of the window of the page you're testing, not the QUnit page where it runs.</p>
+<p>Depending on the context in which F is called, this selector may be used immediately and return a jQuery
+collection, or it may cache the selector, which will be used in the asynchronous queue later to find elements
+when previous queued methods have finished.  Read more about this below.</p>
+<pre><code class="language-js">// look up .foo elements in the application window
+F(&quot;.foo&quot;)
+</code></pre>
+<p><em>Function</em></p>
+<p>If a function is provided, it will be added to the queue to be run after previous queued methods.</p>
+<pre><code class="language-js">// Wait for this to be visible
+F(&quot;.grid&quot;).visible()
+
+// Run after the previous wait completes
+F(function(){
+    ok(F(&quot;.foo&quot;).hasClasF('bar'))
+})
+</code></pre>
+<p><em>Object</em></p>
+<p>If you want to reference the test page's window or document, pass <code>F.window</code>
+or <code>F.window.document</code>.</p>
+<pre><code class="language-js">// click the test page's document element
+F(F.window.document).click()
+</code></pre>
+<p><strong>[context]</strong> <code>{Number|String}</code></p>
+<p>Context is an optional parameter.  If provided, the number or string is used as the
+frame number or name in the document.frames array of the tested page.  The frame is looked up,
+and this is passed as the context of the query.</p>
+<pre><code class="language-js">// find something in the 0th frame
+F(&quot;a.mylink&quot;, 0)
+
+// find something within the frame that has name=&quot;myframe&quot;
+F(&quot;a.another, &quot;myframe&quot;)
+</code></pre>
+<h3>Synchronous vs asynchronous queries</h3>
+<p>As mentioned above, F sometimes performs synchronous queries and returns a jQuery collection object.<br />
+Other times, it returns nothing, caches the selector, and adds a method to [FuncUnit._queue].</p>
+<p><strong>Synchronous</strong></p>
+<p>All [funcunit.actions actions] and [funcunit.waits waits] are asynchronous commands.  They add themselves to
+[FuncUnit.queue] and run in order.  Each action and wait accepts an optional callback parameter.  This callback
+runs after the queued method completes.</p>
+<p>Inside these callbacks, you get information about the page and perform assertions, synchronously.
+Any time F is called inside a callback, it runs synchronously and returns a jQuery collection.</p>
+<pre><code class="language-js">F(&quot;.foo&quot;).visible(function(){
+  // this will run immediately and return a $ collection
+  var size = F(&quot;.bar&quot;).size();
+  equal(size, 5);
+})
+</code></pre>
+<p>Inside these callbacks, you can set breakpoints and debug tests.</p>
+<p>Sometimes, you want to get information about the page as soon as a test begins.  Later in a callback,
+you can compare this initial value with the current value.</p>
+<p>If you call F at the start of a test, it will also run immediately and return a $ collection. Until the first
+item is added to the queue, F will run synchronously.</p>
+<pre><code class="language-js">test(&quot;contacts test&quot;, function(){
+  // runs synchronously
+  var origNbrItems = F(&quot;.contacts&quot;).size();
+  F(&quot;.addNew&quot;).click(function(){
+    var newNbrItems = F(&quot;.contacts&quot;).size();
+    ok(newNbrItems &gt; origNbrItems);
+  });
+})
+</code></pre>
+<p>Beware that you MUST put any synchronous getters inside a callback or before any actions or waits.</p>
+<pre><code class="language-js">test(&quot;contacts test&quot;, function(){
+  F(&quot;.addNew&quot;).click(function(){
+    var newNbrItems = F(&quot;.contacts&quot;).size();
+    ok(newNbrItems &gt; origNbrItems);
+  });
+  // this will fail!  
+  var origNbrItems = F(&quot;.contacts&quot;).size();
+})
+</code></pre>
+<p><strong>Asynchronous</strong></p>
+<p>Except for the cases outlined above, the F method needs to run asynchronously in the correct queue order. In this case, doing an
+immediate query and returning a collection would be wasteful and slow down test performance.</p>
+<pre><code class="language-js">// 1. query for .container
+// 2. add a method to the queue that repeatedly checks when .container is visible
+F(&quot;.container&quot;).visible();
+
+// 3. when the previous method completes, do a query for .foo
+// 4. click .foo
+F(&quot;.foo&quot;).click()
+</code></pre>
+<h3>Why F?</h3>
+<p>F is a &quot;copy&quot; of $, created using <a href="http://api.jquery.com/jQuery.sub/">jQuery.sub</a>.  All FuncUnit methods,
+like actions, waits, and traversers, are added to F.fn.  All the jQuery methods that FuncUnit doesn't
+overload are callable on F collections.</p>
+<p>The reason for this is to preserve jQuery in the test page, unmodified.  If you want to use jQuery, none of
+its methods are modified. jQuery can be used to do unit testing, or to directly access the test page and do
+custom things.</p>
+<pre><code class="language-js">// accessing elements within the test page
+ok($(&quot;.foo&quot;).hasClasF(&quot;bar&quot;))
+</code></pre>
+<h3>Extending F</h3>
+<p>Occassionally there will be tests that need some jQuery plugins to run correctly.  To extend F</p>
+<ol>
+<li>Load your jQuery plugin</li>
+<li>Add the plugin method to F.fn</li>
+</ol>
+<pre><code class="language-js">steal(&quot;funcunit&quot;, &quot;resources/myplugin.js&quot;, function(){
+  F.fn.myplugin = $.fn.myplugin;
+  // test code goes here
+})
+</code></pre>
+<p>Most likely this method works synchronously so you have to use it inside a callback, where F is
+returning synchronously.</p>
+<pre><code class="language-js">// inside a wait callback, F returns a jQuery collection
+F(&quot;.foo&quot;).visible(function(){
+  // call myplugin on jQuery collection
+  var els = F(&quot;.contact&quot;).myplugin()
+})
+</code></pre>
+<h2>Traversing</h2>
+<p>FuncUnit provides its own asynchronous versions of jQuery traverser methods
+[FuncUnit.prototype.find find], [FuncUnit.prototype.closest closest],
+[FuncUnit.prototype.next next], [FuncUnit.prototype.prev prev],
+[FuncUnit.prototype.siblings siblings], [FuncUnit.prototype.last last],
+and [FuncUnit.prototype.first first].  The FuncUnit versions add themselves to
+[FuncUnit._queue].  When they are called, they take the current jQuery collection object,
+modify it with their traversal, and pass the result to the next method in the queue.</p>
+<pre><code class="language-js">// click .container, wait for width to be 500px
+F(&quot;.container&quot;).click().width(500)
+  // find .contact inside container, click it
+  .find(&quot;.contact&quot;).click()
+</code></pre>
+
+		</section>
+		
+		
+
+		
+
+		
+	
+	
+	</article>
+	
+	
+
+</div>
+
+
+
+
+
+
+	<footer>
+		<nav class="container">
+			<a class="brand javascriptmvc" href="index.html"></a>
+			<ul class="nav">
+				<li class="guides"><a href="../guides/index.html">Guides</a></li>
+				<li class="docs"><a href="../docs/index.html">API</a></li>
+				<li class="github"><a href="https://github.com/bitovi/funcunit">GitHub</a></li>
+			</ul>
+		</nav>
+	</footer>
+
+</body>
+
+</html>

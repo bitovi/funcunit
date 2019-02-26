@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8 lt-ie7" lang="en">
+<![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8" lang="en">
+<![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie lt-ie9" lang="en">
+<![endif]-->
+<!--[if IE 9]>
+<html class="no-js ie ie9" lang="en">
+<![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>Guides - Getters &amp; Assertions </title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" type="image/png" href="static/img/funcunit-logo-32x32.png">
+
+	<link rel="stylesheet" type="text/css" href='./static/bundles/static.css'/>
+
+	<!--[if lt IE 9]>
+   <script type="text/javascript" src="../scripts/static/lib/html5shiv.js"></script>
+    <!--<![endif]-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-2302003-26', 'auto');
+	  ga('send', 'pageview');
+	</script>
+</head>
+
+<body class="guides">
+	<header>
+		<nav class="container">
+
+			<div class="logo-menu">
+				<a class="brand funcunit" href="../index.html">FuncUnit</a>
+				<ul class="dropdown-menu">
+					<li><a href="https://donejs.com">DoneJS</a></li>
+					<li><a href="http://javascriptmvc.com">JavaScriptMVC</a></li>
+					<li><a href="https://canjs.com">CanJS</a></li>
+					<li><a href="https://jquerypp.com">jQuery++</a></li>
+					<li><a href="https://stealjs.com">StealJS</a></li>
+					<li class="active"><a href="../index.html">FuncUnit</a></li>
+					<li><a href="https://documentjs.com">DocumentJS</a></li>
+				</ul>
+			</div>
+			<ul class="nav">
+				<li >
+        	<a href="../index.html">Home</a>
+        </li>
+				<li class="guides active"><a href="../guides/index.html">Guides</a></li>
+				<li class="docs "><a href="../docs/index.html">API</a></li>
+				<li class="community"><a href="https://github.com/bitovi/funcunit" target="_blank">GitHub</a></li>
+				<li class="chat"><a href="https://www.bitovi.com/community/slack" target="_blank">Chat</a></li>
+				<li class="forum"><a href="https://forums.bitovi.com/c/testing" target="_blank">Forums</a></li>
+			</ul>
+			<div class="pull-right">
+				<div class="bitovi-menu">
+					<a href="https://www.bitovi.com" class="bitovi icon-bits">Bitovi</a>
+					<ul class="dropdown-menu">
+						<li><a href="https://www.bitovi.com">Bitovi.com</a></li>
+						<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+						<li><a href="https://www.bitovi.com/design">Design</a></li>
+						<li><a href="https://www.bitovi.com/development">Development</a></li>
+						<li><a href="https://www.bitovi.com/training">Training</a></li>
+						<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+						<li><a href="https://www.bitovi.com/about">About</a></li>
+						<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	
+<div class="container api">
+
+	
+	<nav class="sidebar">
+		
+		<ul class="api cascading primary-grouping"> 
+	
+		
+		
+			
+			<li class="search-container active">
+			<a class="sidebar-title" href="index.html" data-search="Guides">
+				Guides
+			</a>
+			
+	<ul>
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.guides.start.html" data-search="Getting Started">
+						Getting Started
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.actions.html" data-search="Actions">
+						Actions
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container active ">
+					<a class="page" href="Guides.getters.html" data-search="Getters &amp; Assertions">
+						Getters &amp; Assertions
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.finding.html" data-search="Finding Elements">
+						Finding Elements
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.waits.html" data-search="Waits">
+						Waits
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.contributing.html" data-search="Contributing">
+						Contributing
+					</a>
+				</li>
+				
+			
+			
+		
+	</ul>
+
+		</li>
+			
+		
+	
+</ul>
+	</nav>
+	
+	
+	
+	<article class="content docs">
+	
+	
+		
+		<section class="title">
+			<div class="heading">
+<h1>Getters &amp; Assertions</h1>
+	<ul class="tags">
+		<li>page</li>
+	</ul>
+	
+	
+</div>
+
+<div class="sub-heading">
+	
+	
+		<span class="module">Guides.getters</span>
+	
+	
+	
+	<span class="inherits">&nbsp;</span>
+</div>
+
+<ul class="links">
+	
+	
+	
+	
+</ul>
+<br />
+		</section>
+		
+		
+		
+		<section class="contents">
+		</section>
+		
+		
+		
+
+		
+
+		
+			
+		
+		
+		
+		
+
+		
+		<section class="comment">
+			<p>Getter commands are jQuery getter methods. At certain points throughout a test, it's necessary
+to gather information about the page and perform assertions.  Unlike FuncUnit API methods, getters<br />
+work synchronously.</p>
+<h2>Getter methods</h2>
+<p>Inside FuncUnit callbacks, the F method returns a jQuery collection.  You can perform any jQuery getter method
+on it, like <a href="http://api.jquery.com/text/">text</a>, <a href="http://api.jquery.com/val/">val</a>,
+<a href="http://api.jquery.com/width/">width</a>, <a href="http://api.jquery.com/size/">size</a>, etc. Any jQuery method can be used
+as a getter.</p>
+<pre><code class="language-js">F(&quot;.foo&quot;).visible(function(){
+  // perform getters inside wait callbacks
+  var size = F(&quot;.bar&quot;).size();
+})
+</code></pre>
+<h2>Assertions</h2>
+<p>To perform assertions, use QUnit assertion methods.</p>
+<ul>
+<li><a href="http://docs.jquery.com/QUnit/ok#statemessage">ok</a></li>
+<li><a href="http://docs.jquery.com/QUnit/equal#actualexpectedmessage">equal</a></li>
+<li><a href="http://docs.jquery.com/QUnit/notEqual#actualexpectedmessage">notEqual</a></li>
+<li><a href="http://docs.jquery.com/QUnit/raises#blockexpectedmessage">raises</a></li>
+<li><a href="http://docs.jquery.com/QUnit/deepEqual#actualexpectedmessage">deepEqual</a></li>
+</ul>
+<pre><code class="language-js">F(&quot;.foo&quot;).visible(function(){
+  // perform assertions inside wait callbacks
+  var size = F(&quot;.bar&quot;).size();
+  ok(size, 5, &quot;there are 5 bars);
+})
+</code></pre>
+<h2>Tests without assertions</h2>
+<p>It's worth noting that it is possible to write entire tests without using any getters or assertions.
+Any wait condition will fail an assertion if they reach the timeout before succeeding.</p>
+<p>Therefore, entire tests can be written with just action and wait methods. If the test succeeds, it will finish
+without any assertions.  If it fails, it will throw a failed assertion.</p>
+<pre><code class="language-js">test(&quot;test with waits&quot;, function(){
+  F(&quot;.foo&quot;).click();
+  // if this wait condition never becomes true, test will fail
+  F(&quot;.bar&quot;).visible();
+})
+</code></pre>
+<p>Often, writing a test with assertions adds more unnecessary code.</p>
+<pre><code class="language-js">test(&quot;with assertions&quot;, function(){
+  F(&quot;.expander&quot;).click()
+    .width(500, function(){
+      // if the wait condition isn't met, this assertion won't run
+      // therefore, this assertion isn't necessary
+      ok(true, &quot;expander is 500px&quot;);
+    })
+})
+</code></pre>
+
+		</section>
+		
+		
+
+		
+
+		
+	
+	
+	</article>
+	
+	
+
+</div>
+
+
+
+
+
+
+	<footer>
+		<nav class="container">
+			<a class="brand javascriptmvc" href="index.html"></a>
+			<ul class="nav">
+				<li class="guides"><a href="../guides/index.html">Guides</a></li>
+				<li class="docs"><a href="../docs/index.html">API</a></li>
+				<li class="github"><a href="https://github.com/bitovi/funcunit">GitHub</a></li>
+			</ul>
+		</nav>
+	</footer>
+
+</body>
+
+</html>

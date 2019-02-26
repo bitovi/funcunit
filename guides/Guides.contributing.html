@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+
+<!--[if lt IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8 lt-ie7" lang="en">
+<![endif]-->
+<!--[if IE 7]>
+<html class="no-js ie lt-ie9 lt-ie8" lang="en">
+<![endif]-->
+<!--[if IE 8]>
+<html class="no-js ie lt-ie9" lang="en">
+<![endif]-->
+<!--[if IE 9]>
+<html class="no-js ie ie9" lang="en">
+<![endif]-->
+<!--[if gt IE 9]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>Guides - Contributing </title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<link rel="shortcut icon" type="image/png" href="static/img/funcunit-logo-32x32.png">
+
+	<link rel="stylesheet" type="text/css" href='./static/bundles/static.css'/>
+
+	<!--[if lt IE 9]>
+   <script type="text/javascript" src="../scripts/static/lib/html5shiv.js"></script>
+    <!--<![endif]-->
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	  ga('create', 'UA-2302003-26', 'auto');
+	  ga('send', 'pageview');
+	</script>
+</head>
+
+<body class="guides">
+	<header>
+		<nav class="container">
+
+			<div class="logo-menu">
+				<a class="brand funcunit" href="../index.html">FuncUnit</a>
+				<ul class="dropdown-menu">
+					<li><a href="https://donejs.com">DoneJS</a></li>
+					<li><a href="http://javascriptmvc.com">JavaScriptMVC</a></li>
+					<li><a href="https://canjs.com">CanJS</a></li>
+					<li><a href="https://jquerypp.com">jQuery++</a></li>
+					<li><a href="https://stealjs.com">StealJS</a></li>
+					<li class="active"><a href="../index.html">FuncUnit</a></li>
+					<li><a href="https://documentjs.com">DocumentJS</a></li>
+				</ul>
+			</div>
+			<ul class="nav">
+				<li >
+        	<a href="../index.html">Home</a>
+        </li>
+				<li class="guides active"><a href="../guides/index.html">Guides</a></li>
+				<li class="docs "><a href="../docs/index.html">API</a></li>
+				<li class="community"><a href="https://github.com/bitovi/funcunit" target="_blank">GitHub</a></li>
+				<li class="chat"><a href="https://www.bitovi.com/community/slack" target="_blank">Chat</a></li>
+				<li class="forum"><a href="https://forums.bitovi.com/c/testing" target="_blank">Forums</a></li>
+			</ul>
+			<div class="pull-right">
+				<div class="bitovi-menu">
+					<a href="https://www.bitovi.com" class="bitovi icon-bits">Bitovi</a>
+					<ul class="dropdown-menu">
+						<li><a href="https://www.bitovi.com">Bitovi.com</a></li>
+						<li><a href="https://www.bitovi.com/blog">Blog</a></li>
+						<li><a href="https://www.bitovi.com/design">Design</a></li>
+						<li><a href="https://www.bitovi.com/development">Development</a></li>
+						<li><a href="https://www.bitovi.com/training">Training</a></li>
+						<li><a href="https://www.bitovi.com/open-source">Open Source</a></li>
+						<li><a href="https://www.bitovi.com/about">About</a></li>
+						<li><a href="https://www.bitovi.com/contact">Contact Us</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	
+<div class="container api">
+
+	
+	<nav class="sidebar">
+		
+		<ul class="api cascading primary-grouping"> 
+	
+		
+		
+			
+			<li class="search-container active">
+			<a class="sidebar-title" href="index.html" data-search="Guides">
+				Guides
+			</a>
+			
+	<ul>
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.guides.start.html" data-search="Getting Started">
+						Getting Started
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.actions.html" data-search="Actions">
+						Actions
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.getters.html" data-search="Getters &amp; Assertions">
+						Getters &amp; Assertions
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.finding.html" data-search="Finding Elements">
+						Finding Elements
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container">
+					<a class="page" href="Guides.waits.html" data-search="Waits">
+						Waits
+					</a>
+				</li>
+				
+			
+			
+		
+			
+				
+				
+				<li class="search-container active ">
+					<a class="page" href="Guides.contributing.html" data-search="Contributing">
+						Contributing
+					</a>
+				</li>
+				
+			
+			
+		
+	</ul>
+
+		</li>
+			
+		
+	
+</ul>
+	</nav>
+	
+	
+	
+	<article class="content docs">
+	
+	
+		
+		<section class="title">
+			<div class="heading">
+<h1>Contributing</h1>
+	<ul class="tags">
+		<li>page</li>
+	</ul>
+	
+	
+</div>
+
+<div class="sub-heading">
+	
+	
+		<span class="module">Guides.contributing</span>
+	
+	
+	
+	<span class="inherits">&nbsp;</span>
+</div>
+
+<ul class="links">
+	
+	
+	
+	
+</ul>
+<br />
+		</section>
+		
+		
+		
+		<section class="contents">
+		</section>
+		
+		
+		
+
+		
+
+		
+			
+		
+		
+		
+		
+
+		
+		<section class="comment">
+			<h2>Overview</h2>
+<p>FuncUnit is managed by the <a href="https://donejs.com/About.html#section=section_Team">DoneJS Contributors Team</a>.
+All contributions from all types of contributors are welcome. Contributing
+to an Open Source project can be an intimidating experience.  We're
+committed to making the experience as pleasant and rewarding as possible.  We're happy to setup a
+pairing session to show you how to fix a bug or write a feature.</p>
+<p>If you have any questions, you can always reach us on <a href="https://www.bitovi.com/community/slack">Slack</a>.</p>
+<h2>Report a bug</h2>
+<p>FuncUnit uses <a href="https://github.com/bitovi/funcunit/issues/new">Github Issues</a> to track bugs.</p>
+<p>When creating an issue, it's very helpful to include:</p>
+<ul>
+<li>Small examples using tools like JSBin.</li>
+<li>Breaking unit tests (optional).</li>
+<li>Proposed fix solutions (optional)</li>
+</ul>
+<p>Also, please search for previous tickets.  If there's something similar, add to that, or
+give it a <code>+1</code>.</p>
+<p>Finally, if there are any questions, reach out to
+us on the <a href="https://forums.bitovi.com/c/testing">Bitovi forums</a> or talk to us on
+<a href="https://www.bitovi.com/community/slack">Slack</a>.</p>
+<h3>Priority, Tags, and Complexity</h3>
+<p>The <a href="https://donejs.com/About.html#section=section_Team">core team</a> reviews issues
+and assigns them a <code>P0</code> to <code>P4</code> tag corresponding to the following priorities:</p>
+<ul>
+<li><code>P0</code> - An issue that will preempt any other issues currently being worked on.</li>
+<li><code>P1</code> - A critical feature or bug that needs to be fixed to keep CanJS's high degree of quality.</li>
+<li><code>P2</code> - A feature or bug that is less likely to be encountered, but something we intend to get to.</li>
+<li><code>P3</code> - A nice to have. The OS team might get to it, but it's helpful if the community assists.</li>
+<li><code>P4</code> - A nice to have that the OS team will accept, but will be unlikely to prioritize any effort towards.</li>
+</ul>
+<p>There are several ways to influence these priorities:</p>
+<ul>
+<li>Offer to pair with a contributor on a solution.</li>
+<li>Write a good test.</li>
+<li>Come to a DoneJS Contributors meeting and make your case.</li>
+<li>Get others from other organizations to <code>+1</code> the issue.</li>
+<li>Make your case on <a href="https://www.bitovi.com/community/slack">Slack</a> with a contributor or in the issue.</li>
+<li>You can always hire <a href="https://www.bitovi.com">Bitovi</a> or a contributor to make the change.</li>
+</ul>
+<p>Also, the core team will often include a complexity indicator in the title that looks like
+<code>~NUMBER</code>.  This is a fibonacci number.  <code>~1</code> means its an extremely simple task.  <code>~8</code> is about
+a half day task.  <code>~34</code> might take a week of experimentation.</p>
+<h2>Suggest a feature</h2>
+<p>FuncUnit uses <a href="https://github.com/bitovi/funcunit/issues/new">Github Issues</a> to track feature requests.</p>
+<p>When creating an feature issue, it's very helpful to include:</p>
+<ul>
+<li>Examples of what using the feature will look like.</li>
+<li>Benefits and drawbacks of the feature.</li>
+<li>Why the feature is important.</li>
+<li>Any implementation details around the feature.</li>
+</ul>
+<p>Here are some examples of well-written feature requests:</p>
+<ul>
+<li><a href="https://github.com/canjs/can-event/issues/11">Make events fire asynchronously and dispatched during request animation frame or setImmediate</a></li>
+<li><a href="https://github.com/canjs/canjs/issues/1699">Modify key -&gt; argument behavior in stache</a></li>
+</ul>
+<p>Also, please search for previous feature requests.  If there's something similar, add to that, or
+give it a <code>+1</code>.</p>
+<p>Finally, if there are any questions, reach out to
+us on the <a href="https://forums.bitovi.com/c/testing">Bitovi forums</a> or talk to us on
+<a href="https://www.bitovi.com/community/slack">Slack</a>.</p>
+<h3>Priority, Tags, and Complexity</h3>
+<p>The <a href="https://donejs.com/About.html#section=section_Team">core team</a> reviews issues
+and assigns them a <code>P0</code> to <code>P4</code> tag corresponding to the following priorities:</p>
+<ul>
+<li><code>P0</code> - An issue that will preempt any other issues currently being worked on.</li>
+<li><code>P1</code> - A critical feature or bug that needs to be fixed to keep CanJS's high degree of quality.</li>
+<li><code>P2</code> - A feature or bug that is less likely to be encountered, but something we intend to get to.</li>
+<li><code>P3</code> - A nice to have. The OS team might get to it, but it's helpful if the community assists.</li>
+<li><code>P4</code> - A nice to have that the OS team will accept, but will be unlikely to prioritize any effort towards.</li>
+</ul>
+<p>There are several ways to influence these priorities:</p>
+<ul>
+<li>Offer to pair with a contributor on a solution.</li>
+<li>Write a good test.</li>
+<li>Come to a DoneJS Contributors meeting and make your case.</li>
+<li>Get others from other organizations to <code>+1</code> the issue.</li>
+<li>Make your case on <a href="https://www.bitovi.com/community/slack">Slack</a> with a contributor or in the issue.</li>
+<li>You can always hire <a href="https://www.bitovi.com">Bitovi</a> or a contributor to make the change.</li>
+</ul>
+<p>Also, the core team will often include a complexity indicator in the title that looks like
+<code>~NUMBER</code>.  This is a fibonacci number.  <code>~1</code> means its an extremely simple task.  <code>~8</code> is about
+a half day task.  <code>~34</code> might take a week of experimentation.</p>
+<h2>Code changes</h2>
+<p>Contributing to any Open Source project can be intimidating.  All contributions from all types of contributors are welcome.  We're
+committed to making the experience as pleasant and rewarding as possible.  We're happy to setup a
+pairing session to show you how to fix a bug or write a feature.</p>
+<p>If you have any questions, you can always reach us on <a href="https://www.bitovi.com/community/slack">Slack</a>.</p>
+<h3>Setting up your development environment.</h3>
+<p>Developing FuncUnit requires:</p>
+<ul>
+<li>A <a href="github.com">https://github.com/</a> account and git client.</li>
+<li>Node version 4 or later.</li>
+<li>Firefox for running automated tests.</li>
+</ul>
+<h4>Getting github account and client</h4>
+<p>Signup for a <a href="GitHub">https://github.com/</a> account.</p>
+<p>There are a variety of ways to get a git command line client
+connected to your GitHub account.  Fortunately, GitHub has
+great documentation on how to <a href="https://help.github.com/articles/set-up-git/">Setup Git</a>.</p>
+<p>If you already have <code>git</code> installed, make sure you've
+<a href="https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/">setup your ssh keys</a>.</p>
+<h4>Get NodeJS</h4>
+<p>Download Node.js version 4 or later at <a href="https://nodejs.org">https://nodejs.org</a>.  You can
+verify node is working at its version with:</p>
+<pre><code>&gt; node -v
+</code></pre>
+<h4>Get Firefox</h4>
+<p>Download the Firefox browser
+<a href="https://www.mozilla.org/en-US/firefox/new/">here</a>. Make sure it gets installed into the
+default location for your operating system.</p>
+<p>Firefox is used to run each repository's tests.</p>
+<h3>Getting the code and verify it is working</h3>
+<p>Once your environment is setup, you should be able to clone the repository you
+want to change, install its dependencies, and verify you've setup your
+development environment correctly.</p>
+<p><strong>1.</strong>  Fork the repository you are working from by clicking the <code>fork</code> button.</p>
+<p><strong>2.</strong> Clone the your forked version of the repository.</p>
+<pre><code>&gt; git clone git@github.com:&lt;your username&gt;/&lt;repository-name&gt;.git
+</code></pre>
+<p>For example, if your username is <code>justinbmeyer</code>, and you forked <code>funcunit</code>:</p>
+<pre><code>&gt; git clone git@github.com:justinbmeyer/funcunit.git
+</code></pre>
+<p>Before the next step, make sure you move into your project's directory.  For example:</p>
+<pre><code>&gt; cd funcunit
+</code></pre>
+<p><strong>3.</strong> Install npm dependencies with:</p>
+<pre><code>&gt; npm install
+</code></pre>
+<p><strong>4.</strong> Make sure Firefox is closed and run the test suite with:</p>
+<pre><code>&gt; npm test
+</code></pre>
+<p>If every test passed, <strong>congrats</strong>! You have everything you need to
+change code and send it back to us.</p>
+<h3>File organization and responsibilities</h3>
+<p>Understanding the file structure can help you figure out what code needs to be changed.<br />
+The following details the directory structure of FuncUnit:</p>
+<pre><code>├── package.json            - Configuration of package and dev scripts
+├── funcunit.js               - Main module code
+├── build.js                - Build script to export code in other formats
+├── .editorconfig           - Configures editors for this project
+├── .gitignore              - Tells git to ignore certain files
+├── .jshintrc               - Configures JSHint
+├── .npmignore              - Tells npm publish to ignore certain files
+├── .travis.yml             - Travis CI configuration
+├── publish-docs.js         - Publishes the documentation to gh-pages
+├── readme.md               - Automatically generated readme
+├── test.html               - Main test page
+├── test/                   - Test files
+|   ├── test.js                         - Main test file
+|   ├── *                               - Other files and folders for tests go in this folder
+├── browser/                - core FuncUnit files
+├── doc/                    - Documentation source
+|   ├── guides/             - Guide documentation files
+├── node_modules/           - Node dependency installation folder
+├── site/                   - Files hosted via gh-pages in github
+</code></pre>
+<p>Generally, speaking, the most important files are:</p>
+<ul>
+<li>the main module -  <code>funcunit.js</code></li>
+<li>the main test module - <code>test/test.js</code></li>
+<li>the test page - <code>test.html</code></li>
+</ul>
+<p>When fixing a bug or making a feature, we'll add a test in the main test module
+and update code in the main module and verify the tests are passing by running
+the test page.</p>
+<p>Where possible, FuncUnit code is:</p>
+<ul>
+<li>Tabs not spaces</li>
+<li>JSHinted</li>
+<li>CommonJS not ES6</li>
+<li>Follows jQuery <a href="https://contribute.jquery.org/style-guide/js/">coding conventions</a></li>
+</ul>
+<h3>Make your changes</h3>
+<p>Once you've figured out where you need to make changes, you'll want to complete the following steps
+to make those changes and create a pull request so we can include your code in future releases:</p>
+<ol>
+<li>Create a new feature branch. For example, <code>git checkout -b html5-fix</code>.</li>
+<li>Make some changes to the code and tests.</li>
+<li>Run tests <code>npm test</code> and make sure they pass in all browsers.</li>
+<li>Update documentation if necessary.</li>
+<li>Push your changes to your remote branch.  For example, <code>git push origin html5-fix</code>.</li>
+<li>Submit a pull request! Navigate to Pull Requests and click the 'New Pull Request' button. Fill in some
+details about your potential patch including a meaningful title. When finished, press &quot;Send pull request&quot;. The core team will be notified about your submission and let you know of any problems or targeted release date.</li>
+</ol>
+<p>If you enjoy making these kinds of fixes, and want to directly influence CanJS's direction,
+consider joining our <a href="https://donejs.com/About.html#section=section_Coreteam">Core team</a>.</p>
+<h2>Documentation improvements</h2>
+<p>The FuncUnit site is generated with <a href="https://documentjs.com">DocumentJS</a>.  Its
+content is hosted using Github pages publishing the <a href="https://github.com/bitovi/funcunit/tree/gh-pages">bitovi/funcunit#gh-pages</a> repo.</p>
+<p>DocumentJS reads JavaScript comments and markdown files within the <code>funcunit</code>.</p>
+<p>The guides content for the site is within the <code>funcunit/doc</code> folder.</p>
+<h2>Generate the documentation locally</h2>
+<p>To generate the CanJS site:</p>
+<ol>
+<li><p>Clone <a href="bitovi/funcunit">https://github.com/bitovi/funcunit.git</a></p>
+<pre><code>&gt; git clone git@github.com:bitovi/funcunit
+</code></pre></li>
+<li><p>Install dependencies:</p>
+<pre><code>&gt; npm install
+</code></pre></li>
+<li><p>Run <code>documentjs</code>:</p>
+<pre><code>&gt; ./node_modules/.bin/documentjs
+</code></pre></li>
+</ol>
+<p>This should produce a static site in your <code>funcunit</code> folder.  Open <code>funcunit/index.html</code>
+and you should see the site.  You might want to use <code>http-server</code> to start
+a simple static file server.</p>
+<h3>Improve the theme's design and styles</h3>
+<p>The FuncUnit theme is in <code>funcunit/site/theme</code></p>
+<h3>Publish the documentation</h3>
+<p>Once the docs look right locally, commit your changes, then run:</p>
+<pre><code class="language-shell">npm run document:publish
+</code></pre>
+<p>The <code>publish-docs.js</code> script will generate the documentation again and push out the <code>gh-pages</code> branch.</p>
+<h3>Writing API documentation</h3>
+<p>Our documentation is modeled off of jQuery's.  Please read
+their <a href="https://github.com/jquery/api.jquery.com/blob/master/README.md">guidelines</a>. Also read our
+[guides/api].</p>
+<p>Generally speaking there are three parts to every documentation page:</p>
+<ul>
+<li>Its description</li>
+<li>Its signatures</li>
+<li>The body (typically &quot;Use&quot; section)</li>
+</ul>
+<h4>Description</h4>
+<p>The description section should be a one or two sentence explanation of what this
+piece of documentation does from a <em>user</em> centric view.  Descriptions are a quick summary
+of the <strong>why</strong> and the <strong>what</strong>. It should take on an
+active voice.  For example, [can-component]'s description:</p>
+<blockquote>
+<p>Create a custom element that can be used to manage widgets or application logic.</p>
+</blockquote>
+<p>Notice that it uses &quot;Create&quot; not &quot;Creates&quot;.</p>
+<h4>Signatures</h4>
+<p>Signatures are the <strong>what</strong> and the <strong>how</strong>.  They should include all or most of the following:</p>
+<ul>
+<li><strong>What the signature does</strong>, if different from the description, especially if there are
+multiple signatures.</li>
+<li>High level details on <strong>how the code works</strong>.</li>
+<li>A simple example showing <strong>how to use the code</strong>.</li>
+</ul>
+<p>[can-compute]'s first signature is a good example of this. First, it explains
+<strong>what that signature does</strong>:</p>
+<blockquote>
+<p>Create a compute that derives its value from other observables.</p>
+</blockquote>
+<p>Then it briefly explains <strong>how the code works</strong>:</p>
+<blockquote>
+<p>Uses can-observation to call the getterSetter and track observables.</p>
+</blockquote>
+<p>Finally, it provides minimal sample code:</p>
+<pre><code class="language-js">var age = compute(32);
+
+var nameAndAge = compute(function(){
+     return &quot;Matthew - &quot; + age();
+});
+
+nameAndAge() // -&gt; &quot;Matthew - 32&quot;
+
+age(33);
+
+nameAndAge() // -&gt; &quot;Matthew - 33&quot;
+</code></pre>
+<p>Not all signatures need to hit all three points.  For example [can-event/batch/batch]'s
+signature simply adds a bit more depth to the purpose of [can-event/batch/batch]
+and then details <strong>how the code works</strong>.  <strong>How to use the code</strong> is
+left for the <code>body</code> section as importing the module is not necessary to show.</p>
+<p>Signature titles should follow jQuery's conventions:</p>
+<ul>
+<li>Static methods like: <code>TypeAlias.method()</code></li>
+<li>Prototype methods like: <code>typeAlias.method()</code></li>
+<li>Spaces in between arguments: <code>typeAlias.method( arg1, arg2 )</code></li>
+<li>Brackets around optional args: <code>typeAlias.method( arg1 [, arg2 ], arg3 )</code> or
+<code>typeAlias.method( arg1 [, arg2 ][, arg3 ] )</code></li>
+</ul>
+<p>Make sure to fully document the a signature's parameters and return
+value.  There's a lot of flexibility in documenting the <a href="https://documentjs.com/docs/documentjs.typeExpression.html">type expression</a> of
+a return value or parameters and the <a href="https://documentjs.com/docs/documentjs.nameExpression.html">name expression</a> of
+parameters.</p>
+<ul>
+<li>Parameter and descriptions should start with a <code>Capital</code> and end with a period like:
+<code>@param {Type} name Indicates that something should happen.</code></li>
+</ul>
+<h4>body</h4>
+<p>Most body sections start with an <code>## Use</code>.  They should be a mini guide on
+how to use that piece of code.  Modules should have long bodies that span
+multiple topics.  For example [can-component]'s body has examples and
+information about nearly all of its sub-functions.  However
+[can-component.prototype.tag can-component.prototype.tag] doesn't have a
+use section because it's covered in [can-component].</p>
+<h4>structuring documentation</h4>
+<ul>
+<li>Group names (like <code>prototype</code>) should be lower case.</li>
+<li>Types should be capitalized <code>{String}</code> except when they are describing a function [can-fixture.requestHandler].</li>
+</ul>
+<h2>Releases - Maintaining FuncUnit</h2>
+<h3>Making a release</h3>
+<h4>For individual modules</h4>
+<p>FuncUnit has the same structure as all CanJS individual modules which allows making releases through npm scripts.
+All versions should follow the <a href="http://semver.org/">Semantic Versioning</a> guidelines in the form of <code>MAJOR.MINOR.PATCH</code> for</p>
+<ul>
+<li><code>MAJOR</code> version when you make incompatible API changes,</li>
+<li><code>MINOR</code> version when you add functionality in a backwards-compatible manner, and</li>
+<li><code>PATCH</code> version when you make backwards-compatible bug fixes.</li>
+</ul>
+<p>To make a release we have to make sure to be on the <code>master</code> branch and the latest upstream changes and reinstall the latest version of all Node modules:</p>
+<pre><code>git checkout master
+git fetch --all &amp;&amp; git rebase
+npm cache clean
+rm -rf node_modules
+npm install
+</code></pre>
+<p>Now we can run <code>npm run release:&lt;versiontype&gt;</code>. For example, to make a <code>PATCH</code> release:</p>
+<pre><code>npm run release:patch
+</code></pre>
+<p>This will run the tests, build, bump the version number accordingly and publish the module to <a href="https://www.npmjs.com/">npm</a>.</p>
+<h3>Continuous integration</h3>
+<h4>Travis</h4>
+<p>All repositories automatically run their tests in <a href="https://travis-ci.org/">Travis CI</a> using the <code>npm test</code> command (browser tests use Firefox as their target browser).</p>
+
+		</section>
+		
+		
+
+		
+
+		
+	
+	
+	</article>
+	
+	
+
+</div>
+
+
+
+
+
+
+	<footer>
+		<nav class="container">
+			<a class="brand javascriptmvc" href="index.html"></a>
+			<ul class="nav">
+				<li class="guides"><a href="../guides/index.html">Guides</a></li>
+				<li class="docs"><a href="../docs/index.html">API</a></li>
+				<li class="github"><a href="https://github.com/bitovi/funcunit">GitHub</a></li>
+			</ul>
+		</nav>
+	</footer>
+
+</body>
+
+</html>
