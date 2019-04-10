@@ -31,7 +31,7 @@
     "testee:jasmine": "testee test/adapters/jasmine.html --browsers firefox",
     "testee:jasmine2": "testee test/adapters/jasmine2.html --browsers firefox",
     "test": "npm run lint && npm run testee",
-    "lint": "eslint browser/**/*.js *.js",
+    "lint": "eslint browser/adapters/*.js *.js",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
