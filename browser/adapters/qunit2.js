@@ -1,32 +1,23 @@
-module.exports = function(runner) {
-	var done;
-
-	/*
-		QUnit2 does not expose a generic `assert`.
-		It is only accessible within each test.
-		Thus we need to intercept the assert
-		from each test in order to start/stop/ok.
-	*/
-	var currentTestAssert;
-	var originalTest = runner.test;
-	runner.test = function funcunitTest (title, test) {
-		return originalTest(title, function (assert) {
-			currentTestAssert = assert;
-			return test.apply(this, arguments);
-		});
+module.exports = function (runner) {
+	var doneStack = [];
+	var _async = QUnit.assert.async; // disallow override; bug or feature?
+	var getCurrentAssert = function () {
+		if (runner.config.current) {
+			return runner.config.current.assert;
+		}
+		throw new Error("Outside of test context");
 	}
-
 	return {
-		pauseTest:function(){
-			done = currentTestAssert.async();
+		pauseTest: function () {
+			doneStack.push(_async.call(getCurrentAssert()));
 		},
-		resumeTest: function(){
-			done();
+		resumeTest: function () {
+			doneStack.pop()();
 		},
-		assertOK: function(assertion, message){
-			currentTestAssert.ok(assertion, message)
+		assertOK: function (assertion, message) {
+			getCurrentAssert().ok(assertion, message);
 		},
-		equiv: function(expected, actual){
+		equiv: function (expected, actual) {
 			return runner.equiv(expected, actual);
 		}
 	};

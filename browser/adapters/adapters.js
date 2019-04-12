@@ -85,11 +85,11 @@ FuncUnit.attach = function(runner){
 };
 
 function isQUnit(runner) {
-	return !!(runner.ok && runner.start && runner.stop);
+	return !!(window.QUnit && runner === window.QUnit && (!runner.version || runner.version.startsWith("1.")));
 }
 
 function isQUnit2(runner) {
-	return !!(runner.assert && runner.assert.ok && runner.assert.async);
+	return !!(window.QUnit && runner === window.QUnit && runner.version && runner.version.startsWith("2.") );
 }
 
 function isMocha(runner) {
