@@ -44,7 +44,7 @@
   },
   "main": "dist/cjs/funcunit.js",
   "dependencies": {
-    "syn": "^0.13.0"
+    "syn": "^0.14.1"
   },
   "devDependencies": {
     "can-define": "^0.8.0",
