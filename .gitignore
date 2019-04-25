@@ -1,16 +1,29 @@
-testee.log
+
+# Logs
+logs
+*.log
+
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
+site/node_modules/
+
+# Documentation
+docs/
+!doc/guides/
+guides/
+
+# Site
+!site/lib/
+!site/**/lib/
+
+# Misc (move these as appropriate)
+dist/**
+dist/
 lib
 build
 *.orig
 .DS_Store
-dist/
-docs/
-guides/
-!doc/guides/
-site/node_modules/
-!site/lib/
-!site/**/lib/
 .idea/
 static
 index.html
