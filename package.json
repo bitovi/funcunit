@@ -61,6 +61,7 @@
     "less": "^1.7.0",
     "shelljs": "^0.7.8",
     "steal": "^2.0.0",
+    "steal-css": "^1.0.0",
     "steal-jasmine": "0.0.3",
     "steal-mocha": "0.0.3",
     "steal-qunit": "^1.0.0",
@@ -78,6 +79,9 @@
       "steal",
       "steal-tools",
       "testee"
+    ],
+    "plugins": [
+      "steal-css"
     ]
   }
 }
