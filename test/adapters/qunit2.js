@@ -62,7 +62,7 @@ QUnit.test("QUnit2 call count", function(assert) {
 	fakeQunit.test("test", function() {});
 	adapted.pauseTest();
 	adapted.resumeTest();
-	adapted.assertOK(true);
+	adapted.assertOK();
 	adapted.equiv();
 
 	QUnit.assert.deepEqual(stats, {
