@@ -23,7 +23,7 @@ QUnit.test("QUnit adapter test", function(assert) {
 
 QUnit.module("QUnit 2 adapter unit tests");
 
-QUnit.test("it works", function(assert) {
+QUnit.test("QUnit2 call count", function(assert) {
 	var adapter = require("../../browser/adapters/qunit2");
 
 	var stats = {
@@ -42,7 +42,9 @@ QUnit.test("it works", function(assert) {
 		},
 		ok: function() {
 			stats.ok += 1;
-		}
+		},
+		test: {}
+		
 	};
 
 	var fakeQunit = {
@@ -51,18 +53,20 @@ QUnit.test("it works", function(assert) {
 		},
 		equiv: function() {
 			stats.equiv += 1;
-		}
+		},
+		config : { current : { assert : fakeAssert }}
 	};
-
+	
 	var adapted = adapter(fakeQunit);
+	debugger;
 
 	fakeQunit.test("test", function() {});
 	adapted.pauseTest();
 	adapted.resumeTest();
-	adapted.assertOK();
+	adapted.assertOK(true);
 	adapted.equiv();
 
-	assert.deepEqual(stats, {
+	QUnit.assert.deepEqual(stats, {
 		async: 1,
 		done: 1,
 		ok: 1,
