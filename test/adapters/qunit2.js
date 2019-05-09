@@ -58,7 +58,6 @@ QUnit.test("QUnit2 call count", function(assert) {
 	};
 	
 	var adapted = adapter(fakeQunit);
-	debugger;
 
 	fakeQunit.test("test", function() {});
 	adapted.pauseTest();
