@@ -60,15 +60,16 @@
     "jquerypp": "^2.0.2",
     "less": "^1.7.0",
     "shelljs": "^0.7.8",
-    "steal": "^0.16.35",
+    "steal": "^2.0.0",
+    "steal-css": "^1.0.0",
     "steal-jasmine": "0.0.3",
     "steal-mocha": "0.0.3",
-    "steal-qunit": "^0.1.1",
-    "steal-qunit2": "1.0.0",
-    "steal-tools": "^0.16.0",
+    "steal-qunit": "^1.0.0",
+    "steal-qunit2": "^2.0.0",
+    "steal-tools": "^2.0.0",
     "testee": "^0.9.1"
   },
-  "system": {
+  "steal": {
     "main": "funcunit",
     "map": {
       "chai": "chai/chai"
@@ -78,6 +79,9 @@
       "steal",
       "steal-tools",
       "testee"
+    ],
+    "plugins": [
+      "steal-css"
     ]
   }
 }

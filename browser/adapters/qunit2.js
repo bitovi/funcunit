@@ -1,6 +1,5 @@
 module.exports = function (runner) {
 	var doneStack = [];
-	var _async = QUnit.assert.async; // disallow override; bug or feature?
 	var getCurrentAssert = function () {
 		if (runner.config.current) {
 			return runner.config.current.assert;
@@ -9,7 +8,7 @@ module.exports = function (runner) {
 	}
 	return {
 		pauseTest: function () {
-			doneStack.push(_async.call(getCurrentAssert()));
+			doneStack.push(getCurrentAssert().async());
 		},
 		resumeTest: function () {
 			doneStack.pop()();
