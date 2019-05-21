@@ -21,7 +21,7 @@
     "preversion": "npm test && npm run build",
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
     "postpublish": "git push --tags && git checkout master && git branch -D release && git push",
-    "ci": "rm -rf ~/.mozilla && npm run testee:test && rm -rf ~/.mozilla && npm run testee:none && rm -rf ~/.mozilla && npm run testee:qunit && rm -rf ~/.mozilla && npm run testee:mocha && rm -rf ~/.mozilla && npm run testee:jasmine && rm -rf ~/.mozilla && npm run testee:jasmine2",
+    "ci": "rm -rf ~/.mozilla && npm run testee:integ_qunit1 && npm run testee:integ_qunit2 && rm -rf ~/.mozilla && npm run testee:none && rm -rf ~/.mozilla && npm run testee:qunit && rm -rf ~/.mozilla && npm run testee:mocha && rm -rf ~/.mozilla && npm run testee:jasmine && rm -rf ~/.mozilla && npm run testee:jasmine2",
     "testee": "npm run testee:integ_qunit1 && npm run testee:integ_qunit2 && npm run testee:none && npm run testee:qunit && npm run testee:qunit2 && npm run testee:mocha && npm run testee:jasmine && npm run testee:jasmine2",
     "testee:integ_qunit1": "testee qunit1_tests.html --browsers firefox",
     "testee:integ_qunit2": "testee qunit2_tests.html --browsers firefox",
