@@ -8,8 +8,7 @@ var FuncUnit = require("funcunit/browser/core");
  */
 FuncUnit._incallback = false;
 //where we should add things in a callback
-var currentPosition = 0,
-  startedQueue = false;
+var currentPosition = 0;
 
 /**
    * @property FuncUnit.speed F.speed()
@@ -99,14 +98,14 @@ add = function(handler, error, context) {
   if(handler instanceof Function) {
     if(typeof error === 'object') {
       context = error;
-      delete error;
+      error = null;
     }
 
     error = (error && error.toString()) || 'Custom method has failed.';
     var cb = handler;
 
     handler = {
-      method: function(success, error) {
+      method: function(success, error) {		// eslint-disable-line no-unused-vars
         success();
       },
       success: cb,
@@ -143,7 +142,7 @@ var currentEl;
  * @param {Object} selector
  */
 FuncUnit._done = function(el, selector){
-  var next, 
+  var next,
     timer,
     speed = FuncUnit.speed || 0;
 
