@@ -4,7 +4,6 @@ services:
 sudo: false
 language: node_js
 node_js:
-  - 6
   - 8
   - node
 before_install:
