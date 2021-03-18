@@ -76,9 +76,9 @@ var clicks = [
       }
       var selector = this.selector;
       FuncUnit.add({
-        method: function(success, error){
+        method: async function(success, error){
           options = options || {};
-          syn("_" + name, this.bind[0], options, success);
+          await syn("_" + name, this.bind[0], options, success);
         },
         success: success,
         error: "Could not " + name + " '" + this.selector+"'",
@@ -146,9 +146,8 @@ $.extend(FuncUnit.prototype, {
       text = "[ctrl]a[ctrl-up]\b"
     }
     FuncUnit.add({
-      method : function(success, error){
-        syn("_type", this.bind[0], text, success);
-
+      method : async function(success, error){
+        await syn("_type", this.bind[0], text, success);
       },
       success : success,
       error : "Could not type " + text + " into " + this.selector,
@@ -177,9 +176,8 @@ $.extend(FuncUnit.prototype, {
       keys = "[ctrl]a[ctrl-up]\b"
     }
     FuncUnit.add({
-      method : function(success, error){
-        syn("_type", this.bind[0], keys, success);
-
+      method : async function(success, error){
+        await syn("_type", this.bind[0], keys, success);
       },
       success : success,
       error : "Could not send the keys " + keys + " into " + this.selector,
@@ -266,8 +264,8 @@ $.extend(FuncUnit.prototype, {
 
     var selector = this.selector;
     FuncUnit.add({
-      method: function(success, error){
-        syn("_drag", this.bind[0], options, success);
+      method: async function(success, error){
+        await syn("_drag", this.bind[0], options, success);
       },
       success: success,
       error: "Could not drag " + this.selector,
@@ -334,8 +332,8 @@ $.extend(FuncUnit.prototype, {
 
     var selector = this.selector;
     FuncUnit.add({
-      method: function(success, error){
-        syn("_move", this.bind[0], options, success);
+      method: async function(success, error){
+        await syn("_move", this.bind[0], options, success);
       },
       success: success,
       error: "Could not move " + this.selector,

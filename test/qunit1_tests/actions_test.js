@@ -7,10 +7,13 @@ QUnit.module("scroll", {
    }
  })
 
-test("scroll on click", function(){
-	F('#innerdiv').click()
-	F("#scrolldiv").scrollTop(100, "Scrolled down 100")
-	F("#scrolldiv").scrollLeft(100, "Scrolled left 100")
+test("scroll on click", async function(){
+	try {
+		await F('#innerdiv').click()
+	} catch (e) {
+	}
+	await F("#scrolldiv").scrollTop(100, "Scrolled down 100")
+	await F("#scrolldiv").scrollLeft(100, "Scrolled left 100")
 })
 
 test("auto scrollleft", function(){  
