@@ -78,7 +78,7 @@ var clicks = [
       FuncUnit.add({
         method: async function(success, error){
           options = options || {};
-          await syn("_" + name, this.bind[0], options, success);
+          await syn[name](this.bind[0], options);
         },
         success: success,
         error: "Could not " + name + " '" + this.selector+"'",
@@ -147,7 +147,7 @@ $.extend(FuncUnit.prototype, {
     }
     FuncUnit.add({
       method : async function(success, error){
-        await syn("_type", this.bind[0], text, success);
+        await syn.type(this.bind[0], text);
       },
       success : success,
       error : "Could not type " + text + " into " + this.selector,
@@ -177,7 +177,7 @@ $.extend(FuncUnit.prototype, {
     }
     FuncUnit.add({
       method : async function(success, error){
-        await syn("_type", this.bind[0], keys, success);
+        await syn.type(this.bind[0], keys);
       },
       success : success,
       error : "Could not send the keys " + keys + " into " + this.selector,
@@ -265,7 +265,7 @@ $.extend(FuncUnit.prototype, {
     var selector = this.selector;
     FuncUnit.add({
       method: async function(success, error){
-        await syn("_drag", this.bind[0], options, success);
+        await syn.drag(this.bind[0], options);
       },
       success: success,
       error: "Could not drag " + this.selector,
@@ -333,7 +333,7 @@ $.extend(FuncUnit.prototype, {
     var selector = this.selector;
     FuncUnit.add({
       method: async function(success, error){
-        await syn("_move", this.bind[0], options, success);
+        await syn.move(this.bind[0], options);
       },
       success: success,
       error: "Could not move " + this.selector,

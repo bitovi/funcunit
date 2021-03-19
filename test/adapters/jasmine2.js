@@ -21,10 +21,10 @@ describe('Adapters', function() {
 		$('.clickme, .clickresult').remove();
 	});
 
-	it('should use the jasmine adapter', function(done) {
-		F.wait(1000);
-		F('.clickme').click();
-		F('.clickresult').text('clicked');
+	it('should use the jasmine adapter', async function(done) {
+		await F.wait(1000);
+		await F('.clickme').click();
+		await F('.clickresult').text('clicked');
 
 		F(function() {
 			expect($('.clickresult').text()).toBe('clicked');

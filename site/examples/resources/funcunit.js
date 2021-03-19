@@ -242,8 +242,8 @@ var __m2 = (function(){
 			}
 			return res;
 		},
-		click: async function( options, element, callback ) {
-			await Syn('click!', options, element, callback);
+		click: function( options, element, callback ) {
+			Syn('click!', options, element, callback);
 		},
 		/**
 		 * @attribute defaults
