@@ -1,4 +1,3 @@
-var $ = require("funcunit/browser/jquery");
 var FuncUnit = require("funcunit/browser/core");
 
 /**
