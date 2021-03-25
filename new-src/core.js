@@ -23,28 +23,41 @@ FuncUnit = function ( selector, context ) {
 
 
 
+// https://stackoverflow.com/questions/4754560/help-understanding-jquerys-jquery-fn-init-why-is-init-in-fn
 
-// Add async query to FuncUnit queue
-var performAsyncQuery = function ( selector, frame, self ) {
+
+const performAsyncQuery = function ( selector, frame, self ) {
     FuncUnit.add({
-        method: function () {},
-        error: `selector failed: ${selector}`,
+        method: function ( success, error ) {
+            this.frame = frame;
+            this.selector = selector;
+
+            if (FuncUnit.win) {
+                frame = getContext(frame);
+            }
+
+            // this.bind = new origFuncUnit( selector, frame, true );
+            this.bind = new origFuncUnit.fn.init( selector, frame, true );
+            success();
+            return this;
+        },
+        error: `Selector failed: ${selector}`,
         type: 'query'
     });
 }
 
 
 
-
-// Perform sync query
-var performSyncQuery = function ( selector, frame ) {
+const performSyncQuery = function ( selector, frame ) {
     const origFrame = frame;
 
     if (FuncUnit.win) {
         frame = getContext(frame);
     }
 
+    // const result = new origFuncUnit( selector, frame, true );
     const result = new origFuncUnit.fn.init( selector, frame, true );
+
     result.frame = origFrame;
 
     return result;
@@ -53,13 +66,13 @@ var performSyncQuery = function ( selector, frame ) {
 
 
 
-// helper
-var getContext = function ( context ) {
+const getContext = function ( context ) {
     let frame, frames, selector;
 
     if (typeof context === 'number' || typeof context === 'string') {
-        selector = typeof context === "number" ? "iframe:eq(" + context + ")" : "iframe[name='" + context + "']";
+        selector = typeof context === 'number' ? `iframe:eq(${context})` : `iframe[name='${context}']`;
         frames = new origFuncUnit.fn.init(sel, FuncUnit.win.document.documentElement, true);
+        frame = (frames.length ? frames.get(0).contentWindow : FuncUnit.win).document.documentElement;
     } else {
         frame = FuncUnit.win.document.documentElement;
     }
