@@ -45,6 +45,7 @@
   },
   "main": "dist/cjs/funcunit.js",
   "dependencies": {
+    "sizzle": "^2.3.6",
     "syn": "^1.0.0-pre.2"
   },
   "devDependencies": {
@@ -65,8 +66,7 @@
     "steal-css": "^1.0.0",
     "steal-jasmine": "0.0.3",
     "steal-mocha": "0.0.3",
-    "steal-qunit": "^1.0.0",
-    "steal-qunit2": "^2.0.0",
+    "steal-qunit": "^2.0.0",
     "steal-tools": "^2.0.0",
     "testee": "^0.9.1"
   },
