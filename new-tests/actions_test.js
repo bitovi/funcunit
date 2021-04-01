@@ -26,13 +26,12 @@ QUnit.test('right click', async assert => {
     done();
 });
 
-// NOT WORKING - potential syn bug
-// QUnit.test('double click', async assert => {
-//     const done = assert.async();
-//     const element = await F('#foo').dblClick();
-//     assert.ok(element.classList.contains('iWasDoubleClicked'), '#foo was double clicked');
-//     done();
-// });
+QUnit.test('double click', async assert => {
+    const done = assert.async();
+    const element = await F('#foo').dblClick();
+    assert.ok(element.classList.contains('iWasDoubleClicked'), '#foo was double clicked');
+    done();
+});
 
 
 // Scroll --------------------

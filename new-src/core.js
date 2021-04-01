@@ -76,7 +76,7 @@ const funcUnitStaticMethods = {
         }
         let stealDone = false, ready = false;
 
-        setTimeout(() => ready = true, 333);
+        setTimeout(() => ready = true, 123);
 
         await resolveWhenTrue({
             tester: () => {

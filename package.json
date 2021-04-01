@@ -46,7 +46,7 @@
   "main": "dist/cjs/funcunit.js",
   "dependencies": {
     "sizzle": "^2.3.6",
-    "syn": "^1.0.0-pre.2"
+    "syn": "^1.0.0-pre.3"
   },
   "devDependencies": {
     "can-define": "^0.8.0",

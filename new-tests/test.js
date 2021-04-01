@@ -3,7 +3,7 @@ const F = require("funcunit/new-src/core");
 
 QUnit.module("funcunit - jQuery conflict")
 
-QUnit.test("basics", async function(assert){
+QUnit.test("basics", async function(assert) {
 	const button = document.createElement("button");
 	button.innerHTML = "click";
 	button.onclick = () => button.innerHTML = "clicked";
