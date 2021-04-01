@@ -1,7 +1,7 @@
 const QUnit = require("steal-qunit");
 const F = require("funcunit/new-src/core");
 
-QUnit.module('funcunit actions', {
+QUnit.module('funcunit dialogs', {
     beforeEach: async assert => {
         const done = assert.async();
         await F.useWindow(`${__dirname}/test-setup/confirm.html`);

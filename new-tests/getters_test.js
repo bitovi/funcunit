@@ -1,7 +1,7 @@
 const QUnit = require("steal-qunit");
 const F = require("funcunit/new-src/core");
 
-QUnit.module("funcunit find closest",{
+QUnit.module("funcunit getters",{
 	beforeEach: async function(assert) {
 		const done = assert.async();
 		await F.useWindow(__dirname+"/test-setup/qunit2_tests.html");

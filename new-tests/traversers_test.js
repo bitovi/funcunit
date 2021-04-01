@@ -1,7 +1,7 @@
 const QUnit = require("steal-qunit");
 const F = require("funcunit/new-src/core");
 
-QUnit.module("funcunit find closest",{
+QUnit.module("funcunit traversers",{
 	beforeEach: async function(assert) {
 		const done = assert.async();
 		await F.useWindow(`${__dirname}/test-setup/qunit2_tests.html`);
@@ -9,7 +9,7 @@ QUnit.module("funcunit find closest",{
 	}
 });
 
-QUnit.test("closest", async function(assert){
+QUnit.test("find closest", async function(assert){
 	const done = assert.async();
 
 	let element = await F("a:contains('Holler')").closest("#foo").click();

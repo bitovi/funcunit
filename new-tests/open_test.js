@@ -1,7 +1,7 @@
 const QUnit = require("steal-qunit");
 const F = require("funcunit/new-src/core");
 
-QUnit.module('funcunit actions', {
+QUnit.module('funcunit open windows', {
     beforeEach: async assert => {
         const done = assert.async();
         // await F.useWindow(`${__dirname}/test-setup/qunit2_tests.html`);
