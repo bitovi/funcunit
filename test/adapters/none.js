@@ -15,17 +15,13 @@ QUnit.module('Adapters', {
 	}
 });
 
-test('QUnit with no adapter test', async function() {
+test('QUnit with no adapter test', function() {
 	stop();
 
-	await F.wait(1000);
-	console.log('waited');
-
-	await F('.clickme').click();
-	console.log('clicked');
-
-	await F('.clickresult').text('clicked');
-
-	ok('clicked the text');
-	start();
+	F.wait(1000);
+	F('.clickme').click();
+	F('.clickresult').text('clicked', function() {
+		ok('clicked the text');
+		start();
+	});
 });

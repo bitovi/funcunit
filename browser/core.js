@@ -1,3 +1,4 @@
+var jQuery = require("funcunit/browser/jquery");
 var oldFuncUnit = require("funcunit/browser/init");
 
 var FuncUnit = oldFuncUnit.jQuery.sub();

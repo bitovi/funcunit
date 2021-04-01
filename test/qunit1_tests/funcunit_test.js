@@ -21,8 +21,8 @@ test("Iframe access", function(){
 	});
 })
 
-test("typing alt and shift characters", async function(){
-	await F('#typehere').type("@", function(){
+test("typing alt and shift characters", function(){
+	F('#typehere').type("@", function(){
 		equal(F('#typehere').val(), "@", "types weird chars" );
 	})
 })

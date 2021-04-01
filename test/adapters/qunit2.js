@@ -15,10 +15,10 @@ QUnit.module("Adapters 2", {
 	}
 });
 
-QUnit.test("QUnit adapter test", async function(assert) {
-	await F.wait(1000);
-	await F(".clickme").click();
-	await F(".clickresult").text("clicked", "clicked the link");
+QUnit.test("QUnit adapter test", function(assert) {
+	F.wait(1000);
+	F(".clickme").click();
+	F(".clickresult").text("clicked", "clicked the link");
 });
 
 QUnit.module("QUnit 2 adapter unit tests");

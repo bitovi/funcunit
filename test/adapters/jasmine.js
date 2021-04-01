@@ -19,9 +19,9 @@ describe('Adapters', function() {
 		$('.clickme, .clickresult').remove();
 	});
 
-	it('should use the jasmine adapter', async function() {
-		await F.wait(1000);
-		await F('.clickme').click();
-		await F('.clickresult').text('clicked');
+	it('should use the jasmine adapter', function() {
+		F.wait(1000);
+		F('.clickme').click();
+		F('.clickresult').text('clicked');
 	});
 });

@@ -1,5 +1,4 @@
 var FuncUnit = require("funcunit/browser/core");
-// var FuncUnit = require("funcunit/src/core");
 
 require("funcunit/browser/adapters/");
 require("funcunit/browser/open");
