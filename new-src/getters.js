@@ -191,7 +191,7 @@ function simpleAsyncGetter(elementPromise, getter) {
     });
 }
 
-function makeDimension(element, add, subtract = []) {
+function getDimension(element, add, subtract = []) {
     const styles = getComputedStyle(element);
     
     const sum = add.reduce((total, property) => {
@@ -204,11 +204,11 @@ function makeDimension(element, add, subtract = []) {
 }
 
 function calculateHeight(element) {
-    return makeDimension(element, ['height'], ['padding-top', 'padding-bottom']);
+    return getDimension(element, ['height'], ['padding-top', 'padding-bottom']);
 }
 
 function calculateInnerHeight(element) {
-    return makeDimension(element, ['height']);
+    return getDimension(element, ['height']);
 }
 
 function calculateOuterHeight (element, includeMargin = false) {
@@ -217,15 +217,15 @@ function calculateOuterHeight (element, includeMargin = false) {
         addProperties.push('margin-top');
         addProperties.push('margin-bottom');
     }
-    return makeDimension(element, addProperties);
+    return getDimension(element, addProperties);
 }
 
 function calculateWidth(element) {
-    return makeDimension(element, ['width'], ['padding-left', 'padding-right']);
+    return getDimension(element, ['width'], ['padding-left', 'padding-right']);
 }
 
 function calculateInnerWidth(element) {
-    return makeDimension(element, ['width']);
+    return getDimension(element, ['width']);
 }
 
 function calculateOuterWidth(element, includeMargin = false) {
@@ -234,7 +234,7 @@ function calculateOuterWidth(element, includeMargin = false) {
         addProperties.push('margin-left');
         addProperties.push('margin-right');
     }
-    return makeDimension(element, addProperties);
+    return getDimension(element, addProperties);
 }
 
 
