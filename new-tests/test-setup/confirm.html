@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+	<body>
+		<script src="../../node_modules/steal/steal.js">
+      var $ = require("funcunit/browser/jquery");
+				$(function(){
+					
+					window.confirm = function(string) {
+						return true;
+					};
+					
+					window.alert = function(string) {
+						return true;
+					};
+
+					window.prompt = function(string) {
+						return true;
+					};
+					
+					$('#confirm').click(function() {
+						if (confirm("are you sure?")) {
+							$("#confirm").html("I was confirmed");
+						} else {
+							$("#confirm").html("I was not confirmed");
+						}
+					});
+					
+					$('#alert').click(function() {
+						if (alert("that just happened")) {
+							$("#alert").html("I was alerted");
+						} else {
+							$("#alert").html("I was not alerted");
+						}
+					});
+
+					$('#prompt').click(function() {
+						if (prompt("whats your name?")) {
+							$("#prompt").html("I was prompted");
+						} else {
+							$("#prompt").html("I was not prompted");
+						}
+					})
+				});
+		</script>
+
+		<a href="#" id="confirm">Confirm!</a>
+		<a href="#" id="alert">Alert!</a>
+		<a href="#" id="prompt">Prompt!</a>
+	</body>
+</html>
